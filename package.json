@@ -1,0 +1,58 @@
+{
+  "name": "chronia",
+  "version": "0.1.0",
+  "description": "Simple date/time utilities",
+  "license": "MIT",
+  "author": "Takashi Yamashina <takashi.yamashina@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t0k0sh1/chronia.git"
+  },
+  "homepage": "https://github.com/t0k0sh1/chronia#readme",
+  "bugs": {
+    "url": "https://github.com/t0k0sh1/chronia/issues"
+  },
+  "keywords": [
+    "chronia",
+    "date",
+    "time",
+    "datetime",
+    "utility",
+    "utils",
+    "typescript",
+    "javascript"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "sideEffects": false,
+  "scripts": {
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "npm run build:esm && npm run build:cjs",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2"
+  }
+}
