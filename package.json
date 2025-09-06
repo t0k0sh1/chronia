@@ -1,6 +1,6 @@
 {
   "name": "chronia",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple date/time utilities",
   "license": "MIT",
   "author": "Takashi Yamashina <takashi.yamashina@gmail.com>",
@@ -33,7 +33,8 @@
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
     }
   },
   "sideEffects": false,
