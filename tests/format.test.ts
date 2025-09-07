@@ -10,7 +10,23 @@ const mockLocalize: Localize = {
     return era ? "AD" : "BC";
   },
   month: () => "",
-  day: () => "",
+  weekday: (weekday, options) => {
+    const abbreviated = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const wide = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const narrow = ["S", "M", "T", "W", "T", "F", "S"];
+
+    if (options?.width === "wide") return wide[weekday];
+    if (options?.width === "narrow") return narrow[weekday];
+    return abbreviated[weekday];
+  },
   dayPeriod: (period, options) => {
     if (options?.width === "narrow") return period === "am" ? "a" : "p";
     if (options?.width === "wide")
@@ -285,5 +301,65 @@ describe("format - day of year tokens", () => {
     { date: new Date(2024, 11, 31), token: "yyyy-DDD", expected: "2024-366" },
   ])("date=$date token=$token => $expected", ({ date, token, expected }) => {
     expect(format(date, token)).toBe(expected);
+  });
+});
+
+describe("format - weekday tokens", () => {
+  it.each([
+    // --- fallback ---
+    {
+      date: new Date(2025, 0, 5),
+      token: "E",
+      localize: undefined,
+      expected: "Sun",
+    }, // Sunday
+    {
+      date: new Date(2025, 0, 6),
+      token: "EEE",
+      localize: undefined,
+      expected: "Mon",
+    }, // Monday
+    {
+      date: new Date(2025, 0, 7),
+      token: "EEEE",
+      localize: undefined,
+      expected: "Tuesday",
+    },
+    {
+      date: new Date(2025, 0, 8),
+      token: "EEEEE",
+      localize: undefined,
+      expected: "W",
+    },
+
+    // --- with localize ---
+    {
+      date: new Date(2025, 0, 9),
+      token: "E",
+      localize: mockLocalize,
+      expected: "Thu",
+    }, // Thursday
+    {
+      date: new Date(2025, 0, 10),
+      token: "EEEE",
+      localize: mockLocalize,
+      expected: "Friday",
+    },
+    {
+      date: new Date(2025, 0, 11),
+      token: "EEEEE",
+      localize: mockLocalize,
+      expected: "S",
+    }, // Saturday
+  ])(
+    "date=$date token=$token localize? => $expected",
+    ({ date, token, localize, expected }) => {
+      expect(format(date, token, localize)).toBe(expected);
+    },
+  );
+
+  it("can combine weekday with year/month/day", () => {
+    const d = new Date(2025, 0, 5); // Sunday
+    expect(format(d, "yyyy-MM-dd EEEE")).toBe("2025-01-05 Sunday");
   });
 });

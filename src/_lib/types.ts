@@ -7,8 +7,8 @@ export type Localize = {
     month: number,
     options?: { width: "narrow" | "abbreviated" | "wide" },
   ) => string;
-  day: (
-    day: number,
+  weekday: (
+    weekday: number,
     options?: { width: "narrow" | "abbreviated" | "wide" },
   ) => string;
   dayPeriod: (
