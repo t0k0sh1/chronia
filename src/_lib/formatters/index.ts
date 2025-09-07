@@ -1,4 +1,4 @@
-import { Formatter } from "./types";
+import { Formatter } from "../types";
 import { tokens } from "./tokens";
 
 export const formatters: { [token: string]: Formatter } = {

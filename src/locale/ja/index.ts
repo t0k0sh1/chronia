@@ -23,9 +23,9 @@ export const ja: Localize = {
     ];
     return months[month];
   },
-  day: (day, options) => {
+  weekday: (weekday, options) => {
     const days = ["日", "月", "火", "水", "木", "金", "土"];
-    return days[day];
+    return days[weekday];
   },
   dayPeriod: (period, options) => {
     if (options?.width === "narrow") return period === "am" ? "午前" : "午後";

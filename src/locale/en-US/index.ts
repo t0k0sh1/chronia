@@ -40,8 +40,8 @@ export const enUS: Localize = {
     };
     return months[options?.width || "abbreviated"][month];
   },
-  day: (day, options) => {
-    const days = {
+  weekday: (weekday, options) => {
+    const weekdays = {
       narrow: ["S", "M", "T", "W", "T", "F", "S"],
       abbreviated: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       wide: [
@@ -54,7 +54,7 @@ export const enUS: Localize = {
         "Saturday",
       ],
     };
-    return days[options?.width || "abbreviated"][day];
+    return weekdays[options?.width || "abbreviated"][weekday];
   },
   dayPeriod: (period, options) => {
     if (options?.width === "narrow") return period === "am" ? "a" : "p";
