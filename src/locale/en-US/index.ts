@@ -56,4 +56,10 @@ export const enUS: Localize = {
     };
     return days[options?.width || "abbreviated"][day];
   },
+  dayPeriod: (period, options) => {
+    if (options?.width === "narrow") return period === "am" ? "a" : "p";
+    if (options?.width === "wide")
+      return period === "am" ? "AM (morning)" : "PM (afternoon)";
+    return period === "am" ? "AM" : "PM";
+  },
 };

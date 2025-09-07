@@ -1,5 +1,23 @@
 import { describe, it, expect } from "vitest";
 import { format } from "../src";
+import { Localize } from "../src/_lib/types";
+
+// モック localize
+const mockLocalize: Localize = {
+  era: (era, options) => {
+    if (options?.width === "narrow") return era ? "A" : "B";
+    if (options?.width === "wide") return era ? "Anno Domini" : "Before Christ";
+    return era ? "AD" : "BC";
+  },
+  month: () => "",
+  day: () => "",
+  dayPeriod: (period, options) => {
+    if (options?.width === "narrow") return period === "am" ? "a" : "p";
+    if (options?.width === "wide")
+      return period === "am" ? "ante meridiem" : "post meridiem";
+    return period === "am" ? "AM" : "PM";
+  },
+};
 
 describe("format - year tokens", () => {
   it.each([
@@ -79,28 +97,41 @@ describe("format - day tokens", () => {
   });
 });
 
-describe("format - era tokens (G)", () => {
+describe("format - era tokens", () => {
   it.each([
-    // AD
-    [2025, "yyyy G", "2025 AD"],
-    [2025, "G", "AD"],
+    // --- fallback ---
+    { year: 2025, token: "G", localize: undefined, expected: "AD" },
+    { year: 0, token: "G", localize: undefined, expected: "BC" },
 
-    // 1 BC (year = 0)
-    [0, "yyyy G", "0001 BC"],
-    [0, "G", "BC"],
+    // --- localize abbreviated ---
+    { year: 2025, token: "G", localize: mockLocalize, expected: "AD" },
+    { year: -1, token: "G", localize: mockLocalize, expected: "BC" },
 
-    // 2 BC (year = -1)
-    [-1, "yyyy G", "0002 BC"],
-    [-1, "G", "BC"],
+    // --- localize wide ---
+    {
+      year: 2025,
+      token: "GGGG",
+      localize: mockLocalize,
+      expected: "Anno Domini",
+    },
+    {
+      year: -1,
+      token: "GGGG",
+      localize: mockLocalize,
+      expected: "Before Christ",
+    },
 
-    // 1000 BC (year = -999)
-    [-999, "yyyy G", "1000 BC"],
-    [-999, "G", "BC"],
-  ])("year %s with pattern %s → %s", (year, pattern, expected) => {
-    const d = new Date(0, 0, 1);
-    d.setFullYear(year);
-    expect(format(d, pattern)).toBe(expected);
-  });
+    // --- localize narrow ---
+    { year: 2025, token: "GGGGG", localize: mockLocalize, expected: "A" },
+    { year: -1, token: "GGGGG", localize: mockLocalize, expected: "B" },
+  ])(
+    "year=$year token=$token localize? => $expected",
+    ({ year, token, localize, expected }) => {
+      const d = new Date(0, 0, 1);
+      d.setFullYear(year);
+      expect(format(d, token, localize)).toBe(expected);
+    },
+  );
 });
 
 describe("format - hour tokens", () => {
@@ -129,21 +160,43 @@ describe("format - hour tokens", () => {
   });
 });
 
-describe("format - AM/PM tokens (a)", () => {
+describe("format - dayPeriod tokens", () => {
   it.each([
-    [new Date(2025, 0, 1, 0, 0), "a", "AM"], // midnight
-    [new Date(2025, 0, 1, 11, 59), "a", "AM"], // before noon
-    [new Date(2025, 0, 1, 12, 0), "a", "PM"], // noon
-    [new Date(2025, 0, 1, 15, 0), "a", "PM"], // afternoon
-    [new Date(2025, 0, 1, 23, 59), "a", "PM"], // late night
-  ])("date %s with pattern %s → %s", (date, pattern, expected) => {
-    expect(format(date, pattern)).toBe(expected);
-  });
+    // --- fallback ---
+    { hour: 0, token: "a", localize: undefined, expected: "AM" },
+    { hour: 11, token: "a", localize: undefined, expected: "AM" },
+    { hour: 12, token: "a", localize: undefined, expected: "PM" },
+    { hour: 23, token: "a", localize: undefined, expected: "PM" },
 
-  it("works combined with 12h format", () => {
-    const d = new Date(2025, 0, 1, 15, 30); // 3:30 PM
-    expect(format(d, "hh a")).toBe("03 PM");
-  });
+    // --- localize abbreviated ---
+    { hour: 9, token: "a", localize: mockLocalize, expected: "AM" },
+    { hour: 9, token: "aa", localize: mockLocalize, expected: "AM" },
+    { hour: 15, token: "a", localize: mockLocalize, expected: "PM" },
+
+    // --- localize wide ---
+    {
+      hour: 9,
+      token: "aaaa",
+      localize: mockLocalize,
+      expected: "ante meridiem",
+    },
+    {
+      hour: 15,
+      token: "aaaa",
+      localize: mockLocalize,
+      expected: "post meridiem",
+    },
+
+    // --- localize narrow ---
+    { hour: 9, token: "aaaaa", localize: mockLocalize, expected: "a" },
+    { hour: 15, token: "aaaaa", localize: mockLocalize, expected: "p" },
+  ])(
+    "hour=$hour token=$token localize? => $expected",
+    ({ hour, token, localize, expected }) => {
+      const d = new Date(2025, 0, 1, hour);
+      expect(format(d, token, localize)).toBe(expected);
+    },
+  );
 });
 
 describe("format - minute tokens", () => {

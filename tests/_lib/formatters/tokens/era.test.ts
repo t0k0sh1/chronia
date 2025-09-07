@@ -10,6 +10,7 @@ const mockLocalize: Localize = {
   },
   month: () => "",
   day: () => "",
+  dayPeriod: () => "",
 };
 
 describe("formatEra", () => {

@@ -39,6 +39,7 @@ const mockLocalize: Localize = {
     return abbreviated[month];
   },
   day: () => "",
+  dayPeriod: () => "",
 };
 
 describe("formatMonth", () => {

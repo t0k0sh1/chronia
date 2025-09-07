@@ -27,4 +27,9 @@ export const ja: Localize = {
     const days = ["日", "月", "火", "水", "木", "金", "土"];
     return days[day];
   },
+  dayPeriod: (period, options) => {
+    if (options?.width === "narrow") return period === "am" ? "午前" : "午後";
+    if (options?.width === "wide") return period === "am" ? "午前" : "午後";
+    return period === "am" ? "AM" : "PM"; // fallback
+  },
 };

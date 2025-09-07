@@ -11,6 +11,10 @@ export type Localize = {
     day: number,
     options?: { width: "narrow" | "abbreviated" | "wide" },
   ) => string;
+  dayPeriod: (
+    period: "am" | "pm",
+    options?: { width: "narrow" | "abbreviated" | "wide" },
+  ) => string;
 };
 
 export type Formatter = (

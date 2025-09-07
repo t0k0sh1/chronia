@@ -7,7 +7,7 @@ import { formatHour } from "./tokens/hour";
 import { formatMinute } from "./tokens/minute";
 import { formatSecond } from "./tokens/second";
 import { formatMillisecond } from "./tokens/millisecond";
-import { formatAmPm } from "./tokens/ampm";
+import { formatDayPeriod } from "./tokens/dayPeriod";
 import { formatDayOfYear } from "./tokens/dayOfYear";
 
 export const formatters: { [token: string]: Formatter } = {
@@ -20,6 +20,6 @@ export const formatters: { [token: string]: Formatter } = {
   m: formatMinute,
   s: formatSecond,
   S: formatMillisecond,
-  a: formatAmPm,
+  a: formatDayPeriod,
   D: formatDayOfYear,
 };
