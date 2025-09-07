@@ -1,27 +1,17 @@
 import { Formatter } from "./types";
-import { formatEra } from "./tokens/era";
-import { formatYear } from "./tokens/year";
-import { formatMonth } from "./tokens/month";
-import { formatDay } from "./tokens/day";
-import { formatHour } from "./tokens/hour";
-import { formatMinute } from "./tokens/minute";
-import { formatSecond } from "./tokens/second";
-import { formatMillisecond } from "./tokens/millisecond";
-import { formatDayPeriod } from "./tokens/dayPeriod";
-import { formatDayOfYear } from "./tokens/dayOfYear";
-import { formatWeekday } from "./tokens/weekday";
+import { tokens } from "./tokens";
 
 export const formatters: { [token: string]: Formatter } = {
-  G: formatEra,
-  y: formatYear,
-  M: formatMonth,
-  d: formatDay,
-  H: formatHour,
-  h: formatHour,
-  m: formatMinute,
-  s: formatSecond,
-  S: formatMillisecond,
-  a: formatDayPeriod,
-  D: formatDayOfYear,
-  E: formatWeekday,
+  G: tokens.formatEra,
+  y: tokens.formatYear,
+  M: tokens.formatMonth,
+  d: tokens.formatDay,
+  H: tokens.formatHour,
+  h: tokens.formatHour,
+  m: tokens.formatMinute,
+  s: tokens.formatSecond,
+  S: tokens.formatMillisecond,
+  a: tokens.formatDayPeriod,
+  D: tokens.formatDayOfYear,
+  E: tokens.formatWeekday,
 };
