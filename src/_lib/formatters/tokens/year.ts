@@ -8,6 +8,8 @@ export const formatYear: Formatter = (date, token) => {
   switch (token) {
     case "yyyy":
       return yearStr.padStart(4, "0");
+    case "yyy":
+      return yearStr.slice(-3).padStart(3, "0");
     case "yy":
       return yearStr.slice(-2).padStart(2, "0");
     case "y":
