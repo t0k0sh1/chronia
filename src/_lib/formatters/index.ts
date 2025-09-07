@@ -8,6 +8,7 @@ import { formatMinute } from "./tokens/minute";
 import { formatSecond } from "./tokens/second";
 import { formatMillisecond } from "./tokens/millisecond";
 import { formatAmPm } from "./tokens/ampm";
+import { formatDayOfYear } from "./tokens/dayOfYear";
 
 export const formatters: { [token: string]: Formatter } = {
   G: formatEra,
@@ -20,4 +21,5 @@ export const formatters: { [token: string]: Formatter } = {
   s: formatSecond,
   S: formatMillisecond,
   a: formatAmPm,
+  D: formatDayOfYear,
 };

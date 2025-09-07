@@ -1,4 +1,4 @@
-import { Formatter } from "../types";
+import { Formatter } from "../../types";
 
 export const formatHour: Formatter = (date, token) => {
   const hours24 = date.getHours();

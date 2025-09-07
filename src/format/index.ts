@@ -1,10 +1,11 @@
 import { tokenize } from "../_lib/tokenize";
 import { formatters } from "../_lib/formatters";
+import { Localize } from "../_lib/types";
 
 export function format(
   date: Date,
   pattern: string,
-  localize: any = {},
+  localize?: Localize,
 ): string {
   const tokens = tokenize(pattern);
   let result = "";

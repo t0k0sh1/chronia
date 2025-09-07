@@ -204,3 +204,33 @@ describe("format - millisecond tokens", () => {
     expect(format(d, "hh:mm:ss.SSS a")).toBe("03:07:09.045 PM");
   });
 });
+
+describe("format - day of year tokens", () => {
+  it.each([
+    // --- Jan 1, 2025 (非うるう年) ---
+    { date: new Date(2025, 0, 1), token: "D", expected: "1" },
+    { date: new Date(2025, 0, 1), token: "DD", expected: "01" },
+    { date: new Date(2025, 0, 1), token: "DDD", expected: "001" },
+
+    // --- Dec 31, 2025 (365日目) ---
+    { date: new Date(2025, 11, 31), token: "D", expected: "365" },
+    { date: new Date(2025, 11, 31), token: "DD", expected: "365" },
+    { date: new Date(2025, 11, 31), token: "DDD", expected: "365" },
+
+    // --- Feb 29, 2024 (うるう年 60日目) ---
+    { date: new Date(2024, 1, 29), token: "D", expected: "60" },
+    { date: new Date(2024, 1, 29), token: "DD", expected: "60" },
+    { date: new Date(2024, 1, 29), token: "DDD", expected: "060" },
+
+    // --- Dec 31, 2024 (うるう年 366日目) ---
+    { date: new Date(2024, 11, 31), token: "D", expected: "366" },
+    { date: new Date(2024, 11, 31), token: "DD", expected: "366" },
+    { date: new Date(2024, 11, 31), token: "DDD", expected: "366" },
+
+    // --- 他のトークンと組み合わせ ---
+    { date: new Date(2025, 0, 1), token: "yyyy-DDD", expected: "2025-001" },
+    { date: new Date(2024, 11, 31), token: "yyyy-DDD", expected: "2024-366" },
+  ])("date=$date token=$token => $expected", ({ date, token, expected }) => {
+    expect(format(date, token)).toBe(expected);
+  });
+});

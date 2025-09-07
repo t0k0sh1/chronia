@@ -1,4 +1,4 @@
-import { Formatter } from "../types";
+import { Formatter } from "../../types";
 
 export const formatYear: Formatter = (date, token) => {
   const rawYear = date.getFullYear();
