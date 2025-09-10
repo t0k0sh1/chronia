@@ -5,6 +5,8 @@ export * from "./addMonths";
 export * from "./addSeconds";
 export * from "./addYears";
 export * from "./format";
+export * from "./isAfter";
+export * from "./isBefore";
 export * from "./isValid";
 export * from "./subDays";
 export * from "./subHours";
