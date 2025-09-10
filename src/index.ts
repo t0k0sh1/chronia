@@ -6,6 +6,7 @@ export * from "./addSeconds";
 export * from "./addYears";
 export * from "./format";
 export * from "./isAfter";
+export * from "./isAfterOrEqual";
 export * from "./isBefore";
 export * from "./isBeforeOrEqual";
 export * from "./isEqual";
