@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isBeforeOrEqual } from "./index";
+import { isBeforeOrEqual } from "../src/isBeforeOrEqual";
 
 describe("isBeforeOrEqual", () => {
   describe("millisecond comparison (default)", () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isEqual } from "./index";
+import { isEqual } from "../src/isEqual";
 
 describe("isEqual", () => {
   describe("millisecond comparison (default)", () => {
