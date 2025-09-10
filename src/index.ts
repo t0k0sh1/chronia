@@ -7,6 +7,7 @@ export * from "./addYears";
 export * from "./format";
 export * from "./isAfter";
 export * from "./isBefore";
+export * from "./isBeforeOrEqual";
 export * from "./isEqual";
 export * from "./isValid";
 export * from "./subDays";
