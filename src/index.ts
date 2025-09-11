@@ -7,6 +7,7 @@ export * from "./addYears";
 export * from "./format";
 export * from "./getDay";
 export * from "./getMonth";
+export * from "./getYear";
 export * from "./isAfter";
 export * from "./isAfterOrEqual";
 export * from "./isBefore";
