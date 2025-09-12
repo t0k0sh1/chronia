@@ -6,6 +6,7 @@ export * from "./addSeconds";
 export * from "./addYears";
 export * from "./format";
 export * from "./getDay";
+export * from "./getHours";
 export * from "./getMonth";
 export * from "./getYear";
 export * from "./isAfter";
