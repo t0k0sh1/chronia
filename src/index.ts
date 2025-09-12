@@ -9,6 +9,7 @@ export * from "./getDay";
 export * from "./getHours";
 export * from "./getMinutes";
 export * from "./getMonth";
+export * from "./getSeconds";
 export * from "./getYear";
 export * from "./isAfter";
 export * from "./isAfterOrEqual";
