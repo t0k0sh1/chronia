@@ -21,6 +21,7 @@ export * from "./isEqual";
 export * from "./isValid";
 export * from "./subDays";
 export * from "./subHours";
+export * from "./subMilliseconds";
 export * from "./subMinutes";
 export * from "./subMonths";
 export * from "./subSeconds";
