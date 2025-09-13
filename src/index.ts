@@ -1,5 +1,6 @@
 export * from "./addDays";
 export * from "./addHours";
+export * from "./addMilliseconds";
 export * from "./addMinutes";
 export * from "./addMonths";
 export * from "./addSeconds";
