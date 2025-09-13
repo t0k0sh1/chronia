@@ -1,24 +1,39 @@
+/**
+ * Add the specified number of years to the given date.
+ *
+ * - Accepts a `Date` object or a timestamp (number).
+ * - Returns a new `Date` instance with the specified number of years added.
+ * - If the input date or amount is invalid, returns `Invalid Date`.
+ * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * - Leap year adjustment: if the original date is Feb 29 and the target year
+ *   is not a leap year, the result becomes Feb 28.
+ *
+ * @param date - The original date or timestamp.
+ * @param amount - The number of years to add (fractions are truncated).
+ * @returns A new `Date` object with the years added, or `Invalid Date` if input is invalid.
+ */
 export function addYears(date: Date | number, amount: number): Date {
-  const d = date instanceof Date ? new Date(date.getTime()) : new Date(date);
+  const dt = new Date(date);
 
-  if (!(d instanceof Date) || isNaN(d.getTime()) || !isFinite(amount)) {
+  // Validate input: must be a valid date and a finite number
+  if (isNaN(dt.getTime()) || !isFinite(amount)) {
     return new Date(NaN);
   }
 
-  // Get the original date components to handle leap year edge cases
-  const originalDay = d.getDate();
-  const originalMonth = d.getMonth();
+  // Store original components to handle leap year edge cases
+  const originalDay = dt.getDate();
+  const originalMonth = dt.getMonth();
   const isOriginallyFeb29 = originalMonth === 1 && originalDay === 29;
-  
-  // Add years
-  d.setFullYear(d.getFullYear() + amount);
-  
-  // Handle leap year edge cases (Feb 29 in leap year -> Feb 28 in non-leap year)
-  if (isOriginallyFeb29 && d.getMonth() !== 1) {
-    // If we were originally on Feb 29 and now we're in a different month (March),
-    // it means the target year doesn't have Feb 29, so adjust to Feb 28
-    d.setMonth(1, 28);
+
+  // Truncate fractions and add the years
+  const yearToAdd = Math.trunc(amount);
+  dt.setFullYear(dt.getFullYear() + yearToAdd);
+
+  // Adjust for leap year (Feb 29 → Feb 28 when target year is not a leap year)
+  if (isOriginallyFeb29 && dt.getMonth() !== 1) {
+    dt.setMonth(1, 28);
   }
-  
-  return d;
+
+  return dt;
 }
+

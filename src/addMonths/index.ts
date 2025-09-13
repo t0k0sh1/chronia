@@ -1,22 +1,36 @@
+/**
+ * Add the specified number of months to the given date.
+ *
+ * - Accepts a `Date` object or a timestamp (number).
+ * - Returns a new `Date` with the specified months added.
+ * - If the input date or amount is invalid, returns `Invalid Date`.
+ * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * - Handles month-end adjustment: if the original day does not exist in the target month,
+ *   the result becomes the last day of that month.
+ *
+ * @param date - The original date or timestamp.
+ * @param amount - The number of months to add (fractions are truncated).
+ * @returns A new `Date` object with the months added, or `Invalid Date` if input is invalid.
+ */
 export function addMonths(date: Date | number, amount: number): Date {
-  const d = date instanceof Date ? new Date(date.getTime()) : new Date(date);
+  const dt = new Date(date);
 
-  if (!(d instanceof Date) || isNaN(d.getTime()) || !isFinite(amount)) {
+  // Validate input: must be a valid date and a finite number
+  if (isNaN(dt.getTime()) || !isFinite(amount)) {
     return new Date(NaN);
   }
 
-  // Get the original day to handle month-end edge cases
-  const originalDay = d.getDate();
-  
-  // Add months
-  d.setMonth(d.getMonth() + amount);
-  
-  // Handle month-end edge cases (e.g., Jan 31 + 1 month should be Feb 28/29, not Mar 3)
-  if (d.getDate() !== originalDay) {
-    // If the day changed, it means we overflowed to the next month
-    // Set to the last day of the intended month
-    d.setDate(0);
+  const originalDay = dt.getDate();
+
+  // Truncate fractions and add months
+  const monthsToAdd = Math.trunc(amount);
+  dt.setMonth(dt.getMonth() + monthsToAdd);
+
+  // Adjust for month-end: if overflowed, set to the last day of the intended month
+  if (dt.getDate() !== originalDay) {
+    dt.setDate(0);
   }
-  
-  return d;
+
+  return dt;
 }
+

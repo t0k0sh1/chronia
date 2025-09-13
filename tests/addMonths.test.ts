@@ -22,6 +22,18 @@ describe("addMonths", () => {
       expected: new Date(2025, 0, 15), // Same date
       desc: "adding zero months returns same date",
     },
+    {
+      base: new Date(2025, 0, 15), // Jan 15, 2025
+      amount: 1.9,
+      expected: new Date(2025, 1, 15), // Feb 15, 2025
+      desc: "truncates fractional positive amount",
+    },
+    {
+      base: new Date(2025, 0, 15), // Jan 15, 2025
+      amount: -1.9,
+      expected: new Date(2024, 11, 15), // Dec 15, 2024
+      desc: "truncates fractional negative amount",
+    },
 
     // --- Year boundary crossing ---
     {
@@ -110,6 +122,12 @@ describe("addMonths", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is -Infinity",
     },
+    {
+      base: NaN,
+      amount: 1,
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when timestamp is NaN",
+    },
   ])("$desc", ({ base, amount, expected }) => {
     const result = addMonths(base as Date | number, amount);
     if (isNaN(expected.getTime())) {
@@ -122,9 +140,9 @@ describe("addMonths", () => {
   it("does not mutate the original date", () => {
     const original = new Date(2025, 0, 15);
     const originalTime = original.getTime();
-    
+
     addMonths(original, 5);
-    
+
     expect(original.getTime()).toBe(originalTime);
   });
 
@@ -132,7 +150,8 @@ describe("addMonths", () => {
     const base = new Date(2025, 0, 15); // Jan 15, 2025
     const result = addMonths(base, 25); // Add 25 months
     const expected = new Date(2027, 1, 15); // Feb 15, 2027
-    
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 });
+

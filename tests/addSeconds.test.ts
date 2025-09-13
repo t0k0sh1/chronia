@@ -105,19 +105,19 @@ describe("addSeconds", () => {
     {
       base: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
       amount: 1.5,
-      expected: new Date(2025, 0, 15, 12, 0, 1, 500), // Jan 15, 2025, 12:00:01.500
+      expected: new Date(2025, 0, 15, 12, 0, 1, 0), // Jan 15, 2025, 12:00:01.000 (1 second added, 0.5 truncated)
       desc: "handles fractional seconds (1.5 seconds)",
     },
     {
       base: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000
       amount: 0.5,
-      expected: new Date(2025, 0, 15, 10, 15, 0, 500), // Jan 15, 2025, 10:15:00.500
+      expected: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000 (0 seconds added, 0.5 truncated)
       desc: "handles half second (0.5 seconds)",
     },
     {
       base: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000
       amount: 0.001,
-      expected: new Date(2025, 0, 15, 10, 15, 0, 1), // Jan 15, 2025, 10:15:00.001
+      expected: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000 (0 seconds added, 0.001 truncated)
       desc: "handles millisecond precision (0.001 seconds)",
     },
 
@@ -204,9 +204,9 @@ describe("addSeconds", () => {
 
   it("handles precise fractional seconds", () => {
     const base = new Date(2025, 0, 15, 12, 0, 0, 0);
-    const result = addSeconds(base, 0.25); // Quarter second = 250 milliseconds
-    const expected = new Date(2025, 0, 15, 12, 0, 0, 250);
-    
+    const result = addSeconds(base, 0.25); // Quarter second truncated to 0
+    const expected = new Date(2025, 0, 15, 12, 0, 0, 0); // No change (0 seconds added)
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 

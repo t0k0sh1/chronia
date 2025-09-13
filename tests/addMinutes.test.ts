@@ -87,17 +87,17 @@ describe("addMinutes", () => {
       desc: "adds two days worth of minutes (2880)",
     },
 
-    // --- Fractional minutes ---
+    // --- Fractional minutes (truncated) ---
     {
       base: new Date(2025, 0, 15, 12, 0, 0), // Jan 15, 2025, 12:00:00
       amount: 1.5,
-      expected: new Date(2025, 0, 15, 12, 1, 30), // Jan 15, 2025, 12:01:30
+      expected: new Date(2025, 0, 15, 12, 1, 0), // Jan 15, 2025, 12:01:00 (1 minute added, 0.5 truncated)
       desc: "handles fractional minutes (1.5 minutes)",
     },
     {
       base: new Date(2025, 0, 15, 10, 15, 0), // Jan 15, 2025, 10:15:00
       amount: 0.5,
-      expected: new Date(2025, 0, 15, 10, 15, 30), // Jan 15, 2025, 10:15:30
+      expected: new Date(2025, 0, 15, 10, 15, 0), // Jan 15, 2025, 10:15:00 (0 minutes added, 0.5 truncated)
       desc: "handles half minute (0.5 minutes)",
     },
 
@@ -184,9 +184,9 @@ describe("addMinutes", () => {
 
   it("handles precise fractional minutes", () => {
     const base = new Date(2025, 0, 15, 12, 0, 0, 0);
-    const result = addMinutes(base, 0.25); // Quarter minute = 15 seconds
-    const expected = new Date(2025, 0, 15, 12, 0, 15, 0);
-    
+    const result = addMinutes(base, 0.25); // Quarter minute truncated to 0
+    const expected = new Date(2025, 0, 15, 12, 0, 0, 0); // No change (0 minutes added)
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 });

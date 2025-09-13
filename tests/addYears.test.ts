@@ -22,6 +22,18 @@ describe("addYears", () => {
       expected: new Date(2025, 3, 20), // Same date
       desc: "adding zero years returns same date",
     },
+    {
+      base: new Date(2020, 0, 1),
+      amount: 1.9,
+      expected: new Date(2021, 0, 1),
+      desc: "truncates fractional amount (positive)",
+    },
+    {
+      base: new Date(2020, 0, 1),
+      amount: -1.9,
+      expected: new Date(2019, 0, 1),
+      desc: "truncates fractional amount (negative)",
+    },
 
     // --- Leap year handling ---
     {
@@ -110,6 +122,12 @@ describe("addYears", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is -Infinity",
     },
+    {
+      base: NaN,
+      amount: 1,
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when timestamp is NaN",
+    },
   ])("$desc", ({ base, amount, expected }) => {
     const result = addYears(base as Date | number, amount);
     if (isNaN(expected.getTime())) {
@@ -122,9 +140,9 @@ describe("addYears", () => {
   it("does not mutate the original date", () => {
     const original = new Date(2020, 5, 15);
     const originalTime = original.getTime();
-    
+
     addYears(original, 3);
-    
+
     expect(original.getTime()).toBe(originalTime);
   });
 
@@ -133,7 +151,7 @@ describe("addYears", () => {
     const base = new Date(2020, 1, 29); // Feb 29, 2020
     const result = addYears(base, 8); // Add 8 years -> 2028 (leap year)
     const expected = new Date(2028, 1, 29); // Feb 29, 2028
-    
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 
@@ -141,7 +159,8 @@ describe("addYears", () => {
     const base = new Date(2020, 5, 15);
     const result = addYears(base, 100); // Add 100 years
     const expected = new Date(2120, 5, 15);
-    
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 });
+
