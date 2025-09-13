@@ -1,12 +1,17 @@
+import { addMinutes } from "../addMinutes";
+
+/**
+ * Subtract the specified number of minutes from the given date.
+ *
+ * - Accepts a `Date` object or a timestamp (number).
+ * - Returns a new `Date` instance with the specified number of minutes subtracted.
+ * - If the input date or amount is invalid, returns `Invalid Date`.
+ * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ *
+ * @param date - The original date or timestamp.
+ * @param amount - The number of minutes to subtract (fractions are truncated).
+ * @returns A new `Date` object with the minutes subtracted, or `Invalid Date` if input is invalid.
+ */
 export function subMinutes(date: Date | number, amount: number): Date {
-  const d = date instanceof Date ? new Date(date.getTime()) : new Date(date);
-
-  if (!(d instanceof Date) || isNaN(d.getTime()) || !isFinite(amount)) {
-    return new Date(NaN);
-  }
-
-  // Subtract minutes by subtracting milliseconds (1 minute = 60,000 milliseconds)
-  d.setTime(d.getTime() - amount * 60000);
-  
-  return d;
+  return addMinutes(date, -amount);
 }

@@ -87,17 +87,17 @@ describe("subMinutes", () => {
       desc: "subtracts two days worth of minutes (2880)",
     },
 
-    // --- Fractional minutes ---
+    // --- Fractional minutes (truncated) ---
     {
       base: new Date(2025, 0, 15, 12, 1, 30), // Jan 15, 2025, 12:01:30
       amount: 1.5,
-      expected: new Date(2025, 0, 15, 12, 0, 0), // Jan 15, 2025, 12:00:00
+      expected: new Date(2025, 0, 15, 12, 0, 30), // Jan 15, 2025, 12:00:30 (1 minute subtracted, 0.5 truncated)
       desc: "handles fractional minutes (1.5 minutes)",
     },
     {
       base: new Date(2025, 0, 15, 10, 15, 30), // Jan 15, 2025, 10:15:30
       amount: 0.5,
-      expected: new Date(2025, 0, 15, 10, 15, 0), // Jan 15, 2025, 10:15:00
+      expected: new Date(2025, 0, 15, 10, 15, 30), // Jan 15, 2025, 10:15:30 (0 minutes subtracted, 0.5 truncated)
       desc: "handles half minute (0.5 minutes)",
     },
 
@@ -199,9 +199,9 @@ describe("subMinutes", () => {
 
   it("handles precise fractional minutes", () => {
     const base = new Date(2025, 0, 15, 12, 0, 15, 0);
-    const result = subMinutes(base, 0.25); // Quarter minute = 15 seconds
-    const expected = new Date(2025, 0, 15, 12, 0, 0, 0);
-    
+    const result = subMinutes(base, 0.25); // Quarter minute truncated to 0
+    const expected = new Date(2025, 0, 15, 12, 0, 15, 0); // No change (0 minutes subtracted)
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 });

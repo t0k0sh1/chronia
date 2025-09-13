@@ -105,19 +105,19 @@ describe("subSeconds", () => {
     {
       base: new Date(2025, 0, 15, 12, 0, 1, 500), // Jan 15, 2025, 12:00:01.500
       amount: 1.5,
-      expected: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
+      expected: new Date(2025, 0, 15, 12, 0, 0, 500), // Jan 15, 2025, 12:00:00.500 (1 second subtracted, 0.5 truncated)
       desc: "handles fractional seconds (1.5 seconds)",
     },
     {
       base: new Date(2025, 0, 15, 10, 15, 0, 500), // Jan 15, 2025, 10:15:00.500
       amount: 0.5,
-      expected: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000
+      expected: new Date(2025, 0, 15, 10, 15, 0, 500), // Jan 15, 2025, 10:15:00.500 (0 seconds subtracted, 0.5 truncated)
       desc: "handles half second (0.5 seconds)",
     },
     {
       base: new Date(2025, 0, 15, 10, 15, 0, 1), // Jan 15, 2025, 10:15:00.001
       amount: 0.001,
-      expected: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000
+      expected: new Date(2025, 0, 15, 10, 15, 0, 1), // Jan 15, 2025, 10:15:00.001 (0 seconds subtracted, 0.001 truncated)
       desc: "handles millisecond precision (0.001 seconds)",
     },
 
@@ -219,17 +219,17 @@ describe("subSeconds", () => {
 
   it("handles precise fractional seconds", () => {
     const base = new Date(2025, 0, 15, 12, 0, 0, 250);
-    const result = subSeconds(base, 0.25); // Quarter second = 250 milliseconds
-    const expected = new Date(2025, 0, 15, 12, 0, 0, 0);
-    
+    const result = subSeconds(base, 0.25); // Quarter second truncated to 0
+    const expected = new Date(2025, 0, 15, 12, 0, 0, 250); // No change (0 seconds subtracted)
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 
   it("works at second precision edge", () => {
     const base = new Date(2025, 0, 15, 12, 0, 0, 999); // 999 milliseconds
-    const result = subSeconds(base, 0.999);
-    const expected = new Date(2025, 0, 15, 12, 0, 0, 0);
-    
+    const result = subSeconds(base, 0.999); // 0.999 truncated to 0
+    const expected = new Date(2025, 0, 15, 12, 0, 0, 999); // No change (0 seconds subtracted)
+
     expect(result.getTime()).toBe(expected.getTime());
   });
 });

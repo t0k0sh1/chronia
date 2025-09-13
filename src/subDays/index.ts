@@ -1,10 +1,17 @@
+import { addDays } from "../addDays";
+
+/**
+ * Subtract the specified number of days from the given date.
+ *
+ * - Accepts a `Date` object or a timestamp (number).
+ * - Returns a new `Date` instance with the specified number of days subtracted.
+ * - If the input date or amount is invalid, returns `Invalid Date`.
+ * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ *
+ * @param date - The original date or timestamp.
+ * @param amount - The number of days to subtract (fractions are truncated).
+ * @returns A new `Date` object with the days subtracted, or `Invalid Date` if input is invalid.
+ */
 export function subDays(date: Date | number, amount: number): Date {
-  const d = date instanceof Date ? new Date(date.getTime()) : new Date(date);
-
-  if (!(d instanceof Date) || isNaN(d.getTime()) || !isFinite(amount)) {
-    return new Date(NaN);
-  }
-
-  d.setDate(d.getDate() - amount);
-  return d;
+  return addDays(date, -amount);
 }

@@ -1,22 +1,19 @@
+import { addMonths } from "../addMonths";
+
+/**
+ * Subtract the specified number of months from the given date.
+ *
+ * - Accepts a `Date` object or a timestamp (number).
+ * - Returns a new `Date` instance with the specified number of months subtracted.
+ * - If the input date or amount is invalid, returns `Invalid Date`.
+ * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * - Month-end adjustment: if the original date has a day that doesn't exist
+ *   in the target month (e.g., Mar 31 - 1 month), adjusts to the last valid day.
+ *
+ * @param date - The original date or timestamp.
+ * @param amount - The number of months to subtract (fractions are truncated).
+ * @returns A new `Date` object with the months subtracted, or `Invalid Date` if input is invalid.
+ */
 export function subMonths(date: Date | number, amount: number): Date {
-  const d = date instanceof Date ? new Date(date.getTime()) : new Date(date);
-
-  if (!(d instanceof Date) || isNaN(d.getTime()) || !isFinite(amount)) {
-    return new Date(NaN);
-  }
-
-  // Get the original day to handle month-end edge cases
-  const originalDay = d.getDate();
-  
-  // Subtract months
-  d.setMonth(d.getMonth() - amount);
-  
-  // Handle month-end edge cases (e.g., Mar 31 - 1 month should be Feb 28/29, not Mar 3)
-  if (d.getDate() !== originalDay) {
-    // If the day changed, it means we overflowed to the next month
-    // Set to the last day of the intended month
-    d.setDate(0);
-  }
-  
-  return d;
+  return addMonths(date, -amount);
 }

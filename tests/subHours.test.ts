@@ -79,13 +79,13 @@ describe("subHours", () => {
     {
       base: new Date(2025, 0, 15, 14, 30, 0), // Jan 15, 2025, 14:30:00
       amount: 1.5,
-      expected: new Date(2025, 0, 15, 13, 0, 0), // Jan 15, 2025, 13:00:00
+      expected: new Date(2025, 0, 15, 13, 30, 0), // Jan 15, 2025, 13:30:00 (1 hour subtracted, 0.5 truncated)
       desc: "handles fractional hours (1.5 hours)",
     },
     {
       base: new Date(2025, 0, 15, 10, 30, 0), // Jan 15, 2025, 10:30:00
       amount: 0.25,
-      expected: new Date(2025, 0, 15, 10, 15, 0), // Jan 15, 2025, 10:15:00
+      expected: new Date(2025, 0, 15, 10, 30, 0), // Jan 15, 2025, 10:30:00 (0 hours subtracted, 0.25 truncated)
       desc: "handles quarter hour (0.25 hours)",
     },
 
