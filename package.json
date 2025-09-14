@@ -1,6 +1,6 @@
 {
   "name": "chronia",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "type": "module",
   "description": "Simple date/time utilities",
   "license": "MIT",
@@ -28,21 +28,16 @@
     "README.md",
     "LICENSE"
   ],
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "sideEffects": false,
   "scripts": {
-    "build:esm": "tsc -p tsconfig.esm.json",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
-    "build": "npm run build:esm && npm run build:cjs",
+    "build": "tsup",
     "clean": "rimraf dist",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "vitest",
@@ -60,6 +55,7 @@
     "@typescript-eslint/parser": "^8.42.0",
     "eslint": "^9.35.0",
     "rimraf": "^6.0.1",
+    "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.42.0",
     "vitest": "^3.2.4"
