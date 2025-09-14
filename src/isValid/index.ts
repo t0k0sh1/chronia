@@ -1,5 +1,13 @@
+/**
+ * Check if the given value is a valid Date or timestamp.
+ *
+ * - Accepts a `Date` object or a timestamp (number).
+ * - Returns `true` if the resulting Date is valid, otherwise `false`.
+ *
+ * @param date - The Date object or timestamp to validate.
+ * @returns `true` if valid, `false` if invalid.
+ */
 export function isValid(date: Date | number): boolean {
-  const d = date instanceof Date ? date : new Date(date);
-  
-  return d instanceof Date && !isNaN(d.getTime()) && isFinite(d.getTime());
+  return !isNaN(new Date(date).getTime());
 }
+

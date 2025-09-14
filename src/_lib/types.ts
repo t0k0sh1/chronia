@@ -22,3 +22,12 @@ export type Formatter = (
   token: string,
   localize?: Localize,
 ) => string;
+
+export type TimeUnit =
+  | "year"
+  | "month"
+  | "day"
+  | "hour"
+  | "minute"
+  | "second"
+  | "millisecond";
