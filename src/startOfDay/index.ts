@@ -3,7 +3,7 @@
  *
  * Returns a new Date object set to 00:00:00.000 of the same date.
  *
- * @param date - The original date
+ * @param date - The original date or timestamp
  * @returns New Date object representing the start of the day
  *
  * @example
@@ -15,11 +15,12 @@
  * const dayStart = startOfDay(lateEvening); // June 15, 2024 00:00:00.000
  * ```
  */
-export function startOfDay(date: Date): Date {
+export function startOfDay(date: Date | number): Date {
+  const dt = new Date(date);
   return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
+    dt.getFullYear(),
+    dt.getMonth(),
+    dt.getDate(),
     0, // 00:00:00.000
     0,
     0,

@@ -4,8 +4,8 @@
  * Returns the exact difference in milliseconds between two dates.
  * This is the most precise difference calculation.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns The difference in milliseconds (negative if dateLeft is before dateRight)
  *
  * @example
@@ -23,6 +23,8 @@
  * diffMilliseconds(date5, date6); // 0 (exact same time)
  * ```
  */
-export function diffMilliseconds(dateLeft: Date, dateRight: Date): number {
-  return dateLeft.getTime() - dateRight.getTime();
+export function diffMilliseconds(dateLeft: Date | number, dateRight: Date | number): number {
+  const dtLeft = new Date(dateLeft);
+  const dtRight = new Date(dateRight);
+  return dtLeft.getTime() - dtRight.getTime();
 }

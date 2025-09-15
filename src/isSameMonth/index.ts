@@ -6,8 +6,8 @@ import { diffMonths } from "../diffMonths";
  * Returns true if both dates fall within the same calendar month and year,
  * regardless of day or time components.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns True if both dates are in the same month and year, false otherwise
  *
  * @example
@@ -29,6 +29,6 @@ import { diffMonths } from "../diffMonths";
  * isSameMonth(date7, date8); // false (different years)
  * ```
  */
-export function isSameMonth(dateLeft: Date, dateRight: Date): boolean {
+export function isSameMonth(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffMonths(dateLeft, dateRight) === 0;
 }

@@ -6,8 +6,8 @@ import { diffSeconds } from "../diffSeconds";
  * Returns true if both dates fall within the same second,
  * regardless of milliseconds.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns True if both dates are in the same second, false otherwise
  *
  * @example
@@ -29,6 +29,6 @@ import { diffSeconds } from "../diffSeconds";
  * isSameSecond(date7, date8); // false (different minutes)
  * ```
  */
-export function isSameSecond(dateLeft: Date, dateRight: Date): boolean {
+export function isSameSecond(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffSeconds(dateLeft, dateRight) === 0;
 }

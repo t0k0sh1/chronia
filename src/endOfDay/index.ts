@@ -3,7 +3,7 @@
  *
  * Returns a new Date object set to 23:59:59.999 of the same date.
  *
- * @param date - The original date
+ * @param date - The original date or timestamp
  * @returns New Date object representing the end of the day
  *
  * @example
@@ -15,11 +15,12 @@
  * const dayEnd = endOfDay(earlyMorning); // June 15, 2024 23:59:59.999
  * ```
  */
-export function endOfDay(date: Date): Date {
+export function endOfDay(date: Date | number): Date {
+  const dt = new Date(date);
   return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
+    dt.getFullYear(),
+    dt.getMonth(),
+    dt.getDate(),
     23, // 23:59:59.999
     59,
     59,

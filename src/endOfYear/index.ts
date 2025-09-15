@@ -3,7 +3,7 @@
  *
  * Returns a new Date object set to December 31st at 23:59:59.999 of the same year.
  *
- * @param date - The original date
+ * @param date - The original date or timestamp
  * @returns New Date object representing the end of the year
  *
  * @example
@@ -15,9 +15,10 @@
  * const yearEnd = endOfYear(firstDayOfYear); // December 31, 2024 23:59:59.999
  * ```
  */
-export function endOfYear(date: Date): Date {
+export function endOfYear(date: Date | number): Date {
+  const dt = new Date(date);
   return new Date(
-    date.getFullYear(),
+    dt.getFullYear(),
     11, // December (month 11)
     31, // Last day of the year
     23, // 23:59:59.999

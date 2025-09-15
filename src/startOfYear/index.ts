@@ -3,7 +3,7 @@
  *
  * Returns a new Date object set to January 1st at 00:00:00.000 of the same year.
  *
- * @param date - The original date
+ * @param date - The original date or timestamp
  * @returns New Date object representing the start of the year
  *
  * @example
@@ -15,9 +15,10 @@
  * const yearStart = startOfYear(lastDayOfYear); // January 1, 2024 00:00:00.000
  * ```
  */
-export function startOfYear(date: Date): Date {
+export function startOfYear(date: Date | number): Date {
+  const dt = new Date(date);
   return new Date(
-    date.getFullYear(),
+    dt.getFullYear(),
     0, // January (month 0)
     1, // First day of the year
     0, // 00:00:00.000

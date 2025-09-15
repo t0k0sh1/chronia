@@ -6,7 +6,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * Returns the same date without any truncation since millisecond is the smallest unit.
  * This function is provided for API consistency.
  *
- * @param date - The date to truncate
+ * @param date - The date or timestamp to truncate
  * @returns New Date object (identical to the input)
  *
  * @example
@@ -15,6 +15,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * const truncated = truncMillisecond(date); // June 15, 2024 14:30:45.123 (same)
  * ```
  */
-export function truncMillisecond(date: Date): Date {
-  return truncateToUnit(date, "millisecond");
+export function truncMillisecond(date: Date | number): Date {
+  const dt = new Date(date);
+  return truncateToUnit(dt, "millisecond");
 }

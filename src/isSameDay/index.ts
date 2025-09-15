@@ -6,8 +6,8 @@ import { diffDays } from "../diffDays";
  * Returns true if both dates fall on the same calendar day,
  * regardless of time components.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns True if both dates are on the same day, false otherwise
  *
  * @example
@@ -29,6 +29,6 @@ import { diffDays } from "../diffDays";
  * isSameDay(date7, date8); // false
  * ```
  */
-export function isSameDay(dateLeft: Date, dateRight: Date): boolean {
+export function isSameDay(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffDays(dateLeft, dateRight) === 0;
 }

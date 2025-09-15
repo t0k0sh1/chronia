@@ -24,17 +24,19 @@
  * diffDays(date5, date6); // 1
  * ```
  */
-export function diffDays(dateLeft: Date, dateRight: Date): number {
+export function diffDays(dateLeft: Date | number, dateRight: Date | number): number {
+  const dtLeft = new Date(dateLeft);
+  const dtRight = new Date(dateRight);
   // Create dates at midnight for calendar day comparison
   const leftMidnight = new Date(
-    dateLeft.getFullYear(),
-    dateLeft.getMonth(),
-    dateLeft.getDate()
+    dtLeft.getFullYear(),
+    dtLeft.getMonth(),
+    dtLeft.getDate()
   );
   const rightMidnight = new Date(
-    dateRight.getFullYear(),
-    dateRight.getMonth(),
-    dateRight.getDate()
+    dtRight.getFullYear(),
+    dtRight.getMonth(),
+    dtRight.getDate()
   );
 
   const diffTime = leftMidnight.getTime() - rightMidnight.getTime();

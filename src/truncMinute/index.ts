@@ -5,7 +5,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  *
  * Sets the seconds and milliseconds to 0 while keeping the same date, hour, and minute.
  *
- * @param date - The date to truncate
+ * @param date - The date or timestamp to truncate
  * @returns New Date object truncated to the start of the minute
  *
  * @example
@@ -14,6 +14,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * const truncated = truncMinute(date); // June 15, 2024 14:30:00.000
  * ```
  */
-export function truncMinute(date: Date): Date {
-  return truncateToUnit(date, "minute");
+export function truncMinute(date: Date | number): Date {
+  const dt = new Date(date);
+  return truncateToUnit(dt, "minute");
 }

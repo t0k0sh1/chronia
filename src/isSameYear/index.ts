@@ -6,8 +6,8 @@ import { diffYears } from "../diffYears";
  * Returns true if both dates fall within the same calendar year,
  * regardless of month, day, or time components.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns True if both dates are in the same year, false otherwise
  *
  * @example
@@ -25,6 +25,6 @@ import { diffYears } from "../diffYears";
  * isSameYear(date5, date6); // true
  * ```
  */
-export function isSameYear(dateLeft: Date, dateRight: Date): boolean {
+export function isSameYear(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffYears(dateLeft, dateRight) === 0;
 }

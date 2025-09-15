@@ -3,7 +3,7 @@
  *
  * Returns a new Date object set to the last day of the month at 23:59:59.999.
  *
- * @param date - The original date
+ * @param date - The original date or timestamp
  * @returns New Date object representing the end of the month
  *
  * @example
@@ -15,10 +15,11 @@
  * const monthEnd = endOfMonth(firstDayOfMonth); // February 29, 2024 23:59:59.999 (leap year)
  * ```
  */
-export function endOfMonth(date: Date): Date {
+export function endOfMonth(date: Date | number): Date {
+  const dt = new Date(date);
   return new Date(
-    date.getFullYear(),
-    date.getMonth() + 1, // Next month
+    dt.getFullYear(),
+    dt.getMonth() + 1, // Next month
     0, // 0th day of next month = last day of current month
     23, // 23:59:59.999
     59,

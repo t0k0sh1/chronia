@@ -6,8 +6,8 @@ import { diffMinutes } from "../diffMinutes";
  * Returns true if both dates fall within the same minute,
  * regardless of seconds or milliseconds.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns True if both dates are in the same minute, false otherwise
  *
  * @example
@@ -29,6 +29,6 @@ import { diffMinutes } from "../diffMinutes";
  * isSameMinute(date7, date8); // false (different hours)
  * ```
  */
-export function isSameMinute(dateLeft: Date, dateRight: Date): boolean {
+export function isSameMinute(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffMinutes(dateLeft, dateRight) === 0;
 }

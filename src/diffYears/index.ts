@@ -4,8 +4,8 @@
  * Returns the number of full years between the earlier and later date.
  * Only considers year values, ignoring months, days, and time components.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns The difference in years (negative if dateLeft is before dateRight)
  *
  * @example
@@ -19,6 +19,8 @@
  * diffYears(date3, date4); // 0 (same calendar year)
  * ```
  */
-export function diffYears(dateLeft: Date, dateRight: Date): number {
-  return dateLeft.getFullYear() - dateRight.getFullYear();
+export function diffYears(dateLeft: Date | number, dateRight: Date | number): number {
+  const dtLeft = new Date(dateLeft);
+  const dtRight = new Date(dateRight);
+  return dtLeft.getFullYear() - dtRight.getFullYear();
 }

@@ -3,7 +3,7 @@
  *
  * Returns a new Date object set to the first day of the month at 00:00:00.000.
  *
- * @param date - The original date
+ * @param date - The original date or timestamp
  * @returns New Date object representing the start of the month
  *
  * @example
@@ -15,10 +15,11 @@
  * const monthStart = startOfMonth(lastDayOfMonth); // June 1, 2024 00:00:00.000
  * ```
  */
-export function startOfMonth(date: Date): Date {
+export function startOfMonth(date: Date | number): Date {
+  const dt = new Date(date);
   return new Date(
-    date.getFullYear(),
-    date.getMonth(),
+    dt.getFullYear(),
+    dt.getMonth(),
     1, // First day of the month
     0, // 00:00:00.000
     0,

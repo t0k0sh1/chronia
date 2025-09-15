@@ -4,8 +4,8 @@
  * Returns the number of full months between the earlier and later date.
  * Only considers year and month values, ignoring days and time components.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns The difference in months (negative if dateLeft is before dateRight)
  *
  * @example
@@ -23,8 +23,10 @@
  * diffMonths(date5, date6); // 12
  * ```
  */
-export function diffMonths(dateLeft: Date, dateRight: Date): number {
-  const yearDiff = dateLeft.getFullYear() - dateRight.getFullYear();
-  const monthDiff = dateLeft.getMonth() - dateRight.getMonth();
+export function diffMonths(dateLeft: Date | number, dateRight: Date | number): number {
+  const dtLeft = new Date(dateLeft);
+  const dtRight = new Date(dateRight);
+  const yearDiff = dtLeft.getFullYear() - dtRight.getFullYear();
+  const monthDiff = dtLeft.getMonth() - dtRight.getMonth();
   return yearDiff * 12 + monthDiff;
 }

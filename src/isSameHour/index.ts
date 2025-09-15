@@ -6,8 +6,8 @@ import { diffHours } from "../diffHours";
  * Returns true if both dates fall within the same hour,
  * regardless of minutes, seconds, or milliseconds.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns True if both dates are in the same hour, false otherwise
  *
  * @example
@@ -29,6 +29,6 @@ import { diffHours } from "../diffHours";
  * isSameHour(date7, date8); // false (different days)
  * ```
  */
-export function isSameHour(dateLeft: Date, dateRight: Date): boolean {
+export function isSameHour(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffHours(dateLeft, dateRight) === 0;
 }

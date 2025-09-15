@@ -5,7 +5,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  *
  * Sets the milliseconds to 0 while keeping the same date, hour, minute, and second.
  *
- * @param date - The date to truncate
+ * @param date - The date or timestamp to truncate
  * @returns New Date object truncated to the start of the second
  *
  * @example
@@ -14,6 +14,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * const truncated = truncSecond(date); // June 15, 2024 14:30:45.000
  * ```
  */
-export function truncSecond(date: Date): Date {
-  return truncateToUnit(date, "second");
+export function truncSecond(date: Date | number): Date {
+  const dt = new Date(date);
+  return truncateToUnit(dt, "second");
 }

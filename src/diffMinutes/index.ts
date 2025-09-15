@@ -4,8 +4,8 @@
  * Returns the number of complete minutes between the earlier and later date.
  * Ignores seconds and milliseconds - only counts full minute boundaries crossed.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns The difference in complete minutes (negative if dateLeft is before dateRight)
  *
  * @example
@@ -23,21 +23,23 @@
  * diffMinutes(date5, date6); // 15
  * ```
  */
-export function diffMinutes(dateLeft: Date, dateRight: Date): number {
+export function diffMinutes(dateLeft: Date | number, dateRight: Date | number): number {
+  const dtLeft = new Date(dateLeft);
+  const dtRight = new Date(dateRight);
   // Create dates at the start of each minute for comparison
   const leftMinute = new Date(
-    dateLeft.getFullYear(),
-    dateLeft.getMonth(),
-    dateLeft.getDate(),
-    dateLeft.getHours(),
-    dateLeft.getMinutes()
+    dtLeft.getFullYear(),
+    dtLeft.getMonth(),
+    dtLeft.getDate(),
+    dtLeft.getHours(),
+    dtLeft.getMinutes()
   );
   const rightMinute = new Date(
-    dateRight.getFullYear(),
-    dateRight.getMonth(),
-    dateRight.getDate(),
-    dateRight.getHours(),
-    dateRight.getMinutes()
+    dtRight.getFullYear(),
+    dtRight.getMonth(),
+    dtRight.getDate(),
+    dtRight.getHours(),
+    dtRight.getMinutes()
   );
 
   const diffTime = leftMinute.getTime() - rightMinute.getTime();

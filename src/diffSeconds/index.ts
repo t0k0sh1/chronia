@@ -4,8 +4,8 @@
  * Returns the number of complete seconds between the earlier and later date.
  * Ignores milliseconds - only counts full second boundaries crossed.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns The difference in complete seconds (negative if dateLeft is before dateRight)
  *
  * @example
@@ -23,23 +23,25 @@
  * diffSeconds(date5, date6); // 30
  * ```
  */
-export function diffSeconds(dateLeft: Date, dateRight: Date): number {
+export function diffSeconds(dateLeft: Date | number, dateRight: Date | number): number {
+  const dtLeft = new Date(dateLeft);
+  const dtRight = new Date(dateRight);
   // Create dates at the start of each second for comparison
   const leftSecond = new Date(
-    dateLeft.getFullYear(),
-    dateLeft.getMonth(),
-    dateLeft.getDate(),
-    dateLeft.getHours(),
-    dateLeft.getMinutes(),
-    dateLeft.getSeconds()
+    dtLeft.getFullYear(),
+    dtLeft.getMonth(),
+    dtLeft.getDate(),
+    dtLeft.getHours(),
+    dtLeft.getMinutes(),
+    dtLeft.getSeconds()
   );
   const rightSecond = new Date(
-    dateRight.getFullYear(),
-    dateRight.getMonth(),
-    dateRight.getDate(),
-    dateRight.getHours(),
-    dateRight.getMinutes(),
-    dateRight.getSeconds()
+    dtRight.getFullYear(),
+    dtRight.getMonth(),
+    dtRight.getDate(),
+    dtRight.getHours(),
+    dtRight.getMinutes(),
+    dtRight.getSeconds()
   );
 
   const diffTime = leftSecond.getTime() - rightSecond.getTime();

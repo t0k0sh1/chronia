@@ -5,7 +5,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  *
  * Sets the date to January 1st at 00:00:00.000 of the same year.
  *
- * @param date - The date to truncate
+ * @param date - The date or timestamp to truncate
  * @returns New Date object truncated to the start of the year
  *
  * @example
@@ -14,6 +14,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * const truncated = truncYear(date); // January 1, 2024 00:00:00.000
  * ```
  */
-export function truncYear(date: Date): Date {
-  return truncateToUnit(date, "year");
+export function truncYear(date: Date | number): Date {
+  const dt = new Date(date);
+  return truncateToUnit(dt, "year");
 }

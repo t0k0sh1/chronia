@@ -5,7 +5,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  *
  * Sets the date to the 1st day of the month at 00:00:00.000.
  *
- * @param date - The date to truncate
+ * @param date - The date or timestamp to truncate
  * @returns New Date object truncated to the start of the month
  *
  * @example
@@ -14,6 +14,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * const truncated = truncMonth(date); // June 1, 2024 00:00:00.000
  * ```
  */
-export function truncMonth(date: Date): Date {
-  return truncateToUnit(date, "month");
+export function truncMonth(date: Date | number): Date {
+  const dt = new Date(date);
+  return truncateToUnit(dt, "month");
 }

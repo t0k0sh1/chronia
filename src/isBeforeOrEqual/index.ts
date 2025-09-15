@@ -7,26 +7,28 @@ import { TimeUnit } from "../types";
  * - Returns `false` if either date is invalid.
  * - Comparison can be truncated to a given unit (default: millisecond).
  *
- * @param a - First date to compare.
- * @param b - Second date to compare.
+ * @param a - First date or timestamp to compare.
+ * @param b - Second date or timestamp to compare.
  * @param opts.unit - Comparison unit (year, month, day, hour, minute, second, millisecond).
  */
 export function isBeforeOrEqual(
-  a: Date,
-  b: Date,
+  a: Date | number,
+  b: Date | number,
   opts?: {
     unit?: TimeUnit;
   },
 ): boolean {
-  if (isNaN(a.getTime()) || isNaN(b.getTime())) return false;
+  const dtA = new Date(a);
+  const dtB = new Date(b);
+  if (isNaN(dtA.getTime()) || isNaN(dtB.getTime())) return false;
 
   const unit = opts?.unit ?? "millisecond";
 
   if (unit === "millisecond") {
-    return a.getTime() <= b.getTime();
+    return dtA.getTime() <= dtB.getTime();
   }
 
-  const aTruncated = truncateToUnit(a, unit);
-  const bTruncated = truncateToUnit(b, unit);
+  const aTruncated = truncateToUnit(dtA, unit);
+  const bTruncated = truncateToUnit(dtB, unit);
   return aTruncated.getTime() <= bTruncated.getTime();
 }

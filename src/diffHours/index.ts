@@ -4,8 +4,8 @@
  * Returns the number of complete hours between the earlier and later date.
  * Ignores minutes, seconds, and milliseconds - only counts full hour boundaries crossed.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
+ * @param dateLeft - The first date or timestamp
+ * @param dateRight - The second date or timestamp
  * @returns The difference in complete hours (negative if dateLeft is before dateRight)
  *
  * @example
@@ -23,19 +23,21 @@
  * diffHours(date5, date6); // 3
  * ```
  */
-export function diffHours(dateLeft: Date, dateRight: Date): number {
+export function diffHours(dateLeft: Date | number, dateRight: Date | number): number {
+  const dtLeft = new Date(dateLeft);
+  const dtRight = new Date(dateRight);
   // Create dates at the start of each hour for comparison
   const leftHour = new Date(
-    dateLeft.getFullYear(),
-    dateLeft.getMonth(),
-    dateLeft.getDate(),
-    dateLeft.getHours()
+    dtLeft.getFullYear(),
+    dtLeft.getMonth(),
+    dtLeft.getDate(),
+    dtLeft.getHours()
   );
   const rightHour = new Date(
-    dateRight.getFullYear(),
-    dateRight.getMonth(),
-    dateRight.getDate(),
-    dateRight.getHours()
+    dtRight.getFullYear(),
+    dtRight.getMonth(),
+    dtRight.getDate(),
+    dtRight.getHours()
   );
 
   const diffTime = leftHour.getTime() - rightHour.getTime();
