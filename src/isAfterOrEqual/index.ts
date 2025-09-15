@@ -1,5 +1,5 @@
 import { truncateToUnit } from "../_lib/truncateToUnit";
-import { TimeUnit } from "../_lib/types";
+import { TimeUnit } from "../types";
 
 /**
  * Check if date `a` is after or equal to date `b`.
@@ -30,3 +30,4 @@ export function isAfterOrEqual(
   const bTruncated = truncateToUnit(b, unit);
   return aTruncated.getTime() >= bTruncated.getTime();
 }
+

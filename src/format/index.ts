@@ -1,6 +1,6 @@
 import { tokenize } from "../_lib/tokenize";
 import { formatters } from "../_lib/formatters";
-import { Localize } from "../_lib/types";
+import { Localize } from "../types";
 
 export function format(
   date: Date,

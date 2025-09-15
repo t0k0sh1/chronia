@@ -1,4 +1,4 @@
-import { Formatter } from "../../types";
+import { Formatter } from "../../../types";
 
 export const formatSecond: Formatter = (date, token) => {
   const secondsStr = String(date.getSeconds());

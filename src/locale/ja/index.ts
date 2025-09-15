@@ -1,4 +1,4 @@
-import { Localize } from "../../_lib/types";
+import { Localize } from "../../types";
 
 export const ja: Localize = {
   era: (era, options) => {

@@ -1,4 +1,4 @@
-import { Formatter } from "../../types";
+import { Formatter } from "../../../types";
 
 function getDayOfYear(date: Date): number {
   const start = new Date(date.getFullYear(), 0, 1);

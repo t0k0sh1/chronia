@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { formatMonth } from "../../../../src/_lib/formatters/tokens/month";
-import { Localize } from "../../../../src/_lib/types";
+import { Localize } from "../../../../src/types";
 
 const mockLocalize: Localize = {
   era: () => "",

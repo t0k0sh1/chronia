@@ -1,4 +1,4 @@
-import { Formatter } from "../../types";
+import { Formatter } from "../../../types";
 
 export const formatMonth: Formatter = (date, token, localize) => {
   const month = date.getMonth(); // 0–11

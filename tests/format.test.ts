@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { format } from "../src";
-import { Localize } from "../src/_lib/types";
+import { Localize } from "../src/types";
 
 // モック localize
 const mockLocalize: Localize = {

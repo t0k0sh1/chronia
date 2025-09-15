@@ -1,4 +1,4 @@
-import { Formatter } from "../../types";
+import { Formatter } from "../../../types";
 
 export const formatDayPeriod: Formatter = (date, token, localize) => {
   const hours = date.getHours();

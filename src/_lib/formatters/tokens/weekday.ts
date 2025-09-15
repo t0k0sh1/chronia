@@ -1,4 +1,4 @@
-import { Formatter } from "../../types";
+import { Formatter } from "../../../types";
 
 export const formatWeekday: Formatter = (date, token, localize) => {
   const weekday = date.getDay(); // 0 = Sunday, 6 = Saturday
