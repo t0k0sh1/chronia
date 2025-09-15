@@ -30,13 +30,13 @@
  */
 export function min(...dates: (Date | number)[]): Date {
   if (dates.length === 0) {
-    throw new Error('min requires at least one date argument');
+    throw new Error("min requires at least one date argument");
   }
 
   // Convert all inputs to Date objects and check validity
   const dateObjects: Date[] = [];
   for (const date of dates) {
-    const dateObj = typeof date === 'number' ? new Date(date) : date;
+    const dateObj = typeof date === "number" ? new Date(date) : date;
     if (isNaN(dateObj.getTime())) {
       return new Date(NaN);
     }

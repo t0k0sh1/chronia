@@ -44,9 +44,9 @@ export function clamp(
   maxDate: Date | number
 ): Date {
   // Convert all inputs to Date objects
-  const dateObj = typeof date === 'number' ? new Date(date) : date;
-  const minDateObj = typeof minDate === 'number' ? new Date(minDate) : minDate;
-  const maxDateObj = typeof maxDate === 'number' ? new Date(maxDate) : maxDate;
+  const dateObj = typeof date === "number" ? new Date(date) : date;
+  const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
+  const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
 
   // Check validity of all inputs
   if (
