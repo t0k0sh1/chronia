@@ -19,6 +19,7 @@ export * from "./isBefore";
 export * from "./isBeforeOrEqual";
 export * from "./isEqual";
 export * from "./isValid";
+export * from "./parse";
 export * from "./subDays";
 export * from "./subHours";
 export * from "./subMilliseconds";

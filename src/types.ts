@@ -72,6 +72,49 @@ export type Formatter = (
 ) => string;
 
 /**
+ * Parser result containing the new position and any parsed data.
+ */
+export type ParseResult = {
+  position: number;
+} | null;
+
+/**
+ * Date components being built during parsing.
+ */
+export type DateComponents = {
+  year: number;
+  month: number;
+  day: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+  milliseconds: number;
+  isPM: boolean;
+  hours12: number | null;
+};
+
+/**
+ * Token parser function for date parsing.
+ *
+ * Parses a specific format token from the input string and updates
+ * the date components accordingly.
+ *
+ * @param input - The input string being parsed
+ * @param position - Current position in the input string
+ * @param token - The format token to parse
+ * @param localize - Optional localization object for parsing localized text
+ * @param dateComponents - Date components being built
+ * @returns ParseResult with new position, or null if parsing fails
+ */
+export type Parser = (
+  input: string,
+  position: number,
+  token: string,
+  localize: Localize | undefined,
+  dateComponents: DateComponents,
+) => ParseResult;
+
+/**
  * Time unit for date/time operations.
  *
  * Used in various date manipulation and comparison functions to specify

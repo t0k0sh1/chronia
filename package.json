@@ -1,6 +1,6 @@
 {
   "name": "chronia",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "description": "Simple date/time utilities",
   "license": "MIT",
