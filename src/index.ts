@@ -55,3 +55,4 @@ export * from "./isSameMinute";
 export * from "./isSameSecond";
 export * from "./min";
 export * from "./max";
+export * from "./clamp";
