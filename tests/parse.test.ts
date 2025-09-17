@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parse } from "../src/parse";
-import { Localize } from "../src/types";
+import { Locale } from "../src/types";
 
 describe("parse", () => {
   describe("basic date parsing", () => {
@@ -212,7 +212,7 @@ describe("parse", () => {
   });
 
   describe("with localization", () => {
-    const mockLocalize: Localize = {
+    const mockLocale: Locale = {
       era: (era) => (era ? "н.э." : "до н.э."),
       month: (month) => {
         const months = [
@@ -229,20 +229,20 @@ describe("parse", () => {
     };
 
     it("parses localized month names", () => {
-      const result = parse("15 января 2024", "dd MMMM yyyy", { localize: mockLocalize });
+      const result = parse("15 января 2024", "dd MMMM yyyy", { locale: mockLocale });
       expect(result.getMonth()).toBe(0);
       expect(result.getDate()).toBe(15);
       expect(result.getFullYear()).toBe(2024);
     });
 
     it("parses localized day periods", () => {
-      const result = parse("3:30 ПП", "h:mm a", { localize: mockLocalize });
+      const result = parse("3:30 ПП", "h:mm a", { locale: mockLocale });
       expect(result.getHours()).toBe(15);
       expect(result.getMinutes()).toBe(30);
     });
 
     it("parses localized weekdays", () => {
-      const result = parse("Пн", "EEE", { localize: mockLocalize });
+      const result = parse("Пн", "EEE", { locale: mockLocale });
       expect(isNaN(result.getTime())).toBe(false);
     });
   });

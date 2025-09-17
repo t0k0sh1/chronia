@@ -1,20 +1,20 @@
 import { Formatter } from "../../../types";
 
-export const formatEra: Formatter = (date, token, localize) => {
+export const formatEra: Formatter = (date, token, locale) => {
   const rawYear = date.getFullYear();
   const era = rawYear > 0 ? 1 : 0;
 
-  if (localize) {
+  if (locale) {
     switch (token) {
       case "G":
       case "GG":
       case "GGG":
-        return localize.era(era, { width: "abbreviated" });
+        return locale.era(era, { width: "abbreviated" });
       case "GGGGG":
-        return localize.era(era, { width: "narrow" });
+        return locale.era(era, { width: "narrow" });
       case "GGGG":
       default:
-        return localize.era(era, { width: "wide" });
+        return locale.era(era, { width: "wide" });
     }
   }
 

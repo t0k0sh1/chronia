@@ -1,6 +1,6 @@
-import { Localize } from "../../types";
+import { Locale } from "../../types";
 
-export const enUS: Localize = {
+export const enUS: Locale = {
   era: (era, options) => {
     if (options?.width === "narrow") return era ? "A" : "B";
     if (options?.width === "wide") return era ? "Anno Domini" : "Before Christ";

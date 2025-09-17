@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { formatWeekday } from "../../../../src/_lib/formatters/tokens/weekday";
-import { Localize } from "../../../../src/types";
+import { Locale } from "../../../../src/types";
 
-const mockLocalize: Localize = {
+const mockLocale: Locale = {
   era: () => "",
   month: () => "",
   weekday: (weekday, options) => {
@@ -31,13 +31,13 @@ describe("formatWeekday", () => {
     {
       date: new Date(2025, 0, 5),
       token: "E",
-      localize: undefined,
+      locale: undefined,
       expected: "Sun",
     }, // 2025-01-05 = Sunday
     {
       date: new Date(2025, 0, 6),
       token: "EEE",
-      localize: undefined,
+      locale: undefined,
       expected: "Mon",
     }, // Monday
 
@@ -45,7 +45,7 @@ describe("formatWeekday", () => {
     {
       date: new Date(2025, 0, 7),
       token: "EEEE",
-      localize: undefined,
+      locale: undefined,
       expected: "Tuesday",
     },
 
@@ -53,7 +53,7 @@ describe("formatWeekday", () => {
     {
       date: new Date(2025, 0, 8),
       token: "EEEEE",
-      localize: undefined,
+      locale: undefined,
       expected: "W",
     },
 
@@ -61,7 +61,7 @@ describe("formatWeekday", () => {
     {
       date: new Date(2025, 0, 9),
       token: "E",
-      localize: mockLocalize,
+      locale: mockLocale,
       expected: "Thu",
     },
 
@@ -69,7 +69,7 @@ describe("formatWeekday", () => {
     {
       date: new Date(2025, 0, 10),
       token: "EEEE",
-      localize: mockLocalize,
+      locale: mockLocale,
       expected: "Friday",
     },
 
@@ -77,13 +77,13 @@ describe("formatWeekday", () => {
     {
       date: new Date(2025, 0, 11),
       token: "EEEEE",
-      localize: mockLocalize,
+      locale: mockLocale,
       expected: "S",
     }, // Saturday
   ])(
-    "date=$date token=$token localize? => $expected",
-    ({ date, token, localize, expected }) => {
-      expect(formatWeekday(date, token, localize)).toBe(expected);
+    "date=$date token=$token locale? => $expected",
+    ({ date, token, locale, expected }) => {
+      expect(formatWeekday(date, token, locale)).toBe(expected);
     },
   );
 });

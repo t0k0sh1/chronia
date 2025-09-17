@@ -1,6 +1,6 @@
-import { Localize } from "../../types";
+import { Locale } from "../../types";
 
-export const ja: Localize = {
+export const ja: Locale = {
   era: (era, options) => {
     if (options?.width === "narrow") return era ? "西" : "紀";
     if (options?.width === "wide") return era ? "西暦" : "紀元前";

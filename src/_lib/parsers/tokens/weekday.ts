@@ -1,10 +1,10 @@
 import { Parser } from "../../../types";
 
-export const parseWeekday: Parser = (input, position, token, localize, _dateComponents) => {
+export const parseWeekday: Parser = (input, position, token, locale, _dateComponents) => {
   // Weekday parsing doesn't affect the date components directly
   // It's mainly for validation - ensuring the parsed weekday matches the date
 
-  if (localize) {
+  if (locale) {
     const widthMap: { [key: string]: "narrow" | "abbreviated" | "wide" } = {
       "E": "abbreviated",
       "EE": "abbreviated",
@@ -17,7 +17,7 @@ export const parseWeekday: Parser = (input, position, token, localize, _dateComp
 
     // Try to match each weekday
     for (let weekdayIndex = 0; weekdayIndex < 7; weekdayIndex++) {
-      const weekdayName = localize.weekday(weekdayIndex, { width });
+      const weekdayName = locale.weekday(weekdayIndex, { width });
       if (input.startsWith(weekdayName, position)) {
         // We don't set the date based on weekday, just validate it matches
         return { position: position + weekdayName.length };

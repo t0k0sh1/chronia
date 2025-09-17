@@ -1,12 +1,12 @@
 import { Parser } from "../../../types";
 
-export const parseDayPeriod: Parser = (input, position, token, localize, dateComponents) => {
-  if (localize) {
+export const parseDayPeriod: Parser = (input, position, token, locale, dateComponents) => {
+  if (locale) {
     // Try AM - check longer strings first
     const amVariants = [
-      localize.dayPeriod("am", { width: "wide" }),
-      localize.dayPeriod("am", { width: "abbreviated" }),
-      localize.dayPeriod("am", { width: "narrow" }),
+      locale.dayPeriod("am", { width: "wide" }),
+      locale.dayPeriod("am", { width: "abbreviated" }),
+      locale.dayPeriod("am", { width: "narrow" }),
     ].sort((a, b) => b.length - a.length); // Sort by length descending
 
     for (const amText of amVariants) {
@@ -18,9 +18,9 @@ export const parseDayPeriod: Parser = (input, position, token, localize, dateCom
 
     // Try PM - check longer strings first
     const pmVariants = [
-      localize.dayPeriod("pm", { width: "wide" }),
-      localize.dayPeriod("pm", { width: "abbreviated" }),
-      localize.dayPeriod("pm", { width: "narrow" }),
+      locale.dayPeriod("pm", { width: "wide" }),
+      locale.dayPeriod("pm", { width: "abbreviated" }),
+      locale.dayPeriod("pm", { width: "narrow" }),
     ].sort((a, b) => b.length - a.length); // Sort by length descending
 
     for (const pmText of pmVariants) {

@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { format } from "../src";
-import { Localize } from "../src/types";
+import { Locale } from "../src/types";
 
-// モック localize
-const mockLocalize: Localize = {
+// モック locale
+const mockLocale: Locale = {
   era: (era, options) => {
     if (options?.width === "narrow") return era ? "A" : "B";
     if (options?.width === "wide") return era ? "Anno Domini" : "Before Christ";
@@ -120,26 +120,26 @@ describe("format - era tokens", () => {
     { year: 0, token: "G", localize: undefined, expected: "BC" },
 
     // --- localize abbreviated ---
-    { year: 2025, token: "G", localize: mockLocalize, expected: "AD" },
-    { year: -1, token: "G", localize: mockLocalize, expected: "BC" },
+    { year: 2025, token: "G", localize: mockLocale, expected: "AD" },
+    { year: -1, token: "G", localize: mockLocale, expected: "BC" },
 
     // --- localize wide ---
     {
       year: 2025,
       token: "GGGG",
-      localize: mockLocalize,
+      localize: mockLocale,
       expected: "Anno Domini",
     },
     {
       year: -1,
       token: "GGGG",
-      localize: mockLocalize,
+      localize: mockLocale,
       expected: "Before Christ",
     },
 
     // --- localize narrow ---
-    { year: 2025, token: "GGGGG", localize: mockLocalize, expected: "A" },
-    { year: -1, token: "GGGGG", localize: mockLocalize, expected: "B" },
+    { year: 2025, token: "GGGGG", localize: mockLocale, expected: "A" },
+    { year: -1, token: "GGGGG", localize: mockLocale, expected: "B" },
   ])(
     "year=$year token=$token localize? => $expected",
     ({ year, token, localize, expected }) => {
@@ -185,27 +185,27 @@ describe("format - dayPeriod tokens", () => {
     { hour: 23, token: "a", localize: undefined, expected: "PM" },
 
     // --- localize abbreviated ---
-    { hour: 9, token: "a", localize: mockLocalize, expected: "AM" },
-    { hour: 9, token: "aa", localize: mockLocalize, expected: "AM" },
-    { hour: 15, token: "a", localize: mockLocalize, expected: "PM" },
+    { hour: 9, token: "a", localize: mockLocale, expected: "AM" },
+    { hour: 9, token: "aa", localize: mockLocale, expected: "AM" },
+    { hour: 15, token: "a", localize: mockLocale, expected: "PM" },
 
     // --- localize wide ---
     {
       hour: 9,
       token: "aaaa",
-      localize: mockLocalize,
+      localize: mockLocale,
       expected: "ante meridiem",
     },
     {
       hour: 15,
       token: "aaaa",
-      localize: mockLocalize,
+      localize: mockLocale,
       expected: "post meridiem",
     },
 
     // --- localize narrow ---
-    { hour: 9, token: "aaaaa", localize: mockLocalize, expected: "a" },
-    { hour: 15, token: "aaaaa", localize: mockLocalize, expected: "p" },
+    { hour: 9, token: "aaaaa", localize: mockLocale, expected: "a" },
+    { hour: 15, token: "aaaaa", localize: mockLocale, expected: "p" },
   ])(
     "hour=$hour token=$token localize? => $expected",
     ({ hour, token, localize, expected }) => {
@@ -336,19 +336,19 @@ describe("format - weekday tokens", () => {
     {
       date: new Date(2025, 0, 9),
       token: "E",
-      localize: mockLocalize,
+      localize: mockLocale,
       expected: "Thu",
     }, // Thursday
     {
       date: new Date(2025, 0, 10),
       token: "EEEE",
-      localize: mockLocalize,
+      localize: mockLocale,
       expected: "Friday",
     },
     {
       date: new Date(2025, 0, 11),
       token: "EEEEE",
-      localize: mockLocalize,
+      localize: mockLocale,
       expected: "S",
     }, // Saturday
   ])(

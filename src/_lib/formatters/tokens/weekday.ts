@@ -1,20 +1,20 @@
 import { Formatter } from "../../../types";
 
-export const formatWeekday: Formatter = (date, token, localize) => {
+export const formatWeekday: Formatter = (date, token, locale) => {
   const weekday = date.getDay(); // 0 = Sunday, 6 = Saturday
 
-  if (localize) {
+  if (locale) {
     switch (token) {
       case "E":
       case "EE":
       case "EEE":
-        return localize.weekday(weekday, { width: "abbreviated" });
+        return locale.weekday(weekday, { width: "abbreviated" });
       case "EEEE":
-        return localize.weekday(weekday, { width: "wide" });
+        return locale.weekday(weekday, { width: "wide" });
       case "EEEEE":
-        return localize.weekday(weekday, { width: "narrow" });
+        return locale.weekday(weekday, { width: "narrow" });
       default:
-        return localize.weekday(weekday, { width: "abbreviated" });
+        return locale.weekday(weekday, { width: "abbreviated" });
     }
   }
 

@@ -1,6 +1,6 @@
 import { Parser } from "../../../types";
 
-export const parseMonth: Parser = (input, position, token, localize, dateComponents) => {
+export const parseMonth: Parser = (input, position, token, locale, dateComponents) => {
   // Handle numeric month formats
   if (token === "M" || token === "MM") {
     let monthStr = "";
@@ -26,12 +26,12 @@ export const parseMonth: Parser = (input, position, token, localize, dateCompone
   }
 
   // Handle text month formats (MMM, MMMM, MMMMM)
-  if (localize && (token === "MMM" || token === "MMMM" || token === "MMMMM")) {
+  if (locale && (token === "MMM" || token === "MMMM" || token === "MMMMM")) {
     const width = token === "MMM" ? "abbreviated" : token === "MMMM" ? "wide" : "narrow";
 
     // Try to match each month
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
-      const monthName = localize.month(monthIndex, { width });
+      const monthName = locale.month(monthIndex, { width });
       if (input.startsWith(monthName, position)) {
         dateComponents.month = monthIndex;
         return { position: position + monthName.length };

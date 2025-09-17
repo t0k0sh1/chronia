@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { formatEra } from "../../../../src/_lib/formatters/tokens/era";
-import { Localize } from "../../../../src/types";
+import { Locale } from "../../../../src/types";
 
-const mockLocalize: Localize = {
+const mockLocale: Locale = {
   era: (era, options) => {
     if (options?.width === "narrow") return era ? "A" : "B";
     if (options?.width === "wide") return era ? "Anno Domini" : "Before Christ";
@@ -16,36 +16,36 @@ const mockLocalize: Localize = {
 describe("formatEra", () => {
   it.each([
     // --- fallback (localizeなし) ---
-    { year: 2025, token: "G", localize: undefined, expected: "AD" },
-    { year: 0, token: "G", localize: undefined, expected: "BC" },
+    { year: 2025, token: "G", locale: undefined, expected: "AD" },
+    { year: 0, token: "G", locale: undefined, expected: "BC" },
 
     // --- localizeあり (abbreviated) ---
-    { year: 2025, token: "G", localize: mockLocalize, expected: "AD" },
-    { year: 0, token: "G", localize: mockLocalize, expected: "BC" },
+    { year: 2025, token: "G", locale: mockLocale, expected: "AD" },
+    { year: 0, token: "G", locale: mockLocale, expected: "BC" },
 
     // --- localizeあり (wide) ---
     {
       year: 2025,
       token: "GGGG",
-      localize: mockLocalize,
+      locale: mockLocale,
       expected: "Anno Domini",
     },
     {
       year: -1,
       token: "GGGG",
-      localize: mockLocalize,
+      locale: mockLocale,
       expected: "Before Christ",
     },
 
     // --- localizeあり (narrow) ---
-    { year: 2025, token: "GGGGG", localize: mockLocalize, expected: "A" },
-    { year: -1, token: "GGGGG", localize: mockLocalize, expected: "B" },
+    { year: 2025, token: "GGGGG", locale: mockLocale, expected: "A" },
+    { year: -1, token: "GGGGG", locale: mockLocale, expected: "B" },
   ])(
-    "year=$year token=$token localize=$localize => $expected",
-    ({ year, token, localize, expected }) => {
+    "year=$year token=$token locale=$locale => $expected",
+    ({ year, token, locale, expected }) => {
       const d = new Date(0, 0, 1);
       d.setFullYear(year);
-      expect(formatEra(d, token, localize)).toBe(expected);
+      expect(formatEra(d, token, locale)).toBe(expected);
     },
   );
 });

@@ -1,12 +1,12 @@
 import { Parser } from "../../../types";
 
-export const parseEra: Parser = (input, position, token, localize, dateComponents) => {
-  if (localize) {
+export const parseEra: Parser = (input, position, token, locale, dateComponents) => {
+  if (locale) {
     // Try AD/CE (era = 1) - check longer strings first
     const adVariants = [
-      localize.era(1, { width: "wide" }),
-      localize.era(1, { width: "abbreviated" }),
-      localize.era(1, { width: "narrow" }),
+      locale.era(1, { width: "wide" }),
+      locale.era(1, { width: "abbreviated" }),
+      locale.era(1, { width: "narrow" }),
     ].sort((a, b) => b.length - a.length); // Sort by length descending
 
     for (const adText of adVariants) {
@@ -19,9 +19,9 @@ export const parseEra: Parser = (input, position, token, localize, dateComponent
 
     // Try BC/BCE (era = 0) - check longer strings first
     const bcVariants = [
-      localize.era(0, { width: "wide" }),
-      localize.era(0, { width: "abbreviated" }),
-      localize.era(0, { width: "narrow" }),
+      locale.era(0, { width: "wide" }),
+      locale.era(0, { width: "abbreviated" }),
+      locale.era(0, { width: "narrow" }),
     ].sort((a, b) => b.length - a.length); // Sort by length descending
 
     for (const bcText of bcVariants) {

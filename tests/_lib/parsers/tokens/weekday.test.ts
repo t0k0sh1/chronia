@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parseWeekday } from "../../../../src/_lib/parsers/tokens/weekday";
-import { DateComponents, Localize } from "../../../../src/types";
+import { DateComponents, Locale } from "../../../../src/types";
 
 describe("parseWeekday", () => {
   const createDateComponents = (): DateComponents => ({
@@ -15,7 +15,7 @@ describe("parseWeekday", () => {
     hours12: null,
   });
 
-  const mockLocalize: Localize = {
+  const mockLocale: Locale = {
     era: () => "",
     month: () => "",
     weekday: (weekday, options) => {
@@ -42,7 +42,7 @@ describe("parseWeekday", () => {
         ["Sat", "E"],
       ])("parses localized %s with pattern %s", (input, token) => {
         const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, token, mockLocalize, dateComponents);
+        const result = parseWeekday(input, 0, token, mockLocale, dateComponents);
 
         expect(result).not.toBeNull();
         expect(result!.position).toBe(input.length);
@@ -61,7 +61,7 @@ describe("parseWeekday", () => {
         ["Saturday"],
       ])("parses localized %s", (input) => {
         const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, "EEEE", mockLocalize, dateComponents);
+        const result = parseWeekday(input, 0, "EEEE", mockLocale, dateComponents);
 
         expect(result).not.toBeNull();
         expect(result!.position).toBe(input.length);
@@ -77,7 +77,7 @@ describe("parseWeekday", () => {
         ["F"],
       ])("parses localized narrow %s", (input) => {
         const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, "EEEEE", mockLocalize, dateComponents);
+        const result = parseWeekday(input, 0, "EEEEE", mockLocale, dateComponents);
 
         expect(result).not.toBeNull();
         expect(result!.position).toBe(1);
@@ -88,12 +88,12 @@ describe("parseWeekday", () => {
         const dateComponents1 = createDateComponents();
         const dateComponents2 = createDateComponents();
 
-        const result1 = parseWeekday("T", 0, "EEEEE", mockLocalize, dateComponents1);
+        const result1 = parseWeekday("T", 0, "EEEEE", mockLocale, dateComponents1);
         expect(result1).not.toBeNull();
         expect(result1!.position).toBe(1);
 
         // Should match the first occurrence (Tuesday = index 2)
-        const result2 = parseWeekday("T", 0, "EEEEE", mockLocalize, dateComponents2);
+        const result2 = parseWeekday("T", 0, "EEEEE", mockLocale, dateComponents2);
         expect(result2).not.toBeNull();
         expect(result2!.position).toBe(1);
       });
@@ -190,7 +190,7 @@ describe("parseWeekday", () => {
 
     it("returns null when no match found with localization", () => {
       const dateComponents = createDateComponents();
-      const result = parseWeekday("InvalidDay", 0, "EEEE", mockLocalize, dateComponents);
+      const result = parseWeekday("InvalidDay", 0, "EEEE", mockLocale, dateComponents);
 
       expect(result).toBeNull();
     });

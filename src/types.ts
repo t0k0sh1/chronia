@@ -7,7 +7,7 @@
  * - "abbreviated": Short form (e.g., "Mon" for Monday)
  * - "wide": Full form (e.g., "Monday")
  */
-export type Localize = {
+export type Locale = {
   /**
    * Format era (BC/AD).
    *
@@ -62,13 +62,13 @@ export type Localize = {
  *
  * @param date - The date to format
  * @param token - The format token to process
- * @param localize - Optional localization object for locale-specific formatting
+ * @param locale - Optional localization object for locale-specific formatting
  * @returns Formatted string representation of the date component
  */
 export type Formatter = (
   date: Date,
   token: string,
-  localize?: Localize,
+  locale?: Locale,
 ) => string;
 
 /**
@@ -102,7 +102,7 @@ export type DateComponents = {
  * @param input - The input string being parsed
  * @param position - Current position in the input string
  * @param token - The format token to parse
- * @param localize - Optional localization object for parsing localized text
+ * @param locale - Optional localization object for parsing localized text
  * @param dateComponents - Date components being built
  * @returns ParseResult with new position, or null if parsing fails
  */
@@ -110,7 +110,7 @@ export type Parser = (
   input: string,
   position: number,
   token: string,
-  localize: Localize | undefined,
+  locale: Locale | undefined,
   dateComponents: DateComponents,
 ) => ParseResult;
 

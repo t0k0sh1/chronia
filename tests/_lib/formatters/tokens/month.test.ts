@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { formatMonth } from "../../../../src/_lib/formatters/tokens/month";
-import { Localize } from "../../../../src/types";
+import { Locale } from "../../../../src/types";
 
-const mockLocalize: Localize = {
+const mockLocale: Locale = {
   era: () => "",
   month: (month, options) => {
     const abbreviated = [
@@ -45,27 +45,27 @@ const mockLocalize: Localize = {
 describe("formatMonth", () => {
   it.each([
     // --- fallback (数値のみ) ---
-    { month: 0, token: "M", localize: undefined, expected: "1" },
-    { month: 0, token: "MM", localize: undefined, expected: "01" },
-    { month: 8, token: "M", localize: undefined, expected: "9" },
-    { month: 11, token: "MM", localize: undefined, expected: "12" },
+    { month: 0, token: "M", locale: undefined, expected: "1" },
+    { month: 0, token: "MM", locale: undefined, expected: "01" },
+    { month: 8, token: "M", locale: undefined, expected: "9" },
+    { month: 11, token: "MM", locale: undefined, expected: "12" },
 
     // --- localize (abbreviated) ---
-    { month: 0, token: "MMM", localize: mockLocalize, expected: "Jan" },
-    { month: 11, token: "MMM", localize: mockLocalize, expected: "Dec" },
+    { month: 0, token: "MMM", locale: mockLocale, expected: "Jan" },
+    { month: 11, token: "MMM", locale: mockLocale, expected: "Dec" },
 
     // --- localize (wide) ---
-    { month: 0, token: "MMMM", localize: mockLocalize, expected: "January" },
-    { month: 1, token: "MMMM", localize: mockLocalize, expected: "February" },
+    { month: 0, token: "MMMM", locale: mockLocale, expected: "January" },
+    { month: 1, token: "MMMM", locale: mockLocale, expected: "February" },
 
     // --- localize (narrow) ---
-    { month: 0, token: "MMMMM", localize: mockLocalize, expected: "J" },
-    { month: 1, token: "MMMMM", localize: mockLocalize, expected: "F" },
+    { month: 0, token: "MMMMM", locale: mockLocale, expected: "J" },
+    { month: 1, token: "MMMMM", locale: mockLocale, expected: "F" },
   ])(
-    "month=$month token=$token localize? => $expected",
-    ({ month, token, localize, expected }) => {
+    "month=$month token=$token locale? => $expected",
+    ({ month, token, locale, expected }) => {
       const d = new Date(2025, month, 1);
-      expect(formatMonth(d, token, localize)).toBe(expected);
+      expect(formatMonth(d, token, locale)).toBe(expected);
     },
   );
 });

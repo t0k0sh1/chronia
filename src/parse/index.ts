@@ -8,7 +8,7 @@
  * @param dateString - The date string to parse
  * @param pattern - The format pattern using Unicode tokens (e.g., "yyyy-MM-dd HH:mm:ss")
  * @param options - Optional parsing configuration
- * @param options.localize - Optional localization object for parsing locale-specific text
+ * @param options.locale - Optional localization object for parsing locale-specific text
  * @param options.referenceDate - Reference date for missing components (defaults to current date)
  * @returns Parsed Date object, or invalid Date if parsing fails
  *
@@ -29,8 +29,8 @@
  * parse("14:30", "HH:mm", { referenceDate: refDate }); // Date(2023, 5, 10, 14, 30)
  *
  * // Localized parsing
- * import { enUS } from "./locale/en-US";
- * parse("January 15, 2024", "MMMM dd, yyyy", { localize: enUS });
+ * import { enUS } from "./i18n/en-US";
+ * parse("January 15, 2024", "MMMM dd, yyyy", { locale: enUS });
  *
  * // Invalid parsing
  * parse("invalid", "yyyy-MM-dd"); // Invalid Date (isNaN(date.getTime()) === true)
@@ -54,13 +54,13 @@
 
 import { tokenize } from "../_lib/tokenize";
 import { parsers } from "../_lib/parsers";
-import { Localize } from "../types";
+import { Locale } from "../types";
 
 export function parse(
   dateString: string,
   pattern: string,
   options?: {
-    localize?: Localize;
+    locale?: Locale;
     referenceDate?: Date;
   },
 ): Date {
@@ -86,7 +86,7 @@ export function parse(
     const parser = parsers[token[0]];
 
     if (parser) {
-      const result = parser(dateString, position, token, options?.localize, dateComponents);
+      const result = parser(dateString, position, token, options?.locale, dateComponents);
       if (result === null) {
         return new Date(NaN); // Parsing failed
       }

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parseEra } from "../../../../src/_lib/parsers/tokens/era";
-import { DateComponents, Localize } from "../../../../src/types";
+import { DateComponents, Locale } from "../../../../src/types";
 
 describe("parseEra", () => {
   const createDateComponents = (year = 2000): DateComponents => ({
@@ -15,7 +15,7 @@ describe("parseEra", () => {
     hours12: null,
   });
 
-  const mockLocalize: Localize = {
+  const mockLocale: Locale = {
     era: (era, options) => {
       if (options?.width === "narrow") return era ? "A" : "B";
       if (options?.width === "wide") return era ? "Anno Domini" : "Before Christ";
@@ -33,19 +33,19 @@ describe("parseEra", () => {
       const dateComponents3 = createDateComponents(100);
 
       // Narrow
-      const result1 = parseEra("A", 0, "G", mockLocalize, dateComponents1);
+      const result1 = parseEra("A", 0, "G", mockLocale, dateComponents1);
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(1);
       expect(dateComponents1.year).toBe(100); // No change for AD
 
       // Abbreviated
-      const result2 = parseEra("AD", 0, "G", mockLocalize, dateComponents2);
+      const result2 = parseEra("AD", 0, "G", mockLocale, dateComponents2);
       expect(result2).not.toBeNull();
       expect(result2!.position).toBe(2);
       expect(dateComponents2.year).toBe(100); // No change for AD
 
       // Wide
-      const result3 = parseEra("Anno Domini", 0, "G", mockLocalize, dateComponents3);
+      const result3 = parseEra("Anno Domini", 0, "G", mockLocale, dateComponents3);
       expect(result3).not.toBeNull();
       expect(result3!.position).toBe(11);
       expect(dateComponents3.year).toBe(100); // No change for AD
@@ -57,19 +57,19 @@ describe("parseEra", () => {
       const dateComponents3 = createDateComponents(100);
 
       // Narrow
-      const result1 = parseEra("B", 0, "G", mockLocalize, dateComponents1);
+      const result1 = parseEra("B", 0, "G", mockLocale, dateComponents1);
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(1);
       expect(dateComponents1.year).toBe(-99); // 100 BC = year -99
 
       // Abbreviated
-      const result2 = parseEra("BC", 0, "G", mockLocalize, dateComponents2);
+      const result2 = parseEra("BC", 0, "G", mockLocale, dateComponents2);
       expect(result2).not.toBeNull();
       expect(result2!.position).toBe(2);
       expect(dateComponents2.year).toBe(-99); // 100 BC = year -99
 
       // Wide
-      const result3 = parseEra("Before Christ", 0, "G", mockLocalize, dateComponents3);
+      const result3 = parseEra("Before Christ", 0, "G", mockLocale, dateComponents3);
       expect(result3).not.toBeNull();
       expect(result3!.position).toBe(13);
       expect(dateComponents3.year).toBe(-99); // 100 BC = year -99
@@ -221,7 +221,7 @@ describe("parseEra", () => {
 
     it("returns null when no match found with localization", () => {
       const dateComponents = createDateComponents(100);
-      const result = parseEra("XYZ", 0, "G", mockLocalize, dateComponents);
+      const result = parseEra("XYZ", 0, "G", mockLocale, dateComponents);
 
       expect(result).toBeNull();
     });

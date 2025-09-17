@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parseDayPeriod } from "../../../../src/_lib/parsers/tokens/dayPeriod";
-import { DateComponents, Localize } from "../../../../src/types";
+import { DateComponents, Locale } from "../../../../src/types";
 
 describe("parseDayPeriod", () => {
   const createDateComponents = (): DateComponents => ({
@@ -15,7 +15,7 @@ describe("parseDayPeriod", () => {
     hours12: null,
   });
 
-  const mockLocalize: Localize = {
+  const mockLocale: Locale = {
     era: () => "",
     month: () => "",
     weekday: () => "",
@@ -33,19 +33,19 @@ describe("parseDayPeriod", () => {
       const dateComponents3 = createDateComponents();
 
       // Narrow
-      const result1 = parseDayPeriod("a", 0, "a", mockLocalize, dateComponents1);
+      const result1 = parseDayPeriod("a", 0, "a", mockLocale, dateComponents1);
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(1);
       expect(dateComponents1.isPM).toBe(false);
 
       // Abbreviated
-      const result2 = parseDayPeriod("AM", 0, "a", mockLocalize, dateComponents2);
+      const result2 = parseDayPeriod("AM", 0, "a", mockLocale, dateComponents2);
       expect(result2).not.toBeNull();
       expect(result2!.position).toBe(2);
       expect(dateComponents2.isPM).toBe(false);
 
       // Wide
-      const result3 = parseDayPeriod("Morning", 0, "a", mockLocalize, dateComponents3);
+      const result3 = parseDayPeriod("Morning", 0, "a", mockLocale, dateComponents3);
       expect(result3).not.toBeNull();
       expect(result3!.position).toBe(7);
       expect(dateComponents3.isPM).toBe(false);
@@ -57,19 +57,19 @@ describe("parseDayPeriod", () => {
       const dateComponents3 = createDateComponents();
 
       // Narrow
-      const result1 = parseDayPeriod("p", 0, "a", mockLocalize, dateComponents1);
+      const result1 = parseDayPeriod("p", 0, "a", mockLocale, dateComponents1);
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(1);
       expect(dateComponents1.isPM).toBe(true);
 
       // Abbreviated
-      const result2 = parseDayPeriod("PM", 0, "a", mockLocalize, dateComponents2);
+      const result2 = parseDayPeriod("PM", 0, "a", mockLocale, dateComponents2);
       expect(result2).not.toBeNull();
       expect(result2!.position).toBe(2);
       expect(dateComponents2.isPM).toBe(true);
 
       // Wide
-      const result3 = parseDayPeriod("Evening", 0, "a", mockLocalize, dateComponents3);
+      const result3 = parseDayPeriod("Evening", 0, "a", mockLocale, dateComponents3);
       expect(result3).not.toBeNull();
       expect(result3!.position).toBe(7);
       expect(dateComponents3.isPM).toBe(true);
@@ -185,7 +185,7 @@ describe("parseDayPeriod", () => {
 
     it("returns null when no match found with localization", () => {
       const dateComponents = createDateComponents();
-      const result = parseDayPeriod("XYZ", 0, "a", mockLocalize, dateComponents);
+      const result = parseDayPeriod("XYZ", 0, "a", mockLocale, dateComponents);
 
       expect(result).toBeNull();
     });
@@ -203,7 +203,7 @@ describe("parseDayPeriod", () => {
     });
 
     it("handles localized strings that might conflict", () => {
-      const conflictLocalize: Localize = {
+      const conflictLocale: Locale = {
         era: () => "",
         month: () => "",
         weekday: () => "",
@@ -217,12 +217,12 @@ describe("parseDayPeriod", () => {
       const dateComponents1 = createDateComponents();
       const dateComponents2 = createDateComponents();
 
-      const result1 = parseDayPeriod("ANTE", 0, "a", conflictLocalize, dateComponents1);
+      const result1 = parseDayPeriod("ANTE", 0, "a", conflictLocale, dateComponents1);
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(4);
       expect(dateComponents1.isPM).toBe(false);
 
-      const result2 = parseDayPeriod("POST", 0, "a", conflictLocalize, dateComponents2);
+      const result2 = parseDayPeriod("POST", 0, "a", conflictLocale, dateComponents2);
       expect(result2).not.toBeNull();
       expect(result2!.position).toBe(4);
       expect(dateComponents2.isPM).toBe(true);

@@ -20,7 +20,7 @@ This is a TypeScript date/time utility library with dual module support (ESM/CJS
 - **src/index.ts**: Main entry point that re-exports all utilities
 - **src/format/**: Date formatting functionality with locale support
 - **src/addDays/**: Date arithmetic utilities
-- **src/locale/**: Locale-specific formatting data (en-US, ja)
+- **src/i18n/**: Locale-specific formatting data (en-US, ja)
 - **src/_lib/**: Internal shared utilities
 
 ### Formatting System Architecture
@@ -29,7 +29,7 @@ The date formatting system follows a token-based approach:
 
 1. **Tokenization** (`src/_lib/tokenize.ts`): Parses format patterns into tokens using regex
 2. **Formatters** (`src/_lib/formatters/`): Token handlers organized by category (year, month, day, etc.)
-3. **Localization** (`src/_lib/types.ts`, `src/locale/`): Pluggable locale system via `Localize` interface
+3. **Localization** (`src/_lib/types.ts`, `src/i18n/`): Pluggable locale system via `Localize` interface
 
 ### Key Design Patterns
 

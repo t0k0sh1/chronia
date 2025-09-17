@@ -1,17 +1,17 @@
 import { tokenize } from "../_lib/tokenize";
 import { formatters } from "../_lib/formatters";
-import { Localize } from "../types";
+import { Locale } from "../types";
 
 /**
  * Format a Date object according to a format pattern.
  *
  * Supports Unicode format patterns with various tokens for year, month, day,
  * hour, minute, second, millisecond, era, and weekday formatting.
- * Includes support for localized formatting via optional Localize parameter.
+ * Includes support for localized formatting via optional Locale parameter.
  *
  * @param date - The Date object to format
  * @param pattern - The format pattern using Unicode tokens (e.g., "yyyy-MM-dd HH:mm:ss")
- * @param localize - Optional localization object for locale-specific formatting
+ * @param locale - Optional localization object for locale-specific formatting
  * @returns Formatted date string
  *
  * @example
@@ -42,20 +42,15 @@ import { Localize } from "../types";
  * - **Weekday**: E/EE/EEE (Mon), EEEE (Monday)
  * - **Day of Year**: D (1), DD (01), DDD (001)
  */
-export function format(
-  date: Date,
-  pattern: string,
-  localize?: Localize,
-): string {
+export function format(date: Date, pattern: string, locale?: Locale): string {
   const tokens = tokenize(pattern);
   let result = "";
 
   for (const token of tokens) {
     const handler = formatters[token[0]];
     if (handler) {
-      result += handler(date, token, localize);
+      result += handler(date, token, locale);
     } else {
-      // リテラル文字（'...'）や記号
       result += token.replace(/''/g, "'").replace(/^'|'$/g, "");
     }
   }

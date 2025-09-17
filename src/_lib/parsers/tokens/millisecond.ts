@@ -1,6 +1,6 @@
 import { Parser } from "../../../types";
 
-export const parseMillisecond: Parser = (input, position, token, _localize, dateComponents) => {
+export const parseMillisecond: Parser = (input, position, token, _locale, dateComponents) => {
   const length = token.length;
   let msStr = "";
 

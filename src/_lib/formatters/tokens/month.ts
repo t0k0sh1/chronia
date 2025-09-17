@@ -1,19 +1,19 @@
 import { Formatter } from "../../../types";
 
-export const formatMonth: Formatter = (date, token, localize) => {
+export const formatMonth: Formatter = (date, token, locale) => {
   const month = date.getMonth(); // 0–11
 
-  if (localize) {
+  if (locale) {
     switch (token) {
       case "M":
       case "MM":
         return (month + 1).toString().padStart(token.length, "0");
       case "MMM":
-        return localize.month(month, { width: "abbreviated" });
+        return locale.month(month, { width: "abbreviated" });
       case "MMMM":
-        return localize.month(month, { width: "wide" });
+        return locale.month(month, { width: "wide" });
       case "MMMMM":
-        return localize.month(month, { width: "narrow" });
+        return locale.month(month, { width: "narrow" });
     }
   }
 

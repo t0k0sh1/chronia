@@ -1,6 +1,6 @@
 import { Parser } from "../../../types";
 
-export const parseDay: Parser = (input, position, token, _localize, dateComponents) => {
+export const parseDay: Parser = (input, position, token, _locale, dateComponents) => {
   let dayStr = "";
   const maxLength = token === "d" ? 2 : 2;
 

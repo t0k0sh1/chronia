@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { parseMonth } from "../../../../src/_lib/parsers/tokens/month";
-import { DateComponents, Localize } from "../../../../src/types";
+import { DateComponents, Locale } from "../../../../src/types";
 
 describe("parseMonth", () => {
   const createDateComponents = (): DateComponents => ({
@@ -15,7 +15,7 @@ describe("parseMonth", () => {
     hours12: null,
   });
 
-  const mockLocalize: Localize = {
+  const mockLocale: Locale = {
     era: () => "",
     month: (month, options) => {
       const months = {
@@ -96,7 +96,7 @@ describe("parseMonth", () => {
         ["Dec", 0, 11], // December = month 11
       ])("parses localized %s as month %d", (input, position, expectedMonth) => {
         const dateComponents = createDateComponents();
-        const result = parseMonth(input, position, "MMM", mockLocalize, dateComponents);
+        const result = parseMonth(input, position, "MMM", mockLocale, dateComponents);
 
         expect(result).not.toBeNull();
         expect(result!.position).toBe(position + input.length);
@@ -144,7 +144,7 @@ describe("parseMonth", () => {
         ["December", 0, 11],
       ])("parses localized %s as month %d", (input, position, expectedMonth) => {
         const dateComponents = createDateComponents();
-        const result = parseMonth(input, position, "MMMM", mockLocalize, dateComponents);
+        const result = parseMonth(input, position, "MMMM", mockLocale, dateComponents);
 
         expect(result).not.toBeNull();
         expect(result!.position).toBe(position + input.length);
@@ -187,7 +187,7 @@ describe("parseMonth", () => {
         ["D", 0, 11], // December
       ])("parses localized narrow %s as month %d", (input, position, expectedMonth) => {
         const dateComponents = createDateComponents();
-        const result = parseMonth(input, position, "MMMMM", mockLocalize, dateComponents);
+        const result = parseMonth(input, position, "MMMMM", mockLocale, dateComponents);
 
         expect(result).not.toBeNull();
         expect(result!.position).toBe(position + input.length);
