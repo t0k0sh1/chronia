@@ -38,7 +38,7 @@ import { format, parse, addDays, isAfter, min, max, clamp } from 'chronia';
 // Format dates
 const date = new Date(2024, 0, 15, 14, 30, 0);
 format(date, 'yyyy-MM-dd HH:mm:ss'); // "2024-01-15 14:30:00"
-format(date, 'EEEE, MMMM do'); // "Monday, January 15th"
+format(date, 'EEEE, MMMM dd'); // "Monday, January 15"
 
 // Parse date strings
 const parsed = parse('2024-01-15', 'yyyy-MM-dd');
@@ -80,7 +80,7 @@ format(date, 'HH:mm:ss.SSS');        // "14:30:45.123"
 
 // Combined patterns
 format(date, 'yyyy-MM-dd HH:mm:ss'); // "2024-01-15 14:30:45"
-format(date, 'EEEE, MMMM do, yyyy'); // "Monday, January 15th, 2024"
+format(date, 'EEEE, MMMM dd, yyyy'); // "Monday, January 15, 2024"
 
 // Literals and custom text
 format(date, "'Today is' EEEE");     // "Today is Monday"
@@ -373,12 +373,12 @@ import { ja } from 'chronia/locale/ja';
 const date = new Date(2024, 0, 15);
 
 // English
-format(date, 'EEEE, MMMM do', enUS); // "Monday, January 15th"
+format(date, 'EEEE, MMMM dd', enUS); // "Monday, January 15"
 parse('January 15, 2024', 'MMMM dd, yyyy', { locale: enUS });
 
 // Japanese
-format(date, 'EEEE, MMMM do', ja); // "月曜日, 1月 15日"
-parse('月曜日, 1月 15日', 'EEEE, MMMM do', { locale: ja });
+format(date, 'EEEE, MMMM dd', ja); // "月曜日, 1月 15日"
+parse('月曜日, 1月 15日', 'EEEE, MMMM dd', { locale: ja });
 ```
 
 ### Available Locales

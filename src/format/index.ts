@@ -23,7 +23,7 @@ import { Locale } from "../types";
  * format(date, "dd/MM/yyyy HH:mm"); // "15/01/2024 14:30"
  *
  * // With literals
- * format(date, "'Today is' EEEE, MMMM do"); // "Today is Monday, January 15th"
+ * format(date, "'Today is' EEEE, MMMM dd"); // "Today is Monday, January 15"
  *
  * // 12-hour format
  * format(date, "h:mm a"); // "2:30 PM"
