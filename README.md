@@ -374,11 +374,11 @@ const date = new Date(2024, 0, 15);
 
 // English
 format(date, 'EEEE, MMMM do', enUS); // "Monday, January 15th"
-parse('January 15, 2024', 'MMMM dd, yyyy', { localize: enUS });
+parse('January 15, 2024', 'MMMM dd, yyyy', { locale: enUS });
 
 // Japanese
 format(date, 'EEEE, MMMM do', ja); // "月曜日, 1月 15日"
-parse('月曜日, 1月 15日', 'EEEE, MMMM do', { localize: ja });
+parse('月曜日, 1月 15日', 'EEEE, MMMM do', { locale: ja });
 ```
 
 ### Available Locales
@@ -391,7 +391,7 @@ parse('月曜日, 1月 15日', 'EEEE, MMMM do', { localize: ja });
 Chronia is built with TypeScript and provides excellent type safety:
 
 ```typescript
-import { format, parse, addDays, min, max, clamp, diffDays, Localize } from 'chronia';
+import { format, parse, addDays, min, max, clamp, diffDays, Locale } from 'chronia';
 
 // All functions are fully typed with Date | number support
 const date: Date = new Date();
@@ -410,7 +410,7 @@ const clamped: Date = clamp(date, timestamp, future);
 const difference: number = diffDays(date, timestamp);
 
 // Custom localization
-const customLocale: Localize = {
+const customLocale: Locale = {
   era: (era, options) => era ? 'CE' : 'BCE',
   month: (month, options) => `Month ${month + 1}`,
   weekday: (weekday, options) => `Day ${weekday}`,
@@ -428,9 +428,10 @@ const customLocale: Localize = {
 
 Chronia is designed to be lightweight and tree-shakable:
 
-- Core library: ~30KB (minified)
+- ESM: 17.5 KB (minified) / 4.1 KB (gzipped)
+- CJS: 17.8 KB (minified)
 - Individual functions can be imported to reduce bundle size
-- ESM and CJS builds available
+- Full TypeScript definitions included
 
 ## License
 
