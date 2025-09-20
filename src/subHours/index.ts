@@ -13,5 +13,11 @@ import { addHours } from "../addHours";
  * @returns A new `Date` object with the hours subtracted, or `Invalid Date` if input is invalid.
  */
 export function subHours(date: Date | number, amount: number): Date {
+  if (!(date instanceof Date || typeof date === "number")) {
+    return new Date(NaN);
+  }
+  if (!(typeof amount === "number")) {
+    return new Date(NaN);
+  }
   return addHours(date, -amount);
 }

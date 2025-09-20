@@ -38,4 +38,3 @@ export function addMonths(date: Date | number, amount: number): Date {
 
   return dt;
 }
-

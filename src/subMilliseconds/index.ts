@@ -13,5 +13,11 @@ import { addMilliseconds } from "../addMilliseconds";
  * @returns A new `Date` object with the milliseconds subtracted, or `Invalid Date` if input is invalid.
  */
 export function subMilliseconds(date: Date | number, amount: number): Date {
+  if (!(date instanceof Date || typeof date === "number")) {
+    return new Date(NaN);
+  }
+  if (!(typeof amount === "number")) {
+    return new Date(NaN);
+  }
   return addMilliseconds(date, -amount);
 }

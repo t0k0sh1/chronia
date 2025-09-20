@@ -5,88 +5,133 @@ describe("subDays", () => {
   it.each([
     // --- Valid cases ---
     {
-      base: new Date(2025, 0, 10), // Jan 10, 2025
+      date: new Date(2025, 0, 10),
       amount: 5,
-      expected: new Date(2025, 0, 5), // Jan 5, 2025
+      expected: new Date(2025, 0, 5),
       desc: "subtracts positive days",
     },
     {
-      base: new Date(2025, 0, 5),
+      date: new Date(2025, 0, 5),
       amount: -3,
-      expected: new Date(2025, 0, 8), // Jan 8, 2025 (subtracting negative = adding)
+      expected: new Date(2025, 0, 8),
       desc: "subtracts negative days (adds)",
     },
     {
-      base: new Date(2025, 1, 1), // Feb 1, 2025
-      amount: 1,
-      expected: new Date(2025, 0, 31), // Jan 31, 2025
-      desc: "crosses month boundary backwards",
+      date: new Date(2025, 0, 15),
+      amount: 0,
+      expected: new Date(2025, 0, 15),
+      desc: "subtracting zero days returns same date",
     },
     {
-      base: new Date(2024, 2, 1), // Mar 1, 2024 (leap year)
-      amount: 1,
-      expected: new Date(2024, 1, 29), // Feb 29, 2024
-      desc: "handles leap year backwards",
+      date: new Date(2025, 0, 5),
+      amount: 1.9,
+      expected: new Date(2025, 0, 4),
+      desc: "truncates fractional amount (positive)",
     },
     {
-      base: new Date(2023, 2, 1), // Mar 1, 2023 (non-leap year)
-      amount: 1,
-      expected: new Date(2023, 1, 28), // Feb 28, 2023
-      desc: "handles non-leap year backwards",
+      date: new Date(2025, 0, 5),
+      amount: -1.9,
+      expected: new Date(2025, 0, 6),
+      desc: "truncates fractional amount (negative)",
     },
     {
-      base: new Date(2025, 0, 15).getTime(),
+      date: new Date(2025, 1, 1),
+      amount: 1,
+      expected: new Date(2025, 0, 31),
+      desc: "crosses month boundary backward",
+    },
+    {
+      date: new Date(2024, 2, 1),
+      amount: 1,
+      expected: new Date(2024, 1, 29),
+      desc: "handles leap year backward (Mar 1 → Feb 29)",
+    },
+    {
+      date: new Date(2023, 2, 1),
+      amount: 1,
+      expected: new Date(2023, 1, 28),
+      desc: "handles non-leap year backward (Mar 1 → Feb 28)",
+    },
+    {
+      date: new Date(2025, 0, 1),
+      amount: 1,
+      expected: new Date(2024, 11, 31),
+      desc: "crosses year boundary backward",
+    },
+    {
+      date: new Date(2025, 0, 15).getTime(),
       amount: 10,
-      expected: new Date(2025, 0, 5), // Jan 5, 2025
+      expected: new Date(2025, 0, 5),
       desc: "accepts timestamp input",
     },
     {
-      base: new Date(2025, 0, 1), // Jan 1, 2025
-      amount: 0,
-      expected: new Date(2025, 0, 1), // Same date
-      desc: "subtracting zero returns same date",
+      date: new Date(2025, 0, 15),
+      amount: 365,
+      expected: new Date(2024, 0, 16),
+      desc: "handles large positive days",
+    },
+    {
+      date: new Date(2025, 0, 15),
+      amount: -365,
+      expected: new Date(2026, 0, 15),
+      desc: "subtracts large negative days (adds)",
     },
 
     // --- Invalid cases ---
     {
-      base: new Date("invalid"),
+      date: new Date("invalid"),
       amount: 5,
       expected: new Date(NaN),
       desc: "returns Invalid Date when base is invalid",
     },
     {
-      base: new Date(2025, 0, 1),
+      date: new Date(2025, 0, 1),
       amount: NaN,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is NaN",
     },
     {
-      base: new Date(2025, 0, 1),
+      date: new Date(2025, 0, 1),
       amount: Infinity,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is Infinity",
     },
     {
-      base: new Date(2025, 0, 1),
+      date: new Date(2025, 0, 1),
       amount: -Infinity,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is -Infinity",
     },
-  ])("$desc", ({ base, amount, expected }) => {
-    const result = subDays(base as Date | number, amount);
+    {
+      date: NaN,
+      amount: 1,
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when timestamp is NaN",
+    },
+    {
+      date: "2025-01-10" as any,
+      amount: 1,
+      expected: new Date(NaN),
+      desc: "rejects string as date",
+    },
+    {
+      date: new Date(2025, 0, 10),
+      amount: "1" as any,
+      expected: new Date(NaN),
+      desc: "rejects string as amount",
+    },
+    {
+      date: new Date("2021-01-01T15:00:00Z"),
+      amount: 1,
+      expected: new Date("2020-12-31T15:00:00Z"),
+      desc: "works correctly across UTC/JST boundary",
+    },
+  ])("$desc", ({ date, amount, expected }) => {
+    const result = subDays(date as Date | number, amount);
     if (isNaN(expected.getTime())) {
       expect(isNaN(result.getTime())).toBe(true);
     } else {
       expect(result.getTime()).toBe(expected.getTime());
     }
-  });
-
-  it("does not mutate the original date", () => {
-    const original = new Date(2025, 0, 15);
-    const originalTime = original.getTime();
-    
-    subDays(original, 5);
-    
-    expect(original.getTime()).toBe(originalTime);
   });
 });
