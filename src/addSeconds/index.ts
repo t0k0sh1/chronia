@@ -11,14 +11,19 @@
  * @returns A new `Date` object with the seconds added, or `Invalid Date` if input is invalid.
  */
 export function addSeconds(date: Date | number, amount: number): Date {
-  const dt = new Date(date);
-
-  // Validate input: must be a valid date and a finite number
-  if (isNaN(dt.getTime()) || !isFinite(amount)) {
+  if (!(date instanceof Date || typeof date === "number")) {
+    return new Date(NaN);
+  }
+  if (!(typeof amount === "number")) {
     return new Date(NaN);
   }
 
-  // Truncate fractions and add the seconds
+  const dt = new Date(date);
+
+  if (isNaN(dt.getTime())) {
+    return new Date(NaN);
+  }
+
   const secondsToAdd = Math.trunc(amount);
   dt.setSeconds(dt.getSeconds() + secondsToAdd);
   return dt;

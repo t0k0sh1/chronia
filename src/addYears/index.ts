@@ -22,7 +22,6 @@ export function addYears(date: Date | number, amount: number): Date {
 
   const dt = new Date(date);
 
-  // Validate input: must be a valid date and a finite number
   if (isNaN(dt.getTime())) {
     return new Date(NaN);
   }

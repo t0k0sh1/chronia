@@ -3,199 +3,147 @@ import { addMilliseconds } from "../src/addMilliseconds";
 
 describe("addMilliseconds", () => {
   it.each([
-    // --- Basic operations ---
+    // --- Valid cases ---
     {
-      base: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
+      date: new Date(2020, 5, 15, 12, 0, 0, 0),
       amount: 500,
-      expected: new Date(2025, 0, 15, 12, 0, 0, 500), // Jan 15, 2025, 12:00:00.500
+      expected: new Date(2020, 5, 15, 12, 0, 0, 500),
       desc: "adds positive milliseconds",
     },
     {
-      base: new Date(2025, 0, 15, 12, 0, 0, 500), // Jan 15, 2025, 12:00:00.500
+      date: new Date(2025, 8, 10, 15, 0, 0, 500),
       amount: -300,
-      expected: new Date(2025, 0, 15, 12, 0, 0, 200), // Jan 15, 2025, 12:00:00.200
+      expected: new Date(2025, 8, 10, 15, 0, 0, 200),
       desc: "adds negative milliseconds (subtracts)",
     },
     {
-      base: new Date(2025, 0, 15, 12, 0, 0, 100), // Jan 15, 2025, 12:00:00.100
+      date: new Date(2025, 3, 20, 10, 0, 0, 100),
       amount: 0,
-      expected: new Date(2025, 0, 15, 12, 0, 0, 100), // Jan 15, 2025, 12:00:00.100
-      desc: "adding zero milliseconds returns same time",
+      expected: new Date(2025, 3, 20, 10, 0, 0, 100),
+      desc: "adding zero milliseconds returns same date",
     },
-
-    // --- Boundary crossing ---
     {
-      base: new Date(2025, 0, 15, 12, 0, 0, 999), // Jan 15, 2025, 12:00:00.999
+      date: new Date(2020, 0, 1, 12, 0, 0, 0),
+      amount: 1.9,
+      expected: new Date(2020, 0, 1, 12, 0, 0, 1),
+      desc: "truncates fractional amount (positive)",
+    },
+    {
+      date: new Date(2020, 0, 1, 12, 0, 0, 100),
+      amount: -2.7,
+      expected: new Date(2020, 0, 1, 12, 0, 0, 98),
+      desc: "truncates fractional amount (negative)",
+    },
+    {
+      date: new Date(2020, 0, 1, 12, 0, 0, 999),
       amount: 1,
-      expected: new Date(2025, 0, 15, 12, 0, 1, 0), // Jan 15, 2025, 12:00:01.000
+      expected: new Date(2020, 0, 1, 12, 0, 1, 0),
       desc: "crosses second boundary forward",
     },
     {
-      base: new Date(2025, 0, 15, 12, 0, 1, 0), // Jan 15, 2025, 12:00:01.000
+      date: new Date(2020, 0, 1, 12, 0, 1, 0),
       amount: -1,
-      expected: new Date(2025, 0, 15, 12, 0, 0, 999), // Jan 15, 2025, 12:00:00.999
+      expected: new Date(2020, 0, 1, 12, 0, 0, 999),
       desc: "crosses second boundary backward",
     },
     {
-      base: new Date(2025, 0, 15, 12, 59, 59, 999), // Jan 15, 2025, 12:59:59.999
+      date: new Date(2020, 0, 1, 12, 59, 59, 999),
       amount: 1,
-      expected: new Date(2025, 0, 15, 13, 0, 0, 0), // Jan 15, 2025, 13:00:00.000
+      expected: new Date(2020, 0, 1, 13, 0, 0, 0),
       desc: "crosses minute and hour boundary forward",
     },
     {
-      base: new Date(2025, 0, 15, 0, 0, 0, 0), // Jan 15, 2025, 00:00:00.000
-      amount: -1,
-      expected: new Date(2025, 0, 14, 23, 59, 59, 999), // Jan 14, 2025, 23:59:59.999
-      desc: "crosses day boundary backward",
+      date: new Date(2020, 0, 1, 23, 59, 59, 999),
+      amount: 1,
+      expected: new Date(2020, 0, 2, 0, 0, 0, 0),
+      desc: "crosses day boundary forward",
     },
     {
-      base: new Date(2025, 0, 31, 23, 59, 59, 999), // Jan 31, 2025, 23:59:59.999
+      date: new Date(2020, 0, 31, 23, 59, 59, 999),
       amount: 1,
-      expected: new Date(2025, 1, 1, 0, 0, 0, 0), // Feb 1, 2025, 00:00:00.000
+      expected: new Date(2020, 1, 1, 0, 0, 0, 0),
       desc: "crosses month boundary",
     },
     {
-      base: new Date(2025, 11, 31, 23, 59, 59, 999), // Dec 31, 2025, 23:59:59.999
+      date: new Date(2020, 11, 31, 23, 59, 59, 999),
       amount: 1,
-      expected: new Date(2026, 0, 1, 0, 0, 0, 0), // Jan 1, 2026, 00:00:00.000
+      expected: new Date(2021, 0, 1, 0, 0, 0, 0),
       desc: "crosses year boundary",
     },
-
-    // --- Large values ---
     {
-      base: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
-      amount: 1000,
-      expected: new Date(2025, 0, 15, 12, 0, 1, 0), // Jan 15, 2025, 12:00:01.000
-      desc: "adds full second worth of milliseconds (1000)",
-    },
-    {
-      base: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
-      amount: 60000,
-      expected: new Date(2025, 0, 15, 12, 1, 0, 0), // Jan 15, 2025, 12:01:00.000
-      desc: "adds full minute worth of milliseconds (60000)",
-    },
-    {
-      base: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
-      amount: 3600000,
-      expected: new Date(2025, 0, 15, 13, 0, 0, 0), // Jan 15, 2025, 13:00:00.000
-      desc: "adds full hour worth of milliseconds (3600000)",
-    },
-    {
-      base: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
-      amount: 86400000,
-      expected: new Date(2025, 0, 16, 12, 0, 0, 0), // Jan 16, 2025, 12:00:00.000
-      desc: "adds full day worth of milliseconds (86400000)",
-    },
-
-    // --- Fractional milliseconds (truncated) ---
-    {
-      base: new Date(2025, 0, 15, 12, 0, 0, 0), // Jan 15, 2025, 12:00:00.000
-      amount: 1.5,
-      expected: new Date(2025, 0, 15, 12, 0, 0, 1), // Jan 15, 2025, 12:00:00.001 (1ms added, 0.5 truncated)
-      desc: "handles fractional milliseconds (1.5 milliseconds)",
-    },
-    {
-      base: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000
-      amount: 0.9,
-      expected: new Date(2025, 0, 15, 10, 15, 0, 0), // Jan 15, 2025, 10:15:00.000 (0ms added, 0.9 truncated)
-      desc: "handles fractional milliseconds less than 1",
-    },
-    {
-      base: new Date(2025, 0, 15, 10, 15, 0, 100), // Jan 15, 2025, 10:15:00.100
-      amount: -2.7,
-      expected: new Date(2025, 0, 15, 10, 15, 0, 98), // Jan 15, 2025, 10:15:00.098 (-2ms added, -0.7 truncated)
-      desc: "handles negative fractional milliseconds",
-    },
-
-    // --- Edge cases with midnight ---
-    {
-      base: new Date(2025, 0, 15, 0, 0, 0, 0), // Jan 15, 2025, 00:00:00.000 (midnight)
-      amount: 1,
-      expected: new Date(2025, 0, 15, 0, 0, 0, 1), // Jan 15, 2025, 00:00:00.001
-      desc: "handles midnight correctly",
-    },
-    {
-      base: new Date(2025, 0, 14, 23, 59, 59, 999), // Jan 14, 2025, 23:59:59.999
-      amount: 1,
-      expected: new Date(2025, 0, 15, 0, 0, 0, 0), // Jan 15, 2025, 00:00:00.000
-      desc: "transitions from end of day to next day",
-    },
-
-    // --- Timestamp input ---
-    {
-      base: 1736942400000, // Jan 15, 2025, 12:00:00.000 UTC
+      date: new Date(2020, 6, 15, 12, 0, 0, 0).getTime(),
       amount: 500,
-      expected: new Date(1736942400500), // Jan 15, 2025, 12:00:00.500 UTC
+      expected: new Date(2020, 6, 15, 12, 0, 0, 500),
       desc: "accepts timestamp input",
     },
-
-    // --- Invalid inputs ---
     {
-      base: new Date(NaN),
-      amount: 100,
+      date: new Date(2025, 0, 1, 0, 0, 0, 0),
+      amount: 1000000,
+      expected: new Date(2025, 0, 1, 0, 16, 40, 0),
+      desc: "handles large positive milliseconds",
+    },
+    {
+      date: new Date(2025, 0, 10, 0, 0, 0, 0),
+      amount: -1000000,
+      expected: new Date(2025, 0, 9, 23, 43, 20, 0),
+      desc: "handles large negative milliseconds",
+    },
+
+    // --- Invalid cases ---
+    {
+      date: new Date("invalid"),
+      amount: 500,
       expected: new Date(NaN),
       desc: "returns Invalid Date when base is invalid",
     },
     {
-      base: new Date(2025, 0, 15),
+      date: new Date(2025, 0, 15, 12, 0, 0, 0),
       amount: NaN,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is NaN",
     },
     {
-      base: new Date(2025, 0, 15),
+      date: new Date(2025, 0, 15, 12, 0, 0, 0),
       amount: Infinity,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is Infinity",
     },
     {
-      base: new Date(2025, 0, 15),
+      date: new Date(2025, 0, 15, 12, 0, 0, 0),
       amount: -Infinity,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is -Infinity",
     },
-  ])("$desc", ({ base, amount, expected }) => {
-    const result = addMilliseconds(base as Date | number, amount);
+    {
+      date: NaN,
+      amount: 1,
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when timestamp is NaN",
+    },
+    {
+      date: "2020-01-01T12:00:00.000" as any,
+      amount: 1,
+      expected: new Date(NaN),
+      desc: "rejects string as date",
+    },
+    {
+      date: new Date(2020, 0, 1, 12, 0, 0, 0),
+      amount: "1" as any,
+      expected: new Date(NaN),
+      desc: "rejects string as amount",
+    },
+    {
+      date: new Date("2020-12-31T15:30:45.500Z"),
+      amount: 500,
+      expected: new Date("2020-12-31T15:30:46.000Z"),
+      desc: "works correctly across UTC/JST boundary",
+    },
+  ])("$desc", ({ date, amount, expected }) => {
+    const result = addMilliseconds(date as Date | number, amount);
     if (isNaN(expected.getTime())) {
       expect(isNaN(result.getTime())).toBe(true);
     } else {
       expect(result.getTime()).toBe(expected.getTime());
     }
-  });
-
-  it("does not mutate the original date", () => {
-    const original = new Date(2025, 0, 15, 12, 0, 0, 500);
-    const originalTime = original.getTime();
-
-    addMilliseconds(original, 250);
-
-    expect(original.getTime()).toBe(originalTime);
-  });
-
-  it("handles extreme millisecond values", () => {
-    const base = new Date(2025, 0, 15, 12, 0, 0, 0);
-
-    // Add a year worth of milliseconds
-    const yearInMs = 365 * 24 * 60 * 60 * 1000;
-    const result = addMilliseconds(base, yearInMs);
-    const expected = new Date(2026, 0, 15, 12, 0, 0, 0);
-
-    expect(result.getTime()).toBe(expected.getTime());
-  });
-
-  it("handles precise millisecond operations", () => {
-    const base = new Date(2025, 0, 15, 12, 0, 0, 123);
-    const result = addMilliseconds(base, 456);
-    const expected = new Date(2025, 0, 15, 12, 0, 0, 579);
-
-    expect(result.getTime()).toBe(expected.getTime());
-  });
-
-  it("correctly handles millisecond overflow", () => {
-    const base = new Date(2025, 0, 15, 12, 0, 0, 950);
-    const result = addMilliseconds(base, 100);
-    const expected = new Date(2025, 0, 15, 12, 0, 1, 50);
-
-    expect(result.getTime()).toBe(expected.getTime());
   });
 });

@@ -13,16 +13,21 @@
  * @returns A new `Date` object with the months added, or `Invalid Date` if input is invalid.
  */
 export function addMonths(date: Date | number, amount: number): Date {
+  if (!(date instanceof Date || typeof date === "number")) {
+    return new Date(NaN);
+  }
+  if (!(typeof amount === "number")) {
+    return new Date(NaN);
+  }
+
   const dt = new Date(date);
 
-  // Validate input: must be a valid date and a finite number
-  if (isNaN(dt.getTime()) || !isFinite(amount)) {
+  if (isNaN(dt.getTime())) {
     return new Date(NaN);
   }
 
   const originalDay = dt.getDate();
 
-  // Truncate fractions and add months
   const monthsToAdd = Math.trunc(amount);
   dt.setMonth(dt.getMonth() + monthsToAdd);
 

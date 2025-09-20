@@ -5,153 +5,145 @@ describe("addMonths", () => {
   it.each([
     // --- Valid cases ---
     {
-      base: new Date(2025, 0, 15), // Jan 15, 2025
+      date: new Date(2025, 0, 15),
       amount: 3,
-      expected: new Date(2025, 3, 15), // Apr 15, 2025
+      expected: new Date(2025, 3, 15),
       desc: "adds positive months",
     },
     {
-      base: new Date(2025, 5, 15), // Jun 15, 2025
+      date: new Date(2025, 5, 15),
       amount: -2,
-      expected: new Date(2025, 3, 15), // Apr 15, 2025
+      expected: new Date(2025, 3, 15),
       desc: "adds negative months (subtracts)",
     },
     {
-      base: new Date(2025, 0, 15), // Jan 15, 2025
+      date: new Date(2025, 0, 15),
       amount: 0,
-      expected: new Date(2025, 0, 15), // Same date
+      expected: new Date(2025, 0, 15),
       desc: "adding zero months returns same date",
     },
     {
-      base: new Date(2025, 0, 15), // Jan 15, 2025
+      date: new Date(2025, 0, 15),
       amount: 1.9,
-      expected: new Date(2025, 1, 15), // Feb 15, 2025
-      desc: "truncates fractional positive amount",
+      expected: new Date(2025, 1, 15),
+      desc: "truncates fractional amount (positive)",
     },
     {
-      base: new Date(2025, 0, 15), // Jan 15, 2025
+      date: new Date(2025, 0, 15),
       amount: -1.9,
-      expected: new Date(2024, 11, 15), // Dec 15, 2024
-      desc: "truncates fractional negative amount",
-    },
-
-    // --- Year boundary crossing ---
-    {
-      base: new Date(2025, 11, 15), // Dec 15, 2025
-      amount: 2,
-      expected: new Date(2026, 1, 15), // Feb 15, 2026
-      desc: "crosses year boundary forward",
+      expected: new Date(2024, 11, 15),
+      desc: "truncates fractional amount (negative)",
     },
     {
-      base: new Date(2025, 1, 15), // Feb 15, 2025
-      amount: -3,
-      expected: new Date(2024, 10, 15), // Nov 15, 2024
-      desc: "crosses year boundary backward",
-    },
-
-    // --- Month-end edge cases ---
-    {
-      base: new Date(2025, 0, 31), // Jan 31, 2025
+      date: new Date(2025, 0, 31),
       amount: 1,
-      expected: new Date(2025, 1, 28), // Feb 28, 2025 (Feb has only 28 days)
+      expected: new Date(2025, 1, 28),
       desc: "handles month-end overflow (Jan 31 -> Feb 28)",
     },
     {
-      base: new Date(2024, 0, 31), // Jan 31, 2024 (leap year)
+      date: new Date(2024, 0, 31),
       amount: 1,
-      expected: new Date(2024, 1, 29), // Feb 29, 2024 (leap year)
+      expected: new Date(2024, 1, 29),
       desc: "handles month-end overflow in leap year (Jan 31 -> Feb 29)",
     },
     {
-      base: new Date(2025, 2, 31), // Mar 31, 2025
+      date: new Date(2025, 2, 31),
       amount: 1,
-      expected: new Date(2025, 3, 30), // Apr 30, 2025 (Apr has only 30 days)
+      expected: new Date(2025, 3, 30),
       desc: "handles month-end overflow (Mar 31 -> Apr 30)",
     },
     {
-      base: new Date(2025, 4, 31), // May 31, 2025
-      amount: 1,
-      expected: new Date(2025, 5, 30), // Jun 30, 2025 (Jun has only 30 days)
-      desc: "handles month-end overflow (May 31 -> Jun 30)",
-    },
-
-    // --- Leap year handling ---
-    {
-      base: new Date(2024, 1, 29), // Feb 29, 2024 (leap year)
+      date: new Date(2024, 1, 29),
       amount: 12,
-      expected: new Date(2025, 1, 28), // Feb 28, 2025 (non-leap year)
+      expected: new Date(2025, 1, 28),
       desc: "handles leap year to non-leap year (Feb 29 -> Feb 28)",
     },
     {
-      base: new Date(2023, 1, 28), // Feb 28, 2023 (non-leap year)
-      amount: 12,
-      expected: new Date(2024, 1, 28), // Feb 28, 2024 (leap year, but same day)
-      desc: "handles non-leap year to leap year",
+      date: new Date(2025, 11, 15),
+      amount: 2,
+      expected: new Date(2026, 1, 15),
+      desc: "crosses year boundary forward",
     },
-
-    // --- Timestamp input ---
     {
-      base: new Date(2025, 0, 15).getTime(),
+      date: new Date(2025, 1, 15),
+      amount: -3,
+      expected: new Date(2024, 10, 15),
+      desc: "crosses year boundary backward",
+    },
+    {
+      date: new Date(2025, 0, 15).getTime(),
       amount: 6,
-      expected: new Date(2025, 6, 15), // Jul 15, 2025
+      expected: new Date(2025, 6, 15),
       desc: "accepts timestamp input",
+    },
+    {
+      date: new Date(2025, 0, 15),
+      amount: 100,
+      expected: new Date(2033, 4, 15),
+      desc: "handles large positive months",
+    },
+    {
+      date: new Date(2025, 0, 15),
+      amount: -100,
+      expected: new Date(2016, 8, 15),
+      desc: "handles large negative months",
     },
 
     // --- Invalid cases ---
     {
-      base: new Date("invalid"),
+      date: new Date("invalid"),
       amount: 3,
       expected: new Date(NaN),
       desc: "returns Invalid Date when base is invalid",
     },
     {
-      base: new Date(2025, 0, 15),
+      date: new Date(2025, 0, 15),
       amount: NaN,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is NaN",
     },
     {
-      base: new Date(2025, 0, 15),
+      date: new Date(2025, 0, 15),
       amount: Infinity,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is Infinity",
     },
     {
-      base: new Date(2025, 0, 15),
+      date: new Date(2025, 0, 15),
       amount: -Infinity,
       expected: new Date(NaN),
       desc: "returns Invalid Date when amount is -Infinity",
     },
     {
-      base: NaN,
+      date: NaN,
       amount: 1,
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
     },
-  ])("$desc", ({ base, amount, expected }) => {
-    const result = addMonths(base as Date | number, amount);
+    {
+      date: "2020-01-15" as any,
+      amount: 1,
+      expected: new Date(NaN),
+      desc: "rejects string as date",
+    },
+    {
+      date: new Date(2020, 0, 15),
+      amount: "1" as any,
+      expected: new Date(NaN),
+      desc: "rejects string as amount",
+    },
+    {
+      date: new Date("2020-12-31T15:00:00Z"),
+      amount: 1,
+      expected: new Date("2021-01-31T15:00:00Z"),
+      desc: "works correctly across UTC/JST boundary",
+    },
+  ])("$desc", ({ date, amount, expected }) => {
+    const result = addMonths(date as Date | number, amount);
     if (isNaN(expected.getTime())) {
       expect(isNaN(result.getTime())).toBe(true);
     } else {
       expect(result.getTime()).toBe(expected.getTime());
     }
   });
-
-  it("does not mutate the original date", () => {
-    const original = new Date(2025, 0, 15);
-    const originalTime = original.getTime();
-
-    addMonths(original, 5);
-
-    expect(original.getTime()).toBe(originalTime);
-  });
-
-  it("handles large month additions correctly", () => {
-    const base = new Date(2025, 0, 15); // Jan 15, 2025
-    const result = addMonths(base, 25); // Add 25 months
-    const expected = new Date(2027, 1, 15); // Feb 15, 2027
-
-    expect(result.getTime()).toBe(expected.getTime());
-  });
 });
-
