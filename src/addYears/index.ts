@@ -13,27 +13,30 @@
  * @returns A new `Date` object with the years added, or `Invalid Date` if input is invalid.
  */
 export function addYears(date: Date | number, amount: number): Date {
-  const dt = new Date(date);
-
-  // Validate input: must be a valid date and a finite number
-  if (isNaN(dt.getTime()) || !isFinite(amount)) {
+  if (!(date instanceof Date || typeof date === "number")) {
+    return new Date(NaN);
+  }
+  if (!(typeof amount === "number")) {
     return new Date(NaN);
   }
 
-  // Store original components to handle leap year edge cases
-  const originalDay = dt.getDate();
-  const originalMonth = dt.getMonth();
-  const isOriginallyFeb29 = originalMonth === 1 && originalDay === 29;
+  const dt = new Date(date);
 
-  // Truncate fractions and add the years
+  // Validate input: must be a valid date and a finite number
+  if (isNaN(dt.getTime())) {
+    return new Date(NaN);
+  }
+
   const yearToAdd = Math.trunc(amount);
+
+  const originalMonth = dt.getMonth();
+  const originalDay = dt.getDate();
+
   dt.setFullYear(dt.getFullYear() + yearToAdd);
 
-  // Adjust for leap year (Feb 29 → Feb 28 when target year is not a leap year)
-  if (isOriginallyFeb29 && dt.getMonth() !== 1) {
+  if (originalMonth === 1 && originalDay === 29 && dt.getMonth() !== 1) {
     dt.setMonth(1, 28);
   }
 
   return dt;
 }
-
