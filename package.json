@@ -1,8 +1,8 @@
 {
   "name": "chronia",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "type": "module",
-  "description": "Simple date/time utilities",
+  "description": "A modern, lightweight TypeScript date/time utility library with comprehensive formatting, parsing, and manipulation capabilities.",
   "license": "MIT",
   "author": "Takashi Yamashina <takashi.yamashina@gmail.com>",
   "repository": {
