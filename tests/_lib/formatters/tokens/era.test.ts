@@ -9,7 +9,7 @@ const mockLocale: Locale = {
     return era ? "AD" : "BC";
   },
   month: () => "",
-  day: () => "",
+  weekday: () => "",
   dayPeriod: () => "",
 };
 

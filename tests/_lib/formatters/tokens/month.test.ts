@@ -38,7 +38,7 @@ const mockLocale: Locale = {
     if (options?.width === "narrow") return narrow[month];
     return abbreviated[month];
   },
-  day: () => "",
+  weekday: () => "",
   dayPeriod: () => "",
 };
 

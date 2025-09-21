@@ -5,7 +5,7 @@ import { Locale } from "../../../../src/types";
 const mockLocale: Locale = {
   era: () => "",
   month: () => "",
-  day: () => "",
+  weekday: () => "",
   dayPeriod: (period, options) => {
     if (options?.width === "narrow") return period === "am" ? "a" : "p";
     if (options?.width === "wide") return period === "am" ? "午前" : "午後";
