@@ -136,3 +136,25 @@ export type TimeUnit =
   | "minute"
   | "second"
   | "millisecond";
+
+/**
+ * Date interval with optional start and end boundaries.
+ *
+ * Used in date range operations to define a time interval with optional boundaries.
+ * Either boundary can be null to indicate an open interval in that direction.
+ *
+ * - start: The start boundary of the interval (null means no lower bound)
+ * - end: The end boundary of the interval (null means no upper bound)
+ */
+export type Interval = {
+  /**
+   * The start boundary of the interval.
+   * If null, the interval has no lower bound (extends to MIN_DATE).
+   */
+  start: Date | number | null;
+  /**
+   * The end boundary of the interval.
+   * If null, the interval has no upper bound (extends to MAX_DATE).
+   */
+  end: Date | number | null;
+};
