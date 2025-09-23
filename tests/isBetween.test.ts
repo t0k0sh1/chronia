@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { isBetween } from "../src/isBetween";
 import { MIN_DATE, MAX_DATE } from "../src/constants";
-import type { Interval } from "../src/types";
+import type { Interval, BetweenOption } from "../src/types";
 
 describe("isBetween", () => {
   const baseDate = new Date(2024, 5, 15, 12, 30, 45); // June 15, 2024 12:30:45
@@ -358,6 +358,233 @@ describe("isBetween", () => {
       const validInterval: Interval = { start: startDate, end: endDate };
 
       expect(isBetween(baseDate, validInterval)).toBe(true);
+    });
+  });
+
+  describe("BetweenOption bounds tests", () => {
+    const testDate = new Date(2024, 5, 15, 12, 0, 0); // June 15, 2024 12:00:00
+    const testStart = new Date(2024, 5, 10, 10, 0, 0); // June 10, 2024 10:00:00
+    const testEnd = new Date(2024, 5, 20, 14, 0, 0); // June 20, 2024 14:00:00
+    const interval: Interval = { start: testStart, end: testEnd };
+
+    describe('bounds "()" - both boundaries excluded (default)', () => {
+      const opts: BetweenOption = { bounds: "()" };
+
+      it.each([
+        {
+          date: testDate,
+          expected: true,
+          description: "date strictly within range",
+        },
+        {
+          date: testStart,
+          expected: false,
+          description: "date equals start boundary (excluded)",
+        },
+        {
+          date: testEnd,
+          expected: false,
+          description: "date equals end boundary (excluded)",
+        },
+        {
+          date: new Date(2024, 5, 9),
+          expected: false,
+          description: "date before start",
+        },
+        {
+          date: new Date(2024, 5, 21),
+          expected: false,
+          description: "date after end",
+        },
+      ])(
+        "$description",
+        ({ date, expected }) => {
+          expect(isBetween(date, interval, opts)).toBe(expected);
+        }
+      );
+
+      it("should use '()' as default when no options provided", () => {
+        expect(isBetween(testDate, interval)).toBe(true);
+        expect(isBetween(testStart, interval)).toBe(false);
+        expect(isBetween(testEnd, interval)).toBe(false);
+      });
+    });
+
+    describe('bounds "[]" - both boundaries included', () => {
+      const opts: BetweenOption = { bounds: "[]" };
+
+      it.each([
+        {
+          date: testDate,
+          expected: true,
+          description: "date within range",
+        },
+        {
+          date: testStart,
+          expected: true,
+          description: "date equals start boundary (included)",
+        },
+        {
+          date: testEnd,
+          expected: true,
+          description: "date equals end boundary (included)",
+        },
+        {
+          date: new Date(2024, 5, 9),
+          expected: false,
+          description: "date before start",
+        },
+        {
+          date: new Date(2024, 5, 21),
+          expected: false,
+          description: "date after end",
+        },
+      ])(
+        "$description",
+        ({ date, expected }) => {
+          expect(isBetween(date, interval, opts)).toBe(expected);
+        }
+      );
+    });
+
+    describe('bounds "[)" - start included, end excluded', () => {
+      const opts: BetweenOption = { bounds: "[)" };
+
+      it.each([
+        {
+          date: testDate,
+          expected: true,
+          description: "date within range",
+        },
+        {
+          date: testStart,
+          expected: true,
+          description: "date equals start boundary (included)",
+        },
+        {
+          date: testEnd,
+          expected: false,
+          description: "date equals end boundary (excluded)",
+        },
+        {
+          date: new Date(2024, 5, 9),
+          expected: false,
+          description: "date before start",
+        },
+        {
+          date: new Date(2024, 5, 21),
+          expected: false,
+          description: "date after end",
+        },
+      ])(
+        "$description",
+        ({ date, expected }) => {
+          expect(isBetween(date, interval, opts)).toBe(expected);
+        }
+      );
+    });
+
+    describe('bounds "(]" - start excluded, end included', () => {
+      const opts: BetweenOption = { bounds: "(]" };
+
+      it.each([
+        {
+          date: testDate,
+          expected: true,
+          description: "date within range",
+        },
+        {
+          date: testStart,
+          expected: false,
+          description: "date equals start boundary (excluded)",
+        },
+        {
+          date: testEnd,
+          expected: true,
+          description: "date equals end boundary (included)",
+        },
+        {
+          date: new Date(2024, 5, 9),
+          expected: false,
+          description: "date before start",
+        },
+        {
+          date: new Date(2024, 5, 21),
+          expected: false,
+          description: "date after end",
+        },
+      ])(
+        "$description",
+        ({ date, expected }) => {
+          expect(isBetween(date, interval, opts)).toBe(expected);
+        }
+      );
+    });
+
+    describe("edge cases with bounds", () => {
+      it("should handle invalid bounds value by defaulting to '()'", () => {
+        const invalidOpts = { bounds: "invalid" as any };
+        expect(isBetween(testDate, interval, invalidOpts)).toBe(true);
+        expect(isBetween(testStart, interval, invalidOpts)).toBe(false);
+        expect(isBetween(testEnd, interval, invalidOpts)).toBe(false);
+      });
+
+      it("should handle null boundaries with bounds options", () => {
+        const nullStartInterval: Interval = { start: null, end: testEnd };
+        const nullEndInterval: Interval = { start: testStart, end: null };
+
+        // With inclusive bounds
+        const inclusiveOpts: BetweenOption = { bounds: "[]" };
+        expect(isBetween(testDate, nullStartInterval, inclusiveOpts)).toBe(true);
+        expect(isBetween(testEnd, nullStartInterval, inclusiveOpts)).toBe(true);
+        expect(isBetween(testDate, nullEndInterval, inclusiveOpts)).toBe(true);
+        expect(isBetween(testStart, nullEndInterval, inclusiveOpts)).toBe(true);
+
+        // With exclusive bounds
+        const exclusiveOpts: BetweenOption = { bounds: "()" };
+        expect(isBetween(testEnd, nullStartInterval, exclusiveOpts)).toBe(false);
+        expect(isBetween(testStart, nullEndInterval, exclusiveOpts)).toBe(false);
+      });
+
+      it("should handle same start and end dates with different bounds", () => {
+        const sameInterval: Interval = {
+          start: new Date(2024, 5, 15, 12, 0, 0),
+          end: new Date(2024, 5, 15, 12, 0, 0)
+        };
+        const sameDate = new Date(2024, 5, 15, 12, 0, 0);
+
+        expect(isBetween(sameDate, sameInterval, { bounds: "[]" })).toBe(true);
+        expect(isBetween(sameDate, sameInterval, { bounds: "[)" })).toBe(false);
+        expect(isBetween(sameDate, sameInterval, { bounds: "(]" })).toBe(false);
+        expect(isBetween(sameDate, sameInterval, { bounds: "()" })).toBe(false);
+      });
+    });
+
+    describe("backward compatibility", () => {
+      it("should maintain existing behavior when no options provided", () => {
+        // The current implementation uses strict comparison (< and >)
+        // which means boundaries are excluded by default
+        const date1 = new Date(2024, 5, 15);
+        const date2 = new Date(2024, 5, 10, 10, 0, 0); // start
+        const date3 = new Date(2024, 5, 20, 14, 0, 0); // end
+        const testInterval: Interval = { start: date2, end: date3 };
+
+        // These should work exactly as before
+        expect(isBetween(date1, testInterval)).toBe(true);
+        expect(isBetween(date2, testInterval)).toBe(false);
+        expect(isBetween(date3, testInterval)).toBe(false);
+
+        // Should be equivalent to explicit "()" bounds
+        expect(isBetween(date1, testInterval)).toBe(
+          isBetween(date1, testInterval, { bounds: "()" })
+        );
+        expect(isBetween(date2, testInterval)).toBe(
+          isBetween(date2, testInterval, { bounds: "()" })
+        );
+        expect(isBetween(date3, testInterval)).toBe(
+          isBetween(date3, testInterval, { bounds: "()" })
+        );
+      });
     });
   });
 });
