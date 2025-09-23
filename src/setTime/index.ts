@@ -1,7 +1,7 @@
 /**
  * Set the timestamp value of a Date object.
  *
- * @param date - The Date object to copy timestamp from
+ * @param date - The Date object to create a copy from
  * @param time - The timestamp in milliseconds since Unix epoch
  * @returns A new Date object with the specified timestamp, or invalid Date for invalid arguments
  *
