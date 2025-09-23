@@ -66,5 +66,6 @@ export * from "./isSameSecond";
 export * from "./min";
 export * from "./max";
 export * from "./clamp";
+export * from "./compare";
 export * from "./constants";
 export type { Interval, Locale, TimeUnit, BoundsType, BetweenOption } from "./types";
