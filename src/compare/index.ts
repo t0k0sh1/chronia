@@ -51,20 +51,14 @@ export function compare(
   }
 
   // T012: Core comparison logic using Date.getTime()
-  let result: number;
-  if (timestamp1 < timestamp2) {
-    result = -1;
-  } else if (timestamp1 > timestamp2) {
-    result = 1;
-  } else {
-    result = 0;
+  const diff = timestamp1 - timestamp2;
+
+  if (diff === 0) {
+    return 0;
   }
+
+  const result = Math.sign(diff);
 
   // Apply order adjustment for descending sort
-  if (order === "DESC") {
-    result = -result;
-  }
-
-  // Ensure we return +0 instead of -0 for equal dates
-  return result === 0 ? 0 : result;
+  return order === "DESC" ? -result : result;
 }
