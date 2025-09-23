@@ -158,3 +158,26 @@ export type Interval = {
    */
   end: Date | number | null;
 };
+
+/**
+ * Mathematical interval notation for boundary inclusion/exclusion.
+ * - "()" : Both boundaries excluded (open interval)
+ * - "[]" : Both boundaries included (closed interval)
+ * - "[)" : Start included, end excluded (left-closed, right-open)
+ * - "(]" : Start excluded, end included (left-open, right-closed)
+ */
+export type BoundsType = "()" | "[]" | "[)" | "(]";
+
+/**
+ * Configuration options for the isBetween function.
+ * Controls how boundary dates are treated in the comparison.
+ */
+export type BetweenOption = {
+  /**
+   * Specifies boundary inclusion using mathematical interval notation.
+   * Defaults to "()" for backward compatibility.
+   *
+   * @default "()"
+   */
+  bounds?: BoundsType;
+};
