@@ -10,6 +10,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - ESM only: `npm run build:esm`
   - CJS only: `npm run build:cjs`
 - **Clean**: `npm run clean` (removes dist directory)
+- **Documentation**: `npx typedoc` (generates API documentation in docs/)
+
+## Pre-Commit Requirements
+
+**IMPORTANT**: Before creating any commit, you MUST:
+1. Run `npm run build` to build ESM/CJS bundles
+2. Run `npx typedoc` to generate updated documentation
+3. Add both `dist/` and `docs/` directories to the commit
+
+This ensures that built artifacts and documentation are always in sync with source code changes.
 
 ## Project Architecture
 
