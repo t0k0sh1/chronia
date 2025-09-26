@@ -93,7 +93,7 @@ describe("now", () => {
 
       // All should be unique Date objects
       expect(results.length).toBe(iterations);
-      results.forEach((result: Date) => {
+      results.forEach(result => {
         expect(result instanceof Date).toBe(true);
       });
     });
