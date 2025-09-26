@@ -1,5 +1,6 @@
 import { MIN_DATE, MAX_DATE } from "../constants";
 import { Interval, BetweenOption } from "../types";
+import { isValidDateOrNumber } from "../_lib/validators";
 
 /**
  * Check if a date falls between two boundary dates with configurable inclusion.
@@ -30,7 +31,7 @@ import { Interval, BetweenOption } from "../types";
  * }, { bounds: "[]" }); // true
  */
 export function isBetween(date: Date | number, interval: Interval, opts?: BetweenOption): boolean {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return false;
   }
 
@@ -41,17 +42,16 @@ export function isBetween(date: Date | number, interval: Interval, opts?: Betwee
   const { start, end } = interval;
 
   // Validate start parameter
-  if (start !== null && !(start instanceof Date || typeof start === "number")) {
+  if (start !== null && !isValidDateOrNumber(start)) {
     return false;
   }
 
   // Validate end parameter
-  if (end !== null && !(end instanceof Date || typeof end === "number")) {
+  if (end !== null && !isValidDateOrNumber(end)) {
     return false;
   }
 
   const dt = new Date(date);
-  if (isNaN(dt.getTime())) return false;
 
   const dateTime = dt.getTime();
 
@@ -61,7 +61,6 @@ export function isBetween(date: Date | number, interval: Interval, opts?: Betwee
     effectiveStart = MIN_DATE;
   } else {
     effectiveStart = new Date(start);
-    if (isNaN(effectiveStart.getTime())) return false;
   }
 
   // Determine effective end boundary
@@ -70,7 +69,6 @@ export function isBetween(date: Date | number, interval: Interval, opts?: Betwee
     effectiveEnd = MAX_DATE;
   } else {
     effectiveEnd = new Date(end);
-    if (isNaN(effectiveEnd.getTime())) return false;
   }
 
   // Get the bounds option, defaulting to "()" for backward compatibility

@@ -1,3 +1,5 @@
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+
 /**
  * Set the year of the given date.
  *
@@ -13,18 +15,14 @@
  * @returns A new `Date` object with the year set, or `Invalid Date` if input is invalid.
  */
 export function setYear(date: Date | number, year: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof year === "number")) {
+  if (!isValidNumber(year)) {
     return new Date(NaN);
   }
 
   const dt = new Date(date);
-
-  if (isNaN(dt.getTime())) {
-    return new Date(NaN);
-  }
 
   const yearToSet = Math.trunc(year);
 

@@ -1,4 +1,5 @@
 import { truncateToUnit } from "../_lib/truncateToUnit";
+import { isValidDateOrNumber } from "../_lib/validators";
 
 /**
  * Truncate a date to the millisecond.
@@ -16,6 +17,9 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * ```
  */
 export function truncMillisecond(date: Date | number): Date {
+  if (!isValidDateOrNumber(date)) {
+    return new Date(NaN);
+  }
   const dt = new Date(date);
   return truncateToUnit(dt, "millisecond");
 }

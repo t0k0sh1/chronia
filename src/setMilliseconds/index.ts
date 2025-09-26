@@ -1,3 +1,5 @@
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+
 /**
  * Set the milliseconds of the given date.
  *
@@ -12,18 +14,14 @@
  * @returns A new `Date` object with the milliseconds set, or `Invalid Date` if input is invalid.
  */
 export function setMilliseconds(date: Date | number, milliseconds: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof milliseconds === "number")) {
+  if (!isValidNumber(milliseconds)) {
     return new Date(NaN);
   }
 
   const dt = new Date(date);
-
-  if (isNaN(dt.getTime())) {
-    return new Date(NaN);
-  }
 
   const millisecondsToSet = Math.trunc(milliseconds);
 

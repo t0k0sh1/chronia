@@ -1,4 +1,5 @@
 import { addDays } from "../addDays";
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
 
 /**
  * Subtract the specified number of days from the given date.
@@ -13,10 +14,10 @@ import { addDays } from "../addDays";
  * @returns A new `Date` object with the days subtracted, or `Invalid Date` if input is invalid.
  */
 export function subDays(date: Date | number, amount: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof amount === "number")) {
+  if (!isValidNumber(amount)) {
     return new Date(NaN);
   }
   return addDays(date, -amount);

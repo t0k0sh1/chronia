@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Get the end of the day for the given date.
  *
@@ -16,6 +18,9 @@
  * ```
  */
 export function endOfDay(date: Date | number): Date {
+  if (!isValidDateOrNumber(date)) {
+    return new Date(NaN);
+  }
   const dt = new Date(date);
   return new Date(
     dt.getFullYear(),

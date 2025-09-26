@@ -1,3 +1,5 @@
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+
 /**
  * Add the specified number of days to the given date.
  *
@@ -11,19 +13,14 @@
  * @returns A new `Date` object with the days added, or `Invalid Date` if input is invalid.
  */
 export function addDays(date: Date | number, amount: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof amount === "number")) {
+  if (!isValidNumber(amount)) {
     return new Date(NaN);
   }
 
   const dt = new Date(date);
-
-  if (isNaN(dt.getTime())) {
-    return new Date(NaN);
-  }
-
   const daysToAdd = Math.trunc(amount);
   dt.setDate(dt.getDate() + daysToAdd);
   return dt;

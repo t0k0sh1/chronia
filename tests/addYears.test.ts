@@ -134,4 +134,59 @@ describe("addYears", () => {
       expect(result.getTime()).toBe(expected.getTime());
     }
   });
+
+  describe("type validation", () => {
+    it("should return Invalid Date for invalid date argument types", () => {
+      const invalidDateInputs = [
+        null,
+        undefined,
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidDateInputs.forEach(input => {
+        const result = addYears(input as any, 1);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for invalid amount argument types", () => {
+      const validDate = new Date(2024, 0, 1);
+      const invalidAmountInputs = [
+        null,
+        undefined,
+        "1",
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidAmountInputs.forEach(input => {
+        const result = addYears(validDate, input as any);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for Invalid Date objects", () => {
+      const invalidDates = [
+        new Date("invalid"),
+        new Date(NaN)
+      ];
+
+      invalidDates.forEach(invalidDate => {
+        const result = addYears(invalidDate, 1);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+  });
 });

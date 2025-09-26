@@ -1,3 +1,5 @@
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+
 /**
  * Set the day of the month of the given date.
  *
@@ -13,18 +15,14 @@
  * @returns A new `Date` object with the day set, or `Invalid Date` if input is invalid.
  */
 export function setDay(date: Date | number, day: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof day === "number")) {
+  if (!isValidNumber(day)) {
     return new Date(NaN);
   }
 
   const dt = new Date(date);
-
-  if (isNaN(dt.getTime())) {
-    return new Date(NaN);
-  }
 
   const dayToSet = Math.trunc(day);
 
