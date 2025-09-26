@@ -641,10 +641,11 @@ const customLocale: Locale = {
 
 Chronia is designed to be lightweight and tree-shakable:
 
-- ESM: 21 KB (minified) / 4.5 KB (gzipped)
-- CJS: 21.2 KB (minified)
+- ![Bundle size](https://badgen.net/bundlephobia/minzip/chronia) (ESM, min+gzip, via [Bundlephobia](https://bundlephobia.com/result?p=chronia))
 - Individual functions can be imported to reduce bundle size
 - Full TypeScript definitions included
+
+> **Note:** Bundle size metrics are automatically updated via [Bundlephobia](https://bundlephobia.com/result?p=chronia). For maximum accuracy, consider automating bundle size checks in CI to keep this information up to date.
 
 ## License
 
