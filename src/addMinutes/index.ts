@@ -1,3 +1,5 @@
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+
 /**
  * Add the specified number of minutes to the given date.
  *
@@ -11,18 +13,14 @@
  * @returns A new `Date` object with the minutes added, or `Invalid Date` if input is invalid.
  */
 export function addMinutes(date: Date | number, amount: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof amount === "number")) {
+  if (!isValidNumber(amount)) {
     return new Date(NaN);
   }
 
   const dt = new Date(date);
-
-  if (isNaN(dt.getTime())) {
-    return new Date(NaN);
-  }
 
   const minutesToAdd = Math.trunc(amount);
   dt.setMinutes(dt.getMinutes() + minutesToAdd);

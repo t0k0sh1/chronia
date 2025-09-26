@@ -1,4 +1,5 @@
 import { truncateToUnit } from "../_lib/truncateToUnit";
+import { isValidDateOrNumber } from "../_lib/validators";
 
 /**
  * Truncate a date to the start of the year.
@@ -15,6 +16,9 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
  * ```
  */
 export function truncYear(date: Date | number): Date {
+  if (!isValidDateOrNumber(date)) {
+    return new Date(NaN);
+  }
   const dt = new Date(date);
   return truncateToUnit(dt, "year");
 }

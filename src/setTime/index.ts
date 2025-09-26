@@ -1,3 +1,5 @@
+import { isValidDate, isValidNumber } from "../_lib/validators";
+
 /**
  * Set the timestamp value of a Date object.
  *
@@ -23,10 +25,10 @@
  * For invalid arguments, returns a new Date(NaN).
  */
 export function setTime(date: Date, time: number): Date {
-  if (!(date instanceof Date)) {
+  if (!isValidDate(date)) {
     return new Date(NaN);
   }
-  if (typeof time !== "number") {
+  if (!isValidNumber(time)) {
     return new Date(NaN);
   }
 

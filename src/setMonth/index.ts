@@ -1,3 +1,5 @@
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+
 /**
  * Set the month of the given date.
  *
@@ -14,18 +16,14 @@
  * @returns A new `Date` object with the month set, or `Invalid Date` if input is invalid.
  */
 export function setMonth(date: Date | number, month: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof month === "number")) {
+  if (!isValidNumber(month)) {
     return new Date(NaN);
   }
 
   const dt = new Date(date);
-
-  if (isNaN(dt.getTime())) {
-    return new Date(NaN);
-  }
 
   const monthToSet = Math.trunc(month);
 

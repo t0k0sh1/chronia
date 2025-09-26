@@ -1,4 +1,5 @@
 import { addMilliseconds } from "../addMilliseconds";
+import { isValidNumber } from "../_lib/validators";
 
 /**
  * Subtract the specified number of milliseconds from the given date.
@@ -13,10 +14,7 @@ import { addMilliseconds } from "../addMilliseconds";
  * @returns A new `Date` object with the milliseconds subtracted, or `Invalid Date` if input is invalid.
  */
 export function subMilliseconds(date: Date | number, amount: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
-    return new Date(NaN);
-  }
-  if (!(typeof amount === "number")) {
+  if (!isValidNumber(amount)) {
     return new Date(NaN);
   }
   return addMilliseconds(date, -amount);

@@ -1,3 +1,5 @@
+import { isValidDate } from "../_lib/validators";
+
 /**
  * Compare two Date objects chronologically.
  *
@@ -35,14 +37,12 @@ export function compare(
     throw new RangeError("Second argument must be a Date object");
   }
 
-  // T013: RangeError handling for invalid inputs
-  const timestamp1 = date1.getTime();
-  if (isNaN(timestamp1)) {
+  // Check for invalid dates specifically
+  if (!isValidDate(date1)) {
     throw new RangeError("First date is invalid");
   }
 
-  const timestamp2 = date2.getTime();
-  if (isNaN(timestamp2)) {
+  if (!isValidDate(date2)) {
     throw new RangeError("Second date is invalid");
   }
 
@@ -51,6 +51,8 @@ export function compare(
   }
 
   // T012: Core comparison logic using Date.getTime()
+  const timestamp1 = date1.getTime();
+  const timestamp2 = date2.getTime();
   const diff = timestamp1 - timestamp2;
 
   if (diff === 0) {

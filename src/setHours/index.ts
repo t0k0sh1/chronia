@@ -1,3 +1,5 @@
+import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+
 /**
  * Set the hours of the given date.
  *
@@ -12,18 +14,14 @@
  * @returns A new `Date` object with the hours set, or `Invalid Date` if input is invalid.
  */
 export function setHours(date: Date | number, hours: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
+  if (!isValidDateOrNumber(date)) {
     return new Date(NaN);
   }
-  if (!(typeof hours === "number")) {
+  if (!isValidNumber(hours)) {
     return new Date(NaN);
   }
 
   const dt = new Date(date);
-
-  if (isNaN(dt.getTime())) {
-    return new Date(NaN);
-  }
 
   const hoursToSet = Math.trunc(hours);
 

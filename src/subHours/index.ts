@@ -1,4 +1,5 @@
 import { addHours } from "../addHours";
+import { isValidNumber } from "../_lib/validators";
 
 /**
  * Subtract the specified number of hours from the given date.
@@ -13,10 +14,7 @@ import { addHours } from "../addHours";
  * @returns A new `Date` object with the hours subtracted, or `Invalid Date` if input is invalid.
  */
 export function subHours(date: Date | number, amount: number): Date {
-  if (!(date instanceof Date || typeof date === "number")) {
-    return new Date(NaN);
-  }
-  if (!(typeof amount === "number")) {
+  if (!isValidNumber(amount)) {
     return new Date(NaN);
   }
   return addHours(date, -amount);

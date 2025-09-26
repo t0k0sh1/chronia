@@ -15,9 +15,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Pre-Commit Requirements
 
 **IMPORTANT**: Before creating any commit, you MUST:
-1. Run `npm run build` to build ESM/CJS bundles
-2. Run `npx typedoc` to generate updated documentation
-3. Add both `dist/` and `docs/` directories to the commit
+1. Run `npm run lint` to ensure code quality and style compliance
+2. Run `npm run build` to build ESM/CJS bundles
+3. Run `npx typedoc` to generate updated documentation
+4. Add both `dist/` and `docs/` directories to the commit
 
 This ensures that built artifacts and documentation are always in sync with source code changes.
 
@@ -61,3 +62,18 @@ The date formatting system follows a token-based approach:
 - **tsconfig.esm.json**: ESM build configuration
 - **tsconfig.cjs.json**: CJS build configuration
 - Outputs to `dist/` with separate directories for each module type and type definitions
+
+## Code Quality Guidelines
+
+### String Literals
+- **ALWAYS** use double quotes (`"`) for string literals in TypeScript/JavaScript code
+- This ensures consistency with the ESLint configuration and project coding standards
+- Example: `return typeof value === "number"` (correct) vs `return typeof value === 'number'` (incorrect)
+
+### Implementation Verification
+- **VERY IMPORTANT**: When you have completed a task, you MUST run the following commands in order to ensure code quality:
+  1. `npm run lint` - Check for linting errors and code style issues
+  2. `npm test` - Ensure all tests pass
+  3. `npm run build` - Verify the code builds successfully
+- If any of these commands fail, fix the issues before proceeding or committing changes
+- Never commit code that fails linting, testing, or building

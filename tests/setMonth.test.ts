@@ -187,4 +187,58 @@ describe("setMonth", () => {
     // To November (30 days)
     expect(setMonth(jan31, 10).getDate()).toBe(30);
   });
+
+  describe("type validation", () => {
+    it("should return Invalid Date for invalid date argument types", () => {
+      const invalidDateInputs = [
+        null,
+        undefined,
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidDateInputs.forEach(input => {
+        const result = setMonth(input as any, 5);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for invalid month argument types", () => {
+      const validDate = new Date(2024, 0, 1);
+      const invalidMonthInputs = [
+        null,
+        undefined,
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidMonthInputs.forEach(input => {
+        const result = setMonth(validDate, input as any);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for Invalid Date objects", () => {
+      const invalidDates = [
+        new Date("invalid"),
+        new Date(NaN)
+      ];
+
+      invalidDates.forEach(invalidDate => {
+        const result = setMonth(invalidDate, 5);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+  });
 });
