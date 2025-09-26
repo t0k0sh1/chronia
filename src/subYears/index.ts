@@ -1,5 +1,5 @@
 import { addYears } from "../addYears";
-import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+import { isValidNumber } from "../_lib/validators";
 
 /**
  * Subtract the specified number of years from the given date.
@@ -16,9 +16,6 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * @returns A new `Date` object with the years subtracted, or `Invalid Date` if input is invalid.
  */
 export function subYears(date: Date | number, amount: number): Date {
-  if (!isValidDateOrNumber(date)) {
-    return new Date(NaN);
-  }
   if (!isValidNumber(amount)) {
     return new Date(NaN);
   }

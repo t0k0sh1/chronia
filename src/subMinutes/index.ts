@@ -1,5 +1,5 @@
 import { addMinutes } from "../addMinutes";
-import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+import { isValidNumber } from "../_lib/validators";
 
 /**
  * Subtract the specified number of minutes from the given date.
@@ -14,9 +14,6 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * @returns A new `Date` object with the minutes subtracted, or `Invalid Date` if input is invalid.
  */
 export function subMinutes(date: Date | number, amount: number): Date {
-  if (!isValidDateOrNumber(date)) {
-    return new Date(NaN);
-  }
   if (!isValidNumber(amount)) {
     return new Date(NaN);
   }
