@@ -63,10 +63,13 @@ describe("now", () => {
       expect(typeof formatted).toBe("string");
       expect(formatted).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
-      const formattedDate = new Date(formatted);
-      expect(formattedDate.getFullYear()).toBe(currentTime.getFullYear());
-      expect(formattedDate.getMonth()).toBe(currentTime.getMonth());
-      expect(formattedDate.getDate()).toBe(currentTime.getDate());
+      // Compare formatted components directly to avoid timezone issues
+      const expectedYear = currentTime.getFullYear().toString();
+      const expectedMonth = (currentTime.getMonth() + 1).toString().padStart(2, "0");
+      const expectedDay = currentTime.getDate().toString().padStart(2, "0");
+      const expected = `${expectedYear}-${expectedMonth}-${expectedDay}`;
+
+      expect(formatted).toBe(expected);
     });
   });
 
