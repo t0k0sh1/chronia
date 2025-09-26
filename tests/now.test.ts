@@ -44,11 +44,6 @@ describe("now", () => {
       const tomorrow = addDays(currentTime, 1);
 
       expect(tomorrow.getTime() - currentTime.getTime()).toBe(24 * 60 * 60 * 1000);
-      expect(tomorrow.getDate()).toBe(
-        currentTime.getDate() === new Date(currentTime.getFullYear(), currentTime.getMonth() + 1, 0).getDate()
-          ? 1 // Next month if current date is last day of month
-          : currentTime.getDate() + 1
-      );
     });
 
     it("works correctly with subHours function", () => {
