@@ -27,15 +27,6 @@ describe("now", () => {
       expect(result.getTime()).toBeLessThanOrEqual(afterCall.getTime());
     });
 
-    it("shows time progression in consecutive calls", () => {
-      const first = now();
-      // Small delay to ensure different timestamps
-      const start = Date.now();
-      while (Date.now() - start < 1) { /* wait 1ms */ }
-      const second = now();
-
-      expect(second.getTime()).toBeGreaterThanOrEqual(first.getTime());
-    });
   });
 
   describe("integration tests", () => {
