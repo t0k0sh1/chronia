@@ -92,7 +92,7 @@ console.log(currentTime); // Current Date object
 // Use with other functions
 const formatted = format(now(), "yyyy-MM-dd HH:mm:ss");
 const tomorrow = addDays(now(), 1);
-const isRecent = isAfter(now(), someOtherDate);
+const isRecent = isAfter(now(), new Date(2000, 0, 1)); // Check if current time is after Jan 1, 2000
 
 // Equivalent to new Date(), but more semantic
 const timestamp1 = now().getTime();
