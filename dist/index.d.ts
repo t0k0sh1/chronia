@@ -1422,6 +1422,30 @@ declare function min(...dates: (Date | number)[]): Date;
 declare function max(...dates: (Date | number)[]): Date;
 
 /**
+ * Get the current date and time.
+ *
+ * Returns a new Date object representing the current moment.
+ * This function provides a consistent way to get the current time
+ * across the chronia library ecosystem.
+ *
+ * @returns {Date} Current date and time as Date object
+ *
+ * @example
+ * ```typescript
+ * import { now } from 'chronia';
+ *
+ * const currentTime = now();
+ * console.log(currentTime); // 2025-01-21T10:30:45.123Z
+ *
+ * // Use with other chronia functions
+ * const tomorrow = addDays(now(), 1);
+ * const oneHourAgo = subHours(now(), 1);
+ * const formatted = format(now(), 'yyyy-MM-dd HH:mm:ss');
+ * ```
+ */
+declare function now(): Date;
+
+/**
  * Clamp a date within a specified range.
  *
  * Takes a date and ensures it falls within the specified minimum and maximum bounds.
@@ -1507,4 +1531,4 @@ declare const MIN_DATE: Date;
  */
 declare const MAX_DATE: Date;
 
-export { type BetweenOption, type BoundsType, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export { type BetweenOption, type BoundsType, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };

@@ -209,7 +209,7 @@ describe('setTime', () => {
     });
   });
 
-  describe('Performance', () => {
+  describe.skip('Performance', () => {
     it('should perform comparably to native setTime()', () => {
       const dates1 = Array.from({ length: 1000 }, () => new Date());
       const dates2 = Array.from({ length: 1000 }, () => new Date());

@@ -105,7 +105,7 @@ describe('getTime', () => {
     });
   });
 
-  describe('Performance', () => {
+  describe.skip('Performance', () => {
     it('should perform comparably to native getTime()', () => {
       const dates = Array.from({ length: 1000 }, () => new Date());
 

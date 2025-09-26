@@ -77,3 +77,10 @@ The date formatting system follows a token-based approach:
   3. `npm run build` - Verify the code builds successfully
 - If any of these commands fail, fix the issues before proceeding or committing changes
 - Never commit code that fails linting, testing, or building
+
+### Performance Tests
+- **Performance tests should remain skipped by default** using `describe.skip()` or `it.skip()`
+- These tests use `performance.now()` and are unreliable in CI environments due to host machine load variations
+- **Only remove skip when specifically needed** for local performance validation during development
+- **Always re-add skip before committing** to maintain CI stability and resource efficiency
+- For dedicated performance testing, use benchmarking libraries like tinybench instead
