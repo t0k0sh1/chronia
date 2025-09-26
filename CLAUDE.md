@@ -18,9 +18,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 1. Run `npm run lint` to ensure code quality and style compliance
 2. Run `npm run build` to build ESM/CJS bundles
 3. Run `npx typedoc` to generate updated documentation
-4. Add both `dist/` and `docs/` directories to the commit
+4. **Update README.md** if functions were added, changed, or removed:
+   - Add documentation for new functions in appropriate sections
+   - Update documentation for modified functions
+   - Remove documentation for deleted functions
+   - Update imports in examples to include/exclude affected functions
+   - **Note**: Only update sections related to changed functions; full README review is not required
+5. Add `dist/`, `docs/`, and `README.md` (if updated) to the commit
 
-This ensures that built artifacts and documentation are always in sync with source code changes.
+This ensures that built artifacts, API documentation, and user documentation are always in sync with source code changes.
 
 ## Project Architecture
 

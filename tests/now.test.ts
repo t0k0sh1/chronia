@@ -85,7 +85,7 @@ describe("now", () => {
 
     it("has minimal memory footprint", () => {
       const iterations = 1000;
-      const results = [];
+      const results: Date[] = [];
 
       for (let i = 0; i < iterations; i++) {
         results.push(now());
@@ -93,7 +93,7 @@ describe("now", () => {
 
       // All should be unique Date objects
       expect(results.length).toBe(iterations);
-      results.forEach(result => {
+      results.forEach((result: Date) => {
         expect(result instanceof Date).toBe(true);
       });
     });
