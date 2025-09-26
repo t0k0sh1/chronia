@@ -29,7 +29,7 @@ export function isValidDate(value: unknown): value is Date {
 export function isValidNumber(value: unknown): value is number {
   // Check if it's a number type and is finite
   // isFinite() handles NaN, Infinity, and -Infinity in one check
-  return typeof value === 'number' && isFinite(value);
+  return typeof value === "number" && isFinite(value);
 }
 
 /**
