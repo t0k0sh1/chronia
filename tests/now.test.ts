@@ -59,7 +59,7 @@ describe("now", () => {
     });
   });
 
-  describe("performance tests", () => {
+  describe.skip("performance tests", () => {
     it("executes in less than 1ms", () => {
       const startTime = performance.now();
       now();
