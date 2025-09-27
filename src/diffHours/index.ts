@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Calculate the difference in complete hours between two dates.
  *
@@ -24,6 +26,12 @@
  * ```
  */
 export function diffHours(dateLeft: Date | number, dateRight: Date | number): number {
+  // Calculation functions return NaN for invalid inputs (graceful error handling)
+  // This differs from boolean functions (return false) and comparison functions (throw errors)
+  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+    return NaN;
+  }
+
   const dtLeft = new Date(dateLeft);
   const dtRight = new Date(dateRight);
   // Create dates at the start of each hour for comparison
