@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { isValidDate, isValidNumber, isValidDateOrNumber } from "./validators";
+import { isValidDate, isValidNumber, isValidDateOrNumber } from "../../src/_lib/validators";
 
 describe("validators", () => {
   describe("isValidDate", () => {
