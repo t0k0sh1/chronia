@@ -1,8 +1,13 @@
 # Chronia
 
-[![npm version](https://badge.fury.io/js/chronia.svg)](https://badge.fury.io/js/chronia)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![npm version](https://badge.fury.io/js/chronia.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/t0k0sh1/chronia/ci.yaml)
+![snyk](https://snyk.io/test/github/t0k0sh1/chronia/badge.svg)
+![Bundle size](https://badgen.net/bundlephobia/minzip/chronia)
+![Node Current](https://img.shields.io/node/v/chronia)
+![NPM Downloads](https://img.shields.io/npm/dm/chronia)
 
 A modern, lightweight TypeScript date/time utility library with comprehensive formatting, parsing, and manipulation capabilities.
 
@@ -636,16 +641,6 @@ const customLocale: Locale = {
 - Modern browsers with ES2020 support
 - Node.js 18+
 - TypeScript 5.0+
-
-## Bundle Size
-
-Chronia is designed to be lightweight and tree-shakable:
-
-- ![Bundle size](https://badgen.net/bundlephobia/minzip/chronia) (ESM, min+gzip, via [Bundlephobia](https://bundlephobia.com/result?p=chronia))
-- Individual functions can be imported to reduce bundle size
-- Full TypeScript definitions included
-
-> **Note:** Bundle size metrics are automatically updated via [Bundlephobia](https://bundlephobia.com/result?p=chronia). For maximum accuracy, consider automating bundle size checks in CI to keep this information up to date.
 
 ## License
 
