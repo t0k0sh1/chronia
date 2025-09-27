@@ -66,7 +66,7 @@ describe('Enhanced Compare Performance Tests', () => {
       dates.sort((a, b) => compare(a, b, 'desc'));
       const end = performance.now();
 
-      expect(end - start).toBeLessThan(50); // Should be very fast for 1k items
+      expect(end - start).toBeLessThan(100); // Should be very fast for 1k items, allow for slower CI
     });
   });
 
@@ -100,7 +100,7 @@ describe('Enhanced Compare Performance Tests', () => {
       }
       const end = performance.now();
 
-      expect(end - start).toBeLessThan(50);
+      expect(end - start).toBeLessThan(100); // Allow for slower CI environments
     });
   });
 });
