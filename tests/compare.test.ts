@@ -197,7 +197,6 @@ describe('compare', () => {
         { name: 'null', input: null },
         { name: 'undefined', input: undefined },
         { name: 'string', input: '2024-01-01' },
-        { name: 'number', input: 1704067200000 },
         { name: 'boolean', input: true },
         { name: 'object', input: {} },
         { name: 'array', input: [] },
@@ -209,6 +208,14 @@ describe('compare', () => {
           compare(input as any, new Date());
         }).toThrow('First argument must be a Date object');
       });
+
+      it('should accept number as first argument (new feature)', () => {
+        const timestamp = 1704067200000; // Valid timestamp
+        const date = new Date('2024-01-02');
+
+        expect(() => compare(timestamp, date)).not.toThrow();
+        expect(compare(timestamp, date)).toBe(-1); // timestamp is earlier
+      });
     });
 
     describe('Invalid second argument', () => {
@@ -216,7 +223,6 @@ describe('compare', () => {
         { name: 'null', input: null },
         { name: 'undefined', input: undefined },
         { name: 'string', input: '2024-01-01' },
-        { name: 'number', input: 1704067200000 },
         { name: 'boolean', input: true },
         { name: 'object', input: {} },
         { name: 'array', input: [] },
@@ -227,6 +233,14 @@ describe('compare', () => {
         expect(() => {
           compare(new Date(), input as any);
         }).toThrow('Second argument must be a Date object');
+      });
+
+      it('should accept number as second argument (new feature)', () => {
+        const date = new Date('2024-01-01');
+        const timestamp = 1704153600000; // Valid timestamp for later date
+
+        expect(() => compare(date, timestamp)).not.toThrow();
+        expect(compare(date, timestamp)).toBe(-1); // date is earlier than timestamp
       });
     });
 
@@ -256,26 +270,83 @@ describe('compare', () => {
       });
     });
 
-    describe('Invalid order parameter', () => {
-      it.each([
-        'asc',
-        'desc',
-        'ASCENDING',
-        'DESCENDING',
-        'up',
-        'down',
-        1,
-        true,
-        null,
-        {},
-        [],
-      ])('should throw RangeError for invalid order: %s', (invalidOrder) => {
-        expect(() => {
-          compare(new Date(), new Date(), invalidOrder as any);
-        }).toThrow(RangeError);
-        expect(() => {
-          compare(new Date(), new Date(), invalidOrder as any);
-        }).toThrow("Order must be 'ASC' or 'DESC'");
+    describe('Order parameter behavior (new specification)', () => {
+      it('should handle null and undefined order parameters without throwing', () => {
+        const date1 = new Date('2024-01-01');
+        const date2 = new Date('2024-01-02');
+
+        // Test that null doesn't cause toUpperCase() error
+        // @ts-expect-error Testing runtime behavior with null
+        expect(() => compare(date1, date2, null)).not.toThrow();
+        // @ts-expect-error Testing runtime behavior with null
+        expect(compare(date1, date2, null)).toBe(-1); // defaults to ASC
+
+        // Test that undefined is handled properly
+        expect(() => compare(date1, date2, undefined)).not.toThrow();
+        expect(compare(date1, date2, undefined)).toBe(-1); // defaults to ASC
+
+        // Confirm consistent behavior
+        // @ts-expect-error Testing runtime behavior with null
+        expect(compare(date1, date2, null)).toBe(compare(date1, date2));
+        expect(compare(date1, date2, undefined)).toBe(compare(date1, date2));
+      });
+
+      it('should accept case-insensitive order parameters', () => {
+        const date1 = new Date('2024-01-01');
+        const date2 = new Date('2024-01-02');
+
+        // Test case-insensitive order parameters
+        // @ts-expect-error Testing runtime behavior with non-typed values
+        expect(compare(date1, date2, 'asc')).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with non-typed values
+        expect(compare(date1, date2, 'Asc')).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with non-typed values
+        expect(compare(date1, date2, 'ASC')).toBe(-1);
+
+        // @ts-expect-error Testing runtime behavior with non-typed values
+        expect(compare(date1, date2, 'desc')).toBe(1);
+        // @ts-expect-error Testing runtime behavior with non-typed values
+        expect(compare(date1, date2, 'Desc')).toBe(1);
+        // @ts-expect-error Testing runtime behavior with non-typed values
+        expect(compare(date1, date2, 'DESC')).toBe(1);
+      });
+
+      it('should treat invalid strings as ASC (default)', () => {
+        const date1 = new Date('2024-01-01');
+        const date2 = new Date('2024-01-02');
+
+        // Invalid strings should default to ASC
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, 'ASCENDING')).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, 'DESCENDING')).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, 'xyz')).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, '')).toBe(-1);
+      });
+
+      it('should treat non-string values as ASC (default)', () => {
+        const date1 = new Date('2024-01-01');
+        const date2 = new Date('2024-01-02');
+
+        // Non-string values should default to ASC
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, 123)).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, true)).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, false)).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, null)).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, {})).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, [])).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, NaN)).toBe(-1);
+        // @ts-expect-error Testing runtime behavior with invalid values
+        expect(compare(date1, date2, Infinity)).toBe(-1);
       });
     });
   });
