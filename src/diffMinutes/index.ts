@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Calculate the difference in complete minutes between two dates.
  *
@@ -24,6 +26,10 @@
  * ```
  */
 export function diffMinutes(dateLeft: Date | number, dateRight: Date | number): number {
+  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+    return NaN;
+  }
+
   const dtLeft = new Date(dateLeft);
   const dtRight = new Date(dateRight);
   // Create dates at the start of each minute for comparison

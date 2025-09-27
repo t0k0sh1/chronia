@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Calculate the difference in calendar days between two dates.
  *
@@ -25,6 +27,10 @@
  * ```
  */
 export function diffDays(dateLeft: Date | number, dateRight: Date | number): number {
+  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+    return NaN;
+  }
+
   const dtLeft = new Date(dateLeft);
   const dtRight = new Date(dateRight);
   // Create dates at midnight for calendar day comparison

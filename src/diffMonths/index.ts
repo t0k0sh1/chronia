@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Calculate the difference in calendar months between two dates.
  *
@@ -24,6 +26,10 @@
  * ```
  */
 export function diffMonths(dateLeft: Date | number, dateRight: Date | number): number {
+  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+    return NaN;
+  }
+
   const dtLeft = new Date(dateLeft);
   const dtRight = new Date(dateRight);
   const yearDiff = dtLeft.getFullYear() - dtRight.getFullYear();

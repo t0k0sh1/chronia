@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Calculate the difference in calendar years between two dates.
  *
@@ -20,6 +22,10 @@
  * ```
  */
 export function diffYears(dateLeft: Date | number, dateRight: Date | number): number {
+  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+    return NaN;
+  }
+
   const dtLeft = new Date(dateLeft);
   const dtRight = new Date(dateRight);
   return dtLeft.getFullYear() - dtRight.getFullYear();

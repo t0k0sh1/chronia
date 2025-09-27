@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Clamp a date within a specified range.
  *
@@ -43,19 +45,15 @@ export function clamp(
   minDate: Date | number,
   maxDate: Date | number
 ): Date {
+  // Validate all inputs using internal validator
+  if (!isValidDateOrNumber(date) || !isValidDateOrNumber(minDate) || !isValidDateOrNumber(maxDate)) {
+    return new Date(NaN);
+  }
+
   // Convert all inputs to Date objects
   const dateObj = typeof date === "number" ? new Date(date) : date;
   const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
   const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
-
-  // Check validity of all inputs
-  if (
-    isNaN(dateObj.getTime()) ||
-    isNaN(minDateObj.getTime()) ||
-    isNaN(maxDateObj.getTime())
-  ) {
-    return new Date(NaN);
-  }
 
   // Ensure min <= max, swap if necessary
   const actualMin = minDateObj.getTime() <= maxDateObj.getTime() ? minDateObj : maxDateObj;

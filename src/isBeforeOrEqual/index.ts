@@ -1,4 +1,5 @@
 import { truncateToUnit } from "../_lib/truncateToUnit";
+import { isValidDateOrNumber } from "../_lib/validators";
 import { TimeUnit } from "../types";
 
 /**
@@ -18,9 +19,10 @@ export function isBeforeOrEqual(
     unit?: TimeUnit;
   },
 ): boolean {
+  if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
+
   const dtA = new Date(a);
   const dtB = new Date(b);
-  if (isNaN(dtA.getTime()) || isNaN(dtB.getTime())) return false;
 
   const unit = opts?.unit ?? "millisecond";
 
