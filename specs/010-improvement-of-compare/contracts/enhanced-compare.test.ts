@@ -83,14 +83,26 @@ describe('Enhanced Compare Function Contracts', () => {
       expect(() => compare(validDate.getTime(), invalidTimestamp)).toThrow(RangeError);
     });
 
-    it('should throw RangeError for invalid order parameters', () => {
+    it('should gracefully handle invalid order parameters by defaulting to ASC', () => {
       const date1 = new Date('2024-01-01');
       const date2 = new Date('2024-01-02');
 
-      // @ts-expect-error Testing invalid order parameter
-      expect(() => compare(date1, date2, 'invalid')).toThrow(RangeError);
-      // @ts-expect-error Testing invalid order parameter
-      expect(() => compare(date1, date2, 'ascending')).toThrow(RangeError);
+      // Invalid order parameters should not throw errors, but default to ASC
+      // @ts-expect-error Testing runtime behavior with invalid order parameter
+      expect(() => compare(date1, date2, 'invalid')).not.toThrow();
+      // @ts-expect-error Testing runtime behavior with invalid order parameter
+      expect(compare(date1, date2, 'invalid')).toBe(-1); // defaults to ASC
+
+      // @ts-expect-error Testing runtime behavior with invalid order parameter
+      expect(() => compare(date1, date2, 'ascending')).not.toThrow();
+      // @ts-expect-error Testing runtime behavior with invalid order parameter
+      expect(compare(date1, date2, 'ascending')).toBe(-1); // defaults to ASC
+
+      // Non-string values should also default to ASC
+      // @ts-expect-error Testing runtime behavior with invalid order parameter
+      expect(() => compare(date1, date2, 123)).not.toThrow();
+      // @ts-expect-error Testing runtime behavior with invalid order parameter
+      expect(compare(date1, date2, 123)).toBe(-1); // defaults to ASC
     });
   });
 
