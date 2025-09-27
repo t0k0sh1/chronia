@@ -45,7 +45,8 @@ export function clamp(
   minDate: Date | number,
   maxDate: Date | number
 ): Date {
-  // Validate all inputs using internal validator
+  // Range functions return Invalid Date for invalid inputs (type-consistent error handling)
+  // This differs from boolean functions (return false) and calculation functions (return NaN)
   if (!isValidDateOrNumber(date) || !isValidDateOrNumber(minDate) || !isValidDateOrNumber(maxDate)) {
     return new Date(NaN);
   }

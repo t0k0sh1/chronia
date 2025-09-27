@@ -26,6 +26,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * ```
  */
 export function diffHours(dateLeft: Date | number, dateRight: Date | number): number {
+  // Calculation functions return NaN for invalid inputs (graceful error handling)
+  // This differs from boolean functions (return false) and comparison functions (throw errors)
   if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
     return NaN;
   }
