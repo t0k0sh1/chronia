@@ -11,6 +11,11 @@
 
 A modern, lightweight TypeScript date/time utility library with comprehensive formatting, parsing, and manipulation capabilities.
 
+> **Note**  
+> This library is currently in the **v0.1.x** stage.  
+> Breaking changes may occur at any time without prior notice.  
+> A stable API will be introduced starting from v0.2.0.
+
 ## Features
 
 - 🚀 **Modern TypeScript** - Built with TypeScript 5.9+ for excellent type safety
