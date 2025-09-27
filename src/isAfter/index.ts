@@ -20,6 +20,8 @@ export function isAfter(
     unit?: TimeUnit;
   },
 ): boolean {
+  // Early validation for fast-fail behavior and code consistency across functions
+  // Slight overhead of Date construction is acceptable for clarity and uniform validation
   if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
 
   const dtA = new Date(a);
