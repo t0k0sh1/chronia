@@ -1,6 +1,33 @@
 import { isValidDateOrNumber } from "../_lib/validators";
 
 /**
+ * Validates and converts a Date or number input to a Date object.
+ * @internal
+ */
+function validateAndConvertDate(
+  input: Date | number,
+  argumentName: "First" | "Second"
+): Date {
+  if (typeof input === "number") {
+    // New feature: Accept number inputs (timestamps)
+    const date = new Date(input);
+    if (!isValidDateOrNumber(date)) {
+      throw new RangeError(`${argumentName} date is invalid`);
+    }
+    return date;
+  } else if (input instanceof Date) {
+    // Existing feature: Accept Date objects
+    if (!isValidDateOrNumber(input)) {
+      throw new RangeError(`${argumentName} date is invalid`);
+    }
+    return input;
+  } else {
+    // Backward compatibility: Original error message for invalid types
+    throw new RangeError(`${argumentName} argument must be a Date object`);
+  }
+}
+
+/**
  * Compare two Date objects or timestamps chronologically.
  *
  * @param date1 - The first Date object or timestamp to compare
@@ -48,45 +75,9 @@ export function compare(
   date2: Date | number,
   order?: "ASC" | "DESC"
 ): number {
-  // Enhanced input validation with backward compatibility
-  let dateLeft: Date;
-  let dateRight: Date;
-
-  // First argument validation
-  if (typeof date1 === "number") {
-    // New feature: Accept number inputs (timestamps)
-    dateLeft = new Date(date1);
-    if (!isValidDateOrNumber(dateLeft)) {
-      throw new RangeError("First date is invalid");
-    }
-  } else if (date1 instanceof Date) {
-    // Existing feature: Accept Date objects
-    dateLeft = date1;
-    if (!isValidDateOrNumber(dateLeft)) {
-      throw new RangeError("First date is invalid");
-    }
-  } else {
-    // Backward compatibility: Original error message for invalid types
-    throw new RangeError("First argument must be a Date object");
-  }
-
-  // Second argument validation
-  if (typeof date2 === "number") {
-    // New feature: Accept number inputs (timestamps)
-    dateRight = new Date(date2);
-    if (!isValidDateOrNumber(dateRight)) {
-      throw new RangeError("Second date is invalid");
-    }
-  } else if (date2 instanceof Date) {
-    // Existing feature: Accept Date objects
-    dateRight = date2;
-    if (!isValidDateOrNumber(dateRight)) {
-      throw new RangeError("Second date is invalid");
-    }
-  } else {
-    // Backward compatibility: Original error message for invalid types
-    throw new RangeError("Second argument must be a Date object");
-  }
+  // Validate and convert inputs using helper function
+  const dateLeft = validateAndConvertDate(date1, "First");
+  const dateRight = validateAndConvertDate(date2, "Second");
 
   // Order parameter normalization (case-insensitive, default to ASC for invalid values)
   let normalizedOrder: "ASC" | "DESC" = "ASC";
