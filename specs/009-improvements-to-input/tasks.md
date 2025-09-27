@@ -50,18 +50,18 @@
 ## Phase 3.3: Core Implementation - Comparison Functions
 - [ ] T007 Update compare function in src/compare/index.ts to use isValidDate validator (maintain RangeError behavior)
 
-## Phase 3.4: Core Implementation - Boolean Functions (Parallel Execution)
+## Phase 3.4: Core Implementation - Boolean Functions (Direct & Indirect Updates)
 - [ ] T008 [P] Update isAfter function in src/isAfter/index.ts to use isValidDateOrNumber validator
 - [ ] T009 [P] Update isBefore function in src/isBefore/index.ts to use isValidDateOrNumber validator
 - [ ] T010 [P] Update isEqual function in src/isEqual/index.ts to use isValidDateOrNumber validator
 - [ ] T011 [P] Update isAfterOrEqual function in src/isAfterOrEqual/index.ts to use isValidDateOrNumber validator
 - [ ] T012 [P] Update isBeforeOrEqual function in src/isBeforeOrEqual/index.ts to use isValidDateOrNumber validator
-- [ ] T013 [P] Update isSameDay function in src/isSameDay/index.ts to use isValidDateOrNumber validator
-- [ ] T014 [P] Update isSameHour function in src/isSameHour/index.ts to use isValidDateOrNumber validator
-- [ ] T015 [P] Update isSameMinute function in src/isSameMinute/index.ts to use isValidDateOrNumber validator
-- [ ] T016 [P] Update isSameSecond function in src/isSameSecond/index.ts to use isValidDateOrNumber validator
-- [ ] T017 [P] Update isSameMonth function in src/isSameMonth/index.ts to use isValidDateOrNumber validator
-- [ ] T018 [P] Update isSameYear function in src/isSameYear/index.ts to use isValidDateOrNumber validator
+- [ ] T013 [Note] isSameDay function gains validation indirectly through diffDays update (T020)
+- [ ] T014 [Note] isSameHour function gains validation indirectly through diffHours update (T021)
+- [ ] T015 [Note] isSameMinute function gains validation indirectly through diffMinutes update (T022)
+- [ ] T016 [Note] isSameSecond function gains validation indirectly through diffSeconds update (T023)
+- [ ] T017 [Note] isSameMonth function gains validation indirectly through diffMonths update (T025)
+- [ ] T018 [Note] isSameYear function gains validation indirectly through diffYears update (T026)
 - [ ] T019 [P] Update isBetween function in src/isBetween/index.ts to use isValidDateOrNumber validator
 
 ## Phase 3.5: Core Implementation - Calculation Functions (Parallel Execution)
@@ -94,7 +94,8 @@
 - Contract tests (T004-T005) before verification (T006)
 - Tests must fail (T006) before any implementation (T007-T027)
 - Comparison (T007) can run independently
-- Boolean functions (T008-T019) can run in parallel within their phase
+- Direct boolean functions (T008-T012, T019) can run in parallel within their phase
+- Indirect validation (T013-T018) occurs through calculation function updates (T020-T026)
 - Calculation functions (T020-T026) can run in parallel within their phase
 - Range function (T027) can run independently
 - Integration testing (T028-T031) requires all implementation complete
@@ -106,11 +107,14 @@
 Task: "Contract test validation standardization in specs/009-improvements-to-input/contracts/validation-standardization.test.ts"
 Task: "Contract test validator usage in specs/009-improvements-to-input/contracts/validator-usage.test.ts"
 
-# Launch T008-T019 together (Boolean functions - all independent files):
+# Launch T008-T012,T019 together (Direct boolean functions - independent files):
 Task: "Update isAfter function in src/isAfter/index.ts to use isValidDateOrNumber validator"
 Task: "Update isBefore function in src/isBefore/index.ts to use isValidDateOrNumber validator"
 Task: "Update isEqual function in src/isEqual/index.ts to use isValidDateOrNumber validator"
-[... and 9 more boolean function tasks]
+Task: "Update isAfterOrEqual function in src/isAfterOrEqual/index.ts to use isValidDateOrNumber validator"
+Task: "Update isBeforeOrEqual function in src/isBeforeOrEqual/index.ts to use isValidDateOrNumber validator"
+Task: "Update isBetween function in src/isBetween/index.ts to use isValidDateOrNumber validator"
+# Note: T013-T018 (isSame* functions) gain validation indirectly through diff* function updates
 
 # Launch T020-T026 together (Calculation functions - all independent files):
 Task: "Update diffDays function in src/diffDays/index.ts to use isValidDateOrNumber validator"
