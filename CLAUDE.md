@@ -62,6 +62,17 @@ The date formatting system follows a token-based approach:
 - Tests cover both normal and edge cases (leap years, BC dates, etc.)
 - Mock localize objects used for testing localization features
 
+### Test File Organization
+
+- **Unit Tests**: MUST be placed in the `tests/` directory, mirroring the source structure
+  - Example: `src/isValid/index.ts` → `tests/isValid.test.ts`
+  - Example: `src/_lib/validators.ts` → `tests/_lib/validators.test.ts`
+- **Benchmark Tests**: MUST be placed in the `tests/` directory with `.bench.ts` extension
+  - Example: `tests/format.bench.ts` for performance testing
+- **Contract Tests**: Should be placed in `specs/[feature]/contracts/` directory
+  - These are for testing implementation contracts during feature development
+  - Example: `specs/007-improvement-of-isvalid/contracts/internal-validator-usage.test.ts`
+
 ### Build Configuration
 
 - **tsconfig.json**: Base TypeScript configuration

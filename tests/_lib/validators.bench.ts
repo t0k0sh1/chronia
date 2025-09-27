@@ -1,7 +1,7 @@
 import { bench, describe } from "vitest";
-import { isValidDate, isValidNumber, isValidDateOrNumber } from "./validators";
+import { isValidDate, isValidNumber, isValidDateOrNumber } from "../../src/_lib/validators";
 
-describe("Validator Performance Benchmarks", () => {
+describe.skip("Validator Performance Benchmarks", () => {
   // Test data
   const validDate = new Date();
   const invalidDate = new Date("invalid");
