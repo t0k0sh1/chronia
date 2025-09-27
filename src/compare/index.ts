@@ -90,13 +90,14 @@ export function compare(
 
   // Order parameter normalization (case-insensitive, default to ASC for invalid values)
   let normalizedOrder: "ASC" | "DESC" = "ASC";
-  if (order !== undefined && typeof order === "string") {
+  if (order !== undefined && order !== null && typeof order === "string") {
     const upperOrder = order.toUpperCase();
     if (upperOrder === "DESC") {
       normalizedOrder = "DESC";
     }
     // Any other value (including "ASC", "asc", or invalid strings) defaults to "ASC"
   }
+  // null, undefined, and non-string values all default to "ASC"
 
   // Core comparison logic using Date.getTime()
   const timestamp1 = dateLeft.getTime();
