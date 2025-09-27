@@ -595,6 +595,7 @@ declare function isEqual(a: Date | number, b: Date | number, opts?: {
  *
  * - Accepts a `Date` object or a timestamp (number).
  * - Returns `true` if the resulting Date is valid, otherwise `false`.
+ * - Uses internal validation utilities for optimal performance.
  *
  * @param date - The Date object or timestamp to validate.
  * @returns `true` if valid, `false` if invalid.

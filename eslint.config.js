@@ -13,5 +13,5 @@ export default tseslint.config({
     semi: ["error", "always"],
     quotes: ["error", "double"],
   },
-  ignores: ["dist/", "node_modules/", "tests/"],
+  ignores: ["dist/", "node_modules/", "tests/", "specs/"],
 });
