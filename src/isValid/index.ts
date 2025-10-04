@@ -13,4 +13,3 @@ import { isValidDateOrNumber } from "../_lib/validators";
 export function isValid(date: Date | number): boolean {
   return isValidDateOrNumber(date);
 }
-

@@ -25,14 +25,18 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * diffMilliseconds(date5, date6); // 0 (exact same time)
  * ```
  */
-export function diffMilliseconds(dateLeft: Date | number, dateRight: Date | number): number {
+export function diffMilliseconds(
+  dateLeft: Date | number,
+  dateRight: Date | number,
+): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
   // This differs from boolean functions (return false) and comparison functions (throw errors)
-  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight))
     return NaN;
-  }
 
   const dtLeft = new Date(dateLeft);
   const dtRight = new Date(dateRight);
+
   return dtLeft.getTime() - dtRight.getTime();
 }
+

@@ -30,10 +30,12 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *   end: new Date('2024-06-20')
  * }, { bounds: "[]" }); // true
  */
-export function isBetween(date: Date | number, interval: Interval, opts?: BetweenOption): boolean {
-  if (!isValidDateOrNumber(date)) {
-    return false;
-  }
+export function isBetween(
+  date: Date | number,
+  interval: Interval,
+  opts?: BetweenOption,
+): boolean {
+  if (!isValidDateOrNumber(date)) return false;
 
   if (typeof interval !== "object" || interval === null) {
     return false;
@@ -90,3 +92,4 @@ export function isBetween(date: Date | number, interval: Interval, opts?: Betwee
       return dateTime > startTime && dateTime < endTime;
   }
 }
+

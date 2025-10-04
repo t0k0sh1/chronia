@@ -13,16 +13,13 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * @returns A new `Date` object with the minutes added, or `Invalid Date` if input is invalid.
  */
 export function addMinutes(date: Date | number, amount: number): Date {
-  if (!isValidDateOrNumber(date)) {
+  if (!isValidDateOrNumber(date) || !isValidNumber(amount))
     return new Date(NaN);
-  }
-  if (!isValidNumber(amount)) {
-    return new Date(NaN);
-  }
 
   const dt = new Date(date);
-
   const minutesToAdd = Math.trunc(amount);
+
   dt.setMinutes(dt.getMinutes() + minutesToAdd);
   return dt;
 }
+

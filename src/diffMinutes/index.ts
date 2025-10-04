@@ -25,12 +25,14 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * diffMinutes(date5, date6); // 15
  * ```
  */
-export function diffMinutes(dateLeft: Date | number, dateRight: Date | number): number {
+export function diffMinutes(
+  dateLeft: Date | number,
+  dateRight: Date | number,
+): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
   // This differs from boolean functions (return false) and comparison functions (throw errors)
-  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight))
     return NaN;
-  }
 
   const dtLeft = new Date(dateLeft);
   const dtRight = new Date(dateRight);
@@ -40,17 +42,19 @@ export function diffMinutes(dateLeft: Date | number, dateRight: Date | number): 
     dtLeft.getMonth(),
     dtLeft.getDate(),
     dtLeft.getHours(),
-    dtLeft.getMinutes()
+    dtLeft.getMinutes(),
   );
   const rightMinute = new Date(
     dtRight.getFullYear(),
     dtRight.getMonth(),
     dtRight.getDate(),
     dtRight.getHours(),
-    dtRight.getMinutes()
+    dtRight.getMinutes(),
   );
 
   const diffTime = leftMinute.getTime() - rightMinute.getTime();
   const millisecondsPerMinute = 1000 * 60;
+
   return Math.round(diffTime / millisecondsPerMinute);
 }
+

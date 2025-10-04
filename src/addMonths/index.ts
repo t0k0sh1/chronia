@@ -15,17 +15,13 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * @returns A new `Date` object with the months added, or `Invalid Date` if input is invalid.
  */
 export function addMonths(date: Date | number, amount: number): Date {
-  if (!isValidDateOrNumber(date)) {
+  if (!isValidDateOrNumber(date) || !isValidNumber(amount))
     return new Date(NaN);
-  }
-  if (!isValidNumber(amount)) {
-    return new Date(NaN);
-  }
 
   const dt = new Date(date);
   const originalDay = dt.getDate();
-
   const monthsToAdd = Math.trunc(amount);
+
   dt.setMonth(dt.getMonth() + monthsToAdd);
 
   // Adjust for month-end: if overflowed, set to the last day of the intended month

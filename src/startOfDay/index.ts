@@ -18,10 +18,10 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * ```
  */
 export function startOfDay(date: Date | number): Date {
-  if (!isValidDateOrNumber(date)) {
-    return new Date(NaN);
-  }
+  if (!isValidDateOrNumber(date)) return new Date(NaN);
+
   const dt = new Date(date);
+
   return new Date(
     dt.getFullYear(),
     dt.getMonth(),
@@ -29,6 +29,7 @@ export function startOfDay(date: Date | number): Date {
     0, // 00:00:00.000
     0,
     0,
-    0
+    0,
   );
 }
+
