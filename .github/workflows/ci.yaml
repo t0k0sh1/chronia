@@ -15,6 +15,10 @@ jobs:
         node-version: [18.x, 20.x, 22.x, 24.x]
 
     steps:
+      # add Socket Firewall to the runner environment
+      - uses: socketdev/action@v1
+        with:
+          mode: firewall
       - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
@@ -23,9 +27,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
 
-      - run: npm install -g @aikidosec/safe-chain
-
-      - run: aikido-npm install
+      - run: sfw npm install
       - run: npm run lint
       - run: npm run build --if-present
       - run: npm test
