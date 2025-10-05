@@ -4,16 +4,50 @@ import { isValidNumber } from "../_lib/validators";
 /**
  * Subtract the specified number of years from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of years subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
- * - Leap year adjustment: if the original date is Feb 29 and the target year
- *   is not a leap year, the result becomes Feb 28.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of years subtracted. Fractional years are truncated toward zero.
+ * Preserves month, day, and time components. When the source date is Feb 29 and the target
+ * year is not a leap year, the result becomes Feb 28.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of years to subtract (fractions are truncated).
- * @returns A new `Date` object with the years subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of years to subtract (can be negative to add)
+ * @returns A new Date object with the years subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive years
+ * const result = subYears(new Date(2020, 0, 15), 3);
+ * // Returns: 2017-01-15
+ *
+ * // Add years (negative amount)
+ * const result = subYears(new Date(2020, 0, 15), -3);
+ * // Returns: 2023-01-15
+ *
+ * // Fractional amounts are truncated
+ * const result = subYears(new Date(2020, 0, 1), 1.9);
+ * // Returns: 2019-01-01 (1.9 truncated to 1)
+ *
+ * // Leap year to non-leap year (Feb 29 → Feb 28)
+ * const result = subYears(new Date(2024, 1, 29), 1);
+ * // Returns: 2023-02-28 (2023 is not a leap year)
+ *
+ * // Leap year to leap year (Feb 29 → Feb 29)
+ * const result = subYears(new Date(2024, 1, 29), 4);
+ * // Returns: 2020-02-29 (2020 is a leap year)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subYears(new Date("invalid"), 3);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
+ * - Leap year adjustment: Feb 29 → Feb 28 when target year is not a leap year
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 export function subYears(date: Date | number, amount: number): Date {
   if (!isValidNumber(amount)) {

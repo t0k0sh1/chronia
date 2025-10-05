@@ -1326,102 +1326,320 @@ declare function parse(dateString: string, pattern: string, options?: {
 /**
  * Subtract the specified number of days from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of days subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of days subtracted. Fractional days are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of days to subtract (fractions are truncated).
- * @returns A new `Date` object with the days subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of days to subtract (can be negative to add)
+ * @returns A new Date object with the days subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive days
+ * const result = subDays(new Date(2025, 0, 10), 5);
+ * // Returns: 2025-01-05
+ *
+ * // Add days (negative amount)
+ * const result = subDays(new Date(2025, 0, 10), -3);
+ * // Returns: 2025-01-13
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result = subDays(timestamp, 7);
+ * // Returns: Date 7 days ago from now
+ *
+ * // Fractional amounts are truncated
+ * const result = subDays(new Date(2025, 0, 5), 1.9);
+ * // Returns: 2025-01-04 (1.9 truncated to 1)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subDays(new Date("invalid"), 5);
+ * // Returns: Invalid Date
+ *
+ * const result = subDays(new Date(2025, 0, 1), NaN);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function subDays(date: Date | number, amount: number): Date;
 
 /**
  * Subtract the specified number of hours from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of hours subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of hours subtracted. Fractional hours are truncated toward zero.
+ * Minutes, seconds, and milliseconds are preserved.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of hours to subtract (fractions are truncated).
- * @returns A new `Date` object with the hours subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of hours to subtract (can be negative to add)
+ * @returns A new Date object with the hours subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive hours
+ * const result = subHours(new Date(2025, 0, 15, 18, 0, 0), 5);
+ * // Returns: 2025-01-15 13:00:00
+ *
+ * // Add hours (negative amount)
+ * const result = subHours(new Date(2025, 0, 15, 10, 30, 0), -3);
+ * // Returns: 2025-01-15 13:30:00
+ *
+ * // Fractional amounts are truncated
+ * const result = subHours(new Date(2025, 0, 15, 15, 0, 0), 1.9);
+ * // Returns: 2025-01-15 14:00:00 (1.9 truncated to 1)
+ *
+ * // Crosses day boundary
+ * const result = subHours(new Date(2025, 0, 15, 2, 0, 0), 4);
+ * // Returns: 2025-01-14 22:00:00
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subHours(new Date("invalid"), 3);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves minutes, seconds, and milliseconds
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function subHours(date: Date | number, amount: number): Date;
 
 /**
  * Subtract the specified number of milliseconds from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of milliseconds subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of milliseconds subtracted. Fractional milliseconds are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of milliseconds to subtract (fractions are truncated).
- * @returns A new `Date` object with the milliseconds subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of milliseconds to subtract (can be negative to add)
+ * @returns A new Date object with the milliseconds subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive milliseconds
+ * const result = subMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 500), 300);
+ * // Returns: 2020-01-01T12:00:00.200
+ *
+ * // Add milliseconds (negative amount)
+ * const result = subMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 200), -300);
+ * // Returns: 2020-01-01T12:00:00.500
+ *
+ * // Fractional amounts are truncated
+ * const result = subMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 100), 1.9);
+ * // Returns: 2020-01-01T12:00:00.099 (1.9 truncated to 1)
+ *
+ * // Crossing second boundary backward
+ * const result = subMilliseconds(new Date(2020, 0, 1, 12, 0, 1, 0), 1);
+ * // Returns: 2020-01-01T12:00:00.999
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subMilliseconds(new Date("invalid"), 500);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function subMilliseconds(date: Date | number, amount: number): Date;
 
 /**
  * Subtract the specified number of minutes from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of minutes subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of minutes subtracted. Fractional minutes are truncated toward zero.
+ * Preserves seconds and milliseconds.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of minutes to subtract (fractions are truncated).
- * @returns A new `Date` object with the minutes subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of minutes to subtract (can be negative to add)
+ * @returns A new Date object with the minutes subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive minutes
+ * const result = subMinutes(new Date(2020, 0, 1, 12, 30, 0), 15);
+ * // Returns: 2020-01-01T12:15:00
+ *
+ * // Add minutes (negative amount)
+ * const result = subMinutes(new Date(2020, 0, 1, 12, 30, 0), -15);
+ * // Returns: 2020-01-01T12:45:00
+ *
+ * // Fractional amounts are truncated
+ * const result = subMinutes(new Date(2020, 0, 1, 12, 30, 0), 1.9);
+ * // Returns: 2020-01-01T12:29:00 (1.9 truncated to 1)
+ *
+ * // Crossing hour boundary
+ * const result = subMinutes(new Date(2020, 0, 1, 12, 15, 0), 30);
+ * // Returns: 2020-01-01T11:45:00
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subMinutes(new Date("invalid"), 30);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves seconds and milliseconds
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function subMinutes(date: Date | number, amount: number): Date;
 
 /**
  * Subtract the specified number of months from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of months subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
- * - Month-end adjustment: if the original date has a day that doesn't exist
- *   in the target month (e.g., Mar 31 - 1 month), adjusts to the last valid day.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of months subtracted. Fractional months are truncated toward zero.
+ * Preserves time components (hours, minutes, seconds, milliseconds). When the day of month
+ * doesn't exist in the target month, the result becomes the last day of that month.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of months to subtract (fractions are truncated).
- * @returns A new `Date` object with the months subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of months to subtract (can be negative to add)
+ * @returns A new Date object with the months subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive months
+ * const result = subMonths(new Date(2020, 3, 15), 3);
+ * // Returns: 2020-01-15
+ *
+ * // Add months (negative amount)
+ * const result = subMonths(new Date(2020, 3, 15), -2);
+ * // Returns: 2020-05-15
+ *
+ * // Fractional amounts are truncated
+ * const result = subMonths(new Date(2020, 3, 15), 1.9);
+ * // Returns: 2020-02-15 (1.9 truncated to 1)
+ *
+ * // Month-end overflow handling (Mar 31 → Feb 28/29)
+ * const result = subMonths(new Date(2025, 2, 31), 1);
+ * // Returns: 2025-02-28 (Feb doesn't have 31 days)
+ *
+ * // Leap year handling
+ * const result = subMonths(new Date(2024, 2, 31), 1);
+ * // Returns: 2024-02-29 (2024 is a leap year)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subMonths(new Date("invalid"), 3);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves time components (hours, minutes, seconds, milliseconds)
+ * - Month-end overflow: if original day doesn't exist in target month, returns last day of that month
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function subMonths(date: Date | number, amount: number): Date;
 
 /**
  * Subtract the specified number of seconds from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of seconds subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of seconds subtracted. Fractional seconds are truncated toward zero.
+ * Preserves milliseconds.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of seconds to subtract (fractions are truncated).
- * @returns A new `Date` object with the seconds subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of seconds to subtract (can be negative to add)
+ * @returns A new Date object with the seconds subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive seconds
+ * const result = subSeconds(new Date(2020, 0, 1, 12, 30, 45), 15);
+ * // Returns: 2020-01-01T12:30:30
+ *
+ * // Add seconds (negative amount)
+ * const result = subSeconds(new Date(2020, 0, 1, 12, 30, 30), -15);
+ * // Returns: 2020-01-01T12:30:45
+ *
+ * // Fractional amounts are truncated
+ * const result = subSeconds(new Date(2020, 0, 1, 12, 0, 30), 1.9);
+ * // Returns: 2020-01-01T12:00:29 (1.9 truncated to 1)
+ *
+ * // Crossing minute boundary
+ * const result = subSeconds(new Date(2020, 0, 1, 12, 31, 15), 30);
+ * // Returns: 2020-01-01T12:30:45
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subSeconds(new Date("invalid"), 30);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves milliseconds
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function subSeconds(date: Date | number, amount: number): Date;
 
 /**
  * Subtract the specified number of years from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of years subtracted.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
- * - Leap year adjustment: if the original date is Feb 29 and the target year
- *   is not a leap year, the result becomes Feb 28.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of years subtracted. Fractional years are truncated toward zero.
+ * Preserves month, day, and time components. When the source date is Feb 29 and the target
+ * year is not a leap year, the result becomes Feb 28.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of years to subtract (fractions are truncated).
- * @returns A new `Date` object with the years subtracted, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of years to subtract (can be negative to add)
+ * @returns A new Date object with the years subtracted, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Subtract positive years
+ * const result = subYears(new Date(2020, 0, 15), 3);
+ * // Returns: 2017-01-15
+ *
+ * // Add years (negative amount)
+ * const result = subYears(new Date(2020, 0, 15), -3);
+ * // Returns: 2023-01-15
+ *
+ * // Fractional amounts are truncated
+ * const result = subYears(new Date(2020, 0, 1), 1.9);
+ * // Returns: 2019-01-01 (1.9 truncated to 1)
+ *
+ * // Leap year to non-leap year (Feb 29 → Feb 28)
+ * const result = subYears(new Date(2024, 1, 29), 1);
+ * // Returns: 2023-02-28 (2023 is not a leap year)
+ *
+ * // Leap year to leap year (Feb 29 → Feb 29)
+ * const result = subYears(new Date(2024, 1, 29), 4);
+ * // Returns: 2020-02-29 (2020 is a leap year)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = subYears(new Date("invalid"), 3);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
+ * - Leap year adjustment: Feb 29 → Feb 28 when target year is not a leap year
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function subYears(date: Date | number, amount: number): Date;
 

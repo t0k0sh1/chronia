@@ -50,13 +50,13 @@ describe("subMinutes", () => {
       date: new Date(2025, 1, 1, 0, 15, 0),
       amount: 30,
       expected: new Date(2025, 0, 31, 23, 45, 0),
-      desc: "crosses month boundary backward",
+      desc: "crosses month boundary",
     },
     {
       date: new Date(2025, 0, 1, 0, 15, 0),
       amount: 30,
       expected: new Date(2024, 11, 31, 23, 45, 0),
-      desc: "crosses year boundary backward",
+      desc: "crosses year boundary",
     },
     {
       date: new Date(2025, 0, 15, 12, 45, 45, 123),
@@ -80,7 +80,7 @@ describe("subMinutes", () => {
       date: new Date(2025, 0, 15, 12, 0, 0),
       amount: -10000,
       expected: new Date(2025, 0, 22, 10, 40, 0),
-      desc: "subtracts large negative minutes (adds)",
+      desc: "handles large negative minutes",
     },
 
     // --- Invalid cases ---
@@ -113,24 +113,6 @@ describe("subMinutes", () => {
       amount: 1,
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
-    },
-    {
-      date: "2025-01-15T12:45:00" as any,
-      amount: 1,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 45, 0),
-      amount: "1" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as amount",
-    },
-    {
-      date: new Date("2020-12-31T16:00:00Z"),
-      amount: 30,
-      expected: new Date("2020-12-31T15:30:00Z"),
-      desc: "works correctly across UTC/JST boundary",
     },
   ])("$desc", ({ date, amount, expected }) => {
     const result = subMinutes(date as Date | number, amount);

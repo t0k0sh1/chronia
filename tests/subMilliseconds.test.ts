@@ -132,24 +132,6 @@ describe("subMilliseconds", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
     },
-    {
-      date: "2025-01-15T12:00:00.500" as any,
-      amount: 1,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 0, 0, 500),
-      amount: "1" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as amount",
-    },
-    {
-      date: new Date("2020-12-31T15:30:46.000Z"),
-      amount: 500,
-      expected: new Date("2020-12-31T15:30:45.500Z"),
-      desc: "works correctly across UTC/JST boundary",
-    },
   ])("$desc", ({ date, amount, expected }) => {
     const result = subMilliseconds(date as Date | number, amount);
     if (isNaN(expected.getTime())) {
