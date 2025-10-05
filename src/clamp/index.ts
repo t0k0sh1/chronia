@@ -45,16 +45,17 @@ export function clamp(
   minDate: Date | number,
   maxDate: Date | number
 ): Date {
-  // Convert all inputs to Date objects
+  // Range functions return Invalid Date for invalid inputs (type-consistent error handling)
+  // This differs from boolean functions (return false) and calculation functions (return NaN)
+  // Validate arguments BEFORE converting to Date objects (consistent with addDays pattern)
+  if (!isValidDateOrNumber(date) || !isValidDateOrNumber(minDate) || !isValidDateOrNumber(maxDate)) {
+    return new Date(NaN);
+  }
+
+  // Convert all inputs to Date objects AFTER validation passes
   const dateObj = typeof date === "number" ? new Date(date) : date;
   const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
   const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
-
-  // Range functions return Invalid Date for invalid inputs (type-consistent error handling)
-  // This differs from boolean functions (return false) and calculation functions (return NaN)
-  if (!isValidDateOrNumber(dateObj) || !isValidDateOrNumber(minDateObj) || !isValidDateOrNumber(maxDateObj)) {
-    return new Date(NaN);
-  }
 
   // Ensure min <= max, swap if necessary
   const actualMin = minDateObj.getTime() <= maxDateObj.getTime() ? minDateObj : maxDateObj;
