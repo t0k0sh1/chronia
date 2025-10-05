@@ -1,4 +1,6 @@
-# Chronia
+<h1>
+<img src="docs/logo.png" width="38" alt="Project Icon" style="vertical-align: middle; margin-bottom: 8px">
+Chronia</h1>
 
 ![npm version](https://badge.fury.io/js/chronia.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
@@ -11,14 +13,14 @@
 
 A modern, lightweight TypeScript date/time utility library with comprehensive formatting, parsing, and manipulation capabilities.
 
-> **Note**  
-> This library is currently in the **v0.1.x** stage.  
-> Breaking changes may occur at any time without prior notice.  
+> **Note**
+> This library is currently in the **v0.1.x** stage.
+> Breaking changes may occur at any time without prior notice.
 > A stable API will be introduced starting from v1.0.0
 
 ## Overview
 
-Chronia is a modern date and time utility library for JavaScript and TypeScript.  
+Chronia is a modern date and time utility library for JavaScript and TypeScript.
 It offers a simple, consistent, and functional API that makes working with dates and times more predictable than the native `Date` object.
 
 ### Key Features
@@ -140,8 +142,8 @@ isValid(new Date("invalid")); // false
 - Use the `isValid` function to detect invalid values for `Date` and `number` results
 - This ensures consistent and predictable error handling across all APIs
 
-Example: `isAfter(date1, date2)` returns `false` if `date1` is **before** `date2` (valid),  
-but also `false` if either input is invalid (error).  
+Example: `isAfter(date1, date2)` returns `false` if `date1` is **before** `date2` (valid),
+but also `false` if either input is invalid (error).
 Use `isValid()` to distinguish these cases.
 
 ## Node.js Version Support Policy
