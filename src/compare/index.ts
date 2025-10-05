@@ -1,33 +1,6 @@
 import { isValidDateOrNumber } from "../_lib/validators";
 
 /**
- * Validates and converts a Date or number input to a Date object.
- * @internal
- */
-function validateAndConvertDate(
-  input: Date | number,
-  argumentName: "First" | "Second"
-): Date {
-  if (typeof input === "number") {
-    // New feature: Accept number inputs (timestamps)
-    const date = new Date(input);
-    if (!isValidDateOrNumber(date)) {
-      throw new RangeError(`${argumentName} date is invalid`);
-    }
-    return date;
-  } else if (input instanceof Date) {
-    // Existing feature: Accept Date objects
-    if (!isValidDateOrNumber(input)) {
-      throw new RangeError(`${argumentName} date is invalid`);
-    }
-    return input;
-  } else {
-    // Backward compatibility: Original error message for invalid types
-    throw new RangeError(`${argumentName} argument must be a Date object`);
-  }
-}
-
-/**
  * Compare two Date objects or timestamps chronologically.
  *
  * @param date1 - The first Date object or timestamp to compare
@@ -73,11 +46,14 @@ function validateAndConvertDate(
 export function compare(
   date1: Date | number,
   date2: Date | number,
-  order?: "ASC" | "DESC"
+  order?: "ASC" | "DESC",
 ): number {
-  // Validate and convert inputs using helper function
-  const dateLeft = validateAndConvertDate(date1, "First");
-  const dateRight = validateAndConvertDate(date2, "Second");
+  // Validate inputs early for NaN cases
+  if (!isValidDateOrNumber(date1) || !isValidDateOrNumber(date2)) return NaN;
+
+  // Convert Validated inputs directly to Date objects
+  const dateLeft = new Date(date1);
+  const dateRight = new Date(date2);
 
   // Order parameter normalization (case-insensitive, default to ASC for invalid values)
   let normalizedOrder: "ASC" | "DESC" = "ASC";
@@ -104,3 +80,4 @@ export function compare(
   // Apply order adjustment for descending sort
   return normalizedOrder === "DESC" ? -result : result;
 }
+

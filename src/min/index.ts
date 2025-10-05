@@ -29,9 +29,7 @@
  * ```
  */
 export function min(...dates: (Date | number)[]): Date {
-  if (dates.length === 0) {
-    throw new Error("min requires at least one date argument");
-  }
+  if (dates.length === 0) return new Date(NaN);
 
   // Convert all inputs to Date objects and check validity
   const dateObjects: Date[] = [];
@@ -52,3 +50,4 @@ export function min(...dates: (Date | number)[]): Date {
 
   return new Date(minDate.getTime());
 }
+
