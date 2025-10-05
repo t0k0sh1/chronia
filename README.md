@@ -5,7 +5,6 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/t0k0sh1/chronia/ci.yaml)
 ![snyk](https://snyk.io/test/github/t0k0sh1/chronia/badge.svg)
-![Bundle size](https://badgen.net/bundlephobia/minzip/chronia)
 ![Node Current](https://img.shields.io/node/v/chronia)
 ![NPM Downloads](https://img.shields.io/npm/dm/chronia)
 
