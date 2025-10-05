@@ -1,3 +1,5 @@
+import { isValidDateOrNumber } from "../_lib/validators";
+
 /**
  * Get the full year of the given date.
  *
@@ -9,6 +11,13 @@
  * @returns The year as a number, or `NaN` if invalid.
  */
 export function getYear(date: Date | number): number {
-  return new Date(date).getFullYear();
+  // Validate arguments before conversion (consistent with library patterns)
+  if (!isValidDateOrNumber(date)) {
+    return NaN;
+  }
+
+  // Convert input to Date object after validation
+  const dateObj = typeof date === "number" ? new Date(date) : date;
+  return dateObj.getFullYear();
 }
 

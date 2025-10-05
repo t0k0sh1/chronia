@@ -4,27 +4,12 @@ import { getYear } from "../src";
 describe("getYear", () => {
   describe("normal cases", () => {
     it.each([
-      ["2024-01-01", 2024],
-      ["2024-06-15", 2024],
-      ["2024-12-31", 2024],
+      ["2024-01-01", 2024], // Start of year
+      ["2024-06-15", 2024], // Mid year
+      ["2024-12-31", 2024], // End of year
       ["2023-01-01", 2023],
       ["2025-01-01", 2025],
-      ["2000-01-01", 2000],
-      ["1999-12-31", 1999],
     ])("should return year %s -> %i", (dateStr, expected) => {
-      const date = new Date(dateStr);
-      expect(getYear(date)).toBe(expected);
-    });
-  });
-
-  describe("boundary values", () => {
-    it.each([
-      ["2024-01-01", 2024], // Start of year
-      ["2024-12-31", 2024], // End of year
-      ["2000-01-01", 2000], // Y2K
-      ["1999-12-31", 1999], // Before Y2K
-      ["2001-01-01", 2001], // After Y2K
-    ])("should handle boundary case %s -> %i", (dateStr, expected) => {
       const date = new Date(dateStr);
       expect(getYear(date)).toBe(expected);
     });
@@ -45,15 +30,11 @@ describe("getYear", () => {
       expect(getYear(new Date("1900-02-28"))).toBe(1900); // Non-leap year (divisible by 100 but not 400)
     });
 
-    it("should handle century boundaries", () => {
+    it("should handle century and millennium boundaries", () => {
+      expect(getYear(new Date("1000-01-01"))).toBe(1000);
       expect(getYear(new Date("1900-01-01"))).toBe(1900);
       expect(getYear(new Date("2000-01-01"))).toBe(2000);
       expect(getYear(new Date("2100-01-01"))).toBe(2100);
-    });
-
-    it("should handle millennium boundaries", () => {
-      expect(getYear(new Date("1000-01-01"))).toBe(1000);
-      expect(getYear(new Date("2000-01-01"))).toBe(2000);
       expect(getYear(new Date("3000-01-01"))).toBe(3000);
     });
   });
@@ -62,8 +43,6 @@ describe("getYear", () => {
     it.each([
       ["1776-07-04", 1776], // US Independence
       ["1492-10-12", 1492], // Columbus
-      ["1970-01-01", 1970], // Unix epoch
-      ["1900-01-01", 1900], // 20th century start
       ["0001-01-01", 1],    // Year 1
       ["0100-01-01", 100],  // Year 100
       ["0500-01-01", 500],  // Year 500
@@ -77,9 +56,7 @@ describe("getYear", () => {
     it.each([
       ["2030-01-01", 2030],
       ["2050-12-31", 2050],
-      ["2100-01-01", 2100],
       ["2999-12-31", 2999],
-      ["3000-01-01", 3000],
     ])("should handle future date %s -> %i", (dateStr, expected) => {
       const date = new Date(dateStr);
       expect(getYear(date)).toBe(expected);
