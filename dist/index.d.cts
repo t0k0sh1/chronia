@@ -1,102 +1,320 @@
 /**
  * Add the specified number of days to the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of days added.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of days added. Fractional days are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of days to add (fractions are truncated).
- * @returns A new `Date` object with the days added, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of days to add (can be negative to subtract)
+ * @returns A new Date object with the days added, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Add positive days
+ * const result = addDays(new Date(2025, 0, 1), 5);
+ * // Returns: 2025-01-06
+ *
+ * // Subtract days (negative amount)
+ * const result = addDays(new Date(2025, 0, 10), -3);
+ * // Returns: 2025-01-07
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result = addDays(timestamp, 7);
+ * // Returns: Date 7 days from now
+ *
+ * // Fractional amounts are truncated
+ * const result = addDays(new Date(2025, 0, 1), 1.9);
+ * // Returns: 2025-01-02 (1.9 truncated to 1)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = addDays(new Date("invalid"), 5);
+ * // Returns: Invalid Date
+ *
+ * const result = addDays(new Date(2025, 0, 1), NaN);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function addDays(date: Date | number, amount: number): Date;
 
 /**
  * Add the specified number of hours to the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of hours added.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of hours added. Fractional hours are truncated toward zero.
+ * Minutes, seconds, and milliseconds are preserved.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of hours to add (fractions are truncated).
- * @returns A new `Date` object with the hours added, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of hours to add (can be negative to subtract)
+ * @returns A new Date object with the hours added, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Add positive hours
+ * const result = addHours(new Date(2020, 5, 15, 12, 0, 0), 3);
+ * // Returns: 2020-06-15 15:00:00
+ *
+ * // Subtract hours (negative amount)
+ * const result = addHours(new Date(2025, 8, 10, 15, 30, 0), -5);
+ * // Returns: 2025-09-10 10:30:00
+ *
+ * // Fractional amounts are truncated
+ * const result = addHours(new Date(2020, 0, 1, 12, 0, 0), 1.9);
+ * // Returns: 2020-01-01 13:00:00 (1.9 truncated to 1)
+ *
+ * // Crosses day boundary
+ * const result = addHours(new Date(2020, 0, 1, 23, 0, 0), 2);
+ * // Returns: 2020-01-02 01:00:00
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = addHours(new Date("invalid"), 3);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves minutes, seconds, and milliseconds
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function addHours(date: Date | number, amount: number): Date;
 
 /**
  * Add the specified number of milliseconds to the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of milliseconds added.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of milliseconds added. Fractional milliseconds are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of milliseconds to add (fractions are truncated).
- * @returns A new `Date` object with the milliseconds added, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of milliseconds to add (can be negative to subtract)
+ * @returns A new Date object with the milliseconds added, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Add positive milliseconds
+ * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 0), 500);
+ * // Returns: 2020-01-01T12:00:00.500
+ *
+ * // Subtract milliseconds (negative amount)
+ * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 500), -300);
+ * // Returns: 2020-01-01T12:00:00.200
+ *
+ * // Fractional amounts are truncated
+ * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 0), 1.9);
+ * // Returns: 2020-01-01T12:00:00.001 (1.9 truncated to 1)
+ *
+ * // Crossing second boundary
+ * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 999), 1);
+ * // Returns: 2020-01-01T12:00:01.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = addMilliseconds(new Date("invalid"), 500);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function addMilliseconds(date: Date | number, amount: number): Date;
 
 /**
  * Add the specified number of minutes to the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of minutes added.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of minutes added. Fractional minutes are truncated toward zero.
+ * Preserves seconds and milliseconds.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of minutes to add (fractions are truncated).
- * @returns A new `Date` object with the minutes added, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of minutes to add (can be negative to subtract)
+ * @returns A new Date object with the minutes added, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Add positive minutes
+ * const result = addMinutes(new Date(2020, 0, 1, 12, 30, 0), 15);
+ * // Returns: 2020-01-01T12:45:00
+ *
+ * // Subtract minutes (negative amount)
+ * const result = addMinutes(new Date(2020, 0, 1, 12, 30, 0), -15);
+ * // Returns: 2020-01-01T12:15:00
+ *
+ * // Fractional amounts are truncated
+ * const result = addMinutes(new Date(2020, 0, 1, 12, 0, 0), 1.9);
+ * // Returns: 2020-01-01T12:01:00 (1.9 truncated to 1)
+ *
+ * // Crossing hour boundary
+ * const result = addMinutes(new Date(2020, 0, 1, 12, 45, 0), 30);
+ * // Returns: 2020-01-01T13:15:00
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = addMinutes(new Date("invalid"), 30);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves seconds and milliseconds
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function addMinutes(date: Date | number, amount: number): Date;
 
 /**
  * Add the specified number of months to the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` with the specified months added.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
- * - Handles month-end adjustment: if the original day does not exist in the target month,
- *   the result becomes the last day of that month.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of months added. Fractional months are truncated toward zero.
+ * Preserves time components (hours, minutes, seconds, milliseconds). When the day of month
+ * doesn't exist in the target month, the result becomes the last day of that month.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of months to add (fractions are truncated).
- * @returns A new `Date` object with the months added, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of months to add (can be negative to subtract)
+ * @returns A new Date object with the months added, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Add positive months
+ * const result = addMonths(new Date(2020, 0, 15), 3);
+ * // Returns: 2020-04-15
+ *
+ * // Subtract months (negative amount)
+ * const result = addMonths(new Date(2020, 5, 15), -2);
+ * // Returns: 2020-04-15
+ *
+ * // Fractional amounts are truncated
+ * const result = addMonths(new Date(2020, 0, 15), 1.9);
+ * // Returns: 2020-02-15 (1.9 truncated to 1)
+ *
+ * // Month-end overflow handling (Jan 31 → Feb 28/29)
+ * const result = addMonths(new Date(2025, 0, 31), 1);
+ * // Returns: 2025-02-28 (Feb doesn't have 31 days)
+ *
+ * // Leap year handling
+ * const result = addMonths(new Date(2024, 0, 31), 1);
+ * // Returns: 2024-02-29 (2024 is a leap year)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = addMonths(new Date("invalid"), 3);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves time components (hours, minutes, seconds, milliseconds)
+ * - Month-end overflow: if original day doesn't exist in target month, returns last day of that month
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function addMonths(date: Date | number, amount: number): Date;
 
 /**
  * Add the specified number of seconds to the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of seconds added.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of seconds added. Fractional seconds are truncated toward zero.
+ * Preserves milliseconds.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of seconds to add (fractions are truncated).
- * @returns A new `Date` object with the seconds added, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of seconds to add (can be negative to subtract)
+ * @returns A new Date object with the seconds added, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Add positive seconds
+ * const result = addSeconds(new Date(2020, 0, 1, 12, 30, 30), 15);
+ * // Returns: 2020-01-01T12:30:45
+ *
+ * // Subtract seconds (negative amount)
+ * const result = addSeconds(new Date(2020, 0, 1, 12, 30, 30), -15);
+ * // Returns: 2020-01-01T12:30:15
+ *
+ * // Fractional amounts are truncated
+ * const result = addSeconds(new Date(2020, 0, 1, 12, 0, 0), 1.9);
+ * // Returns: 2020-01-01T12:00:01 (1.9 truncated to 1)
+ *
+ * // Crossing minute boundary
+ * const result = addSeconds(new Date(2020, 0, 1, 12, 30, 45), 30);
+ * // Returns: 2020-01-01T12:31:15
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = addSeconds(new Date("invalid"), 30);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves milliseconds
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function addSeconds(date: Date | number, amount: number): Date;
 
 /**
  * Add the specified number of years to the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified number of years added.
- * - If the input date or amount is invalid, returns `Invalid Date`.
- * - Fractions in `amount` are truncated (e.g., 1.9 → 1, -1.9 → -1).
- * - Leap year adjustment: if the original date is Feb 29 and the target year
- *   is not a leap year, the result becomes Feb 28.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified number of years added. Fractional years are truncated toward zero.
+ * Preserves month, day, and time components. When the source date is Feb 29 and the target
+ * year is not a leap year, the result becomes Feb 28.
  *
- * @param date - The original date or timestamp.
- * @param amount - The number of years to add (fractions are truncated).
- * @returns A new `Date` object with the years added, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param amount - The number of years to add (can be negative to subtract)
+ * @returns A new Date object with the years added, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Add positive years
+ * const result = addYears(new Date(2020, 0, 15), 3);
+ * // Returns: 2023-01-15
+ *
+ * // Subtract years (negative amount)
+ * const result = addYears(new Date(2020, 0, 15), -3);
+ * // Returns: 2017-01-15
+ *
+ * // Fractional amounts are truncated
+ * const result = addYears(new Date(2020, 0, 1), 1.9);
+ * // Returns: 2021-01-01 (1.9 truncated to 1)
+ *
+ * // Leap year to non-leap year (Feb 29 → Feb 28)
+ * const result = addYears(new Date(2020, 1, 29), 1);
+ * // Returns: 2021-02-28 (2021 is not a leap year)
+ *
+ * // Leap year to leap year (Feb 29 → Feb 29)
+ * const result = addYears(new Date(2020, 1, 29), 4);
+ * // Returns: 2024-02-29 (2024 is a leap year)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result = addYears(new Date("invalid"), 3);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
+ * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
+ * - Leap year adjustment: Feb 29 → Feb 28 when target year is not a leap year
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function addYears(date: Date | number, amount: number): Date;
 
@@ -254,102 +472,328 @@ declare function format(date: Date, pattern: string, locale?: Locale): string;
 /**
  * Get the day of the month from the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns the day of the month (1-31).
- * - If the date is invalid, returns `NaN`.
+ * This function validates arguments before processing and returns the day of the month
+ * (1-31) of the given date. Returns NaN for invalid input.
  *
- * @param date - The Date or timestamp.
- * @returns The day of the month as a number (1-31), or `NaN` if invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The day of the month as a number (1-31), or NaN if invalid
+ *
+ * @example
+ * ```typescript
+ * // Get day from Date object
+ * const result = getDay(new Date(2025, 0, 15));
+ * // Returns: 15
+ *
+ * // Get day from timestamp
+ * const result2 = getDay(1704067200000); // 2024-01-01
+ * // Returns: 1
+ *
+ * // Leap day
+ * const result3 = getDay(new Date(2024, 1, 29));
+ * // Returns: 29
+ *
+ * // End of month
+ * const result4 = getDay(new Date(2024, 0, 31));
+ * // Returns: 31
+ *
+ * // Invalid date returns NaN
+ * const result5 = getDay(new Date("invalid"));
+ * // Returns: NaN
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns the day in the local timezone
+ * - Day values range from 1 to 31 depending on the month
  */
 declare function getDay(date: Date | number): number;
 
 /**
  * Get the hours of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns the hours (0-23) in 24-hour format.
- * - If the date is invalid, returns `NaN`.
+ * This function validates arguments before processing and returns the hours
+ * (0-23) of the given date in 24-hour format. Returns NaN for invalid input.
  *
- * @param date - The Date or timestamp.
- * @returns The hours as a number (0-23), or `NaN` if invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The hours as a number (0-23), or NaN if invalid
+ *
+ * @example
+ * ```typescript
+ * // Get hours from Date object
+ * const result = getHours(new Date(2025, 0, 15, 14, 30));
+ * // Returns: 14
+ *
+ * // Get hours from timestamp
+ * const result2 = getHours(1704110400000); // 2024-01-01 12:00:00
+ * // Returns: 12
+ *
+ * // Midnight (start of day)
+ * const result3 = getHours(new Date(2024, 0, 1, 0, 0, 0));
+ * // Returns: 0
+ *
+ * // End of day
+ * const result4 = getHours(new Date(2024, 0, 1, 23, 59, 59));
+ * // Returns: 23
+ *
+ * // Invalid date returns NaN
+ * const result5 = getHours(new Date("invalid"));
+ * // Returns: NaN
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns the hours in the local timezone (not UTC)
+ * - Hours are in 24-hour format (0-23)
  */
 declare function getHours(date: Date | number): number;
 
 /**
  * Get the milliseconds of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns the milliseconds (0-999).
- * - If the date is invalid, returns `NaN`.
+ * This function validates arguments before processing and returns the milliseconds
+ * component (0-999) of the given date. Returns NaN for invalid input.
  *
- * @param date - The Date or timestamp.
- * @returns The milliseconds as a number (0-999), or `NaN` if invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The milliseconds as a number (0-999), or NaN if invalid
+ *
+ * @example
+ * ```typescript
+ * // Get milliseconds from Date object
+ * const result = getMilliseconds(new Date(2024, 0, 15, 12, 30, 45, 123));
+ * // Returns: 123
+ *
+ * // Get milliseconds from timestamp
+ * const result2 = getMilliseconds(1704067200500); // 500ms past epoch
+ * // Returns: 500
+ *
+ * // Start of second (0 milliseconds)
+ * const result3 = getMilliseconds(new Date(2024, 0, 1, 0, 0, 0, 0));
+ * // Returns: 0
+ *
+ * // End of second (999 milliseconds)
+ * const result4 = getMilliseconds(new Date(2024, 0, 1, 0, 0, 0, 999));
+ * // Returns: 999
+ *
+ * // Invalid date returns NaN
+ * const result5 = getMilliseconds(new Date("invalid"));
+ * // Returns: NaN
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns milliseconds in the range 0-999
+ * - Works with dates in any timezone (returns local time component)
  */
 declare function getMilliseconds(date: Date | number): number;
 
 /**
  * Get the minutes of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns the minutes (0-59).
- * - If the date is invalid, returns `NaN`.
+ * This function validates arguments before processing and returns the minutes (0-59)
+ * of the given date. Returns NaN for invalid input.
  *
- * @param date - The Date or timestamp.
- * @returns The minutes as a number (0-59), or `NaN` if invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The minutes as a number (0-59), or NaN if invalid
+ *
+ * @example
+ * ```typescript
+ * // Get minutes from Date object
+ * const result = getMinutes(new Date(2025, 0, 15, 14, 30, 45));
+ * // Returns: 30
+ *
+ * // Get minutes from timestamp
+ * const result2 = getMinutes(1704067200000); // 2024-01-01 00:00:00
+ * // Returns: 0
+ *
+ * // Minutes at the end of an hour
+ * const result3 = getMinutes(new Date(2024, 11, 31, 23, 59, 59));
+ * // Returns: 59
+ *
+ * // Minutes at the start of an hour
+ * const result4 = getMinutes(new Date(2024, 5, 15, 8, 0, 0));
+ * // Returns: 0
+ *
+ * // Invalid date returns NaN
+ * const result5 = getMinutes(new Date("invalid"));
+ * // Returns: NaN
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns the minutes in the local timezone
+ * - Always returns a value between 0 and 59 for valid dates
  */
 declare function getMinutes(date: Date | number): number;
 
 /**
  * Get the month of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns the month as 1-12 (January is 1, December is 12).
- * - If the date is invalid, returns `NaN`.
+ * This function validates arguments before processing and returns the month
+ * (1-12, where January is 1 and December is 12) of the given date. Returns NaN for invalid input.
  *
- * @param date - The Date or timestamp.
- * @returns The month as a number (1-12), or `NaN` if invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The month as a number (1-12), or NaN if invalid
+ *
+ * @example
+ * ```typescript
+ * // Get month from Date object
+ * const result = getMonth(new Date(2024, 5, 15)); // June
+ * // Returns: 6
+ *
+ * // Get month from timestamp
+ * const result2 = getMonth(1704067200000); // 2024-01-01
+ * // Returns: 1
+ *
+ * // Leap year February
+ * const result3 = getMonth(new Date(2024, 1, 29));
+ * // Returns: 2
+ *
+ * // December
+ * const result4 = getMonth(new Date(2024, 11, 25));
+ * // Returns: 12
+ *
+ * // Invalid date returns NaN
+ * const result5 = getMonth(new Date("invalid"));
+ * // Returns: NaN
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns the month in the local timezone
+ * - Uses 1-based indexing (1-12) unlike JavaScript's native getMonth() (0-11)
  */
 declare function getMonth(date: Date | number): number;
 
 /**
  * Get the seconds of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns the seconds (0-59).
- * - If the date is invalid, returns `NaN`.
+ * This function validates arguments before processing and returns the seconds (0-59)
+ * of the given date. Returns NaN for invalid input.
  *
- * @param date - The Date or timestamp.
- * @returns The seconds as a number (0-59), or `NaN` if invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The seconds as a number (0-59), or NaN if invalid
+ *
+ * @example
+ * ```typescript
+ * // Get seconds from Date object
+ * const result = getSeconds(new Date(2025, 0, 15, 10, 30, 45));
+ * // Returns: 45
+ *
+ * // Get seconds from timestamp
+ * const result2 = getSeconds(1704067245000); // 2024-01-01T00:00:45Z
+ * // Returns: 45
+ *
+ * // Start of minute
+ * const result3 = getSeconds(new Date(2024, 0, 1, 10, 30, 0));
+ * // Returns: 0
+ *
+ * // End of minute
+ * const result4 = getSeconds(new Date(2024, 0, 1, 10, 30, 59));
+ * // Returns: 59
+ *
+ * // Invalid date returns NaN
+ * const result5 = getSeconds(new Date("invalid"));
+ * // Returns: NaN
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns the seconds in the local timezone
+ * - Seconds are always in the range 0-59
  */
 declare function getSeconds(date: Date | number): number;
 
 /**
- * Extract timestamp value from a Date object.
+ * Get the timestamp of the given date.
  *
- * @param date - The Date object to extract timestamp from
- * @returns The number of milliseconds since Unix epoch, or NaN for invalid dates or invalid arguments
+ * This function validates arguments before processing and returns the timestamp
+ * (milliseconds since Unix epoch) of the given date. Returns NaN for invalid input.
+ *
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The timestamp in milliseconds since Unix epoch (1970-01-01), or NaN if invalid
  *
  * @example
- * getTime(new Date('2024-01-01')); // 1704067200000
- * getTime(new Date('invalid')); // NaN
- * getTime('not a date'); // NaN
+ * ```typescript
+ * // Get timestamp from Date object
+ * const result = getTime(new Date("2024-01-01T00:00:00.000Z"));
+ * // Returns: 1704067200000
+ *
+ * // Get timestamp from numeric input (returns as-is if valid)
+ * const result2 = getTime(1704067200000);
+ * // Returns: 1704067200000
+ *
+ * // Unix epoch
+ * const result3 = getTime(new Date(0));
+ * // Returns: 0
+ *
+ * // Negative timestamp (before epoch)
+ * const result4 = getTime(new Date("1969-12-31T00:00:00.000Z"));
+ * // Returns: -86400000
+ *
+ * // Invalid date returns NaN
+ * const result5 = getTime(new Date("invalid"));
+ * // Returns: NaN
+ * ```
  *
  * @remarks
- * This function provides the same behavior as Date.prototype.getTime(),
- * returning the timestamp in milliseconds since the Unix epoch (1970-01-01T00:00:00.000Z).
- * For invalid dates or invalid arguments, it returns NaN.
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns timestamp in milliseconds since Unix epoch (1970-01-01T00:00:00.000Z)
+ * - For numeric input, returns the value as-is if valid
  */
-declare function getTime(date: Date): number;
+declare function getTime(date: Date | number): number;
 
 /**
  * Get the full year of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns the full year (e.g., 2025).
- * - If the date is invalid, returns `NaN`.
+ * This function validates arguments before processing and returns the full year
+ * (e.g., 2025) of the given date. Returns NaN for invalid input.
  *
- * @param date - The Date or timestamp.
- * @returns The year as a number, or `NaN` if invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns The year as a number, or NaN if invalid
+ *
+ * @example
+ * ```typescript
+ * // Get year from Date object
+ * const result = getYear(new Date(2025, 0, 15));
+ * // Returns: 2025
+ *
+ * // Get year from timestamp
+ * const result2 = getYear(1704067200000); // 2024-01-01
+ * // Returns: 2024
+ *
+ * // Leap year
+ * const result3 = getYear(new Date(2024, 1, 29));
+ * // Returns: 2024
+ *
+ * // Historic date
+ * const result4 = getYear(new Date(1776, 6, 4));
+ * // Returns: 1776
+ *
+ * // Invalid date returns NaN
+ * const result5 = getYear(new Date("invalid"));
+ * // Returns: NaN
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns the year in the local timezone
+ * - Supports negative years (BC dates)
  */
 declare function getYear(date: Date | number): number;
 
