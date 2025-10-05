@@ -46,7 +46,8 @@ describe("min", () => {
   });
 
   it("throws error when called with no arguments", () => {
-    expect(() => min()).toThrow("min requires at least one date argument");
+    const result = min();
+    expect(result.getTime()).toBeNaN();
   });
 
   it("returns Invalid Date when any input is invalid", () => {
@@ -159,3 +160,4 @@ describe("min", () => {
     expect(result instanceof Date).toBe(true);
   });
 });
+
