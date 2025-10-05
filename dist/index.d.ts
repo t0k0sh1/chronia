@@ -1903,113 +1903,295 @@ declare function subYears(date: Date | number, amount: number): Date;
 /**
  * Truncate a date to the start of the day.
  *
- * Sets the time to 00:00:00.000 while keeping the same date.
+ * This function sets the time to 00:00:00.000 while keeping the same date,
+ * effectively removing all time components below the day level.
  *
- * @param date - The date or timestamp to truncate
- * @returns New Date object truncated to the start of the day
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object truncated to the start of the day, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const truncated = truncDay(date); // June 15, 2024 00:00:00.000
+ * // Basic truncation
+ * const result = truncDay(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 15, 2024 00:00:00.000
+ *
+ * // Already at start of day
+ * const result2 = truncDay(new Date(2024, 5, 15, 0, 0, 0, 0));
+ * // Returns: June 15, 2024 00:00:00.000 (unchanged)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = truncDay(timestamp);
+ * // Returns: Date at 00:00:00.000 of current day
+ *
+ * // End of day
+ * const result4 = truncDay(new Date(2024, 5, 15, 23, 59, 59, 999));
+ * // Returns: June 15, 2024 00:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = truncDay(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Preserves the date across DST transitions
  */
 declare function truncDay(date: Date | number): Date;
 
 /**
  * Truncate a date to the start of the hour.
  *
- * Sets the minutes, seconds, and milliseconds to 0 while keeping the same date and hour.
+ * This function sets the minutes, seconds, and milliseconds to 0 while keeping the same date and hour,
+ * effectively removing all time components below the hour level.
  *
- * @param date - The date or timestamp to truncate
- * @returns New Date object truncated to the start of the hour
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object truncated to the start of the hour, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const truncated = truncHour(date); // June 15, 2024 14:00:00.000
+ * // Basic truncation
+ * const result = truncHour(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 15, 2024 14:00:00.000
+ *
+ * // Already at start of hour
+ * const result2 = truncHour(new Date(2024, 5, 15, 14, 0, 0, 0));
+ * // Returns: June 15, 2024 14:00:00.000 (unchanged)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = truncHour(timestamp);
+ * // Returns: Date at XX:00:00.000 of current hour
+ *
+ * // End of hour
+ * const result4 = truncHour(new Date(2024, 5, 15, 14, 59, 59, 999));
+ * // Returns: June 15, 2024 14:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = truncHour(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Works correctly across all 24 hours of the day
  */
 declare function truncHour(date: Date | number): Date;
 
 /**
  * Truncate a date to the millisecond.
  *
- * Returns the same date without any truncation since millisecond is the smallest unit.
- * This function is provided for API consistency.
+ * This function returns the same date without any truncation since millisecond is the smallest unit
+ * supported by JavaScript Date objects. It is provided for API consistency with other truncation functions.
  *
- * @param date - The date or timestamp to truncate
- * @returns New Date object (identical to the input)
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object with the same value, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const truncated = truncMillisecond(date); // June 15, 2024 14:30:45.123 (same)
+ * // No truncation (millisecond is smallest unit)
+ * const result = truncMillisecond(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 15, 2024 14:30:45.123 (unchanged)
+ *
+ * // Returns new object with same value
+ * const result2 = truncMillisecond(new Date(2024, 11, 31, 23, 59, 59, 999));
+ * // Returns: December 31, 2024 23:59:59.999 (unchanged)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = truncMillisecond(timestamp);
+ * // Returns: Date with same timestamp value
+ *
+ * // Unix epoch
+ * const result4 = truncMillisecond(new Date(0));
+ * // Returns: January 1, 1970 00:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = truncMillisecond(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Provided for API consistency even though no truncation occurs
+ * - Maintains millisecond precision (0-999)
  */
 declare function truncMillisecond(date: Date | number): Date;
 
 /**
  * Truncate a date to the start of the minute.
  *
- * Sets the seconds and milliseconds to 0 while keeping the same date, hour, and minute.
+ * This function sets the seconds and milliseconds to 0 while keeping the same date, hour, and minute,
+ * effectively removing all time components below the minute level.
  *
- * @param date - The date or timestamp to truncate
- * @returns New Date object truncated to the start of the minute
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object truncated to the start of the minute, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const truncated = truncMinute(date); // June 15, 2024 14:30:00.000
+ * // Basic truncation
+ * const result = truncMinute(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 15, 2024 14:30:00.000
+ *
+ * // Already at start of minute
+ * const result2 = truncMinute(new Date(2024, 5, 15, 14, 30, 0, 0));
+ * // Returns: June 15, 2024 14:30:00.000 (unchanged)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = truncMinute(timestamp);
+ * // Returns: Date at XX:XX:00.000 of current minute
+ *
+ * // End of minute
+ * const result4 = truncMinute(new Date(2024, 5, 15, 14, 30, 59, 999));
+ * // Returns: June 15, 2024 14:30:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = truncMinute(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Works correctly across all 60 minutes of an hour
  */
 declare function truncMinute(date: Date | number): Date;
 
 /**
  * Truncate a date to the start of the month.
  *
- * Sets the date to the 1st day of the month at 00:00:00.000.
+ * This function sets the date to the 1st day of the month at 00:00:00.000,
+ * effectively removing all time components and resetting the day to 1.
  *
- * @param date - The date or timestamp to truncate
- * @returns New Date object truncated to the start of the month
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object truncated to the start of the month, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const truncated = truncMonth(date); // June 1, 2024 00:00:00.000
+ * // Basic truncation
+ * const result = truncMonth(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 1, 2024 00:00:00.000
+ *
+ * // Already at start of month
+ * const result2 = truncMonth(new Date(2024, 5, 1, 0, 0, 0, 0));
+ * // Returns: June 1, 2024 00:00:00.000 (unchanged)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = truncMonth(timestamp);
+ * // Returns: Date at 1st day of current month at 00:00:00.000
+ *
+ * // End of month
+ * const result4 = truncMonth(new Date(2024, 5, 30, 23, 59, 59, 999));
+ * // Returns: June 1, 2024 00:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = truncMonth(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Handles leap years correctly (February in leap years)
  */
 declare function truncMonth(date: Date | number): Date;
 
 /**
  * Truncate a date to the start of the second.
  *
- * Sets the milliseconds to 0 while keeping the same date, hour, minute, and second.
+ * This function sets the milliseconds to 0 while keeping the same date, hour, minute, and second,
+ * effectively removing all time components below the second level.
  *
- * @param date - The date or timestamp to truncate
- * @returns New Date object truncated to the start of the second
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object truncated to the start of the second, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const truncated = truncSecond(date); // June 15, 2024 14:30:45.000
+ * // Basic truncation
+ * const result = truncSecond(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 15, 2024 14:30:45.000
+ *
+ * // Already at start of second
+ * const result2 = truncSecond(new Date(2024, 5, 15, 14, 30, 45, 0));
+ * // Returns: June 15, 2024 14:30:45.000 (unchanged)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = truncSecond(timestamp);
+ * // Returns: Date at XX:XX:XX.000 of current second
+ *
+ * // End of second
+ * const result4 = truncSecond(new Date(2024, 5, 15, 14, 30, 45, 999));
+ * // Returns: June 15, 2024 14:30:45.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = truncSecond(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Works correctly across all 60 seconds of a minute
  */
 declare function truncSecond(date: Date | number): Date;
 
 /**
  * Truncate a date to the start of the year.
  *
- * Sets the date to January 1st at 00:00:00.000 of the same year.
+ * This function sets the date to January 1st at 00:00:00.000 of the same year,
+ * effectively removing all time components and resetting the month and day to January 1st.
  *
- * @param date - The date or timestamp to truncate
- * @returns New Date object truncated to the start of the year
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object truncated to the start of the year, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const truncated = truncYear(date); // January 1, 2024 00:00:00.000
+ * // Basic truncation
+ * const result = truncYear(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: January 1, 2024 00:00:00.000
+ *
+ * // Already at start of year
+ * const result2 = truncYear(new Date(2024, 0, 1, 0, 0, 0, 0));
+ * // Returns: January 1, 2024 00:00:00.000 (unchanged)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = truncYear(timestamp);
+ * // Returns: Date at January 1st of current year at 00:00:00.000
+ *
+ * // End of year
+ * const result4 = truncYear(new Date(2024, 11, 31, 23, 59, 59, 999));
+ * // Returns: January 1, 2024 00:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = truncYear(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Handles leap years correctly
  */
 declare function truncYear(date: Date | number): Date;
 
