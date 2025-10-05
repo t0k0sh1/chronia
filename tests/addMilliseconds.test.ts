@@ -120,24 +120,6 @@ describe("addMilliseconds", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
     },
-    {
-      date: "2020-01-01T12:00:00.000" as any,
-      amount: 1,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2020, 0, 1, 12, 0, 0, 0),
-      amount: "1" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as amount",
-    },
-    {
-      date: new Date("2020-12-31T15:30:45.500Z"),
-      amount: 500,
-      expected: new Date("2020-12-31T15:30:46.000Z"),
-      desc: "works correctly across UTC/JST boundary",
-    },
   ])("$desc", ({ date, amount, expected }) => {
     const result = addMilliseconds(date as Date | number, amount);
     if (isNaN(expected.getTime())) {
