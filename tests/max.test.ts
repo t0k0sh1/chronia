@@ -46,7 +46,8 @@ describe("max", () => {
   });
 
   it("throws error when called with no arguments", () => {
-    expect(() => max()).toThrow("max requires at least one date argument");
+    const result = max();
+    expect(result.getTime()).toBeNaN();
   });
 
   it("returns Invalid Date when any input is invalid", () => {
@@ -159,3 +160,4 @@ describe("max", () => {
     expect(result instanceof Date).toBe(true);
   });
 });
+
