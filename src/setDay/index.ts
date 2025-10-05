@@ -15,10 +15,7 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * @returns A new `Date` object with the day set, or `Invalid Date` if input is invalid.
  */
 export function setDay(date: Date | number, day: number): Date {
-  if (!isValidDateOrNumber(date)) {
-    return new Date(NaN);
-  }
-  if (!isValidNumber(day)) {
+  if (!isValidDateOrNumber(date) || !isValidNumber(day)) {
     return new Date(NaN);
   }
 
