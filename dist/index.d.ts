@@ -1151,58 +1151,212 @@ declare function setTime(date: Date, time: number): Date;
 declare function setMilliseconds(date: Date | number, milliseconds: number): Date;
 
 /**
- * Check if date `a` is strictly after date `b`.
+ * Check if the first date is strictly after the second date.
  *
- * - Returns `false` if either date is invalid.
- * - Comparison can be truncated to a given unit (default: millisecond).
- * - Equality is not considered "after".
+ * This function compares two dates and returns true if the first date is chronologically
+ * after the second date. The comparison can be performed at different granularities
+ * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - First date or timestamp to compare.
- * @param b - Second date or timestamp to compare.
- * @param opts.unit - Comparison unit (year, month, day, hour, minute, second, millisecond).
+ * @param a - The first date as a Date object or timestamp (number)
+ * @param b - The second date as a Date object or timestamp (number)
+ * @param opts - Optional configuration object
+ * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @returns True if date `a` is after date `b`, false otherwise or if either date is invalid
+ *
+ * @example
+ * ```typescript
+ * // Basic comparison (millisecond precision)
+ * const result = isAfter(new Date(2025, 0, 2), new Date(2025, 0, 1));
+ * // Returns: true
+ *
+ * // Compare at year granularity
+ * const result2 = isAfter(
+ *   new Date(2025, 0, 1),
+ *   new Date(2024, 11, 31),
+ *   { unit: "year" }
+ * );
+ * // Returns: true
+ *
+ * // Works with timestamps
+ * const result3 = isAfter(Date.now(), Date.now() - 1000);
+ * // Returns: true (current time is after 1 second ago)
+ *
+ * // Equality returns false (not strictly after)
+ * const date = new Date(2025, 0, 1);
+ * const result4 = isAfter(date, date);
+ * // Returns: false
+ *
+ * // Invalid dates return false
+ * const result5 = isAfter(new Date("invalid"), new Date(2025, 0, 1));
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Equality is not considered "after" (strict comparison)
+ * - When using unit-based comparison, dates are truncated to the specified unit before comparing
+ * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
 declare function isAfter(a: Date | number, b: Date | number, opts?: {
     unit?: TimeUnit;
 }): boolean;
 
 /**
- * Check if date `a` is after or equal to date `b`.
+ * Check if the first date is after or equal to the second date.
  *
- * - Returns `false` if either date is invalid.
- * - Comparison can be truncated to a given unit (default: millisecond).
+ * This function compares two dates and returns true if the first date is chronologically
+ * after or equal to the second date. The comparison can be performed at different granularities
+ * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - First date or timestamp to compare.
- * @param b - Second date or timestamp to compare.
- * @param opts.unit - Comparison unit (year, month, day, hour, minute, second, millisecond).
+ * @param a - The first date as a Date object or timestamp (number)
+ * @param b - The second date as a Date object or timestamp (number)
+ * @param opts - Optional configuration object
+ * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @returns True if date `a` is after or equal to date `b`, false otherwise or if either date is invalid
+ *
+ * @example
+ * ```typescript
+ * // Basic comparison (millisecond precision)
+ * const result = isAfterOrEqual(new Date(2025, 0, 2), new Date(2025, 0, 1));
+ * // Returns: true
+ *
+ * // Equality returns true
+ * const date = new Date(2025, 0, 1);
+ * const result2 = isAfterOrEqual(date, date);
+ * // Returns: true
+ *
+ * // Compare at day granularity
+ * const result3 = isAfterOrEqual(
+ *   new Date(2025, 0, 1, 23, 59),
+ *   new Date(2025, 0, 1, 0, 0),
+ *   { unit: "day" }
+ * );
+ * // Returns: true (same day)
+ *
+ * // Works with timestamps
+ * const result4 = isAfterOrEqual(Date.now(), Date.now() - 1000);
+ * // Returns: true (current time is after 1 second ago)
+ *
+ * // Invalid dates return false
+ * const result5 = isAfterOrEqual(new Date("invalid"), new Date(2025, 0, 1));
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Includes equality in the comparison (a >= b)
+ * - When using unit-based comparison, dates are truncated to the specified unit before comparing
+ * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
 declare function isAfterOrEqual(a: Date | number, b: Date | number, opts?: {
     unit?: TimeUnit;
 }): boolean;
 
 /**
- * Check if date `a` is strictly before date `b`.
+ * Check if the first date is strictly before the second date.
  *
- * - Returns `false` if either date is invalid.
- * - Comparison can be truncated to a given unit (default: millisecond).
- * - Equality is not considered "before".
+ * This function compares two dates and returns true if the first date is chronologically
+ * before the second date. The comparison can be performed at different granularities
+ * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - First date or timestamp to compare.
- * @param b - Second date or timestamp to compare.
- * @param opts.unit - Comparison unit (year, month, day, hour, minute, second, millisecond).
+ * @param a - The first date as a Date object or timestamp (number)
+ * @param b - The second date as a Date object or timestamp (number)
+ * @param opts - Optional configuration object
+ * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @returns True if date `a` is before date `b`, false otherwise or if either date is invalid
+ *
+ * @example
+ * ```typescript
+ * // Basic comparison (millisecond precision)
+ * const result = isBefore(new Date(2025, 0, 1), new Date(2025, 0, 2));
+ * // Returns: true
+ *
+ * // Compare at year granularity
+ * const result2 = isBefore(
+ *   new Date(2024, 11, 31),
+ *   new Date(2025, 0, 1),
+ *   { unit: "year" }
+ * );
+ * // Returns: true
+ *
+ * // Works with timestamps
+ * const result3 = isBefore(Date.now() - 1000, Date.now());
+ * // Returns: true (1 second ago is before current time)
+ *
+ * // Equality returns false (not strictly before)
+ * const date = new Date(2025, 0, 1);
+ * const result4 = isBefore(date, date);
+ * // Returns: false
+ *
+ * // Invalid dates return false
+ * const result5 = isBefore(new Date("invalid"), new Date(2025, 0, 1));
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Equality is not considered "before" (strict comparison)
+ * - When using unit-based comparison, dates are truncated to the specified unit before comparing
+ * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
 declare function isBefore(a: Date | number, b: Date | number, opts?: {
     unit?: TimeUnit;
 }): boolean;
 
 /**
- * Check if date `a` is before or equal to date `b`.
+ * Check if the first date is before or equal to the second date.
  *
- * - Returns `false` if either date is invalid.
- * - Comparison can be truncated to a given unit (default: millisecond).
+ * This function compares two dates and returns true if the first date is chronologically
+ * before or equal to the second date. The comparison can be performed at different granularities
+ * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - First date or timestamp to compare.
- * @param b - Second date or timestamp to compare.
- * @param opts.unit - Comparison unit (year, month, day, hour, minute, second, millisecond).
+ * @param a - The first date as a Date object or timestamp (number)
+ * @param b - The second date as a Date object or timestamp (number)
+ * @param opts - Optional configuration object
+ * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @returns True if date `a` is before or equal to date `b`, false otherwise or if either date is invalid
+ *
+ * @example
+ * ```typescript
+ * // Basic comparison (millisecond precision)
+ * const result = isBeforeOrEqual(new Date(2025, 0, 1), new Date(2025, 0, 2));
+ * // Returns: true
+ *
+ * // Equality returns true
+ * const date = new Date(2025, 0, 1);
+ * const result2 = isBeforeOrEqual(date, date);
+ * // Returns: true
+ *
+ * // Compare at day granularity
+ * const result3 = isBeforeOrEqual(
+ *   new Date(2025, 0, 1, 0, 0),
+ *   new Date(2025, 0, 1, 23, 59),
+ *   { unit: "day" }
+ * );
+ * // Returns: true (same day)
+ *
+ * // Works with timestamps
+ * const result4 = isBeforeOrEqual(Date.now() - 1000, Date.now());
+ * // Returns: true (1 second ago is before current time)
+ *
+ * // Invalid dates return false
+ * const result5 = isBeforeOrEqual(new Date("invalid"), new Date(2025, 0, 1));
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Includes equality in the comparison (a <= b)
+ * - When using unit-based comparison, dates are truncated to the specified unit before comparing
+ * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
 declare function isBeforeOrEqual(a: Date | number, b: Date | number, opts?: {
     unit?: TimeUnit;
@@ -1211,42 +1365,116 @@ declare function isBeforeOrEqual(a: Date | number, b: Date | number, opts?: {
 /**
  * Check if a date falls between two boundary dates with configurable inclusion.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns `false` if the date or interval is invalid.
- * - If start is null, uses MIN_DATE as the lower bound.
- * - If end is null, uses MAX_DATE as the upper bound.
- * - Boundary inclusion is controlled by the `bounds` option using mathematical interval notation.
+ * This function checks whether a date falls within an interval defined by start and end boundaries.
+ * The inclusion of boundaries can be controlled using mathematical interval notation.
  *
- * @param date - The date to check (Date object or timestamp).
- * @param interval - Interval object with start and end boundaries.
- * @param opts - Optional configuration for boundary inclusion.
- * @returns True if date is between the boundaries according to the bounds configuration.
+ * @param date - The date to check as a Date object or timestamp (number)
+ * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
+ * @param opts - Optional configuration for boundary inclusion
+ * @param opts.bounds - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only. Defaults to "()"
+ * @returns True if date is between the boundaries according to the bounds configuration, false otherwise
  *
  * @example
+ * ```typescript
  * // Default behavior (exclusive boundaries)
- * isBetween(new Date('2024-06-15'), {
- *   start: new Date('2024-06-10'),
- *   end: new Date('2024-06-20')
- * }); // true
+ * const result = isBetween(
+ *   new Date(2024, 5, 15),
+ *   { start: new Date(2024, 5, 10), end: new Date(2024, 5, 20) }
+ * );
+ * // Returns: true
  *
- * @example
  * // Inclusive boundaries
- * isBetween(new Date('2024-06-10'), {
- *   start: new Date('2024-06-10'),
- *   end: new Date('2024-06-20')
- * }, { bounds: "[]" }); // true
+ * const result2 = isBetween(
+ *   new Date(2024, 5, 10),
+ *   { start: new Date(2024, 5, 10), end: new Date(2024, 5, 20) },
+ *   { bounds: "[]" }
+ * );
+ * // Returns: true (boundary is included)
+ *
+ * // Open-ended interval (null end uses MAX_DATE)
+ * const result3 = isBetween(
+ *   new Date(2025, 0, 1),
+ *   { start: new Date(2024, 0, 1), end: null }
+ * );
+ * // Returns: true (any date after start)
+ *
+ * // Works with timestamps
+ * const result4 = isBetween(
+ *   Date.now(),
+ *   { start: Date.now() - 1000, end: Date.now() + 1000 }
+ * );
+ * // Returns: true (within 1 second window)
+ *
+ * // Invalid inputs return false
+ * const result5 = isBetween(new Date("invalid"), { start: new Date(2024, 0, 1), end: new Date(2024, 11, 31) });
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity, or invalid interval)
+ * - Accepts both Date objects and numeric timestamps
+ * - If start is null, uses MIN_DATE as the lower bound
+ * - If end is null, uses MAX_DATE as the upper bound
+ * - Boundary inclusion is controlled by the `bounds` option using mathematical interval notation:
+ *   - "()" - Both boundaries excluded (default, for backward compatibility)
+ *   - "[]" - Both boundaries included
+ *   - "[)" - Start included, end excluded
+ *   - "(]" - Start excluded, end included
+ * - Invalid bounds values default to "()" behavior
  */
 declare function isBetween(date: Date | number, interval: Interval, opts?: BetweenOption): boolean;
 
 /**
- * Check if date `a` is equal to date `b`.
+ * Check if two dates are equal.
  *
- * - Returns `false` if either date is invalid.
- * - Comparison can be truncated to a given unit (default: millisecond).
+ * This function compares two dates and returns true if they represent the same point in time.
+ * The comparison can be performed at different granularities (year, month, day, hour, minute,
+ * second, or millisecond).
  *
- * @param a - First date or timestamp to compare.
- * @param b - Second date or timestamp to compare.
- * @param opts.unit - Comparison unit (year, month, day, hour, minute, second, millisecond).
+ * @param a - The first date as a Date object or timestamp (number)
+ * @param b - The second date as a Date object or timestamp (number)
+ * @param opts - Optional configuration object
+ * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @returns True if date `a` is equal to date `b`, false otherwise or if either date is invalid
+ *
+ * @example
+ * ```typescript
+ * // Basic comparison (millisecond precision)
+ * const date1 = new Date(2025, 0, 1, 12, 0, 0);
+ * const date2 = new Date(2025, 0, 1, 12, 0, 0);
+ * const result = isEqual(date1, date2);
+ * // Returns: true
+ *
+ * // Compare at day granularity
+ * const result2 = isEqual(
+ *   new Date(2025, 0, 1, 9, 0),
+ *   new Date(2025, 0, 1, 17, 0),
+ *   { unit: "day" }
+ * );
+ * // Returns: true (same day, different times)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = isEqual(timestamp, new Date(timestamp));
+ * // Returns: true
+ *
+ * // Different dates return false
+ * const result4 = isEqual(new Date(2025, 0, 1), new Date(2025, 0, 2));
+ * // Returns: false
+ *
+ * // Invalid dates return false
+ * const result5 = isEqual(new Date("invalid"), new Date(2025, 0, 1));
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - When using unit-based comparison, dates are truncated to the specified unit before comparing
+ * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
+ * - Two dates with the same timestamp are always equal (at millisecond precision)
  */
 declare function isEqual(a: Date | number, b: Date | number, opts?: {
     unit?: TimeUnit;
@@ -1255,12 +1483,41 @@ declare function isEqual(a: Date | number, b: Date | number, opts?: {
 /**
  * Check if the given value is a valid Date or timestamp.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns `true` if the resulting Date is valid, otherwise `false`.
- * - Uses internal validation utilities for optimal performance.
+ * This function validates whether a Date object or timestamp represents a valid date.
+ * It returns false for Invalid Date, NaN, Infinity, and -Infinity values.
  *
- * @param date - The Date object or timestamp to validate.
- * @returns `true` if valid, `false` if invalid.
+ * @param date - The Date object or timestamp (number) to validate
+ * @returns True if the date is valid, false otherwise
+ *
+ * @example
+ * ```typescript
+ * // Valid Date object
+ * const result = isValid(new Date(2025, 0, 1));
+ * // Returns: true
+ *
+ * // Valid timestamp
+ * const result2 = isValid(Date.now());
+ * // Returns: true
+ *
+ * // Zero timestamp (Unix epoch)
+ * const result3 = isValid(0);
+ * // Returns: true
+ *
+ * // Invalid Date
+ * const result4 = isValid(new Date("invalid"));
+ * // Returns: false
+ *
+ * // Invalid timestamp
+ * const result5 = isValid(NaN);
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments using internal validation utilities for optimal performance
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns false for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns true for all finite numeric timestamps, including 0 (Unix epoch) and negative values
+ * - Uses the same validation logic as other library functions for consistency
  */
 declare function isValid(date: Date | number): boolean;
 
@@ -2059,182 +2316,315 @@ declare function startOfDay(date: Date | number): Date;
 /**
  * Check if two dates are in the same calendar year.
  *
- * Returns true if both dates fall within the same calendar year,
+ * This function compares two dates and returns true if they fall within the same calendar year,
  * regardless of month, day, or time components.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are in the same year, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are in the same year, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 0, 1);    // January 1, 2024
- * const date2 = new Date(2024, 11, 31);  // December 31, 2024
- * isSameYear(date1, date2); // true
+ * // Same year, different months
+ * const result = isSameYear(new Date(2024, 0, 1), new Date(2024, 11, 31));
+ * // Returns: true
  *
- * const date3 = new Date(2024, 11, 31);  // December 31, 2024
- * const date4 = new Date(2025, 0, 1);    // January 1, 2025
- * isSameYear(date3, date4); // false
+ * // Different years
+ * const result2 = isSameYear(new Date(2024, 11, 31), new Date(2025, 0, 1));
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30); // June 15, 2024 14:30
- * const date6 = new Date(2024, 8, 20, 9, 45);  // September 20, 2024 09:45
- * isSameYear(date5, date6); // true
+ * // Same year, different times
+ * const result3 = isSameYear(
+ *   new Date(2024, 5, 15, 14, 30),
+ *   new Date(2024, 8, 20, 9, 45)
+ * );
+ * // Returns: true
+ *
+ * // Works with timestamps
+ * const result4 = isSameYear(Date.now(), Date.now());
+ * // Returns: true
+ *
+ * // Invalid dates return false
+ * const result5 = isSameYear(new Date("invalid"), new Date(2024, 0, 1));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores month, day, and time components in the comparison
+ * - Uses diffYears internally to determine if the year difference is zero
+ * - Handles leap years, BC dates, and century boundaries correctly
  */
 declare function isSameYear(dateLeft: Date | number, dateRight: Date | number): boolean;
 
 /**
- * Check if two dates are in the same calendar month.
+ * Check if two dates are in the same calendar month and year.
  *
- * Returns true if both dates fall within the same calendar month and year,
- * regardless of day or time components.
+ * This function compares two dates and returns true if they fall within the same calendar month
+ * and year, regardless of day or time components.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are in the same month and year, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are in the same month and year, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 1);    // June 1, 2024
- * const date2 = new Date(2024, 5, 30);   // June 30, 2024
- * isSameMonth(date1, date2); // true
+ * // Same month and year, different days
+ * const result = isSameMonth(new Date(2024, 5, 1), new Date(2024, 5, 30));
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 30);   // June 30, 2024
- * const date4 = new Date(2024, 6, 1);    // July 1, 2024
- * isSameMonth(date3, date4); // false
+ * // Different months
+ * const result2 = isSameMonth(new Date(2024, 5, 30), new Date(2024, 6, 1));
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30); // June 15, 2024 14:30
- * const date6 = new Date(2024, 5, 20, 9, 45);  // June 20, 2024 09:45
- * isSameMonth(date5, date6); // true
+ * // Same month and year, different times
+ * const result3 = isSameMonth(
+ *   new Date(2024, 5, 15, 14, 30),
+ *   new Date(2024, 5, 20, 9, 45)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15);   // June 15, 2024
- * const date8 = new Date(2023, 5, 15);   // June 15, 2023
- * isSameMonth(date7, date8); // false (different years)
+ * // Same month, different years
+ * const result4 = isSameMonth(new Date(2024, 5, 15), new Date(2023, 5, 15));
+ * // Returns: false (different years)
+ *
+ * // Invalid dates return false
+ * const result5 = isSameMonth(new Date("invalid"), new Date(2024, 5, 1));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores day and time components in the comparison
+ * - Requires both month AND year to match (June 2024 ≠ June 2023)
+ * - Uses diffMonths internally to determine if the month difference is zero
+ * - Handles month boundaries and leap years correctly
  */
 declare function isSameMonth(dateLeft: Date | number, dateRight: Date | number): boolean;
 
 /**
  * Check if two dates are on the same calendar day.
  *
- * Returns true if both dates fall on the same calendar day,
+ * This function compares two dates and returns true if they fall on the same calendar day,
  * regardless of time components.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are on the same day, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are on the same day, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 0, 0);    // June 15, 2024 00:00
- * const date2 = new Date(2024, 5, 15, 23, 59);  // June 15, 2024 23:59
- * isSameDay(date1, date2); // true
+ * // Same day, different times
+ * const result = isSameDay(
+ *   new Date(2024, 5, 15, 0, 0),
+ *   new Date(2024, 5, 15, 23, 59)
+ * );
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 15, 23, 59);  // June 15, 2024 23:59
- * const date4 = new Date(2024, 5, 16, 0, 0);    // June 16, 2024 00:00
- * isSameDay(date3, date4); // false
+ * // Different days
+ * const result2 = isSameDay(
+ *   new Date(2024, 5, 15, 23, 59),
+ *   new Date(2024, 5, 16, 0, 0)
+ * );
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 45); // June 15, 2024 14:30:45
- * const date6 = new Date(2024, 5, 15, 9, 15, 20);  // June 15, 2024 09:15:20
- * isSameDay(date5, date6); // true
+ * // Same day, different times (with seconds)
+ * const result3 = isSameDay(
+ *   new Date(2024, 5, 15, 14, 30, 45),
+ *   new Date(2024, 5, 15, 9, 15, 20)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15);   // June 15, 2024
- * const date8 = new Date(2024, 5, 14);   // June 14, 2024
- * isSameDay(date7, date8); // false
+ * // Works with timestamps
+ * const today = new Date(2024, 5, 15);
+ * const result4 = isSameDay(today.getTime(), today);
+ * // Returns: true
+ *
+ * // Invalid dates return false
+ * const result5 = isSameDay(new Date("invalid"), new Date(2024, 5, 15));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores hour, minute, second, and millisecond components in the comparison
+ * - Compares based on local timezone calendar day
+ * - Uses diffDays internally to determine if the day difference is zero
+ * - Handles DST transitions and leap years correctly
  */
 declare function isSameDay(dateLeft: Date | number, dateRight: Date | number): boolean;
 
 /**
  * Check if two dates are in the same hour.
  *
- * Returns true if both dates fall within the same hour,
+ * This function compares two dates and returns true if they fall within the same hour,
  * regardless of minutes, seconds, or milliseconds.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are in the same hour, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are in the same hour, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 0, 0);   // June 15, 2024 14:00:00
- * const date2 = new Date(2024, 5, 15, 14, 59, 59); // June 15, 2024 14:59:59
- * isSameHour(date1, date2); // true
+ * // Same hour, different minutes
+ * const result = isSameHour(
+ *   new Date(2024, 5, 15, 14, 0, 0),
+ *   new Date(2024, 5, 15, 14, 59, 59)
+ * );
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 15, 14, 59, 59); // June 15, 2024 14:59:59
- * const date4 = new Date(2024, 5, 15, 15, 0, 0);   // June 15, 2024 15:00:00
- * isSameHour(date3, date4); // false
+ * // Different hours
+ * const result2 = isSameHour(
+ *   new Date(2024, 5, 15, 14, 59, 59),
+ *   new Date(2024, 5, 15, 15, 0, 0)
+ * );
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 45); // June 15, 2024 14:30:45
- * const date6 = new Date(2024, 5, 15, 14, 15, 20); // June 15, 2024 14:15:20
- * isSameHour(date5, date6); // true
+ * // Same hour, different minutes and seconds
+ * const result3 = isSameHour(
+ *   new Date(2024, 5, 15, 14, 30, 45),
+ *   new Date(2024, 5, 15, 14, 15, 20)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15, 14, 30);     // June 15, 2024 14:30
- * const date8 = new Date(2024, 5, 16, 14, 30);     // June 16, 2024 14:30
- * isSameHour(date7, date8); // false (different days)
+ * // Same hour of day, different days
+ * const result4 = isSameHour(
+ *   new Date(2024, 5, 15, 14, 30),
+ *   new Date(2024, 5, 16, 14, 30)
+ * );
+ * // Returns: false (different days)
+ *
+ * // Invalid dates return false
+ * const result5 = isSameHour(new Date("invalid"), new Date(2024, 5, 15, 14, 0));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores minute, second, and millisecond components in the comparison
+ * - Requires year, month, day, AND hour to match
+ * - Uses diffHours internally to determine if the hour difference is zero
+ * - Handles DST transitions correctly
  */
 declare function isSameHour(dateLeft: Date | number, dateRight: Date | number): boolean;
 
 /**
  * Check if two dates are in the same minute.
  *
- * Returns true if both dates fall within the same minute,
+ * This function compares two dates and returns true if they fall within the same minute,
  * regardless of seconds or milliseconds.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are in the same minute, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are in the same minute, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 0);   // June 15, 2024 14:30:00
- * const date2 = new Date(2024, 5, 15, 14, 30, 59);  // June 15, 2024 14:30:59
- * isSameMinute(date1, date2); // true
+ * // Same minute, different seconds
+ * const result = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30, 0),
+ *   new Date(2024, 5, 15, 14, 30, 59)
+ * );
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 59);  // June 15, 2024 14:30:59
- * const date4 = new Date(2024, 5, 15, 14, 31, 0);   // June 15, 2024 14:31:00
- * isSameMinute(date3, date4); // false
+ * // Different minutes
+ * const result2 = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30, 59),
+ *   new Date(2024, 5, 15, 14, 31, 0)
+ * );
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 15, 500); // June 15, 2024 14:30:15.500
- * const date6 = new Date(2024, 5, 15, 14, 30, 45, 800); // June 15, 2024 14:30:45.800
- * isSameMinute(date5, date6); // true
+ * // Same minute, different seconds and milliseconds
+ * const result3 = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30, 15, 500),
+ *   new Date(2024, 5, 15, 14, 30, 45, 800)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15, 14, 30);      // June 15, 2024 14:30
- * const date8 = new Date(2024, 5, 15, 15, 30);      // June 15, 2024 15:30
- * isSameMinute(date7, date8); // false (different hours)
+ * // Same minute of hour, different hours
+ * const result4 = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30),
+ *   new Date(2024, 5, 15, 15, 30)
+ * );
+ * // Returns: false (different hours)
+ *
+ * // Invalid dates return false
+ * const result5 = isSameMinute(new Date("invalid"), new Date(2024, 5, 15, 14, 30));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores second and millisecond components in the comparison
+ * - Requires year, month, day, hour, AND minute to match
+ * - Uses diffMinutes internally to determine if the minute difference is zero
+ * - Handles DST transitions correctly
  */
 declare function isSameMinute(dateLeft: Date | number, dateRight: Date | number): boolean;
 
 /**
  * Check if two dates are in the same second.
  *
- * Returns true if both dates fall within the same second,
+ * This function compares two dates and returns true if they fall within the same second,
  * regardless of milliseconds.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are in the same second, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are in the same second, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 45, 0);   // June 15, 2024 14:30:45.000
- * const date2 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * isSameSecond(date1, date2); // true
+ * // Same second, different milliseconds
+ * const result = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45, 0),
+ *   new Date(2024, 5, 15, 14, 30, 45, 999)
+ * );
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * const date4 = new Date(2024, 5, 15, 14, 30, 46, 0);   // June 15, 2024 14:30:46.000
- * isSameSecond(date3, date4); // false
+ * // Different seconds
+ * const result2 = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45, 999),
+ *   new Date(2024, 5, 15, 14, 30, 46, 0)
+ * );
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const date6 = new Date(2024, 5, 15, 14, 30, 45, 456); // June 15, 2024 14:30:45.456
- * isSameSecond(date5, date6); // true
+ * // Same second, different milliseconds
+ * const result3 = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45, 123),
+ *   new Date(2024, 5, 15, 14, 30, 45, 456)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15, 14, 30, 45);      // June 15, 2024 14:30:45
- * const date8 = new Date(2024, 5, 15, 14, 31, 45);      // June 15, 2024 14:31:45
- * isSameSecond(date7, date8); // false (different minutes)
+ * // Same second of minute, different minutes
+ * const result4 = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45),
+ *   new Date(2024, 5, 15, 14, 31, 45)
+ * );
+ * // Returns: false (different minutes)
+ *
+ * // Invalid dates return false
+ * const result5 = isSameSecond(new Date("invalid"), new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores millisecond component in the comparison
+ * - Requires year, month, day, hour, minute, AND second to match
+ * - Uses diffSeconds internally to determine if the second difference is zero
+ * - Handles DST transitions correctly
  */
 declare function isSameSecond(dateLeft: Date | number, dateRight: Date | number): boolean;
 

@@ -3,31 +3,54 @@ import { diffDays } from "../diffDays";
 /**
  * Check if two dates are on the same calendar day.
  *
- * Returns true if both dates fall on the same calendar day,
+ * This function compares two dates and returns true if they fall on the same calendar day,
  * regardless of time components.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are on the same day, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are on the same day, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 0, 0);    // June 15, 2024 00:00
- * const date2 = new Date(2024, 5, 15, 23, 59);  // June 15, 2024 23:59
- * isSameDay(date1, date2); // true
+ * // Same day, different times
+ * const result = isSameDay(
+ *   new Date(2024, 5, 15, 0, 0),
+ *   new Date(2024, 5, 15, 23, 59)
+ * );
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 15, 23, 59);  // June 15, 2024 23:59
- * const date4 = new Date(2024, 5, 16, 0, 0);    // June 16, 2024 00:00
- * isSameDay(date3, date4); // false
+ * // Different days
+ * const result2 = isSameDay(
+ *   new Date(2024, 5, 15, 23, 59),
+ *   new Date(2024, 5, 16, 0, 0)
+ * );
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 45); // June 15, 2024 14:30:45
- * const date6 = new Date(2024, 5, 15, 9, 15, 20);  // June 15, 2024 09:15:20
- * isSameDay(date5, date6); // true
+ * // Same day, different times (with seconds)
+ * const result3 = isSameDay(
+ *   new Date(2024, 5, 15, 14, 30, 45),
+ *   new Date(2024, 5, 15, 9, 15, 20)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15);   // June 15, 2024
- * const date8 = new Date(2024, 5, 14);   // June 14, 2024
- * isSameDay(date7, date8); // false
+ * // Works with timestamps
+ * const today = new Date(2024, 5, 15);
+ * const result4 = isSameDay(today.getTime(), today);
+ * // Returns: true
+ *
+ * // Invalid dates return false
+ * const result5 = isSameDay(new Date("invalid"), new Date(2024, 5, 15));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores hour, minute, second, and millisecond components in the comparison
+ * - Compares based on local timezone calendar day
+ * - Uses diffDays internally to determine if the day difference is zero
+ * - Handles DST transitions and leap years correctly
  */
 export function isSameDay(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffDays(dateLeft, dateRight) === 0;

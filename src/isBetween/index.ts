@@ -5,30 +5,63 @@ import { isValidDateOrNumber } from "../_lib/validators";
 /**
  * Check if a date falls between two boundary dates with configurable inclusion.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns `false` if the date or interval is invalid.
- * - If start is null, uses MIN_DATE as the lower bound.
- * - If end is null, uses MAX_DATE as the upper bound.
- * - Boundary inclusion is controlled by the `bounds` option using mathematical interval notation.
+ * This function checks whether a date falls within an interval defined by start and end boundaries.
+ * The inclusion of boundaries can be controlled using mathematical interval notation.
  *
- * @param date - The date to check (Date object or timestamp).
- * @param interval - Interval object with start and end boundaries.
- * @param opts - Optional configuration for boundary inclusion.
- * @returns True if date is between the boundaries according to the bounds configuration.
+ * @param date - The date to check as a Date object or timestamp (number)
+ * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
+ * @param opts - Optional configuration for boundary inclusion
+ * @param opts.bounds - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only. Defaults to "()"
+ * @returns True if date is between the boundaries according to the bounds configuration, false otherwise
  *
  * @example
+ * ```typescript
  * // Default behavior (exclusive boundaries)
- * isBetween(new Date('2024-06-15'), {
- *   start: new Date('2024-06-10'),
- *   end: new Date('2024-06-20')
- * }); // true
+ * const result = isBetween(
+ *   new Date(2024, 5, 15),
+ *   { start: new Date(2024, 5, 10), end: new Date(2024, 5, 20) }
+ * );
+ * // Returns: true
  *
- * @example
  * // Inclusive boundaries
- * isBetween(new Date('2024-06-10'), {
- *   start: new Date('2024-06-10'),
- *   end: new Date('2024-06-20')
- * }, { bounds: "[]" }); // true
+ * const result2 = isBetween(
+ *   new Date(2024, 5, 10),
+ *   { start: new Date(2024, 5, 10), end: new Date(2024, 5, 20) },
+ *   { bounds: "[]" }
+ * );
+ * // Returns: true (boundary is included)
+ *
+ * // Open-ended interval (null end uses MAX_DATE)
+ * const result3 = isBetween(
+ *   new Date(2025, 0, 1),
+ *   { start: new Date(2024, 0, 1), end: null }
+ * );
+ * // Returns: true (any date after start)
+ *
+ * // Works with timestamps
+ * const result4 = isBetween(
+ *   Date.now(),
+ *   { start: Date.now() - 1000, end: Date.now() + 1000 }
+ * );
+ * // Returns: true (within 1 second window)
+ *
+ * // Invalid inputs return false
+ * const result5 = isBetween(new Date("invalid"), { start: new Date(2024, 0, 1), end: new Date(2024, 11, 31) });
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity, or invalid interval)
+ * - Accepts both Date objects and numeric timestamps
+ * - If start is null, uses MIN_DATE as the lower bound
+ * - If end is null, uses MAX_DATE as the upper bound
+ * - Boundary inclusion is controlled by the `bounds` option using mathematical interval notation:
+ *   - "()" - Both boundaries excluded (default, for backward compatibility)
+ *   - "[]" - Both boundaries included
+ *   - "[)" - Start included, end excluded
+ *   - "(]" - Start excluded, end included
+ * - Invalid bounds values default to "()" behavior
  */
 export function isBetween(
   date: Date | number,
