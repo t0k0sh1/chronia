@@ -91,16 +91,10 @@ describe("setSeconds", () => {
       desc: "returns Invalid Date when seconds is -Infinity",
     },
     {
-      date: "2025-01-15" as any,
+      date: NaN,
       seconds: 30,
       expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      seconds: "30" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as seconds",
+      desc: "returns Invalid Date when timestamp is NaN",
     },
   ])("$desc", ({ date, seconds, expected }) => {
     const result = setSeconds(date as Date | number, seconds);

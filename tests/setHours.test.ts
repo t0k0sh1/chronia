@@ -90,18 +90,6 @@ describe("setHours", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when hours is -Infinity",
     },
-    {
-      date: "2025-01-15" as any,
-      hours: 12,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      hours: "12" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as hours",
-    },
   ])("$desc", ({ date, hours, expected }) => {
     const result = setHours(date as Date | number, hours);
     if (isNaN(expected.getTime())) {

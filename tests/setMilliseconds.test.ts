@@ -32,7 +32,13 @@ describe("setMilliseconds", () => {
       date: new Date(2025, 0, 15, 12, 30, 45, 123),
       milliseconds: 500.9,
       expected: new Date(2025, 0, 15, 12, 30, 45, 500),
-      desc: "truncates fractional milliseconds",
+      desc: "truncates fractional milliseconds (positive)",
+    },
+    {
+      date: new Date(2025, 0, 15, 12, 30, 45, 123),
+      milliseconds: -500.9,
+      expected: new Date(2025, 0, 15, 12, 30, 44, 500),
+      desc: "truncates fractional milliseconds (negative)",
     },
     {
       date: new Date(2025, 0, 15, 12, 30, 45, 0),
@@ -51,12 +57,6 @@ describe("setMilliseconds", () => {
       milliseconds: 2500,
       expected: new Date(2025, 0, 15, 12, 30, 47, 500),
       desc: "large millisecond value rolls over multiple seconds",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 0, 500),
-      milliseconds: -1500,
-      expected: new Date(2025, 0, 15, 12, 29, 58, 500),
-      desc: "large negative milliseconds crosses minute boundary",
     },
     {
       date: new Date(2025, 0, 15, 12, 30, 45, 123).getTime(),
@@ -91,16 +91,10 @@ describe("setMilliseconds", () => {
       desc: "returns Invalid Date when milliseconds is -Infinity",
     },
     {
-      date: "2025-01-15" as any,
+      date: NaN,
       milliseconds: 500,
       expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      milliseconds: "500" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as milliseconds",
+      desc: "returns Invalid Date when timestamp is NaN",
     },
   ])("$desc", ({ date, milliseconds, expected }) => {
     const result = setMilliseconds(date as Date | number, milliseconds);

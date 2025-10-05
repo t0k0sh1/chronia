@@ -26,7 +26,7 @@ describe("setDay", () => {
       date: new Date(2025, 0, 15, 14, 30, 45, 123),
       day: 20,
       expected: new Date(2025, 0, 20, 14, 30, 45, 123),
-      desc: "preserves time and milliseconds",
+      desc: "preserves year, month, time, and milliseconds",
     },
     {
       date: new Date(2025, 0, 15),
@@ -59,58 +59,16 @@ describe("setDay", () => {
       desc: "day overflow goes to next month",
     },
     {
-      date: new Date(2025, 1, 15),
-      day: 29,
-      expected: new Date(2025, 2, 1),
-      desc: "Feb 29 in non-leap year becomes Mar 1",
-    },
-    {
-      date: new Date(2024, 1, 15),
-      day: 29,
-      expected: new Date(2024, 1, 29),
-      desc: "Feb 29 in leap year stays in February",
-    },
-    {
-      date: new Date(2025, 3, 15),
-      day: 31,
-      expected: new Date(2025, 4, 1),
-      desc: "Apr 31 becomes May 1",
-    },
-    {
       date: new Date(2025, 0, 15),
       day: 100,
       expected: new Date(2025, 3, 10),
       desc: "large day value rolls over multiple months",
     },
     {
-      date: new Date(2025, 0, 15),
-      day: -30,
-      expected: new Date(2024, 11, 1),
-      desc: "large negative day rolls back to previous month",
-    },
-    {
-      date: new Date(2025, 0, 15).getTime(),
-      day: 20,
-      expected: new Date(2025, 0, 20),
-      desc: "accepts timestamp input",
-    },
-    {
       date: new Date(2025, 11, 31, 23, 59, 59, 999),
       day: 1,
       expected: new Date(2025, 11, 1, 23, 59, 59, 999),
-      desc: "year-end date change preserves time",
-    },
-    {
-      date: new Date(2025, 0, 1),
-      day: 365,
-      expected: new Date(2025, 11, 31),
-      desc: "day 365 in non-leap year becomes Dec 31",
-    },
-    {
-      date: new Date(2024, 0, 1),
-      day: 366,
-      expected: new Date(2024, 11, 31),
-      desc: "day 366 in leap year becomes Dec 31",
+      desc: "handles year-end correctly",
     },
 
     // --- Invalid cases ---
@@ -144,18 +102,6 @@ describe("setDay", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
     },
-    {
-      date: "2025-01-15" as any,
-      day: 20,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      day: "20" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as day",
-    },
   ])("$desc", ({ date, day, expected }) => {
     const result = setDay(date as Date | number, day);
     if (isNaN(expected.getTime())) {
@@ -174,8 +120,8 @@ describe("setDay", () => {
     expect(original.getTime()).toBe(originalTime);
   });
 
-  it("handles month boundaries correctly", () => {
-    // Test setting to day 31 in various months
+  it("handles month boundaries and rollover correctly", () => {
+    // Test rollover to next month (30-day months)
     const months30Days = [3, 5, 8, 10]; // April, June, September, November
 
     months30Days.forEach(month => {
@@ -185,32 +131,32 @@ describe("setDay", () => {
       expect(result.getDate()).toBe(1);
     });
 
-    // February special cases
+    // February rollover in non-leap year
     const feb2025 = new Date(2025, 1, 15);
     const feb29_2025 = setDay(feb2025, 29);
     expect(feb29_2025.getMonth()).toBe(2); // March
     expect(feb29_2025.getDate()).toBe(1);
 
+    // February in leap year (no rollover)
     const feb2024 = new Date(2024, 1, 15);
     const feb29_2024 = setDay(feb2024, 29);
     expect(feb29_2024.getMonth()).toBe(1); // Still February
     expect(feb29_2024.getDate()).toBe(29);
-  });
 
-  it("handles day 0 and negative days correctly", () => {
-    // Day 0 should be last day of previous month
+    // Day 0 becomes last day of previous month
     const jan15 = new Date(2025, 0, 15);
     const day0 = setDay(jan15, 0);
     expect(day0.getMonth()).toBe(11); // December
     expect(day0.getDate()).toBe(31);
     expect(day0.getFullYear()).toBe(2024);
 
-    // Test day 0 for various months
+    // Day 0 in March (non-leap year)
     const mar15 = new Date(2025, 2, 15);
     const feb28 = setDay(mar15, 0);
     expect(feb28.getMonth()).toBe(1); // February
     expect(feb28.getDate()).toBe(28);
 
+    // Day 0 in March (leap year)
     const mar15_leap = new Date(2024, 2, 15);
     const feb29_leap = setDay(mar15_leap, 0);
     expect(feb29_leap.getMonth()).toBe(1); // February

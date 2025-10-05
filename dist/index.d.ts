@@ -800,135 +800,353 @@ declare function getYear(date: Date | number): number;
 /**
  * Set the year of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified year set.
- * - If the input date or year is invalid, returns `Invalid Date`.
- * - Fractions in `year` are truncated (e.g., 2023.9 → 2023, -2023.9 → -2023).
- * - Leap year adjustment: if the original date is Feb 29 and the target year
- *   is not a leap year, the result becomes Feb 28.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified year set. Fractional years are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param year - The year to set (fractions are truncated).
- * @returns A new `Date` object with the year set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param year - The year to set (can be negative for BC dates)
+ * @returns A new Date object with the year set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set year to future year
+ * const result = setYear(new Date(2025, 0, 15), 2030);
+ * // Returns: 2030-01-15
+ *
+ * // Set year to past year
+ * const result2 = setYear(new Date(2025, 0, 15), 2020);
+ * // Returns: 2020-01-15
+ *
+ * // Leap year adjustment (Feb 29 → Feb 28)
+ * const result3 = setYear(new Date(2020, 1, 29), 2021);
+ * // Returns: 2021-02-28 (non-leap year)
+ *
+ * // Fractional year is truncated
+ * const result4 = setYear(new Date(2025, 0, 15), 2023.9);
+ * // Returns: 2023-01-15
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setYear(new Date("invalid"), 2025);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (2023.9 → 2023, -2023.9 → -2023)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
+ * - Special handling: When the source date is Feb 29 and the target year is not a leap year, the result becomes Feb 28
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function setYear(date: Date | number, year: number): Date;
 
 /**
  * Set the month of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified month set.
- * - If the input date or month is invalid, returns `Invalid Date`.
- * - Fractions in `month` are truncated (e.g., 1.9 → 1, -1.9 → -1).
- * - Month is 0-indexed (0 = January, 11 = December).
- * - Day adjustment: if the original day doesn't exist in the target month
- *   (e.g., Jan 31 → Feb), adjusts to the last valid day of the month.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified month set. Fractional months are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param month - The month to set (0-11, fractions are truncated).
- * @returns A new `Date` object with the month set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param month - The month to set (0-indexed: 0 = January, 11 = December)
+ * @returns A new Date object with the month set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set month to June
+ * const result = setMonth(new Date(2025, 0, 15), 5);
+ * // Returns: 2025-06-15
+ *
+ * // Set month to January
+ * const result2 = setMonth(new Date(2025, 5, 15), 0);
+ * // Returns: 2025-01-15
+ *
+ * // Day overflow adjustment (Jan 31 → Feb 28)
+ * const result3 = setMonth(new Date(2025, 0, 31), 1);
+ * // Returns: 2025-02-28 (non-leap year)
+ *
+ * // Fractional month is truncated
+ * const result4 = setMonth(new Date(2025, 0, 15), 5.9);
+ * // Returns: 2025-06-15
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setMonth(new Date("invalid"), 5);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (5.9 → 5, -1.9 → -1)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves year, day, and time components (hours, minutes, seconds, milliseconds)
+ * - Special handling: When the original day doesn't exist in the target month (e.g., Jan 31 → Feb), adjusts to the last valid day of the month (Feb 28 or 29)
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function setMonth(date: Date | number, month: number): Date;
 
 /**
  * Set the day of the month of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified day of the month set.
- * - If the input date or day is invalid, returns `Invalid Date`.
- * - Fractions in `day` are truncated (e.g., 15.9 → 15, -15.9 → -15).
- * - Day values outside the valid range will cause date to roll over to adjacent months
- *   (e.g., setting day 32 in January results in February 1).
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified day set. Fractional days are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param day - The day of the month to set (1-31, fractions are truncated).
- * @returns A new `Date` object with the day set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param day - The day to set (1-31, fractions are truncated)
+ * @returns A new Date object with the day set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set day to 1st
+ * const result = setDay(new Date(2025, 0, 15), 1);
+ * // Returns: 2025-01-01
+ *
+ * // Set day to last day of month
+ * const result2 = setDay(new Date(2025, 0, 15), 31);
+ * // Returns: 2025-01-31
+ *
+ * // Day overflow (Jan 32 → Feb 1)
+ * const result3 = setDay(new Date(2025, 0, 15), 32);
+ * // Returns: 2025-02-01
+ *
+ * // Fractional day is truncated
+ * const result4 = setDay(new Date(2025, 0, 15), 15.9);
+ * // Returns: 2025-01-15
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setDay(new Date("invalid"), 15);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (15.9 → 15, -15.9 → -15)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves year, month, and time components (hours, minutes, seconds, milliseconds)
+ * - Rollover behavior: Day values outside valid range cause date to roll over to adjacent months (e.g., Jan 32 → Feb 1, day 0 → last day of previous month)
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function setDay(date: Date | number, day: number): Date;
 
 /**
  * Set the hours of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified hours set.
- * - If the input date or hours is invalid, returns `Invalid Date`.
- * - Fractions in `hours` are truncated (e.g., 14.9 → 14, -14.9 → -14).
- * - Hours values outside 0-23 will cause date to roll over to adjacent days.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified hours set. Fractional hours are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param hours - The hours to set (0-23, fractions are truncated).
- * @returns A new `Date` object with the hours set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param hours - The hours to set (0-23, fractions are truncated)
+ * @returns A new Date object with the hours set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set hours to a specific time
+ * const result = setHours(new Date(2025, 0, 15, 12, 30, 45), 18);
+ * // Returns: 2025-01-15 18:30:45
+ *
+ * // Set hours to midnight
+ * const result2 = setHours(new Date(2025, 0, 15, 12, 30, 45), 0);
+ * // Returns: 2025-01-15 00:30:45
+ *
+ * // Hours rollover to next day
+ * const result3 = setHours(new Date(2025, 0, 15, 12, 30, 45), 24);
+ * // Returns: 2025-01-16 00:30:45
+ *
+ * // Fractional hours are truncated
+ * const result4 = setHours(new Date(2025, 0, 15, 12, 30, 45), 14.9);
+ * // Returns: 2025-01-15 14:30:45
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setHours(new Date("invalid"), 12);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (14.9 → 14, -14.9 → -14)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves date, minutes, seconds, and milliseconds components
+ * - Hours outside 0-23 will cause date rollover (e.g., 24 → next day, -1 → previous day)
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function setHours(date: Date | number, hours: number): Date;
 
 /**
  * Set the minutes of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified minutes set.
- * - If the input date or minutes is invalid, returns `Invalid Date`.
- * - Fractions in `minutes` are truncated (e.g., 30.9 → 30, -30.9 → -30).
- * - Minutes values outside 0-59 will cause date to roll over to adjacent hours.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified minutes set. Fractional minutes are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param minutes - The minutes to set (0-59, fractions are truncated).
- * @returns A new `Date` object with the minutes set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param minutes - The minutes to set (typically 0-59, but values outside this range will cause rollover)
+ * @returns A new Date object with the minutes set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set minutes to standard value
+ * const result = setMinutes(new Date(2025, 0, 15, 12, 30, 45), 45);
+ * // Returns: 2025-01-15 12:45:45
+ *
+ * // Set minutes to boundary value
+ * const result2 = setMinutes(new Date(2025, 0, 15, 12, 30, 45), 0);
+ * // Returns: 2025-01-15 12:00:45
+ *
+ * // Fractional minutes are truncated
+ * const result3 = setMinutes(new Date(2025, 0, 15, 12, 30, 45), 45.9);
+ * // Returns: 2025-01-15 12:45:45
+ *
+ * // Minutes outside 0-59 roll over to adjacent hours
+ * const result4 = setMinutes(new Date(2025, 0, 15, 12, 30, 45), 60);
+ * // Returns: 2025-01-15 13:00:45 (rolls over to next hour)
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setMinutes(new Date("invalid"), 30);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (45.9 → 45, -45.9 → -45)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves year, month, day, hour, seconds, and milliseconds components
+ * - Values outside 0-59 cause rollover: 60 → next hour, -1 → previous hour
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function setMinutes(date: Date | number, minutes: number): Date;
 
 /**
  * Set the seconds of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified seconds set.
- * - If the input date or seconds is invalid, returns `Invalid Date`.
- * - Fractions in `seconds` are truncated (e.g., 30.9 → 30, -30.9 → -30).
- * - Seconds values outside 0-59 will cause date to roll over to adjacent minutes.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified seconds set. Fractional seconds are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param seconds - The seconds to set (0-59, fractions are truncated).
- * @returns A new `Date` object with the seconds set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param seconds - The seconds to set (0-59 for normal range, other values will roll over)
+ * @returns A new Date object with the seconds set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set seconds to 30
+ * const result = setSeconds(new Date(2025, 0, 15, 12, 30, 45), 30);
+ * // Returns: 2025-01-15 12:30:30
+ *
+ * // Set seconds to 0 (start of minute)
+ * const result2 = setSeconds(new Date(2025, 0, 15, 12, 30, 45), 0);
+ * // Returns: 2025-01-15 12:30:00
+ *
+ * // Seconds rollover to next minute
+ * const result3 = setSeconds(new Date(2025, 0, 15, 12, 30, 45), 60);
+ * // Returns: 2025-01-15 12:31:00
+ *
+ * // Fractional seconds are truncated
+ * const result4 = setSeconds(new Date(2025, 0, 15, 12, 30, 45), 30.9);
+ * // Returns: 2025-01-15 12:30:30
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setSeconds(new Date("invalid"), 30);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (30.9 → 30, -30.9 → -30)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves year, month, day, hours, minutes, and milliseconds components
+ * - Seconds outside 0-59 range cause rollover to adjacent minutes (60 → next minute, -1 → previous minute)
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function setSeconds(date: Date | number, seconds: number): Date;
 
 /**
- * Set the timestamp value of a Date object.
+ * Set the complete timestamp of the given date.
  *
- * @param date - The Date object to create a copy from
- * @param time - The timestamp in milliseconds since Unix epoch
- * @returns A new Date object with the specified timestamp, or invalid Date for invalid arguments
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified timestamp. Unlike other setters that modify components (year, month, etc.),
+ * setTime replaces the entire timestamp value.
  *
- * @example
- * const date = new Date();
- * const newDate = setTime(date, 1704067200000); // Creates new date set to 2024-01-01
- *
- * @example
- * const date = new Date();
- * const invalidDate = setTime(date, NaN); // Creates new invalid date
+ * @param date - The base date as a Date object
+ * @param time - The timestamp in milliseconds since Unix epoch (January 1, 1970, 00:00:00 UTC)
+ * @returns A new Date object with the timestamp set, or Invalid Date if any input is invalid
  *
  * @example
- * const invalidDate = setTime('not a date', 1704067200000); // Returns new Date(NaN)
+ * ```typescript
+ * // Set to a specific timestamp
+ * const result = setTime(new Date(), 1704067200000);
+ * // Returns: 2024-01-01T00:00:00.000Z
+ *
+ * // Set to Unix epoch
+ * const result2 = setTime(new Date(), 0);
+ * // Returns: 1970-01-01T00:00:00.000Z
+ *
+ * // Set to negative timestamp (before epoch)
+ * const result3 = setTime(new Date(), -86400000);
+ * // Returns: 1969-12-31T00:00:00.000Z
+ *
+ * // Fractional milliseconds are preserved
+ * const result4 = setTime(new Date(), 1.5);
+ * // Returns: timestamp with 1.5 milliseconds (truncated by Date API)
+ *
+ * // Invalid timestamp returns Invalid Date
+ * const result5 = setTime(new Date(), NaN);
+ * // Returns: Invalid Date
+ * ```
  *
  * @remarks
- * This function creates a new Date object without modifying the original.
- * The returned Date object has the specified timestamp, handling invalid values
- * (NaN, Infinity, out-of-range) by creating invalid dates.
- * For invalid arguments, returns a new Date(NaN).
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts only Date objects (not numeric timestamps) as the first argument
+ * - Returns Invalid Date for: Invalid Date input, NaN, Infinity, -Infinity
+ * - Valid timestamp range: -8.64e15 to 8.64e15 milliseconds
+ * - Timestamps outside this range create Invalid Date
+ * - Always returns a new Date instance (does not mutate input)
+ * - This function replaces all date/time components at once (unlike setYear, setMonth, etc.)
  */
 declare function setTime(date: Date, time: number): Date;
 
 /**
  * Set the milliseconds of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified milliseconds set.
- * - If the input date or milliseconds is invalid, returns `Invalid Date`.
- * - Fractions in `milliseconds` are truncated (e.g., 500.9 → 500, -500.9 → -500).
- * - Milliseconds values outside 0-999 will cause date to roll over to adjacent seconds.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified milliseconds set. Fractional milliseconds are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param milliseconds - The milliseconds to set (0-999, fractions are truncated).
- * @returns A new `Date` object with the milliseconds set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param milliseconds - The milliseconds to set (typically 0-999, fractions are truncated)
+ * @returns A new Date object with the milliseconds set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set milliseconds to a typical value
+ * const result = setMilliseconds(new Date(2025, 0, 15, 12, 30, 45, 123), 500);
+ * // Returns: 2025-01-15 12:30:45.500
+ *
+ * // Set milliseconds to minimum value
+ * const result2 = setMilliseconds(new Date(2025, 0, 15, 12, 30, 45, 123), 0);
+ * // Returns: 2025-01-15 12:30:45.000
+ *
+ * // Rollover to next second with value >= 1000
+ * const result3 = setMilliseconds(new Date(2025, 0, 15, 12, 30, 45, 500), 1000);
+ * // Returns: 2025-01-15 12:30:46.000
+ *
+ * // Fractional milliseconds are truncated
+ * const result4 = setMilliseconds(new Date(2025, 0, 15, 12, 30, 45, 123), 500.9);
+ * // Returns: 2025-01-15 12:30:45.500
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setMilliseconds(new Date("invalid"), 500);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (500.9 → 500, -500.9 → -500)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves year, month, day, and time components (hours, minutes, seconds)
+ * - Special handling: Values outside 0-999 cause rollover to adjacent seconds (1000 → next second, -1 → previous second)
+ * - Always returns a new Date instance (does not mutate input)
  */
 declare function setMilliseconds(date: Date | number, milliseconds: number): Date;
 

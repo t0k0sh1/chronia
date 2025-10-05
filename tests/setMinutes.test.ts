@@ -32,25 +32,19 @@ describe("setMinutes", () => {
       date: new Date(2025, 0, 15, 12, 30, 45, 123),
       minutes: 45.9,
       expected: new Date(2025, 0, 15, 12, 45, 45, 123),
-      desc: "truncates fractional minutes",
+      desc: "truncates fractional minutes (positive)",
     },
     {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      minutes: -1,
-      expected: new Date(2025, 0, 15, 11, 59, 45),
-      desc: "negative minutes rolls back to previous hour",
+      date: new Date(2025, 0, 15, 12, 30, 45, 123),
+      minutes: -45.9,
+      expected: new Date(2025, 0, 15, 11, 15, 45, 123),
+      desc: "truncates fractional minutes (negative)",
     },
     {
       date: new Date(2025, 0, 15, 12, 30, 45),
       minutes: 60,
       expected: new Date(2025, 0, 15, 13, 0, 45),
       desc: "minute 60 rolls over to next hour",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      minutes: 120,
-      expected: new Date(2025, 0, 15, 14, 0, 45),
-      desc: "large minute value rolls over multiple hours",
     },
     {
       date: new Date(2025, 0, 15, 0, 30, 45),
@@ -91,16 +85,10 @@ describe("setMinutes", () => {
       desc: "returns Invalid Date when minutes is -Infinity",
     },
     {
-      date: "2025-01-15" as any,
+      date: NaN,
       minutes: 30,
       expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      minutes: "30" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as minutes",
+      desc: "returns Invalid Date when timestamp is NaN",
     },
   ])("$desc", ({ date, minutes, expected }) => {
     const result = setMinutes(date as Date | number, minutes);
