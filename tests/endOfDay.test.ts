@@ -160,4 +160,49 @@ describe("endOfDay", () => {
       expect(result.getMilliseconds()).toBe(999);
     });
   });
+
+  describe("type validation", () => {
+    it("should return Invalid Date for invalid argument types", () => {
+      const invalidInputs = [
+        null,
+        undefined,
+        "2024-01-01",
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidInputs.forEach(input => {
+        const result = endOfDay(input as any);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for Invalid Date objects", () => {
+      const invalidDates = [
+        new Date("invalid"),
+        new Date(NaN)
+      ];
+
+      invalidDates.forEach(invalidDate => {
+        const result = endOfDay(invalidDate);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for special number values", () => {
+      const specialNumbers = [NaN, Infinity, -Infinity];
+
+      specialNumbers.forEach(num => {
+        const result = endOfDay(num as any);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+  });
 });

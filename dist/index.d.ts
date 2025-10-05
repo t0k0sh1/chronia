@@ -2384,114 +2384,259 @@ declare function diffYears(dateLeft: Date | number, dateRight: Date | number): n
 /**
  * Get the end of the month for the given date.
  *
- * Returns a new Date object set to the last day of the month at 23:59:59.999.
+ * This function returns a new Date object set to the last day of the month at 23:59:59.999
+ * for the given date. The year and month remain the same while the day is set to the last day
+ * of that month and all time components are set to their maximum values. Automatically handles
+ * different month lengths and leap years.
  *
- * @param date - The original date or timestamp
- * @returns New Date object representing the end of the month
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object set to the last day of the month at 23:59:59.999, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45); // June 15, 2024 14:30:45
- * const end = endOfMonth(date); // June 30, 2024 23:59:59.999
+ * // Get end of month from mid-month
+ * const result = endOfMonth(new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: June 30, 2024 23:59:59.999 (30 days)
  *
- * const firstDayOfMonth = new Date(2024, 1, 1, 0, 0, 0); // February 1, 2024 00:00:00
- * const monthEnd = endOfMonth(firstDayOfMonth); // February 29, 2024 23:59:59.999 (leap year)
+ * // Works with first day of month
+ * const result2 = endOfMonth(new Date(2024, 0, 1, 0, 0, 0));
+ * // Returns: January 31, 2024 23:59:59.999 (31 days)
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = endOfMonth(timestamp);
+ * // Returns: Last day of current month at 23:59:59.999
+ *
+ * // Handles leap year February
+ * const result4 = endOfMonth(new Date(2024, 1, 1));
+ * // Returns: February 29, 2024 23:59:59.999 (leap year)
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = endOfMonth(-Infinity);
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Automatically handles different month lengths (28, 29, 30, or 31 days)
+ * - Correctly handles leap years for February
  */
 declare function endOfMonth(date: Date | number): Date;
 
 /**
  * Get the start of the month for the given date.
  *
- * Returns a new Date object set to the first day of the month at 00:00:00.000.
+ * This function returns a new Date object set to the first day of the month at 00:00:00.000
+ * for the given date. The year and month remain the same while the day is set to 1 and
+ * all time components are reset to zero.
  *
- * @param date - The original date or timestamp
- * @returns New Date object representing the start of the month
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object set to the first day of the month at 00:00:00.000, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45); // June 15, 2024 14:30:45
- * const start = startOfMonth(date); // June 1, 2024 00:00:00.000
+ * // Get start of month from mid-month
+ * const result = startOfMonth(new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: June 1, 2024 00:00:00.000
  *
- * const lastDayOfMonth = new Date(2024, 5, 30, 23, 59, 59); // June 30, 2024 23:59:59
- * const monthStart = startOfMonth(lastDayOfMonth); // June 1, 2024 00:00:00.000
+ * // Works with last day of month
+ * const result2 = startOfMonth(new Date(2024, 5, 30, 23, 59, 59));
+ * // Returns: June 1, 2024 00:00:00.000
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = startOfMonth(timestamp);
+ * // Returns: First day of current month at 00:00:00.000
+ *
+ * // Handles leap year February
+ * const result4 = startOfMonth(new Date(2024, 1, 29));
+ * // Returns: February 1, 2024 00:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = startOfMonth(NaN);
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Sets day to 1 and resets hours, minutes, seconds, and milliseconds to 0
  */
 declare function startOfMonth(date: Date | number): Date;
 
 /**
  * Get the end of the year for the given date.
  *
- * Returns a new Date object set to December 31st at 23:59:59.999 of the same year.
+ * This function returns a new Date object set to December 31st at 23:59:59.999 of the same year
+ * for the given date. The year remains the same while the month is set to December (11), the day
+ * to 31, and all time components are set to their maximum values.
  *
- * @param date - The original date or timestamp
- * @returns New Date object representing the end of the year
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object set to December 31st at 23:59:59.999, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45); // June 15, 2024 14:30:45
- * const end = endOfYear(date); // December 31, 2024 23:59:59.999
+ * // Get end of year from mid-year
+ * const result = endOfYear(new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: December 31, 2024 23:59:59.999
  *
- * const firstDayOfYear = new Date(2024, 0, 1, 0, 0, 0); // January 1, 2024 00:00:00
- * const yearEnd = endOfYear(firstDayOfYear); // December 31, 2024 23:59:59.999
+ * // Works with first day of year
+ * const result2 = endOfYear(new Date(2024, 0, 1, 0, 0, 0));
+ * // Returns: December 31, 2024 23:59:59.999
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = endOfYear(timestamp);
+ * // Returns: December 31st of current year at 23:59:59.999
+ *
+ * // Works regardless of leap year
+ * const result4 = endOfYear(new Date(2024, 1, 29));
+ * // Returns: December 31, 2024 23:59:59.999
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = endOfYear(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Sets month to 11 (December), day to 31, hours to 23, minutes to 59, seconds to 59, and milliseconds to 999
  */
 declare function endOfYear(date: Date | number): Date;
 
 /**
  * Get the start of the year for the given date.
  *
- * Returns a new Date object set to January 1st at 00:00:00.000 of the same year.
+ * This function returns a new Date object set to January 1st at 00:00:00.000 of the same year
+ * for the given date. The year remains the same while the month is set to January (0), the day
+ * to 1, and all time components are reset to zero.
  *
- * @param date - The original date or timestamp
- * @returns New Date object representing the start of the year
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object set to January 1st at 00:00:00.000, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45); // June 15, 2024 14:30:45
- * const start = startOfYear(date); // January 1, 2024 00:00:00.000
+ * // Get start of year from mid-year
+ * const result = startOfYear(new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: January 1, 2024 00:00:00.000
  *
- * const lastDayOfYear = new Date(2024, 11, 31, 23, 59, 59); // December 31, 2024 23:59:59
- * const yearStart = startOfYear(lastDayOfYear); // January 1, 2024 00:00:00.000
+ * // Works with last day of year
+ * const result2 = startOfYear(new Date(2024, 11, 31, 23, 59, 59));
+ * // Returns: January 1, 2024 00:00:00.000
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = startOfYear(timestamp);
+ * // Returns: January 1st of current year at 00:00:00.000
+ *
+ * // Handles leap years
+ * const result4 = startOfYear(new Date(2024, 1, 29));
+ * // Returns: January 1, 2024 00:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = startOfYear(Infinity);
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Sets month to 0 (January), day to 1, and resets hours, minutes, seconds, and milliseconds to 0
  */
 declare function startOfYear(date: Date | number): Date;
 
 /**
  * Get the end of the day for the given date.
  *
- * Returns a new Date object set to 23:59:59.999 of the same date.
+ * This function returns a new Date object set to the last moment of the day (23:59:59.999)
+ * for the given date. The date remains the same while all time components are set to their
+ * maximum values.
  *
- * @param date - The original date or timestamp
- * @returns New Date object representing the end of the day
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object set to 23:59:59.999 of the same date, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const end = endOfDay(date); // June 15, 2024 23:59:59.999
+ * // Get end of day from afternoon
+ * const result = endOfDay(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 15, 2024 23:59:59.999
  *
- * const earlyMorning = new Date(2024, 5, 15, 0, 0, 0, 0); // June 15, 2024 00:00:00.000
- * const dayEnd = endOfDay(earlyMorning); // June 15, 2024 23:59:59.999
+ * // Works with start of day time
+ * const result2 = endOfDay(new Date(2024, 5, 15, 0, 0, 0, 0));
+ * // Returns: June 15, 2024 23:59:59.999
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = endOfDay(timestamp);
+ * // Returns: End of today (23:59:59.999)
+ *
+ * // Handles month boundaries
+ * const result4 = endOfDay(new Date(2024, 5, 30, 9, 15));
+ * // Returns: June 30, 2024 23:59:59.999
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = endOfDay(new Date(NaN));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Sets hours to 23, minutes to 59, seconds to 59, and milliseconds to 999
  */
 declare function endOfDay(date: Date | number): Date;
 
 /**
  * Get the start of the day for the given date.
  *
- * Returns a new Date object set to 00:00:00.000 of the same date.
+ * This function returns a new Date object set to the beginning of the day (00:00:00.000)
+ * for the given date. The date remains the same while all time components are reset to zero.
  *
- * @param date - The original date or timestamp
- * @returns New Date object representing the start of the day
+ * @param date - The base date as a Date object or timestamp (number)
+ * @returns A new Date object set to 00:00:00.000 of the same date, or Invalid Date if input is invalid
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const start = startOfDay(date); // June 15, 2024 00:00:00.000
+ * // Get start of day from afternoon
+ * const result = startOfDay(new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: June 15, 2024 00:00:00.000
  *
- * const lateEvening = new Date(2024, 5, 15, 23, 59, 59, 999); // June 15, 2024 23:59:59.999
- * const dayStart = startOfDay(lateEvening); // June 15, 2024 00:00:00.000
+ * // Works with end of day time
+ * const result2 = startOfDay(new Date(2024, 5, 15, 23, 59, 59, 999));
+ * // Returns: June 15, 2024 00:00:00.000
+ *
+ * // Works with timestamps
+ * const timestamp = Date.now();
+ * const result3 = startOfDay(timestamp);
+ * // Returns: Start of today (00:00:00.000)
+ *
+ * // Handles month boundaries
+ * const result4 = startOfDay(new Date(2024, 5, 30, 15, 30));
+ * // Returns: June 30, 2024 00:00:00.000
+ *
+ * // Invalid inputs return Invalid Date
+ * const result5 = startOfDay(new Date("invalid"));
+ * // Returns: Invalid Date
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Always returns a new Date instance (does not mutate input)
+ * - Preserves the date while resetting hours, minutes, seconds, and milliseconds to 0
  */
 declare function startOfDay(date: Date | number): Date;
 

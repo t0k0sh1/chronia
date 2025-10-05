@@ -137,4 +137,49 @@ describe("startOfYear", () => {
     expect(result.getMonth()).toBe(0); // January
     expect(result.getDate()).toBe(1);
   });
+
+  describe("type validation", () => {
+    it("should return Invalid Date for invalid argument types", () => {
+      const invalidInputs = [
+        null,
+        undefined,
+        "2024-01-01",
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidInputs.forEach(input => {
+        const result = startOfYear(input as any);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for Invalid Date objects", () => {
+      const invalidDates = [
+        new Date("invalid"),
+        new Date(NaN)
+      ];
+
+      invalidDates.forEach(invalidDate => {
+        const result = startOfYear(invalidDate);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for special number values", () => {
+      const specialNumbers = [NaN, Infinity, -Infinity];
+
+      specialNumbers.forEach(num => {
+        const result = startOfYear(num as any);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+  });
 });
