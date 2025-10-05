@@ -1,5 +1,5 @@
 <h1>
-<img src="docs/logo.png" width="38" alt="Project Icon" style="vertical-align: middle; margin-bottom: 4px">
+<img src="docs/logo.png" width="38" alt="Project Icon" style="vertical-align: middle;">
 Chronia</h1>
 
 ![npm version](https://badge.fury.io/js/chronia.svg)
