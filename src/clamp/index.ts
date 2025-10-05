@@ -50,7 +50,7 @@ export function clamp(
     return new Date(NaN);
   }
 
-  // Convert to Date objects after validation
+  // Convert inputs to Date objects after validation
   const dateObj = typeof date === "number" ? new Date(date) : date;
   const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
   const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
