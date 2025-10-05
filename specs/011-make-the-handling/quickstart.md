@@ -99,15 +99,17 @@ console.log(isNaN(infResult.getTime())); // Should print: true
 ### Verify Validation Order
 Open `src/clamp/index.ts` and confirm:
 
-1. **Lines 43-46**: Validation block (BEFORE conversion)
+1. **Lines 48-51**: Validation block (BEFORE conversion)
 ```typescript
+// Validate arguments before conversion (consistent with addDays pattern)
 if (!isValidDateOrNumber(date) || !isValidDateOrNumber(minDate) || !isValidDateOrNumber(maxDate)) {
   return new Date(NaN);
 }
 ```
 
-2. **Lines 48-51**: Conversion block (AFTER validation)
+2. **Lines 52-55**: Conversion block (AFTER validation)
 ```typescript
+// Convert inputs to Date objects after validation
 const dateObj = typeof date === "number" ? new Date(date) : date;
 const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
 const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
