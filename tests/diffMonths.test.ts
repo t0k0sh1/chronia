@@ -65,4 +65,58 @@ describe("diffMonths", () => {
     const date2 = new Date(2020, 5, 15); // June 15, 2020
     expect(diffMonths(date1, date2)).toBe(120); // 10 years * 12 months
   });
+
+  describe("invalid inputs", () => {
+    it("returns NaN when the first date is invalid", () => {
+      const invalidDate = new Date("invalid");
+      const validDate = new Date(2024, 5, 15);
+      expect(diffMonths(invalidDate, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when the second date is invalid", () => {
+      const validDate = new Date(2024, 5, 15);
+      const invalidDate = new Date("invalid");
+      expect(diffMonths(validDate, invalidDate)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are invalid", () => {
+      const invalidDate1 = new Date("invalid");
+      const invalidDate2 = new Date("also invalid");
+      expect(diffMonths(invalidDate1, invalidDate2)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is NaN", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffMonths(NaN, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is NaN", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffMonths(validDate, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are NaN", () => {
+      expect(diffMonths(NaN, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffMonths(Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffMonths(validDate, Infinity)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffMonths(-Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffMonths(validDate, -Infinity)).toBe(NaN);
+    });
+  });
 });

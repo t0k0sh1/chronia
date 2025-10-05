@@ -2198,186 +2198,320 @@ declare function truncYear(date: Date | number): Date;
 /**
  * Calculate the difference in calendar days between two dates.
  *
- * Returns the number of full days between the earlier and later date.
- * Ignores time components (hours, minutes, seconds, milliseconds).
- * Uses midnight of each date for calculation to ensure calendar day accuracy.
+ * This function calculates the number of full calendar days between two dates by
+ * comparing them at midnight. Time components are ignored to ensure accurate
+ * calendar day counting.
  *
- * @param dateLeft - The first date
- * @param dateRight - The second date
- * @returns The difference in days (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in calendar days (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 23, 59); // June 15, 2024 23:59
- * const date2 = new Date(2024, 5, 14, 0, 0);   // June 14, 2024 00:00
- * diffDays(date1, date2); // 1 (calendar day difference)
+ * // Basic calendar day difference
+ * const result = diffDays(new Date(2024, 5, 15), new Date(2024, 5, 14));
+ * // Returns: 1
  *
- * const date3 = new Date(2024, 5, 15, 0, 0);   // June 15, 2024 00:00
- * const date4 = new Date(2024, 5, 15, 23, 59); // June 15, 2024 23:59
- * diffDays(date3, date4); // 0 (same calendar day)
+ * // Time components are ignored (same calendar day)
+ * const result = diffDays(new Date(2024, 5, 15, 23, 59), new Date(2024, 5, 15, 0, 0));
+ * // Returns: 0
  *
- * const date5 = new Date(2024, 0, 1);  // January 1, 2024
- * const date6 = new Date(2023, 11, 31); // December 31, 2023
- * diffDays(date5, date6); // 1
+ * // Works with timestamps
+ * const timestamp1 = new Date(2024, 5, 20).getTime();
+ * const timestamp2 = new Date(2024, 5, 15).getTime();
+ * const result = diffDays(timestamp1, timestamp2);
+ * // Returns: 5
+ *
+ * // Negative result when first date is earlier
+ * const result = diffDays(new Date(2024, 5, 10), new Date(2024, 5, 15));
+ * // Returns: -5
+ *
+ * // Invalid inputs return NaN
+ * const result = diffDays(new Date("invalid"), new Date(2024, 5, 15));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Compares dates at midnight for accurate calendar day counting
+ * - Time components (hours, minutes, seconds, milliseconds) are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles leap years, month boundaries, and year boundaries correctly
+ * - Uses Math.round to ensure integer results
  */
 declare function diffDays(dateLeft: Date | number, dateRight: Date | number): number;
 
 /**
  * Calculate the difference in complete hours between two dates.
  *
- * Returns the number of complete hours between the earlier and later date.
- * Ignores minutes, seconds, and milliseconds - only counts full hour boundaries crossed.
+ * This function calculates the number of complete hours between two dates by
+ * comparing them at the start of each hour. Minutes, seconds, and milliseconds
+ * are ignored to ensure accurate hour counting.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in complete hours (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in complete hours (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 59, 59); // June 15, 2024 14:59:59
- * const date2 = new Date(2024, 5, 15, 12, 0, 0);   // June 15, 2024 12:00:00
- * diffHours(date1, date2); // 2 (complete hours)
+ * // Basic hour difference
+ * const result = diffHours(new Date(2024, 5, 15, 14, 30), new Date(2024, 5, 15, 12, 0));
+ * // Returns: 2
  *
- * const date3 = new Date(2024, 5, 15, 14, 30);     // June 15, 2024 14:30
- * const date4 = new Date(2024, 5, 15, 14, 59);     // June 15, 2024 14:59
- * diffHours(date3, date4); // 0 (same hour)
+ * // Minutes/seconds are ignored (same hour)
+ * const result = diffHours(new Date(2024, 5, 15, 14, 59), new Date(2024, 5, 15, 14, 0));
+ * // Returns: 0
  *
- * const date5 = new Date(2024, 5, 16, 2, 0);  // June 16, 2024 02:00
- * const date6 = new Date(2024, 5, 15, 23, 0); // June 15, 2024 23:00
- * diffHours(date5, date6); // 3
+ * // Works with timestamps
+ * const timestamp1 = new Date(2024, 5, 15, 16, 0).getTime();
+ * const timestamp2 = new Date(2024, 5, 15, 14, 0).getTime();
+ * const result = diffHours(timestamp1, timestamp2);
+ * // Returns: 2
+ *
+ * // Negative result when first date is earlier
+ * const result = diffHours(new Date(2024, 5, 15, 10, 30), new Date(2024, 5, 15, 14, 30));
+ * // Returns: -4
+ *
+ * // Invalid inputs return NaN
+ * const result = diffHours(new Date("invalid"), new Date(2024, 5, 15, 14, 0));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Compares dates at the start of each hour for accurate hour counting
+ * - Minutes, seconds, and milliseconds are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles day, month, and year boundaries correctly
+ * - Uses Math.round to ensure integer results
  */
 declare function diffHours(dateLeft: Date | number, dateRight: Date | number): number;
 
 /**
  * Calculate the difference in milliseconds between two dates.
  *
- * Returns the exact difference in milliseconds between two dates.
- * This is the most precise difference calculation.
+ * This function calculates the exact difference in milliseconds between two dates.
+ * This is the most precise time difference calculation available, equivalent to
+ * subtracting the results of getTime().
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in milliseconds (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in milliseconds (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 45, 500); // June 15, 2024 14:30:45.500
- * const date2 = new Date(2024, 5, 15, 14, 30, 45, 100); // June 15, 2024 14:30:45.100
- * diffMilliseconds(date1, date2); // 400
+ * // Basic millisecond difference
+ * const result = diffMilliseconds(new Date(2024, 5, 15, 14, 30, 45, 500), new Date(2024, 5, 15, 14, 30, 45, 100));
+ * // Returns: 400
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 46, 0);   // June 15, 2024 14:30:46.000
- * const date4 = new Date(2024, 5, 15, 14, 30, 45, 0);   // June 15, 2024 14:30:45.000
- * diffMilliseconds(date3, date4); // 1000
+ * // Exact same time returns 0
+ * const result = diffMilliseconds(new Date(2024, 5, 15, 14, 30, 45, 123), new Date(2024, 5, 15, 14, 30, 45, 123));
+ * // Returns: 0
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const date6 = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * diffMilliseconds(date5, date6); // 0 (exact same time)
+ * // Works with timestamps
+ * const timestamp1 = new Date(2024, 5, 15, 14, 30, 46, 0).getTime();
+ * const timestamp2 = new Date(2024, 5, 15, 14, 30, 45, 0).getTime();
+ * const result = diffMilliseconds(timestamp1, timestamp2);
+ * // Returns: 1000
+ *
+ * // Negative result when first date is earlier
+ * const result = diffMilliseconds(new Date(2024, 5, 15, 14, 30, 45, 100), new Date(2024, 5, 15, 14, 30, 45, 500));
+ * // Returns: -400
+ *
+ * // Invalid inputs return NaN
+ * const result = diffMilliseconds(new Date("invalid"), new Date(2024, 5, 15, 14, 30, 45, 0));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Returns exact millisecond difference (no rounding or truncation)
+ * - Equivalent to: dateLeft.getTime() - dateRight.getTime()
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Most precise time difference function in the library
+ * - Useful for performance measurements and precise time calculations
  */
 declare function diffMilliseconds(dateLeft: Date | number, dateRight: Date | number): number;
 
 /**
  * Calculate the difference in complete minutes between two dates.
  *
- * Returns the number of complete minutes between the earlier and later date.
- * Ignores seconds and milliseconds - only counts full minute boundaries crossed.
+ * This function calculates the number of complete minutes between two dates by
+ * comparing them at the start of each minute. Seconds and milliseconds are
+ * ignored to ensure accurate minute counting.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in complete minutes (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in complete minutes (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 59); // June 15, 2024 14:30:59
- * const date2 = new Date(2024, 5, 15, 14, 28, 0);  // June 15, 2024 14:28:00
- * diffMinutes(date1, date2); // 2 (complete minutes)
+ * // Basic minute difference
+ * const result = diffMinutes(new Date(2024, 5, 15, 14, 30), new Date(2024, 5, 15, 14, 28));
+ * // Returns: 2
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 0);  // June 15, 2024 14:30:00
- * const date4 = new Date(2024, 5, 15, 14, 30, 59); // June 15, 2024 14:30:59
- * diffMinutes(date3, date4); // 0 (same minute)
+ * // Seconds are ignored (same minute)
+ * const result = diffMinutes(new Date(2024, 5, 15, 14, 30, 59), new Date(2024, 5, 15, 14, 30, 0));
+ * // Returns: 0
  *
- * const date5 = new Date(2024, 5, 15, 15, 0);  // June 15, 2024 15:00
- * const date6 = new Date(2024, 5, 15, 14, 45); // June 15, 2024 14:45
- * diffMinutes(date5, date6); // 15
+ * // Works with timestamps
+ * const timestamp1 = new Date(2024, 5, 15, 15, 0).getTime();
+ * const timestamp2 = new Date(2024, 5, 15, 14, 45).getTime();
+ * const result = diffMinutes(timestamp1, timestamp2);
+ * // Returns: 15
+ *
+ * // Negative result when first date is earlier
+ * const result = diffMinutes(new Date(2024, 5, 15, 14, 25), new Date(2024, 5, 15, 14, 30));
+ * // Returns: -5
+ *
+ * // Invalid inputs return NaN
+ * const result = diffMinutes(new Date("invalid"), new Date(2024, 5, 15, 14, 30));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Compares dates at the start of each minute for accurate minute counting
+ * - Seconds and milliseconds are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles hour, day, month, and year boundaries correctly
+ * - Uses Math.round to ensure integer results
  */
 declare function diffMinutes(dateLeft: Date | number, dateRight: Date | number): number;
 
 /**
  * Calculate the difference in calendar months between two dates.
  *
- * Returns the number of full months between the earlier and later date.
- * Only considers year and month values, ignoring days and time components.
+ * This function calculates the number of full calendar months between two dates.
+ * Only year and month values are considered; days and time components are ignored.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in months (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in calendar months (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15);  // June 15, 2024
- * const date2 = new Date(2024, 2, 1);   // March 1, 2024
- * diffMonths(date1, date2); // 3
+ * // Basic month difference
+ * const result = diffMonths(new Date(2024, 5, 15), new Date(2024, 2, 1));
+ * // Returns: 3
  *
- * const date3 = new Date(2024, 0, 31);  // January 31, 2024
- * const date4 = new Date(2023, 11, 1);  // December 1, 2023
- * diffMonths(date3, date4); // 1
+ * // Days are ignored (same month)
+ * const result = diffMonths(new Date(2024, 5, 30), new Date(2024, 5, 1));
+ * // Returns: 0
  *
- * const date5 = new Date(2025, 2, 1);   // March 1, 2025
- * const date6 = new Date(2024, 2, 31);  // March 31, 2024
- * diffMonths(date5, date6); // 12
+ * // Works with timestamps
+ * const timestamp1 = new Date(2025, 2, 1).getTime();
+ * const timestamp2 = new Date(2024, 2, 31).getTime();
+ * const result = diffMonths(timestamp1, timestamp2);
+ * // Returns: 12
+ *
+ * // Negative result when first date is earlier
+ * const result = diffMonths(new Date(2024, 2, 15), new Date(2024, 5, 15));
+ * // Returns: -3
+ *
+ * // Invalid inputs return NaN
+ * const result = diffMonths(new Date("invalid"), new Date(2024, 5, 15));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Considers only year and month values for calculation
+ * - Days and time components (hours, minutes, seconds, milliseconds) are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles year boundaries correctly
+ * - Calculation: (yearDiff * 12) + monthDiff
  */
 declare function diffMonths(dateLeft: Date | number, dateRight: Date | number): number;
 
 /**
  * Calculate the difference in complete seconds between two dates.
  *
- * Returns the number of complete seconds between the earlier and later date.
- * Ignores milliseconds - only counts full second boundaries crossed.
+ * This function calculates the number of complete seconds between two dates by
+ * comparing them at the start of each second. Milliseconds are ignored to
+ * ensure accurate second counting.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in complete seconds (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in complete seconds (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * const date2 = new Date(2024, 5, 15, 14, 30, 43, 0);   // June 15, 2024 14:30:43.000
- * diffSeconds(date1, date2); // 2 (complete seconds)
+ * // Basic second difference
+ * const result = diffSeconds(new Date(2024, 5, 15, 14, 30, 45), new Date(2024, 5, 15, 14, 30, 43));
+ * // Returns: 2
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 45, 0);   // June 15, 2024 14:30:45.000
- * const date4 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * diffSeconds(date3, date4); // 0 (same second)
+ * // Milliseconds are ignored (same second)
+ * const result = diffSeconds(new Date(2024, 5, 15, 14, 30, 45, 999), new Date(2024, 5, 15, 14, 30, 45, 0));
+ * // Returns: 0
  *
- * const date5 = new Date(2024, 5, 15, 14, 31, 0);  // June 15, 2024 14:31:00
- * const date6 = new Date(2024, 5, 15, 14, 30, 30); // June 15, 2024 14:30:30
- * diffSeconds(date5, date6); // 30
+ * // Works with timestamps
+ * const timestamp1 = new Date(2024, 5, 15, 14, 31, 0).getTime();
+ * const timestamp2 = new Date(2024, 5, 15, 14, 30, 30).getTime();
+ * const result = diffSeconds(timestamp1, timestamp2);
+ * // Returns: 30
+ *
+ * // Negative result when first date is earlier
+ * const result = diffSeconds(new Date(2024, 5, 15, 14, 30, 40), new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: -5
+ *
+ * // Invalid inputs return NaN
+ * const result = diffSeconds(new Date("invalid"), new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Compares dates at the start of each second for accurate second counting
+ * - Milliseconds are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles minute, hour, day, month, and year boundaries correctly
+ * - Uses Math.round to ensure integer results
  */
 declare function diffSeconds(dateLeft: Date | number, dateRight: Date | number): number;
 
 /**
  * Calculate the difference in calendar years between two dates.
  *
- * Returns the number of full years between the earlier and later date.
- * Only considers year values, ignoring months, days, and time components.
+ * This function calculates the number of full calendar years between two dates.
+ * Only year values are considered; months, days, and time components are ignored.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in years (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in calendar years (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 0, 1);  // January 1, 2024
- * const date2 = new Date(2020, 11, 31); // December 31, 2020
- * diffYears(date1, date2); // 4
+ * // Basic year difference
+ * const result = diffYears(new Date(2024, 0, 1), new Date(2020, 11, 31));
+ * // Returns: 4
  *
- * const date3 = new Date(2024, 11, 31); // December 31, 2024
- * const date4 = new Date(2024, 0, 1);   // January 1, 2024
- * diffYears(date3, date4); // 0 (same calendar year)
+ * // Months/days are ignored (same year)
+ * const result = diffYears(new Date(2024, 11, 31), new Date(2024, 0, 1));
+ * // Returns: 0
+ *
+ * // Works with timestamps
+ * const timestamp1 = new Date(2025, 0, 1).getTime();
+ * const timestamp2 = new Date(2020, 0, 1).getTime();
+ * const result = diffYears(timestamp1, timestamp2);
+ * // Returns: 5
+ *
+ * // Negative result when first date is earlier
+ * const result = diffYears(new Date(2020, 5, 15), new Date(2024, 5, 15));
+ * // Returns: -4
+ *
+ * // Invalid inputs return NaN
+ * const result = diffYears(new Date("invalid"), new Date(2024, 5, 15));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Considers only year values for calculation
+ * - Months, days, and time components (hours, minutes, seconds, milliseconds) are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles century and millennium boundaries correctly
+ * - Calculation: dateLeft.getFullYear() - dateRight.getFullYear()
  */
 declare function diffYears(dateLeft: Date | number, dateRight: Date | number): number;
 

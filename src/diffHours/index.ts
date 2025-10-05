@@ -3,27 +3,46 @@ import { isValidDateOrNumber } from "../_lib/validators";
 /**
  * Calculate the difference in complete hours between two dates.
  *
- * Returns the number of complete hours between the earlier and later date.
- * Ignores minutes, seconds, and milliseconds - only counts full hour boundaries crossed.
+ * This function calculates the number of complete hours between two dates by
+ * comparing them at the start of each hour. Minutes, seconds, and milliseconds
+ * are ignored to ensure accurate hour counting.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in complete hours (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in complete hours (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 59, 59); // June 15, 2024 14:59:59
- * const date2 = new Date(2024, 5, 15, 12, 0, 0);   // June 15, 2024 12:00:00
- * diffHours(date1, date2); // 2 (complete hours)
+ * // Basic hour difference
+ * const result = diffHours(new Date(2024, 5, 15, 14, 30), new Date(2024, 5, 15, 12, 0));
+ * // Returns: 2
  *
- * const date3 = new Date(2024, 5, 15, 14, 30);     // June 15, 2024 14:30
- * const date4 = new Date(2024, 5, 15, 14, 59);     // June 15, 2024 14:59
- * diffHours(date3, date4); // 0 (same hour)
+ * // Minutes/seconds are ignored (same hour)
+ * const result = diffHours(new Date(2024, 5, 15, 14, 59), new Date(2024, 5, 15, 14, 0));
+ * // Returns: 0
  *
- * const date5 = new Date(2024, 5, 16, 2, 0);  // June 16, 2024 02:00
- * const date6 = new Date(2024, 5, 15, 23, 0); // June 15, 2024 23:00
- * diffHours(date5, date6); // 3
+ * // Works with timestamps
+ * const timestamp1 = new Date(2024, 5, 15, 16, 0).getTime();
+ * const timestamp2 = new Date(2024, 5, 15, 14, 0).getTime();
+ * const result = diffHours(timestamp1, timestamp2);
+ * // Returns: 2
+ *
+ * // Negative result when first date is earlier
+ * const result = diffHours(new Date(2024, 5, 15, 10, 30), new Date(2024, 5, 15, 14, 30));
+ * // Returns: -4
+ *
+ * // Invalid inputs return NaN
+ * const result = diffHours(new Date("invalid"), new Date(2024, 5, 15, 14, 0));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Compares dates at the start of each hour for accurate hour counting
+ * - Minutes, seconds, and milliseconds are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles day, month, and year boundaries correctly
+ * - Uses Math.round to ensure integer results
  */
 export function diffHours(
   dateLeft: Date | number,

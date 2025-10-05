@@ -3,27 +3,45 @@ import { isValidDateOrNumber } from "../_lib/validators";
 /**
  * Calculate the difference in calendar months between two dates.
  *
- * Returns the number of full months between the earlier and later date.
- * Only considers year and month values, ignoring days and time components.
+ * This function calculates the number of full calendar months between two dates.
+ * Only year and month values are considered; days and time components are ignored.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in months (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in calendar months (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15);  // June 15, 2024
- * const date2 = new Date(2024, 2, 1);   // March 1, 2024
- * diffMonths(date1, date2); // 3
+ * // Basic month difference
+ * const result = diffMonths(new Date(2024, 5, 15), new Date(2024, 2, 1));
+ * // Returns: 3
  *
- * const date3 = new Date(2024, 0, 31);  // January 31, 2024
- * const date4 = new Date(2023, 11, 1);  // December 1, 2023
- * diffMonths(date3, date4); // 1
+ * // Days are ignored (same month)
+ * const result = diffMonths(new Date(2024, 5, 30), new Date(2024, 5, 1));
+ * // Returns: 0
  *
- * const date5 = new Date(2025, 2, 1);   // March 1, 2025
- * const date6 = new Date(2024, 2, 31);  // March 31, 2024
- * diffMonths(date5, date6); // 12
+ * // Works with timestamps
+ * const timestamp1 = new Date(2025, 2, 1).getTime();
+ * const timestamp2 = new Date(2024, 2, 31).getTime();
+ * const result = diffMonths(timestamp1, timestamp2);
+ * // Returns: 12
+ *
+ * // Negative result when first date is earlier
+ * const result = diffMonths(new Date(2024, 2, 15), new Date(2024, 5, 15));
+ * // Returns: -3
+ *
+ * // Invalid inputs return NaN
+ * const result = diffMonths(new Date("invalid"), new Date(2024, 5, 15));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Considers only year and month values for calculation
+ * - Days and time components (hours, minutes, seconds, milliseconds) are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles year boundaries correctly
+ * - Calculation: (yearDiff * 12) + monthDiff
  */
 export function diffMonths(dateLeft: Date | number, dateRight: Date | number): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
