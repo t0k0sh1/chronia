@@ -45,7 +45,7 @@ describe("min", () => {
     expect(result.getTime()).toBe(timestamp);
   });
 
-  it("throws error when called with no arguments", () => {
+  it("returns NaN when called with no arguments", () => {
     const result = min();
     expect(result.getTime()).toBeNaN();
   });
