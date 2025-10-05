@@ -51,7 +51,7 @@ export function compare(
   // Validate inputs early for NaN cases
   if (!isValidDateOrNumber(date1) || !isValidDateOrNumber(date2)) return NaN;
 
-  // Validate and convert inputs using helper function
+  // Convert Validated inputs directly to Date objects
   const dateLeft = new Date(date1);
   const dateRight = new Date(date2);
 

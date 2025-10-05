@@ -213,7 +213,7 @@ describe("compare", () => {
         const timestamp = 1704067200000; // Valid timestamp
         const date = new Date("2024-01-02");
 
-        expect(() => compare(timestamp, date)).not.toBeNaN();
+        expect(compare(timestamp, date)).not.toBeNaN();
         expect(compare(timestamp, date)).toBe(-1); // timestamp is earlier
       });
     });
@@ -235,7 +235,7 @@ describe("compare", () => {
         const date = new Date("2024-01-01");
         const timestamp = 1704153600000; // Valid timestamp for later date
 
-        expect(() => compare(date, timestamp)).not.toBeNaN();
+        expect(compare(date, timestamp)).not.toBeNaN();
         expect(compare(date, timestamp)).toBe(-1); // date is earlier than timestamp
       });
     });
