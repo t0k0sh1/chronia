@@ -67,34 +67,34 @@
 - [x] **T002** Refactor clamp function to validate before convert
   - **Action**: Modify `src/clamp/index.ts` to validate arguments BEFORE converting to Date objects
   - **File**: `src/clamp/index.ts`
-  - **Current Pattern** (WRONG - lines 48-56):
+  - **Previous Pattern** (WRONG - converted first, then validated):
     ```typescript
-    // Convert first (lines 48-51)
+    // Convert first
     const dateObj = typeof date === "number" ? new Date(date) : date;
     const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
     const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
 
-    // Validate after (line 55)
+    // Validate after conversion
     if (!isValidDateOrNumber(dateObj) || !isValidDateOrNumber(minDateObj) || !isValidDateOrNumber(maxDateObj)) {
       return new Date(NaN);
     }
     ```
-  - **Target Pattern** (CORRECT - following addDays):
+  - **Current Pattern** (CORRECT - lines 48-56, following addDays):
     ```typescript
-    // Validate FIRST (on original arguments)
+    // Validate arguments before conversion (line 48-51)
     if (!isValidDateOrNumber(date) || !isValidDateOrNumber(minDate) || !isValidDateOrNumber(maxDate)) {
       return new Date(NaN);
     }
 
-    // Convert AFTER validation passes
+    // Convert inputs to Date objects after validation (lines 53-56)
     const dateObj = typeof date === "number" ? new Date(date) : date;
     const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
     const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
     ```
   - **Key Changes**:
-    1. Move validation block (lines 55-57) BEFORE conversion block (lines 48-51)
-    2. Change validation to use original arguments: `date`, `minDate`, `maxDate` (not `dateObj`, etc.)
-    3. Keep conversion logic unchanged, just reorder
+    1. Moved validation block BEFORE conversion block
+    2. Changed validation to use original arguments: `date`, `minDate`, `maxDate` (not converted `dateObj`, etc.)
+    3. Kept conversion logic unchanged, just reordered
   - **Import**: Ensure `isValidDateOrNumber` is imported from `../_lib/validators`
   - **Expected Result**: Contract tests (T001) now PASS
   - **Validation**: Run `npm test tests/contracts/validation-order.test.ts` - should PASS
