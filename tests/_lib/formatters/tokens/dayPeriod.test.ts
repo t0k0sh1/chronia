@@ -34,6 +34,9 @@ describe("formatDayPeriod", () => {
     // --- localize narrow (aaaaa) ---
     { hour: 9, token: "aaaaa", locale: mockLocale, expected: "a" },
     { hour: 15, token: "aaaaa", locale: mockLocale, expected: "p" },
+
+    // --- default case with locale (unknown token) ---
+    { hour: 9, token: "aaaaaa", locale: mockLocale, expected: "AM" },
   ])(
     "hour=$hour token=$token locale? => $expected",
     ({ hour, token, locale, expected }) => {

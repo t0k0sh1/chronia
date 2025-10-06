@@ -80,6 +80,14 @@ describe("formatWeekday", () => {
       locale: mockLocale,
       expected: "S",
     }, // Saturday
+
+    // --- default case with locale (unknown token) ---
+    {
+      date: new Date(2025, 0, 5),
+      token: "EEEEEE",
+      locale: mockLocale,
+      expected: "Sun",
+    },
   ])(
     "date=$date token=$token locale? => $expected",
     ({ date, token, locale, expected }) => {
