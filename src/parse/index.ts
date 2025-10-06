@@ -173,10 +173,5 @@ export function parse(
     date.setFullYear(dateComponents.year);
   }
 
-  // Validate the date
-  if (isNaN(date.getTime())) {
-    return new Date(NaN);
-  }
-
   return date;
 }
