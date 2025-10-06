@@ -13,7 +13,6 @@ export const parseMinute: Parser = (input, position, token, _locale, dateCompone
     minuteStr += char;
   }
 
-  if (minuteStr.length === 0) return null;
   if (token === "mm" && minuteStr.length !== 2) return null;
 
   const minute = parseInt(minuteStr, 10);

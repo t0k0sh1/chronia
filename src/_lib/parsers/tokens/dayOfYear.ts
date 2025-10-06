@@ -18,8 +18,6 @@ export const parseDayOfYear: Parser = (input, position, token, _locale, dateComp
     dayStr += char;
   }
 
-  if (dayStr.length === 0) return null;
-
   // For DD and DDD tokens, require exact length
   if (token === "DD" && dayStr.length !== 2) return null;
   if (token === "DDD" && dayStr.length !== 3) return null;
