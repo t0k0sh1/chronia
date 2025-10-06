@@ -185,5 +185,13 @@ describe("parseYear", () => {
       expect(result!.position).toBe(3);
       expect(dateComponents.year).toBe(123);
     });
+
+    it("handles unknown token (default case - yyyyy)", () => {
+      const dateComponents = createDateComponents();
+      const result = parseYear("12345", 0, "yyyyy", undefined, dateComponents);
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(5);
+      expect(dateComponents.year).toBe(12345);
+    });
   });
 });

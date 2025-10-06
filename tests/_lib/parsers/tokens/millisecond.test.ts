@@ -159,5 +159,17 @@ describe("parseMillisecond", () => {
       parseMillisecond("999", 0, "SSS", undefined, components3);
       expect(components3.milliseconds).toBe(999);
     });
+
+    it("returns null for partial match (break case)", () => {
+      const components = createDateComponents();
+      const result = parseMillisecond("5a", 0, "SS", undefined, components);
+      expect(result).toBeNull();
+    });
+
+    it("returns null for unknown token (default case)", () => {
+      const components = createDateComponents();
+      const result = parseMillisecond("500", 0, "SSSS", undefined, components);
+      expect(result).toBeNull();
+    });
   });
 });

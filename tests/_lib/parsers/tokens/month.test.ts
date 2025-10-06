@@ -250,5 +250,23 @@ describe("parseMonth", () => {
       const result = parseMonth("jan", 0, "MMM", undefined, dateComponents);
       expect(result).toBeNull();
     });
+
+    it("returns null for empty numeric string", () => {
+      const dateComponents = createDateComponents();
+      const result = parseMonth("abc", 0, "M", undefined, dateComponents);
+      expect(result).toBeNull();
+    });
+
+    it("returns null when locale text format doesn't match", () => {
+      const mockLocale: Locale = {
+        era: () => "",
+        month: (month) => ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"][month],
+        weekday: () => "",
+        dayPeriod: () => "",
+      };
+      const dateComponents = createDateComponents();
+      const result = parseMonth("January", 0, "MMMM", mockLocale, dateComponents);
+      expect(result).toBeNull();
+    });
   });
 });

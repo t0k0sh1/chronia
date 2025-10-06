@@ -254,5 +254,18 @@ describe("parseWeekday", () => {
       expect(result3).not.toBeNull();
       expect(result3!.position).toBe(1);
     });
+
+    it("handles unknown token with locale (default case)", () => {
+      const mockLocale: Locale = {
+        era: () => "",
+        month: () => "",
+        weekday: (weekday) => ["日", "月", "火", "水", "木", "金", "土"][weekday],
+        dayPeriod: () => "",
+      };
+      const dateComponents = createDateComponents();
+      const result = parseWeekday("月", 0, "EEEEEE", mockLocale, dateComponents);
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+    });
   });
 });

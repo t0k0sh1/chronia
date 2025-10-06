@@ -105,5 +105,11 @@ describe("parseMinute", () => {
       expect(result!.position).toBe(2);
       expect(dateComponents.minutes).toBe(59);
     });
+
+    it("returns null for empty string", () => {
+      const dateComponents = createDateComponents();
+      const result = parseMinute("abc", 0, "m", undefined, dateComponents);
+      expect(result).toBeNull();
+    });
   });
 });

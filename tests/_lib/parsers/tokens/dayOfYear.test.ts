@@ -254,5 +254,20 @@ describe("parseDayOfYear", () => {
       expect(dateComponents2000.month).toBe(1); // February in leap year
       expect(dateComponents2000.day).toBe(29);  // Feb 29
     });
+
+    it("handles token length > 3 (DDDD)", () => {
+      const dateComponents = createDateComponents(2024);
+      const result = parseDayOfYear("0001", 0, "DDDD", undefined, dateComponents);
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(4);
+      expect(dateComponents.month).toBe(0);
+      expect(dateComponents.day).toBe(1);
+    });
+
+    it("returns null for empty string", () => {
+      const dateComponents = createDateComponents(2024);
+      const result = parseDayOfYear("abc", 0, "D", undefined, dateComponents);
+      expect(result).toBeNull();
+    });
   });
 });
