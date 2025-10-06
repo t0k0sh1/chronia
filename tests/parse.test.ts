@@ -184,6 +184,7 @@ describe("parse", () => {
       });
       expect(result).toEqual(new Date(2024, 0, 1, 0, 0, 0));
     });
+
   });
 
   describe("invalid input", () => {
@@ -208,6 +209,12 @@ describe("parse", () => {
     it("returns invalid date for missing characters", () => {
       expect(isNaN(parse("2024-01", "yyyy-MM-dd").getTime())).toBe(true);
       expect(isNaN(parse("2024", "yyyy-MM-dd").getTime())).toBe(true);
+    });
+
+    it("returns invalid date when date construction results in NaN", () => {
+      // Test for edge cases that result in invalid dates after construction
+      // Extremely large values that cause Date constructor to return NaN
+      expect(isNaN(parse("999999999", "yyyy").getTime())).toBe(true);
     });
   });
 

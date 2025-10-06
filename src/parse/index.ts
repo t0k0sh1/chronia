@@ -1,55 +1,86 @@
 /**
  * Parse a date string according to a format pattern.
  *
- * Parses date strings using the same Unicode format tokens as the format() function.
+ * This function parses date strings using the same Unicode format tokens as the format() function.
  * Returns a new Date object on success, or an invalid Date (with NaN time) if parsing fails.
- * Supports localized parsing and uses a reference date for missing components.
+ * Supports localized parsing and uses a reference date for missing date components.
  *
  * @param dateString - The date string to parse
  * @param pattern - The format pattern using Unicode tokens (e.g., "yyyy-MM-dd HH:mm:ss")
  * @param options - Optional parsing configuration
- * @param options.locale - Optional localization object for parsing locale-specific text
+ * @param options.locale - Optional localization object for parsing locale-specific text (month names, day periods, etc.)
  * @param options.referenceDate - Reference date for missing components (defaults to current date)
- * @returns Parsed Date object, or invalid Date if parsing fails
+ * @returns Parsed Date object, or invalid Date if parsing fails (no exceptions thrown)
  *
  * @example
  * ```typescript
- * // Basic parsing
- * parse("2024-01-15", "yyyy-MM-dd"); // Date(2024, 0, 15)
- * parse("15/01/2024 14:30", "dd/MM/yyyy HH:mm"); // Date(2024, 0, 15, 14, 30)
+ * // Basic date parsing
+ * const date1 = parse("2024-01-15", "yyyy-MM-dd");
+ * // Returns: Date(2024, 0, 15)
  *
- * // 12-hour format
- * parse("2:30 PM", "h:mm a"); // Uses current date, sets time to 14:30
+ * // Date and time combined
+ * const date2 = parse("15/01/2024 14:30", "dd/MM/yyyy HH:mm");
+ * // Returns: Date(2024, 0, 15, 14, 30)
  *
- * // With literals
- * parse("Year 2024, Month 01", "'Year' yyyy, 'Month' MM"); // Date(2024, 0, 1)
+ * // 12-hour format with AM/PM
+ * const date3 = parse("2:30 PM", "h:mm a");
+ * // Returns: Date with current date, time set to 14:30
+ *
+ * // Literal text in pattern (enclosed in quotes)
+ * const date4 = parse("Year 2024, Month 01", "'Year' yyyy', Month' MM");
+ * // Returns: Date(2024, 0, 1)
  *
  * // Using reference date for missing components
  * const refDate = new Date(2023, 5, 10); // June 10, 2023
- * parse("14:30", "HH:mm", { referenceDate: refDate }); // Date(2023, 5, 10, 14, 30)
+ * const date5 = parse("14:30", "HH:mm", { referenceDate: refDate });
+ * // Returns: Date(2023, 5, 10, 14, 30)
  *
- * // Localized parsing
+ * // Localized month names
  * import { enUS } from "./i18n/en-US";
- * parse("January 15, 2024", "MMMM dd, yyyy", { locale: enUS });
+ * const date6 = parse("January 15, 2024", "MMMM dd, yyyy", { locale: enUS });
+ * // Returns: Date(2024, 0, 15)
  *
- * // Invalid parsing
- * parse("invalid", "yyyy-MM-dd"); // Invalid Date (isNaN(date.getTime()) === true)
+ * // Invalid input returns Invalid Date
+ * const invalid = parse("invalid-text", "yyyy-MM-dd");
+ * // Returns: Invalid Date (isNaN(invalid.getTime()) === true)
  * ```
  *
- * @example Supported parse tokens (same as format):
- * - **Year**: y (variable), yy (2-digit), yyy (3-digit), yyyy (4-digit)
- * - **Month**: M (1-12), MM (01-12), MMM (Jan), MMMM (January)
+ * @remarks
+ * **Supported Parse Tokens:**
+ * - **Year**: y (variable), yy (2-digit, 50-99→19XX, 00-49→20XX), yyy (3-digit), yyyy (4-digit)
+ * - **Month**: M (1-12), MM (01-12), MMM (Jan/Feb/...), MMMM (January/February/...)
  * - **Day**: d (1-31), dd (01-31)
  * - **Hour**: H (0-23), HH (00-23), h (1-12), hh (01-12)
  * - **Minute**: m (0-59), mm (00-59)
  * - **Second**: s (0-59), ss (00-59)
- * - **Millisecond**: S (0-9), SS (00-99), SSS (000-999)
- * - **Day Period**: a/aa/aaa (AM/PM)
+ * - **Millisecond**: S (0-9, ×100), SS (00-99, ×10), SSS (000-999)
+ * - **Day Period**: a/aa/aaa (AM/PM, case-insensitive)
  * - **Era**: G/GG/GGG (AD/BC), GGGG (Anno Domini/Before Christ)
- * - **Weekday**: E/EE/EEE (Mon), EEEE (Monday)
+ * - **Weekday**: E/EE/EEE (Mon/Tue/...), EEEE (Monday/Tuesday/...), EEEEE (M/T/...)
  * - **Day of Year**: D (1-366), DD (01-366), DDD (001-366)
  *
- * @throws Does not throw errors - returns invalid Date instead
+ * **Parsing Behavior:**
+ * - Missing date components use reference date values (or current date if not specified)
+ * - Time components default to 00:00:00.000 when not specified in pattern
+ * - Literal text must be enclosed in single quotes ('text')
+ * - Use '' to represent a literal single quote character
+ * - Pattern must match input exactly (including delimiters and spacing)
+ * - Returns Invalid Date for: mismatched pattern, invalid values, extra/missing characters
+ * - No exceptions thrown - always returns a Date object (valid or invalid)
+ * - Locale option enables parsing of localized month names, weekdays, and day periods
+ *
+ * **Year Parsing:**
+ * - yy: Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)
+ * - yyyy: Accepts 1-4 digits (supports years like "1 AD" or "999")
+ * - y: Variable length, parses all consecutive digits
+ * - Supports years 0-99 via setFullYear (avoids JavaScript's automatic 1900 offset)
+ *
+ * **12-Hour Format:**
+ * - Requires both hour token (h/hh) and day period token (a/aa/aaa)
+ * - 12 AM converts to 00:00 (midnight)
+ * - 12 PM remains 12:00 (noon)
+ * - 1-11 AM remains 1-11 hours
+ * - 1-11 PM converts to 13-23 hours
  */
 
 import { tokenize } from "../_lib/tokenize";
