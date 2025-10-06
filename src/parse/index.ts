@@ -130,9 +130,6 @@ export function parse(
       if (token.startsWith("'") && token.endsWith("'")) {
         // Remove surrounding quotes and unescape inner quotes
         literalText = token.slice(1, -1).replace(/''/g, "'");
-      } else if (token === "''") {
-        // Special case: double quote becomes single quote
-        literalText = "'";
       }
 
       if (!dateString.startsWith(literalText, position)) {
