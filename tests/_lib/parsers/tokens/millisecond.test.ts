@@ -168,7 +168,7 @@ describe("parseMillisecond", () => {
 
     it("returns null for unknown token (default case)", () => {
       const components = createDateComponents();
-      const result = parseMillisecond("500", 0, "SSSS", undefined, components);
+      const result = parseMillisecond("5000", 0, "SSSS", undefined, components);
       expect(result).toBeNull();
     });
   });
