@@ -22,6 +22,9 @@ describe("formatHour", () => {
     { hour: 23, token: "HH", expected: "23" },
     { hour: 23, token: "h", expected: "11" },
     { hour: 23, token: "hh", expected: "11" },
+
+    // Default case (unknown token)
+    { hour: 15, token: "HHH", expected: "15" },
   ])("hour=$hour token=$token => $expected", ({ hour, token, expected }) => {
     const d = new Date(2025, 0, 1, hour);
     expect(formatHour(d, token)).toBe(expected);

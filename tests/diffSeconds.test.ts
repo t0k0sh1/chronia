@@ -92,4 +92,58 @@ describe("diffSeconds", () => {
     expect(diffSeconds(endOfSecond, startOfSecond)).toBe(0);
     expect(diffSeconds(endOfSecond, midSecond)).toBe(0);
   });
+
+  describe("invalid inputs", () => {
+    it("returns NaN when the first date is invalid", () => {
+      const invalidDate = new Date("invalid");
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      expect(diffSeconds(invalidDate, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when the second date is invalid", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      const invalidDate = new Date("invalid");
+      expect(diffSeconds(validDate, invalidDate)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are invalid", () => {
+      const invalidDate1 = new Date("invalid");
+      const invalidDate2 = new Date("also invalid");
+      expect(diffSeconds(invalidDate1, invalidDate2)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is NaN", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      expect(diffSeconds(NaN, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is NaN", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      expect(diffSeconds(validDate, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are NaN", () => {
+      expect(diffSeconds(NaN, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      expect(diffSeconds(Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      expect(diffSeconds(validDate, Infinity)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      expect(diffSeconds(-Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30, 45);
+      expect(diffSeconds(validDate, -Infinity)).toBe(NaN);
+    });
+  });
 });

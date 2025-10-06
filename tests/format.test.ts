@@ -363,3 +363,10 @@ describe("format - weekday tokens", () => {
     expect(format(d, "yyyy-MM-dd EEEE")).toBe("2025-01-05 Sunday");
   });
 });
+
+describe("format - edge cases", () => {
+  it("returns empty string for empty pattern", () => {
+    const date = new Date(2024, 0, 15);
+    expect(format(date, "")).toBe("");
+  });
+});

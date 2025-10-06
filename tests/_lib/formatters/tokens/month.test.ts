@@ -61,6 +61,11 @@ describe("formatMonth", () => {
     // --- localize (narrow) ---
     { month: 0, token: "MMMMM", locale: mockLocale, expected: "J" },
     { month: 1, token: "MMMMM", locale: mockLocale, expected: "F" },
+
+    // --- localize with M/MM (numeric with locale) ---
+    { month: 0, token: "M", locale: mockLocale, expected: "1" },
+    { month: 0, token: "MM", locale: mockLocale, expected: "01" },
+    { month: 11, token: "M", locale: mockLocale, expected: "12" },
   ])(
     "month=$month token=$token locale? => $expected",
     ({ month, token, locale, expected }) => {

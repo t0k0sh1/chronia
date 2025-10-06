@@ -3,16 +3,44 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
 /**
  * Set the year of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified year set.
- * - If the input date or year is invalid, returns `Invalid Date`.
- * - Fractions in `year` are truncated (e.g., 2023.9 → 2023, -2023.9 → -2023).
- * - Leap year adjustment: if the original date is Feb 29 and the target year
- *   is not a leap year, the result becomes Feb 28.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified year set. Fractional years are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param year - The year to set (fractions are truncated).
- * @returns A new `Date` object with the year set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param year - The year to set (can be negative for BC dates)
+ * @returns A new Date object with the year set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set year to future year
+ * const result = setYear(new Date(2025, 0, 15), 2030);
+ * // Returns: 2030-01-15
+ *
+ * // Set year to past year
+ * const result2 = setYear(new Date(2025, 0, 15), 2020);
+ * // Returns: 2020-01-15
+ *
+ * // Leap year adjustment (Feb 29 → Feb 28)
+ * const result3 = setYear(new Date(2020, 1, 29), 2021);
+ * // Returns: 2021-02-28 (non-leap year)
+ *
+ * // Fractional year is truncated
+ * const result4 = setYear(new Date(2025, 0, 15), 2023.9);
+ * // Returns: 2023-01-15
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setYear(new Date("invalid"), 2025);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (2023.9 → 2023, -2023.9 → -2023)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
+ * - Special handling: When the source date is Feb 29 and the target year is not a leap year, the result becomes Feb 28
+ * - Always returns a new Date instance (does not mutate input)
  */
 export function setYear(date: Date | number, year: number): Date {
   if (!isValidDateOrNumber(date)) {

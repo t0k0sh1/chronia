@@ -3,31 +3,56 @@ import { diffMinutes } from "../diffMinutes";
 /**
  * Check if two dates are in the same minute.
  *
- * Returns true if both dates fall within the same minute,
+ * This function compares two dates and returns true if they fall within the same minute,
  * regardless of seconds or milliseconds.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are in the same minute, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are in the same minute, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 0);   // June 15, 2024 14:30:00
- * const date2 = new Date(2024, 5, 15, 14, 30, 59);  // June 15, 2024 14:30:59
- * isSameMinute(date1, date2); // true
+ * // Same minute, different seconds
+ * const result = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30, 0),
+ *   new Date(2024, 5, 15, 14, 30, 59)
+ * );
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 59);  // June 15, 2024 14:30:59
- * const date4 = new Date(2024, 5, 15, 14, 31, 0);   // June 15, 2024 14:31:00
- * isSameMinute(date3, date4); // false
+ * // Different minutes
+ * const result2 = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30, 59),
+ *   new Date(2024, 5, 15, 14, 31, 0)
+ * );
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 15, 500); // June 15, 2024 14:30:15.500
- * const date6 = new Date(2024, 5, 15, 14, 30, 45, 800); // June 15, 2024 14:30:45.800
- * isSameMinute(date5, date6); // true
+ * // Same minute, different seconds and milliseconds
+ * const result3 = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30, 15, 500),
+ *   new Date(2024, 5, 15, 14, 30, 45, 800)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15, 14, 30);      // June 15, 2024 14:30
- * const date8 = new Date(2024, 5, 15, 15, 30);      // June 15, 2024 15:30
- * isSameMinute(date7, date8); // false (different hours)
+ * // Same minute of hour, different hours
+ * const result4 = isSameMinute(
+ *   new Date(2024, 5, 15, 14, 30),
+ *   new Date(2024, 5, 15, 15, 30)
+ * );
+ * // Returns: false (different hours)
+ *
+ * // Invalid dates return false
+ * const result5 = isSameMinute(new Date("invalid"), new Date(2024, 5, 15, 14, 30));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores second and millisecond components in the comparison
+ * - Requires year, month, day, hour, AND minute to match
+ * - Uses diffMinutes internally to determine if the minute difference is zero
+ * - Handles DST transitions correctly
  */
 export function isSameMinute(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffMinutes(dateLeft, dateRight) === 0;

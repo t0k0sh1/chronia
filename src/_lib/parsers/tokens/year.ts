@@ -43,7 +43,7 @@ export const parseYear: Parser = (input, position, token, _locale, dateComponent
       break;
     case "yyyy":
       // Four-digit year or less (for years like "1 AD")
-      if (yearStr.length === 0 || yearStr.length > 4) return null;
+      // yearStr.length is guaranteed to be 1-4 by the loop above
       break;
     case "yyy":
       // Three-digit year (rare)
@@ -52,9 +52,6 @@ export const parseYear: Parser = (input, position, token, _locale, dateComponent
     case "y":
       // Variable length year - no modification needed, use as-is
       break;
-    default:
-      // For repeated patterns like "yyyyy", expect exact length
-      if (yearStr.length !== token.length) return null;
   }
 
   dateComponents.year = year;

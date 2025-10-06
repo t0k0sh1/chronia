@@ -3,27 +3,46 @@ import { isValidDateOrNumber } from "../_lib/validators";
 /**
  * Calculate the difference in complete seconds between two dates.
  *
- * Returns the number of complete seconds between the earlier and later date.
- * Ignores milliseconds - only counts full second boundaries crossed.
+ * This function calculates the number of complete seconds between two dates by
+ * comparing them at the start of each second. Milliseconds are ignored to
+ * ensure accurate second counting.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns The difference in complete seconds (negative if dateLeft is before dateRight)
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns The difference in complete seconds (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * const date2 = new Date(2024, 5, 15, 14, 30, 43, 0);   // June 15, 2024 14:30:43.000
- * diffSeconds(date1, date2); // 2 (complete seconds)
+ * // Basic second difference
+ * const result = diffSeconds(new Date(2024, 5, 15, 14, 30, 45), new Date(2024, 5, 15, 14, 30, 43));
+ * // Returns: 2
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 45, 0);   // June 15, 2024 14:30:45.000
- * const date4 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * diffSeconds(date3, date4); // 0 (same second)
+ * // Milliseconds are ignored (same second)
+ * const result = diffSeconds(new Date(2024, 5, 15, 14, 30, 45, 999), new Date(2024, 5, 15, 14, 30, 45, 0));
+ * // Returns: 0
  *
- * const date5 = new Date(2024, 5, 15, 14, 31, 0);  // June 15, 2024 14:31:00
- * const date6 = new Date(2024, 5, 15, 14, 30, 30); // June 15, 2024 14:30:30
- * diffSeconds(date5, date6); // 30
+ * // Works with timestamps
+ * const timestamp1 = new Date(2024, 5, 15, 14, 31, 0).getTime();
+ * const timestamp2 = new Date(2024, 5, 15, 14, 30, 30).getTime();
+ * const result = diffSeconds(timestamp1, timestamp2);
+ * // Returns: 30
+ *
+ * // Negative result when first date is earlier
+ * const result = diffSeconds(new Date(2024, 5, 15, 14, 30, 40), new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: -5
+ *
+ * // Invalid inputs return NaN
+ * const result = diffSeconds(new Date("invalid"), new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: NaN
  * ```
+ *
+ * @remarks
+ * - Compares dates at the start of each second for accurate second counting
+ * - Milliseconds are ignored
+ * - Accepts both Date objects and numeric timestamps
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Handles minute, hour, day, month, and year boundaries correctly
+ * - Uses Math.round to ensure integer results
  */
 export function diffSeconds(
   dateLeft: Date | number,

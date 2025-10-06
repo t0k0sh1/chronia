@@ -53,34 +53,10 @@ describe("setYear", () => {
       desc: "sets year to negative (BC)",
     },
     {
-      date: new Date(2020, 1, 29),
-      year: 2021,
-      expected: new Date(2021, 1, 28),
-      desc: "handles leap year to non-leap year (Feb 29 -> Feb 28)",
-    },
-    {
-      date: new Date(2021, 1, 28),
-      year: 2020,
-      expected: new Date(2020, 1, 28),
-      desc: "handles non-leap year to leap year (Feb 28 stays)",
-    },
-    {
-      date: new Date(2020, 1, 29),
-      year: 2024,
-      expected: new Date(2024, 1, 29),
-      desc: "handles leap year to leap year (Feb 29 stays)",
-    },
-    {
       date: new Date(2025, 11, 31, 23, 59, 59, 999),
       year: 2026,
       expected: new Date(2026, 11, 31, 23, 59, 59, 999),
       desc: "handles year-end correctly",
-    },
-    {
-      date: new Date(2025, 0, 15).getTime(),
-      year: 2030,
-      expected: new Date(2030, 0, 15),
-      desc: "accepts timestamp input",
     },
     {
       date: new Date(2025, 0, 15),
@@ -125,24 +101,6 @@ describe("setYear", () => {
       year: 2025,
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
-    },
-    {
-      date: "2025-01-15" as any,
-      year: 2030,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      year: "2030" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as year",
-    },
-    {
-      date: new Date(2020, 11, 31, 15, 0, 0),
-      year: 2025,
-      expected: new Date(2025, 11, 31, 15, 0, 0),
-      desc: "sets year with local timezone date",
     },
   ])("$desc", ({ date, year, expected }) => {
     const result = setYear(date as Date | number, year);

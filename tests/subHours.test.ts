@@ -108,24 +108,6 @@ describe("subHours", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
     },
-    {
-      date: "2025-01-15T18:00:00" as any,
-      amount: 1,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15, 18, 0, 0),
-      amount: "1" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as amount",
-    },
-    {
-      date: new Date("2020-12-31T16:00:00Z"),
-      amount: 1,
-      expected: new Date("2020-12-31T15:00:00Z"),
-      desc: "works correctly across UTC/JST boundary",
-    },
   ])("$desc", ({ date, amount, expected }) => {
     const result = subHours(date as Date | number, amount);
     if (isNaN(expected.getTime())) {

@@ -1,72 +1,94 @@
-import { describe, it, expect } from 'vitest';
-import { getMinutes } from '../src/getMinutes';
+import { describe, it, expect } from "vitest";
+import { getMinutes } from "../src";
 
-describe('getMinutes', () => {
-  it.each([
-    ['2024-01-15T00:00:00', 0],
-    ['2024-01-15T01:30:45', 30],
-    ['2024-01-15T12:45:00', 45],
-    ['2024-01-15T23:59:59', 59],
-    ['2024-01-15T15:15:30', 15],
-    ['2024-12-31T23:01:00', 1],
-    ['2024-02-29T08:25:00', 25],
-    ['2024-01-01T00:00:00', 0],
-    ['1970-01-01T00:00:00', 0],
-    ['2000-01-01T18:42:00', 42],
-  ])('returns minutes from date string %s', (dateString, expected) => {
-    const date = new Date(dateString);
-    expect(getMinutes(date)).toBe(expected);
+describe("getMinutes", () => {
+  describe("normal cases", () => {
+    it.each([
+      ["2024-01-15T00:00:00", 0], // Start of hour
+      ["2024-01-15T12:30:45", 30], // Mid hour
+      ["2024-01-15T23:59:59", 59], // End of hour
+      ["2024-01-15T15:15:30", 15],
+      ["2024-12-31T23:01:00", 1],
+    ])("should return minutes %s -> %i", (dateStr, expected) => {
+      const date = new Date(dateStr);
+      expect(getMinutes(date)).toBe(expected);
+    });
+
+    it("should return the local minutes", () => {
+      // getMinutes() returns the minutes in local timezone
+      const date = new Date("2024-01-15T12:30:00.000Z");
+      const expected = date.getMinutes();
+      expect(getMinutes(date)).toBe(expected);
+    });
   });
 
-  it.each([
-    [new Date(2024, 0, 15, 0, 0, 0), 0],
-    [new Date(2024, 0, 15, 1, 30, 45), 30],
-    [new Date(2024, 0, 15, 12, 45, 0), 45],
-    [new Date(2024, 0, 15, 23, 59, 59), 59],
-    [new Date(2024, 0, 15, 15, 15, 30), 15],
-    [new Date(2024, 11, 31, 23, 1, 0), 1],
-    [new Date(2024, 1, 29, 8, 25, 0), 25],
-    [new Date(2024, 0, 1, 0, 0, 0), 0],
-    [new Date(1970, 0, 1, 0, 0, 0), 0],
-    [new Date(2000, 0, 1, 18, 42, 0), 42],
-  ])('returns minutes from Date object %s', (date, expected) => {
-    expect(getMinutes(date)).toBe(expected);
+  describe("edge cases", () => {
+    it("should handle boundary values", () => {
+      expect(getMinutes(new Date(2024, 0, 1, 10, 0, 0))).toBe(0); // Start of hour
+      expect(getMinutes(new Date(2024, 0, 1, 10, 59, 59))).toBe(59); // End of hour
+      expect(getMinutes(new Date(2024, 0, 1, 10, 30, 0))).toBe(30); // Mid hour
+    });
+
+    it("should handle leap years", () => {
+      expect(getMinutes(new Date("2024-02-29T08:25:00"))).toBe(25); // Leap year
+      expect(getMinutes(new Date("2000-02-29T14:42:00"))).toBe(42); // Leap year (divisible by 400)
+    });
   });
 
-  it.each([
-    [0, new Date(0).getMinutes()],
-    [1705276800000, new Date(1705276800000).getMinutes()],
-    [1705318200000, new Date(1705318200000).getMinutes()],
-    [1705359599000, new Date(1705359599000).getMinutes()],
-    [Date.now(), new Date().getMinutes()],
-  ])('returns minutes from timestamp %d', (timestamp, expected) => {
-    expect(getMinutes(timestamp)).toBe(expected);
+  describe("historic dates", () => {
+    it.each([
+      ["1970-01-01T00:00:00", 0], // Unix epoch
+      ["2000-01-01T18:42:00", 42],
+      ["1776-07-04T10:15:00", 15], // US Independence
+    ])("should handle historic date %s -> %i", (dateStr, expected) => {
+      const date = new Date(dateStr);
+      expect(getMinutes(date)).toBe(expected);
+    });
   });
 
-  it('handles boundary values correctly', () => {
-    const startOfHour = new Date(2024, 0, 1, 10, 0, 0);
-    expect(getMinutes(startOfHour)).toBe(0);
-
-    const endOfHour = new Date(2024, 0, 1, 10, 59, 59);
-    expect(getMinutes(endOfHour)).toBe(59);
-
-    const midHour = new Date(2024, 0, 1, 10, 30, 0);
-    expect(getMinutes(midHour)).toBe(30);
+  describe("future dates", () => {
+    it.each([
+      ["2030-01-01T08:30:00", 30],
+      ["2050-12-31T23:45:00", 45],
+      ["2999-12-31T12:05:00", 5],
+    ])("should handle future date %s -> %i", (dateStr, expected) => {
+      const date = new Date(dateStr);
+      expect(getMinutes(date)).toBe(expected);
+    });
   });
 
-  it('handles different timezones correctly', () => {
-    const utcDate = new Date(Date.UTC(2024, 0, 15, 14, 33, 0));
-    const localMinutes = utcDate.getMinutes();
-    expect(getMinutes(utcDate)).toBe(localMinutes);
+  describe("invalid dates", () => {
+    it("should return NaN for invalid dates", () => {
+      expect(getMinutes(new Date("invalid"))).toBeNaN();
+      expect(getMinutes(new Date(""))).toBeNaN();
+    });
   });
 
-  it('handles negative years', () => {
-    const bcDate = new Date(-100, 0, 1, 10, 45, 0);
-    expect(getMinutes(bcDate)).toBe(45);
+  describe("number input", () => {
+    it("should accept timestamp as input", () => {
+      const timestamp = new Date("2024-06-15T14:30:00").getTime();
+      expect(getMinutes(timestamp)).toBe(30);
+    });
+
+    it("should handle edge timestamp values", () => {
+      expect(getMinutes(0)).toBe(new Date(0).getMinutes()); // Unix epoch
+      expect(getMinutes(-86400000)).toBe(new Date(-86400000).getMinutes()); // Day before Unix epoch
+      expect(getMinutes(86400000)).toBe(new Date(86400000).getMinutes()); // Day after Unix epoch start
+    });
   });
 
-  it('handles far future dates', () => {
-    const futureDate = new Date(9999, 11, 31, 20, 15, 0);
-    expect(getMinutes(futureDate)).toBe(15);
+  describe("negative years (BC dates)", () => {
+    it("should handle BC dates", () => {
+      // Note: JavaScript Date can handle negative years (BC dates)
+      const bcDate = new Date();
+      bcDate.setFullYear(-100, 0, 1); // 100 BC
+      bcDate.setHours(10, 45, 0, 0);
+      expect(getMinutes(bcDate)).toBe(45);
+
+      const bcDate2 = new Date();
+      bcDate2.setFullYear(-1, 0, 1); // 1 BC
+      bcDate2.setHours(15, 20, 0, 0);
+      expect(getMinutes(bcDate2)).toBe(20);
+    });
   });
 });

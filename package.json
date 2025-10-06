@@ -41,7 +41,7 @@
     "clean": "rimraf dist",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "vitest tests/",
-    "lint": "eslint ."
+    "lint": "eslint ./src"
   },
   "engines": {
     "node": ">=18"

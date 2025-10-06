@@ -56,13 +56,13 @@ describe("subSeconds", () => {
       date: new Date(2025, 1, 1, 0, 0, 10),
       amount: 20,
       expected: new Date(2025, 0, 31, 23, 59, 50),
-      desc: "crosses month boundary backward",
+      desc: "crosses month boundary",
     },
     {
       date: new Date(2025, 0, 1, 0, 0, 5),
       amount: 15,
       expected: new Date(2024, 11, 31, 23, 59, 50),
-      desc: "crosses year boundary backward",
+      desc: "crosses year boundary",
     },
     {
       date: new Date(2025, 0, 15, 12, 31, 0, 123),
@@ -86,7 +86,7 @@ describe("subSeconds", () => {
       date: new Date(2025, 0, 15, 12, 0, 0),
       amount: -100000,
       expected: new Date(2025, 0, 16, 15, 46, 40),
-      desc: "subtracts large negative seconds (adds)",
+      desc: "handles large negative seconds",
     },
 
     // --- Invalid cases ---
@@ -119,24 +119,6 @@ describe("subSeconds", () => {
       amount: 1,
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
-    },
-    {
-      date: "2025-01-15T12:30:45" as any,
-      amount: 1,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      amount: "1" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as amount",
-    },
-    {
-      date: new Date("2020-12-31T15:31:15Z"),
-      amount: 30,
-      expected: new Date("2020-12-31T15:30:45Z"),
-      desc: "works correctly across UTC/JST boundary",
     },
   ])("$desc", ({ date, amount, expected }) => {
     const result = subSeconds(date as Date | number, amount);

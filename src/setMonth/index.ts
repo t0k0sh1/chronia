@@ -3,17 +3,44 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
 /**
  * Set the month of the given date.
  *
- * - Accepts a `Date` object or a timestamp (number).
- * - Returns a new `Date` instance with the specified month set.
- * - If the input date or month is invalid, returns `Invalid Date`.
- * - Fractions in `month` are truncated (e.g., 1.9 → 1, -1.9 → -1).
- * - Month is 0-indexed (0 = January, 11 = December).
- * - Day adjustment: if the original day doesn't exist in the target month
- *   (e.g., Jan 31 → Feb), adjusts to the last valid day of the month.
+ * This function validates arguments before processing and returns a new Date instance
+ * with the specified month set. Fractional months are truncated toward zero.
  *
- * @param date - The original date or timestamp.
- * @param month - The month to set (0-11, fractions are truncated).
- * @returns A new `Date` object with the month set, or `Invalid Date` if input is invalid.
+ * @param date - The base date as a Date object or timestamp (number)
+ * @param month - The month to set (0-indexed: 0 = January, 11 = December)
+ * @returns A new Date object with the month set, or Invalid Date if any input is invalid
+ *
+ * @example
+ * ```typescript
+ * // Set month to June
+ * const result = setMonth(new Date(2025, 0, 15), 5);
+ * // Returns: 2025-06-15
+ *
+ * // Set month to January
+ * const result2 = setMonth(new Date(2025, 5, 15), 0);
+ * // Returns: 2025-01-15
+ *
+ * // Day overflow adjustment (Jan 31 → Feb 28)
+ * const result3 = setMonth(new Date(2025, 0, 31), 1);
+ * // Returns: 2025-02-28 (non-leap year)
+ *
+ * // Fractional month is truncated
+ * const result4 = setMonth(new Date(2025, 0, 15), 5.9);
+ * // Returns: 2025-06-15
+ *
+ * // Invalid date returns Invalid Date
+ * const result5 = setMonth(new Date("invalid"), 5);
+ * // Returns: Invalid Date
+ * ```
+ *
+ * @remarks
+ * - Validates arguments before conversion (consistent with library patterns)
+ * - Accepts both Date objects and numeric timestamps
+ * - Fractions are truncated using Math.trunc (5.9 → 5, -1.9 → -1)
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Preserves year, day, and time components (hours, minutes, seconds, milliseconds)
+ * - Special handling: When the original day doesn't exist in the target month (e.g., Jan 31 → Feb), adjusts to the last valid day of the month (Feb 28 or 29)
+ * - Always returns a new Date instance (does not mutate input)
  */
 export function setMonth(date: Date | number, month: number): Date {
   if (!isValidDateOrNumber(date)) {

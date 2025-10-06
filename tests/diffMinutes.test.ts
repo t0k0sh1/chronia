@@ -86,4 +86,58 @@ describe("diffMinutes", () => {
     expect(diffMinutes(endOfMinute, startOfMinute)).toBe(0);
     expect(diffMinutes(endOfMinute, midMinute)).toBe(0);
   });
+
+  describe("invalid inputs", () => {
+    it("returns NaN when the first date is invalid", () => {
+      const invalidDate = new Date("invalid");
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      expect(diffMinutes(invalidDate, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when the second date is invalid", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      const invalidDate = new Date("invalid");
+      expect(diffMinutes(validDate, invalidDate)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are invalid", () => {
+      const invalidDate1 = new Date("invalid");
+      const invalidDate2 = new Date("also invalid");
+      expect(diffMinutes(invalidDate1, invalidDate2)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is NaN", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      expect(diffMinutes(NaN, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is NaN", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      expect(diffMinutes(validDate, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are NaN", () => {
+      expect(diffMinutes(NaN, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      expect(diffMinutes(Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      expect(diffMinutes(validDate, Infinity)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      expect(diffMinutes(-Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15, 14, 30);
+      expect(diffMinutes(validDate, -Infinity)).toBe(NaN);
+    });
+  });
 });

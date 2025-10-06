@@ -15,7 +15,6 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
       monthStr += char;
     }
 
-    if (monthStr.length === 0) return null;
     if (token === "MM" && monthStr.length !== 2) return null;
 
     const month = parseInt(monthStr, 10);

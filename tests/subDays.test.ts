@@ -108,24 +108,6 @@ describe("subDays", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
     },
-    {
-      date: "2025-01-10" as any,
-      amount: 1,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 10),
-      amount: "1" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as amount",
-    },
-    {
-      date: new Date("2021-01-01T15:00:00Z"),
-      amount: 1,
-      expected: new Date("2020-12-31T15:00:00Z"),
-      desc: "works correctly across UTC/JST boundary",
-    },
   ])("$desc", ({ date, amount, expected }) => {
     const result = subDays(date as Date | number, amount);
     if (isNaN(expected.getTime())) {

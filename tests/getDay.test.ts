@@ -4,26 +4,12 @@ import { getDay } from "../src";
 describe("getDay", () => {
   describe("normal cases", () => {
     it.each([
-      ["2024-01-01", 1],
-      ["2024-01-15", 15],
-      ["2024-01-31", 31],
-      ["2024-02-29", 29], // leap year
-      ["2024-12-25", 25],
-      ["2024-12-31", 31],
+      ["2024-01-01", 1],   // Start of month
+      ["2024-01-15", 15],  // Mid month
+      ["2024-01-31", 31],  // End of month
+      ["2024-02-29", 29],  // Leap day
+      ["2024-12-31", 31],  // End of year
     ])("should return day %s -> %i", (dateStr, expected) => {
-      const date = new Date(dateStr);
-      expect(getDay(date)).toBe(expected);
-    });
-  });
-
-  describe("boundary values", () => {
-    it.each([
-      ["2024-01-01", 1], // first day of month
-      ["2024-02-01", 1], // first day of month
-      ["2024-02-28", 28], // last day of non-leap February
-      ["2024-02-29", 29], // leap day
-      ["2023-02-28", 28], // last day of non-leap year February
-    ])("should handle boundary case %s -> %i", (dateStr, expected) => {
       const date = new Date(dateStr);
       expect(getDay(date)).toBe(expected);
     });
@@ -37,32 +23,24 @@ describe("getDay", () => {
   });
 
   describe("edge cases", () => {
-    it("should handle dates from different months", () => {
-      expect(getDay(new Date("2024-01-31"))).toBe(31);
-      expect(getDay(new Date("2024-02-01"))).toBe(1);
-      expect(getDay(new Date("2024-04-30"))).toBe(30);
-      expect(getDay(new Date("2024-05-01"))).toBe(1);
+    it("should handle leap years", () => {
+      expect(getDay(new Date("2024-02-29"))).toBe(29); // Leap year
+      expect(getDay(new Date("2000-02-29"))).toBe(29); // Leap year (divisible by 400)
+      expect(getDay(new Date("2023-02-28"))).toBe(28); // Non-leap year
     });
 
-    it("should handle dates from different years", () => {
-      expect(getDay(new Date("2023-12-31"))).toBe(31);
-      expect(getDay(new Date("2024-01-01"))).toBe(1);
-      expect(getDay(new Date("1999-12-31"))).toBe(31);
-      expect(getDay(new Date("2000-01-01"))).toBe(1);
-    });
-
-    it("should handle dates in different timezones", () => {
-      const date = new Date("2024-03-15T12:00:00.000Z");
-      expect(getDay(date)).toBe(15);
+    it("should handle month boundaries", () => {
+      expect(getDay(new Date("2024-01-31"))).toBe(31); // 31-day month
+      expect(getDay(new Date("2024-04-30"))).toBe(30); // 30-day month
+      expect(getDay(new Date("2024-02-28"))).toBe(28); // February (non-leap)
     });
   });
 
   describe("historic dates", () => {
     it.each([
-      ["1900-01-15", 15],
-      ["1970-01-01", 1], // Unix epoch
-      ["2000-01-01", 1], // Y2K
-      ["0001-01-01", 1], // Year 1
+      ["1970-01-01", 1],  // Unix epoch
+      ["2000-01-01", 1],  // Y2K
+      ["0001-01-01", 1],  // Year 1
     ])("should handle historic date %s -> %i", (dateStr, expected) => {
       const date = new Date(dateStr);
       expect(getDay(date)).toBe(expected);

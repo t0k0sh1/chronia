@@ -84,4 +84,58 @@ describe("diffDays", () => {
     expect(diffDays(evening, earlyMorning)).toBe(0);
     expect(diffDays(evening, lateMorning)).toBe(0);
   });
+
+  describe("invalid inputs", () => {
+    it("returns NaN when the first date is invalid", () => {
+      const invalidDate = new Date("invalid");
+      const validDate = new Date(2024, 5, 15);
+      expect(diffDays(invalidDate, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when the second date is invalid", () => {
+      const validDate = new Date(2024, 5, 15);
+      const invalidDate = new Date("invalid");
+      expect(diffDays(validDate, invalidDate)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are invalid", () => {
+      const invalidDate1 = new Date("invalid");
+      const invalidDate2 = new Date("also invalid");
+      expect(diffDays(invalidDate1, invalidDate2)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is NaN", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffDays(NaN, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is NaN", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffDays(validDate, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when both dates are NaN", () => {
+      expect(diffDays(NaN, NaN)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffDays(Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffDays(validDate, Infinity)).toBe(NaN);
+    });
+
+    it("returns NaN when dateLeft is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffDays(-Infinity, validDate)).toBe(NaN);
+    });
+
+    it("returns NaN when dateRight is -Infinity", () => {
+      const validDate = new Date(2024, 5, 15);
+      expect(diffDays(validDate, -Infinity)).toBe(NaN);
+    });
+  });
 });

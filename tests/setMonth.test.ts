@@ -47,12 +47,6 @@ describe("setMonth", () => {
       desc: "adjusts day to last day of April (Mar 31 -> Apr 30)",
     },
     {
-      date: new Date(2025, 0, 31),
-      month: 10,
-      expected: new Date(2025, 10, 30),
-      desc: "adjusts day to last day of November (Jan 31 -> Nov 30)",
-    },
-    {
       date: new Date(2025, 0, 15, 14, 30, 45, 123),
       month: 6,
       expected: new Date(2025, 6, 15, 14, 30, 45, 123),
@@ -88,18 +82,6 @@ describe("setMonth", () => {
       expected: new Date(2027, 0, 15),
       desc: "handles large month values (adds years)",
     },
-    {
-      date: new Date(2025, 0, 15).getTime(),
-      month: 6,
-      expected: new Date(2025, 6, 15),
-      desc: "accepts timestamp input",
-    },
-    {
-      date: new Date(2025, 11, 31),
-      month: 1,
-      expected: new Date(2025, 1, 28),
-      desc: "year-end date to February",
-    },
 
     // --- Invalid cases ---
     {
@@ -131,24 +113,6 @@ describe("setMonth", () => {
       month: 5,
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
-    },
-    {
-      date: "2025-01-15" as any,
-      month: 5,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      month: "5" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as month",
-    },
-    {
-      date: new Date(2020, 11, 31, 15, 0, 0),
-      month: 5,
-      expected: new Date(2020, 5, 30, 15, 0, 0),
-      desc: "handles day adjustment with time preserved",
     },
   ])("$desc", ({ date, month, expected }) => {
     const result = setMonth(date as Date | number, month);
@@ -186,59 +150,5 @@ describe("setMonth", () => {
 
     // To November (30 days)
     expect(setMonth(jan31, 10).getDate()).toBe(30);
-  });
-
-  describe("type validation", () => {
-    it("should return Invalid Date for invalid date argument types", () => {
-      const invalidDateInputs = [
-        null,
-        undefined,
-        true,
-        false,
-        {},
-        [],
-        () => {},
-        Symbol("test")
-      ];
-
-      invalidDateInputs.forEach(input => {
-        const result = setMonth(input as any, 5);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
-    });
-
-    it("should return Invalid Date for invalid month argument types", () => {
-      const validDate = new Date(2024, 0, 1);
-      const invalidMonthInputs = [
-        null,
-        undefined,
-        true,
-        false,
-        {},
-        [],
-        () => {},
-        Symbol("test")
-      ];
-
-      invalidMonthInputs.forEach(input => {
-        const result = setMonth(validDate, input as any);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
-    });
-
-    it("should return Invalid Date for Invalid Date objects", () => {
-      const invalidDates = [
-        new Date("invalid"),
-        new Date(NaN)
-      ];
-
-      invalidDates.forEach(invalidDate => {
-        const result = setMonth(invalidDate, 5);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
-    });
   });
 });

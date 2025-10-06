@@ -3,31 +3,56 @@ import { diffSeconds } from "../diffSeconds";
 /**
  * Check if two dates are in the same second.
  *
- * Returns true if both dates fall within the same second,
+ * This function compares two dates and returns true if they fall within the same second,
  * regardless of milliseconds.
  *
- * @param dateLeft - The first date or timestamp
- * @param dateRight - The second date or timestamp
- * @returns True if both dates are in the same second, false otherwise
+ * @param dateLeft - The first date as a Date object or timestamp (number)
+ * @param dateRight - The second date as a Date object or timestamp (number)
+ * @returns True if both dates are in the same second, false otherwise or if either date is invalid
  *
  * @example
  * ```typescript
- * const date1 = new Date(2024, 5, 15, 14, 30, 45, 0);   // June 15, 2024 14:30:45.000
- * const date2 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * isSameSecond(date1, date2); // true
+ * // Same second, different milliseconds
+ * const result = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45, 0),
+ *   new Date(2024, 5, 15, 14, 30, 45, 999)
+ * );
+ * // Returns: true
  *
- * const date3 = new Date(2024, 5, 15, 14, 30, 45, 999); // June 15, 2024 14:30:45.999
- * const date4 = new Date(2024, 5, 15, 14, 30, 46, 0);   // June 15, 2024 14:30:46.000
- * isSameSecond(date3, date4); // false
+ * // Different seconds
+ * const result2 = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45, 999),
+ *   new Date(2024, 5, 15, 14, 30, 46, 0)
+ * );
+ * // Returns: false
  *
- * const date5 = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
- * const date6 = new Date(2024, 5, 15, 14, 30, 45, 456); // June 15, 2024 14:30:45.456
- * isSameSecond(date5, date6); // true
+ * // Same second, different milliseconds
+ * const result3 = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45, 123),
+ *   new Date(2024, 5, 15, 14, 30, 45, 456)
+ * );
+ * // Returns: true
  *
- * const date7 = new Date(2024, 5, 15, 14, 30, 45);      // June 15, 2024 14:30:45
- * const date8 = new Date(2024, 5, 15, 14, 31, 45);      // June 15, 2024 14:31:45
- * isSameSecond(date7, date8); // false (different minutes)
+ * // Same second of minute, different minutes
+ * const result4 = isSameSecond(
+ *   new Date(2024, 5, 15, 14, 30, 45),
+ *   new Date(2024, 5, 15, 14, 31, 45)
+ * );
+ * // Returns: false (different minutes)
+ *
+ * // Invalid dates return false
+ * const result5 = isSameSecond(new Date("invalid"), new Date(2024, 5, 15, 14, 30, 45));
+ * // Returns: false
  * ```
+ *
+ * @remarks
+ * - Validates arguments before processing (consistent with library patterns)
+ * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
+ * - Accepts both Date objects and numeric timestamps
+ * - Ignores millisecond component in the comparison
+ * - Requires year, month, day, hour, minute, AND second to match
+ * - Uses diffSeconds internally to determine if the second difference is zero
+ * - Handles DST transitions correctly
  */
 export function isSameSecond(dateLeft: Date | number, dateRight: Date | number): boolean {
   return diffSeconds(dateLeft, dateRight) === 0;

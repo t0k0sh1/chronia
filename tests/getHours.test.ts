@@ -1,72 +1,63 @@
-import { describe, it, expect } from 'vitest';
-import { getHours } from '../src/getHours';
+import { describe, it, expect } from "vitest";
+import { getHours } from "../src";
 
-describe('getHours', () => {
-  it.each([
-    ['2024-01-15T00:00:00', 0],
-    ['2024-01-15T01:30:45', 1],
-    ['2024-01-15T12:00:00', 12],
-    ['2024-01-15T23:59:59', 23],
-    ['2024-01-15T15:45:30', 15],
-    ['2024-12-31T23:00:00', 23],
-    ['2024-02-29T08:15:00', 8],
-    ['2024-01-01T00:00:00', 0],
-    ['1970-01-01T00:00:00', 0],
-    ['2000-01-01T18:30:00', 18],
-  ])('returns hours from date string %s', (dateString, expected) => {
-    const date = new Date(dateString);
-    expect(getHours(date)).toBe(expected);
+describe("getHours", () => {
+  describe("normal cases", () => {
+    it.each([
+      [new Date(2024, 0, 15, 0, 0, 0), 0],   // Midnight
+      [new Date(2024, 0, 15, 12, 0, 0), 12], // Noon
+      [new Date(2024, 0, 15, 23, 59, 59), 23], // End of day
+      [new Date(2024, 0, 15, 14, 30, 0), 14], // Afternoon
+      [new Date(2024, 0, 15, 8, 15, 0), 8],  // Morning
+    ])("should return hours from Date object", (date, expected) => {
+      expect(getHours(date)).toBe(expected);
+    });
+
+    it("should return the local hours", () => {
+      // getHours() returns the hours in local timezone
+      const date = new Date("2024-01-15T14:30:00.000Z");
+      const expected = date.getHours();
+      expect(getHours(date)).toBe(expected);
+    });
   });
 
-  it.each([
-    [new Date(2024, 0, 15, 0, 0, 0), 0],
-    [new Date(2024, 0, 15, 1, 30, 45), 1],
-    [new Date(2024, 0, 15, 12, 0, 0), 12],
-    [new Date(2024, 0, 15, 23, 59, 59), 23],
-    [new Date(2024, 0, 15, 15, 45, 30), 15],
-    [new Date(2024, 11, 31, 23, 0, 0), 23],
-    [new Date(2024, 1, 29, 8, 15, 0), 8],
-    [new Date(2024, 0, 1, 0, 0, 0), 0],
-    [new Date(1970, 0, 1, 0, 0, 0), 0],
-    [new Date(2000, 0, 1, 18, 30, 0), 18],
-  ])('returns hours from Date object %s', (date, expected) => {
-    expect(getHours(date)).toBe(expected);
+  describe("edge cases", () => {
+    it("should handle boundary hours", () => {
+      expect(getHours(new Date(2024, 0, 1, 0, 0, 0))).toBe(0);  // Start (midnight)
+      expect(getHours(new Date(2024, 0, 1, 23, 59, 59))).toBe(23); // End
+      expect(getHours(new Date(2024, 0, 1, 1, 0, 0))).toBe(1);  // First hour
+      expect(getHours(new Date(2024, 0, 1, 22, 0, 0))).toBe(22); // Late evening
+    });
+
+    it("should handle leap year dates", () => {
+      expect(getHours(new Date(2024, 1, 29, 10, 0, 0))).toBe(10); // Leap year
+      expect(getHours(new Date(2023, 1, 28, 15, 0, 0))).toBe(15); // Non-leap year
+    });
   });
 
-  it.each([
-    [0, new Date(0).getHours()],
-    [1705276800000, new Date(1705276800000).getHours()],
-    [1705318200000, new Date(1705318200000).getHours()],
-    [1705359599000, new Date(1705359599000).getHours()],
-    [Date.now(), new Date().getHours()],
-  ])('returns hours from timestamp %d', (timestamp, expected) => {
-    expect(getHours(timestamp)).toBe(expected);
+  describe("number input", () => {
+    it("should accept timestamp as input", () => {
+      const date = new Date(2024, 0, 15, 14, 30, 0);
+      const timestamp = date.getTime();
+      expect(getHours(timestamp)).toBe(14);
+    });
+
+    it("should handle edge timestamp values", () => {
+      expect(getHours(0)).toBe(new Date(0).getHours()); // Unix epoch
+      expect(getHours(86400000)).toBe(new Date(86400000).getHours()); // Day after epoch
+    });
   });
 
-  it('handles boundary values correctly', () => {
-    const midnight = new Date(2024, 0, 1, 0, 0, 0);
-    expect(getHours(midnight)).toBe(0);
+  describe("invalid dates", () => {
+    it("should return NaN for invalid dates", () => {
+      expect(getHours(new Date("invalid"))).toBeNaN();
+      expect(getHours(new Date(""))).toBeNaN();
+    });
 
-    const almostMidnight = new Date(2024, 0, 1, 23, 59, 59);
-    expect(getHours(almostMidnight)).toBe(23);
-
-    const noon = new Date(2024, 0, 1, 12, 0, 0);
-    expect(getHours(noon)).toBe(12);
-  });
-
-  it('handles different timezones correctly', () => {
-    const utcDate = new Date(Date.UTC(2024, 0, 15, 14, 30, 0));
-    const localHours = utcDate.getHours();
-    expect(getHours(utcDate)).toBe(localHours);
-  });
-
-  it('handles negative years', () => {
-    const bcDate = new Date(-100, 0, 1, 10, 0, 0);
-    expect(getHours(bcDate)).toBe(10);
-  });
-
-  it('handles far future dates', () => {
-    const futureDate = new Date(9999, 11, 31, 20, 0, 0);
-    expect(getHours(futureDate)).toBe(20);
+    it("should return NaN for invalid numbers", () => {
+      expect(getHours(NaN)).toBeNaN();
+      expect(getHours(Infinity)).toBeNaN();
+      expect(getHours(-Infinity)).toBeNaN();
+    });
   });
 });

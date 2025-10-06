@@ -12,6 +12,9 @@ describe("formatDayOfYear", () => {
 
     { date: new Date(2024, 1, 29), token: "D", expected: "60" }, // Leap year Feb 29
     { date: new Date(2024, 11, 31), token: "D", expected: "366" }, // Dec 31 leap year
+
+    // Default case (unknown token)
+    { date: new Date(2025, 0, 15), token: "DDDD", expected: "15" },
   ])("date=$date token=$token => $expected", ({ date, token, expected }) => {
     expect(formatDayOfYear(date, token)).toBe(expected);
   });

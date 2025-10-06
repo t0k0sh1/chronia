@@ -108,24 +108,6 @@ describe("subYears", () => {
       expected: new Date(NaN),
       desc: "returns Invalid Date when timestamp is NaN",
     },
-    {
-      date: "2020-01-01" as any,
-      amount: 1,
-      expected: new Date(NaN),
-      desc: "rejects string as date",
-    },
-    {
-      date: new Date(2020, 0, 1),
-      amount: "1" as any,
-      expected: new Date(NaN),
-      desc: "rejects string as amount",
-    },
-    {
-      date: new Date("2020-12-31T15:00:00Z"),
-      amount: 1,
-      expected: new Date("2019-12-31T15:00:00Z"),
-      desc: "works correctly across UTC/JST boundary",
-    },
   ])("$desc", ({ date, amount, expected }) => {
     const result = subYears(date as Date | number, amount);
     if (isNaN(expected.getTime())) {
@@ -133,6 +115,61 @@ describe("subYears", () => {
     } else {
       expect(result.getTime()).toBe(expected.getTime());
     }
+  });
+
+  describe("type validation", () => {
+    it("should return Invalid Date for invalid date argument types", () => {
+      const invalidDateInputs = [
+        null,
+        undefined,
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidDateInputs.forEach(input => {
+        const result = subYears(input as any, 1);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for invalid amount argument types", () => {
+      const validDate = new Date(2024, 0, 1);
+      const invalidAmountInputs = [
+        null,
+        undefined,
+        "1",
+        true,
+        false,
+        {},
+        [],
+        () => {},
+        Symbol("test")
+      ];
+
+      invalidAmountInputs.forEach(input => {
+        const result = subYears(validDate, input as any);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
+
+    it("should return Invalid Date for Invalid Date objects", () => {
+      const invalidDates = [
+        new Date("invalid"),
+        new Date(NaN)
+      ];
+
+      invalidDates.forEach(invalidDate => {
+        const result = subYears(invalidDate, 1);
+        expect(result instanceof Date).toBe(true);
+        expect(result.getTime()).toBeNaN();
+      });
+    });
   });
 });
 

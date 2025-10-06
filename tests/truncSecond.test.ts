@@ -2,36 +2,67 @@ import { describe, it, expect } from "vitest";
 import { truncSecond } from "../src/truncSecond";
 
 describe("truncSecond", () => {
-  it("truncates to the start of the second", () => {
-    const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
-    const result = truncSecond(date);
+  it.each([
+    // --- Valid cases ---
+    {
+      date: new Date(2024, 5, 15, 14, 30, 45, 123),
+      expected: new Date(2024, 5, 15, 14, 30, 45, 0),
+      desc: "truncates to the start of the second",
+    },
+    {
+      date: new Date(2024, 0, 5, 8, 15, 0, 500),
+      expected: new Date(2024, 0, 5, 8, 15, 0, 0),
+      desc: "handles second 0",
+    },
+    {
+      date: new Date(2024, 9, 31, 22, 45, 30, 1),
+      expected: new Date(2024, 9, 31, 22, 45, 30, 0),
+      desc: "handles mid-range second",
+    },
+    {
+      date: new Date(2023, 6, 4, 16, 20, 59, 999),
+      expected: new Date(2023, 6, 4, 16, 20, 59, 0),
+      desc: "handles second 59 with max milliseconds",
+    },
+    {
+      date: new Date(2024, 3, 18, 13, 42, 28, 0),
+      expected: new Date(2024, 3, 18, 13, 42, 28, 0),
+      desc: "handles start of second correctly (no change)",
+    },
+    {
+      date: new Date(2024, 5, 15, 14, 30, 45, 123).getTime(),
+      expected: new Date(2024, 5, 15, 14, 30, 45, 0),
+      desc: "accepts timestamp input",
+    },
 
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(5); // June
-    expect(result.getDate()).toBe(15);
-    expect(result.getHours()).toBe(14);
-    expect(result.getMinutes()).toBe(30);
-    expect(result.getSeconds()).toBe(45);
-    expect(result.getMilliseconds()).toBe(0);
-  });
-
-  it("works with different seconds", () => {
-    const testCases = [
-      new Date(2024, 0, 5, 8, 15, 0, 500), // January 5, 2024 08:15:00.500
-      new Date(2024, 9, 31, 22, 45, 30, 1), // October 31, 2024 22:45:30.001
-      new Date(2023, 6, 4, 16, 20, 59, 999), // July 4, 2023 16:20:59.999
-    ];
-
-    testCases.forEach((date) => {
-      const result = truncSecond(date);
-      expect(result.getFullYear()).toBe(date.getFullYear());
-      expect(result.getMonth()).toBe(date.getMonth());
-      expect(result.getDate()).toBe(date.getDate());
-      expect(result.getHours()).toBe(date.getHours());
-      expect(result.getMinutes()).toBe(date.getMinutes());
-      expect(result.getSeconds()).toBe(date.getSeconds());
-      expect(result.getMilliseconds()).toBe(0);
-    });
+    // --- Invalid cases ---
+    {
+      date: new Date("invalid"),
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when input is invalid",
+    },
+    {
+      date: NaN,
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when timestamp is NaN",
+    },
+    {
+      date: Infinity,
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when timestamp is Infinity",
+    },
+    {
+      date: -Infinity,
+      expected: new Date(NaN),
+      desc: "returns Invalid Date when timestamp is -Infinity",
+    },
+  ])("$desc", ({ date, expected }) => {
+    const result = truncSecond(date as Date | number);
+    if (isNaN(expected.getTime())) {
+      expect(isNaN(result.getTime())).toBe(true);
+    } else {
+      expect(result.getTime()).toBe(expected.getTime());
+    }
   });
 
   it("does not modify the original date", () => {
@@ -41,31 +72,6 @@ describe("truncSecond", () => {
     truncSecond(originalDate);
 
     expect(originalDate.getTime()).toBe(originalTime);
-  });
-
-  it("handles start of second correctly", () => {
-    const startOfSecond = new Date(2024, 3, 18, 13, 42, 28, 0); // April 18, 2024 13:42:28.000
-    const result = truncSecond(startOfSecond);
-
-    expect(result.getTime()).toBe(startOfSecond.getTime());
-  });
-
-  it("handles millisecond precision", () => {
-    const testCases = [
-      { ms: 1, expected: 0 },
-      { ms: 500, expected: 0 },
-      { ms: 999, expected: 0 },
-    ];
-
-    testCases.forEach(({ ms, expected }) => {
-      const date = new Date(2024, 6, 12, 10, 25, 15, ms);
-      const result = truncSecond(date);
-
-      expect(result.getHours()).toBe(10);
-      expect(result.getMinutes()).toBe(25);
-      expect(result.getSeconds()).toBe(15);
-      expect(result.getMilliseconds()).toBe(expected);
-    });
   });
 
   it("works across all 60 seconds", () => {

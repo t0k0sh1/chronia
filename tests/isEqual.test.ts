@@ -139,4 +139,26 @@ describe("isEqual", () => {
       expect(isEqual(date1, date2, { unit: "second" })).toBe(true);
     });
   });
+
+  describe("invalid input handling", () => {
+    it("should return false when first date is invalid", () => {
+      expect(isEqual(new Date(NaN), new Date(2024, 0, 1))).toBe(false);
+      expect(isEqual(NaN, new Date(2024, 0, 1))).toBe(false);
+      expect(isEqual(Infinity, new Date(2024, 0, 1))).toBe(false);
+      expect(isEqual(-Infinity, new Date(2024, 0, 1))).toBe(false);
+    });
+
+    it("should return false when second date is invalid", () => {
+      expect(isEqual(new Date(2024, 0, 1), new Date(NaN))).toBe(false);
+      expect(isEqual(new Date(2024, 0, 1), NaN)).toBe(false);
+      expect(isEqual(new Date(2024, 0, 1), Infinity)).toBe(false);
+      expect(isEqual(new Date(2024, 0, 1), -Infinity)).toBe(false);
+    });
+
+    it("should return false when both dates are invalid", () => {
+      expect(isEqual(new Date(NaN), new Date(NaN))).toBe(false);
+      expect(isEqual(NaN, NaN)).toBe(false);
+      expect(isEqual(Infinity, -Infinity)).toBe(false);
+    });
+  });
 });
