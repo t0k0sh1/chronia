@@ -76,11 +76,40 @@ describe("setTime", () => {
     expect(original.getTime()).toBe(originalTime);
   });
 
+  describe("accepts number as first argument", () => {
+    it("sets time for valid timestamp input", () => {
+      const timestamp = 1609459200000; // 2021-01-01
+      const newTime = 1704067200000; // 2024-01-01
+      const result = setTime(timestamp, newTime);
+
+      expect(result.getTime()).toBe(newTime);
+    });
+
+    it("sets time for Unix epoch timestamp", () => {
+      const result = setTime(0, 1704067200000);
+      expect(result.getTime()).toBe(1704067200000);
+    });
+
+    it("sets time for negative timestamp", () => {
+      const result = setTime(-86400000, 1704067200000);
+      expect(result.getTime()).toBe(1704067200000);
+    });
+
+    it("returns Invalid Date for NaN timestamp input", () => {
+      const result = setTime(NaN, 1704067200000);
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+
+    it("returns Invalid Date for Infinity timestamp input", () => {
+      const result = setTime(Infinity, 1704067200000);
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+  });
+
   it.each([
     { name: "null", input: null },
     { name: "undefined", input: undefined },
     { name: "string", input: "2024-01-01" },
-    { name: "number", input: 1704067200000 },
     { name: "boolean", input: true },
     { name: "object", input: {} },
     { name: "array", input: [] },
