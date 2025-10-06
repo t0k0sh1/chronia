@@ -1,4 +1,4 @@
-<h1 align="center"><img width="550" src="./docs/logo.png" alt="Chronia" /></h1>
+<h1 align="center"><img width="550" src="./logo.png" alt="Chronia" /></h1>
 
 ![npm version](https://badge.fury.io/js/chronia.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
