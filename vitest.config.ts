@@ -5,7 +5,8 @@ export default defineConfig({
     exclude: ["./docs/**", "./specs/**", "./node_modules/**"],
     coverage: {
       provider: "v8",
-      reporter: ["text", "lcov", "html", "json"],
+      reporter: ["text", "json", "lcov"],
+      reportsDirectory: "./coverage",
       exclude: [
         "**/specs/**",
         "**/docs/**",
