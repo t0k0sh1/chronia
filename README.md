@@ -7,6 +7,7 @@
 ![snyk](https://snyk.io/test/github/t0k0sh1/chronia/badge.svg)
 ![Node Current](https://img.shields.io/node/v/chronia)
 ![NPM Downloads](https://img.shields.io/npm/dm/chronia)
+[![codecov](https://codecov.io/gh/t0k0sh1/chronia/graph/badge.svg?token=679LKV16RZ)](https://codecov.io/gh/t0k0sh1/chronia)
 
 A modern, lightweight TypeScript date/time utility library with comprehensive formatting, parsing, and manipulation capabilities.
 
