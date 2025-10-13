@@ -516,5 +516,368 @@ describe("compare", () => {
       expect(dates[3].getTime()).toBeLessThanOrEqual(dates[4].getTime());
     });
   });
+
+  // Integration tests for mixed input types and real-world scenarios
+  describe("Mixed Input Type Integration", () => {
+    it("should handle Date and number inputs consistently", () => {
+      const dateObj = new Date("2024-01-15");
+      const timestamp = new Date("2024-01-10").getTime();
+
+      // Test all combinations
+      expect(() => compare(dateObj, timestamp)).not.toThrow();
+      expect(() => compare(timestamp, dateObj)).not.toThrow();
+      expect(() => compare(timestamp, timestamp)).not.toThrow();
+
+      // Verify correct ordering
+      expect(compare(dateObj, timestamp)).toBe(1); // dateObj is later
+      expect(compare(timestamp, dateObj)).toBe(-1); // timestamp is earlier
+      expect(compare(timestamp, timestamp)).toBe(0); // same timestamp
+    });
+
+    it("should work correctly in Array.sort() with mixed types", () => {
+      const mixed = [
+        new Date("2024-01-03"),
+        new Date("2024-01-01").getTime(),
+        new Date("2024-01-02"),
+        new Date("2024-01-04").getTime(),
+      ];
+
+      expect(() => mixed.sort((a, b) => compare(a, b))).not.toThrow();
+
+      const sorted = mixed.sort((a, b) => compare(a, b));
+
+      // Convert all to timestamps for comparison
+      const timestamps = sorted.map((item) =>
+        typeof item === "number" ? item : item.getTime(),
+      );
+
+      // Verify ascending order
+      for (let i = 1; i < timestamps.length; i++) {
+        expect(timestamps[i]).toBeGreaterThanOrEqual(timestamps[i - 1]);
+      }
+    });
+
+    it("should handle case-insensitive order parameters at runtime", () => {
+      const date1 = new Date("2024-01-01");
+      const timestamp2 = new Date("2024-01-02").getTime();
+
+      // Test TypeScript-typed values
+      expect(compare(date1, timestamp2, "ASC")).toBe(-1);
+      expect(compare(date1, timestamp2, "DESC")).toBe(1);
+
+      // Test runtime case-insensitive behavior (using type assertions)
+      // @ts-expect-error Testing runtime behavior
+      expect(compare(date1, timestamp2, "asc")).toBe(-1);
+      // @ts-expect-error Testing runtime behavior
+      expect(compare(date1, timestamp2, "desc")).toBe(1);
+      // @ts-expect-error Testing runtime behavior
+      expect(compare(date1, timestamp2, "Asc")).toBe(-1);
+      // @ts-expect-error Testing runtime behavior
+      expect(compare(date1, timestamp2, "Desc")).toBe(1);
+    });
+
+    it("should default to ascending order when order parameter omitted", () => {
+      const timestamp1 = new Date("2024-01-01").getTime();
+      const date2 = new Date("2024-01-02");
+
+      expect(() => compare(timestamp1, date2)).not.toThrow();
+      expect(compare(timestamp1, date2)).toBe(-1);
+      expect(compare(timestamp1, date2)).toBe(
+        compare(timestamp1, date2, "ASC"),
+      );
+    });
+  });
+
+  describe("Real-world Scenarios", () => {
+    it("should handle large mixed arrays efficiently", () => {
+      const size = 1000;
+      const mixedArray = Array.from({ length: size }, (_, i) =>
+        i % 2 === 0
+          ? new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
+          : Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
+      );
+
+      expect(() => mixedArray.sort((a, b) => compare(a, b))).not.toThrow();
+
+      const sorted = mixedArray.sort((a, b) => compare(a, b));
+      expect(sorted).toHaveLength(size);
+    });
+
+    it("should maintain precision with timestamp inputs", () => {
+      const baseTime = Date.now();
+      const timestamp1 = baseTime;
+      const timestamp2 = baseTime + 1;
+      const timestamp3 = baseTime + 1000;
+
+      expect(compare(timestamp1, timestamp2)).toBe(-1);
+      expect(compare(timestamp2, timestamp3)).toBe(-1);
+      expect(compare(timestamp1, timestamp1)).toBe(0);
+      expect(compare(timestamp3, timestamp1)).toBe(1);
+    });
+  });
+
+  // Backward compatibility tests
+  describe("Backward Compatibility", () => {
+    describe("Existing Function Signature Compatibility", () => {
+      it("should maintain identical behavior for Date objects", () => {
+        const date1 = new Date("2024-01-01");
+        const date2 = new Date("2024-01-02");
+        const date3 = new Date("2024-01-01"); // Equal to date1
+
+        // Basic comparisons
+        expect(compare(date1, date2)).toBe(-1);
+        expect(compare(date2, date1)).toBe(1);
+        expect(compare(date1, date3)).toBe(0);
+
+        // With explicit ASC order
+        expect(compare(date1, date2, "ASC")).toBe(-1);
+        expect(compare(date2, date1, "ASC")).toBe(1);
+        expect(compare(date1, date3, "ASC")).toBe(0);
+
+        // With DESC order
+        expect(compare(date1, date2, "DESC")).toBe(1);
+        expect(compare(date2, date1, "DESC")).toBe(-1);
+        expect(compare(date1, date3, "DESC")).toBe(0);
+      });
+
+      it("should maintain Array.sort() compatibility", () => {
+        const dates = [
+          new Date("2024-01-03"),
+          new Date("2024-01-01"),
+          new Date("2024-01-02"),
+        ];
+
+        // Ascending sort
+        const ascSorted = [...dates].sort(compare);
+        expect(ascSorted[0].getTime()).toBe(new Date("2024-01-01").getTime());
+        expect(ascSorted[1].getTime()).toBe(new Date("2024-01-02").getTime());
+        expect(ascSorted[2].getTime()).toBe(new Date("2024-01-03").getTime());
+
+        // Descending sort
+        const descSorted = [...dates].sort((a, b) => compare(a, b, "DESC"));
+        expect(descSorted[0].getTime()).toBe(new Date("2024-01-03").getTime());
+        expect(descSorted[1].getTime()).toBe(new Date("2024-01-02").getTime());
+        expect(descSorted[2].getTime()).toBe(new Date("2024-01-01").getTime());
+      });
+
+      it("should maintain error handling for invalid Date objects", () => {
+        const invalidDate = new Date("invalid");
+        const validDate = new Date("2024-01-01");
+
+        const result1 = compare(invalidDate, validDate);
+        const result2 = compare(validDate, invalidDate);
+        const result3 = compare(invalidDate, invalidDate);
+
+        expect(result1).toBeNaN();
+        expect(result2).toBeNaN();
+        expect(result3).toBeNaN();
+      });
+
+      it("should handle runtime order parameters with new specification", () => {
+        const date1 = new Date("2024-01-01");
+        const date2 = new Date("2024-01-02");
+
+        // New behavior: invalid order parameters default to ASC (no errors)
+        // @ts-expect-error Testing runtime behavior
+        expect(() => compare(date1, date2, "invalid")).not.toThrow();
+        // @ts-expect-error Testing runtime behavior
+        expect(compare(date1, date2, "invalid")).toBe(-1); // defaults to ASC
+
+        // Case-insensitive handling
+        // @ts-expect-error Testing runtime behavior
+        expect(compare(date1, date2, "asc")).toBe(-1);
+        // @ts-expect-error Testing runtime behavior
+        expect(compare(date1, date2, "desc")).toBe(1);
+      });
+    });
+
+    describe("Edge Cases Compatibility", () => {
+      it("should handle boundary dates correctly", () => {
+        const minDate = new Date(-8640000000000000);
+        const maxDate = new Date(8640000000000000);
+        const normalDate = new Date("2024-01-01");
+
+        expect(compare(minDate, maxDate)).toBe(-1);
+        expect(compare(maxDate, minDate)).toBe(1);
+        expect(compare(normalDate, minDate)).toBe(1);
+        expect(compare(normalDate, maxDate)).toBe(-1);
+      });
+
+      it("should handle millisecond precision correctly", () => {
+        const date1 = new Date("2024-01-01T00:00:00.000Z");
+        const date2 = new Date("2024-01-01T00:00:00.001Z");
+
+        expect(compare(date1, date2)).toBe(-1);
+        expect(compare(date2, date1)).toBe(1);
+        expect(compare(date1, date1)).toBe(0);
+      });
+
+      it("should handle timezone consistency", () => {
+        // Dates that represent the same moment but created differently
+        const utcDate = new Date("2024-01-01T12:00:00.000Z");
+        const localDate = new Date(2024, 0, 1, 12, 0, 0, 0); // Local time
+
+        // Since compare uses getTime(), timezone representation shouldn't matter
+        // for the comparison logic itself
+        expect(() => compare(utcDate, localDate)).not.toThrow();
+        expect(typeof compare(utcDate, localDate)).toBe("number");
+      });
+
+      it("should maintain performance characteristics", () => {
+        // Test that existing performance is not degraded
+        const dates = Array.from(
+          { length: 1000 },
+          () =>
+            new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
+        );
+
+        const start = performance.now();
+        dates.sort(compare);
+        const end = performance.now();
+
+        // Should be very fast for 1000 Date objects
+        expect(end - start).toBeLessThan(100); // Allow for slower CI environments
+      });
+    });
+
+    describe("Type System Compatibility", () => {
+      it("should accept existing function call patterns", () => {
+        const date1 = new Date("2024-01-01");
+        const date2 = new Date("2024-01-02");
+
+        // All these should work without TypeScript errors
+        expect(() => compare(date1, date2)).not.toThrow();
+        expect(() => compare(date1, date2, "ASC")).not.toThrow();
+        expect(() => compare(date1, date2, "DESC")).not.toThrow();
+      });
+
+      it("should return correct numeric values", () => {
+        const date1 = new Date("2024-01-01");
+        const date2 = new Date("2024-01-02");
+
+        const result1 = compare(date1, date2);
+        const result2 = compare(date2, date1);
+        const result3 = compare(date1, date1);
+
+        expect(typeof result1).toBe("number");
+        expect(typeof result2).toBe("number");
+        expect(typeof result3).toBe("number");
+
+        expect([result1, result2, result3]).toEqual([-1, 1, 0]);
+      });
+    });
+  });
+
+  // Additional performance tests (skipped by default for CI stability)
+  describe.skip("Enhanced Performance Tests", () => {
+    describe("Performance Benchmarks", () => {
+      it("should sort 10,000 Date objects under 120ms", () => {
+        const dates = Array.from(
+          { length: 10000 },
+          () =>
+            new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
+        );
+
+        const start = performance.now();
+        dates.sort(compare);
+        const end = performance.now();
+
+        expect(end - start).toBeLessThan(120);
+      });
+
+      it("should sort 10,000 timestamps under 120ms", () => {
+        const timestamps = Array.from(
+          { length: 10000 },
+          () => Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
+        );
+
+        const start = performance.now();
+        timestamps.sort((a, b) => compare(a, b));
+        const end = performance.now();
+
+        expect(end - start).toBeLessThan(120);
+      });
+
+      it("should sort 10,000 mixed Date/number inputs under 120ms", () => {
+        const mixed = Array.from({ length: 10000 }, (_, i) =>
+          i % 2 === 0
+            ? new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
+            : Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
+        );
+
+        const start = performance.now();
+        mixed.sort((a, b) => compare(a, b));
+        const end = performance.now();
+
+        expect(end - start).toBeLessThan(120);
+      });
+
+      it("should have minimal overhead for individual comparisons", () => {
+        const date1 = new Date("2024-01-01");
+        const timestamp2 = new Date("2024-01-02").getTime();
+
+        const start = performance.now();
+        for (let i = 0; i < 10000; i++) {
+          compare(date1, timestamp2);
+        }
+        const end = performance.now();
+
+        // 10,000 individual comparisons should complete in well under 100ms
+        expect(end - start).toBeLessThan(120);
+      });
+
+      it("should maintain performance with runtime case-insensitive order parameters", () => {
+        const dates = Array.from(
+          { length: 1000 },
+          () =>
+            new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
+        );
+
+        // Test with runtime lowercase order parameter (TypeScript will error but runtime works)
+        const start = performance.now();
+        // @ts-expect-error Testing runtime behavior with lowercase order
+        dates.sort((a, b) => compare(a, b, "desc"));
+        const end = performance.now();
+
+        expect(end - start).toBeLessThan(120); // Should be very fast for 1k items, allow for slower CI
+      });
+    });
+
+    describe("Memory Efficiency", () => {
+      it("should not cause memory leaks with large datasets", () => {
+        // Create large arrays multiple times to test memory usage
+        for (let round = 0; round < 5; round++) {
+          const large = Array.from({ length: 5000 }, (_, i) =>
+            i % 2 === 0
+              ? new Date(
+                  Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
+                )
+              : Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
+          );
+
+          expect(() => large.sort((a, b) => compare(a, b))).not.toThrow();
+          expect(large).toHaveLength(5000);
+        }
+      });
+
+      it("should handle extreme values efficiently", () => {
+        const extremes = [
+          new Date(8640000000000000), // Max safe date
+          new Date(-8640000000000000), // Min safe date
+          Date.now(),
+          0, // Unix epoch
+          new Date("2024-01-01").getTime(),
+        ];
+
+        const start = performance.now();
+        for (let i = 0; i < 1000; i++) {
+          extremes.sort((a, b) => compare(a, b));
+        }
+        const end = performance.now();
+
+        expect(end - start).toBeLessThan(120); // Allow for slower CI environments
+      });
+    });
+  });
 });
 

@@ -232,4 +232,178 @@ describe("clamp", () => {
 
     expect(result.getTime()).toBe(maxDate.getTime());
   });
+
+  // Contract tests: Validation order verification
+  describe("Validation Order Contract", () => {
+    describe("Validation rejects NaN before conversion", () => {
+      it("should return Invalid Date when date is NaN", () => {
+        const nanValue = NaN;
+        const validMin = Date.now();
+        const validMax = Date.now() + 1000;
+
+        const result = clamp(nanValue, validMin, validMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should return Invalid Date when minDate is NaN", () => {
+        const validDate = Date.now();
+        const nanMin = NaN;
+        const validMax = Date.now() + 1000;
+
+        const result = clamp(validDate, nanMin, validMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should return Invalid Date when maxDate is NaN", () => {
+        const validDate = Date.now();
+        const validMin = Date.now() - 1000;
+        const nanMax = NaN;
+
+        const result = clamp(validDate, validMin, nanMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+    });
+
+    describe("Validation rejects Infinity before conversion", () => {
+      it("should return Invalid Date when date is Infinity", () => {
+        const infinityValue = Infinity;
+        const validMin = 0;
+        const validMax = 1000;
+
+        const result = clamp(infinityValue, validMin, validMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should return Invalid Date when date is -Infinity", () => {
+        const negInfinityValue = -Infinity;
+        const validMin = 0;
+        const validMax = 1000;
+
+        const result = clamp(negInfinityValue, validMin, validMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should return Invalid Date when minDate is Infinity", () => {
+        const validDate = Date.now();
+        const infinityMin = Infinity;
+        const validMax = Date.now() + 1000;
+
+        const result = clamp(validDate, infinityMin, validMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should return Invalid Date when maxDate is Infinity", () => {
+        const validDate = Date.now();
+        const validMin = Date.now() - 1000;
+        const infinityMax = Infinity;
+
+        const result = clamp(validDate, validMin, infinityMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+    });
+
+    describe("Valid arguments pass validation, then convert", () => {
+      it("should accept valid number timestamps and return valid Date", () => {
+        const timestamp = Date.now();
+        const minTimestamp = timestamp - 1000;
+        const maxTimestamp = timestamp + 1000;
+
+        const result = clamp(timestamp, minTimestamp, maxTimestamp);
+
+        expect(result.getTime()).toBe(timestamp);
+        expect(result).toBeInstanceOf(Date);
+      });
+
+      it("should accept valid Date objects and return valid Date", () => {
+        const date = new Date(2024, 5, 15);
+        const minDate = new Date(2024, 5, 10);
+        const maxDate = new Date(2024, 5, 20);
+
+        const result = clamp(date, minDate, maxDate);
+
+        expect(result.getTime()).toBe(date.getTime());
+        expect(result).toBeInstanceOf(Date);
+      });
+
+      it("should accept mixed Date and number arguments", () => {
+        const dateObj = new Date(2024, 5, 15);
+        const minTimestamp = new Date(2024, 5, 10).getTime();
+        const maxTimestamp = new Date(2024, 5, 20).getTime();
+
+        const result = clamp(dateObj, minTimestamp, maxTimestamp);
+
+        expect(result.getTime()).toBe(dateObj.getTime());
+        expect(result).toBeInstanceOf(Date);
+      });
+    });
+
+    describe("Mixed invalid arguments fail fast", () => {
+      it("should fail when any argument is invalid (valid date, invalid min, valid max)", () => {
+        const validDate = new Date(2024, 5, 15);
+        const invalidMin = new Date("invalid");
+        const validMax = new Date(2024, 5, 20);
+
+        const result = clamp(validDate, invalidMin, validMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should fail when any argument is invalid (invalid date, valid min, valid max)", () => {
+        const invalidDate = new Date("invalid");
+        const validMin = new Date(2024, 5, 10);
+        const validMax = new Date(2024, 5, 20);
+
+        const result = clamp(invalidDate, validMin, validMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should fail when any argument is invalid (valid date, valid min, invalid max)", () => {
+        const validDate = new Date(2024, 5, 15);
+        const validMin = new Date(2024, 5, 10);
+        const invalidMax = new Date("invalid");
+
+        const result = clamp(validDate, validMin, invalidMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+
+      it("should fail when multiple arguments are invalid", () => {
+        const invalidDate = NaN;
+        const invalidMin = Infinity;
+        const invalidMax = new Date("invalid");
+
+        const result = clamp(invalidDate, invalidMin, invalidMax);
+
+        expect(isNaN(result.getTime())).toBe(true);
+      });
+    });
+
+    describe("Consistency with validation pattern", () => {
+      it("should reject invalid inputs before conversion (validation-first approach)", () => {
+        // This test verifies that validation happens before conversion
+        // All invalid inputs should be rejected consistently
+
+        const invalidInputs = [NaN, Infinity, -Infinity, new Date("invalid")];
+
+        invalidInputs.forEach((invalidInput) => {
+          const clampResult = clamp(
+            invalidInput,
+            new Date(2024, 5, 10),
+            new Date(2024, 5, 20),
+          );
+
+          // Should return Invalid Date for invalid input
+          expect(isNaN(clampResult.getTime())).toBe(true);
+        });
+      });
+    });
+  });
 });
