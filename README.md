@@ -64,6 +64,134 @@ const nextWeek = addDays(current, 7);
 console.log(isAfter(nextWeek, current)); // true
 ```
 
+## Function Categories
+
+Chronia provides 70 functions organized into 10 categories:
+
+### 1. Arithmetic (14 functions)
+Add or subtract time units from dates.
+
+**Addition:**
+- `addYears` - Add years to a date
+- `addMonths` - Add months to a date
+- `addDays` - Add days to a date
+- `addHours` - Add hours to a date
+- `addMinutes` - Add minutes to a date
+- `addSeconds` - Add seconds to a date
+- `addMilliseconds` - Add milliseconds to a date
+
+**Subtraction:**
+- `subYears` - Subtract years from a date
+- `subMonths` - Subtract months from a date
+- `subDays` - Subtract days from a date
+- `subHours` - Subtract hours from a date
+- `subMinutes` - Subtract minutes from a date
+- `subSeconds` - Subtract seconds from a date
+- `subMilliseconds` - Subtract milliseconds from a date
+
+### 2. Comparison (14 functions)
+Compare dates and check for equality or relative ordering.
+
+**Relational:**
+- `isAfter` - Check if a date is after another
+- `isAfterOrEqual` - Check if a date is after or equal to another
+- `isBefore` - Check if a date is before another
+- `isBeforeOrEqual` - Check if a date is before or equal to another
+- `isBetween` - Check if a date is within a range
+- `compare` - Compare two dates for sorting
+
+**Equality:**
+- `isEqual` - Check if two dates are exactly equal
+- `isSameYear` - Check if dates are in the same year
+- `isSameMonth` - Check if dates are in the same month
+- `isSameDay` - Check if dates are on the same day
+- `isSameHour` - Check if dates are in the same hour
+- `isSameMinute` - Check if dates are in the same minute
+- `isSameSecond` - Check if dates are in the same second
+
+**Validation:**
+- `isValid` - Check if a date is valid
+
+### 3. Difference (7 functions)
+Calculate the difference between two dates in specific units.
+
+- `diffYears` - Calculate the difference in years
+- `diffMonths` - Calculate the difference in months
+- `diffDays` - Calculate the difference in days
+- `diffHours` - Calculate the difference in hours
+- `diffMinutes` - Calculate the difference in minutes
+- `diffSeconds` - Calculate the difference in seconds
+- `diffMilliseconds` - Calculate the difference in milliseconds
+
+### 4. Getter (8 functions)
+Extract specific components from dates.
+
+- `getYear` - Get the year
+- `getMonth` - Get the month (0-11)
+- `getDay` - Get the day of the month
+- `getHours` - Get the hours
+- `getMinutes` - Get the minutes
+- `getSeconds` - Get the seconds
+- `getMilliseconds` - Get the milliseconds
+- `getTime` - Get the Unix timestamp
+
+### 5. Setter (8 functions)
+Set specific components of dates.
+
+- `setYear` - Set the year
+- `setMonth` - Set the month
+- `setDay` - Set the day of the month
+- `setHours` - Set the hours
+- `setMinutes` - Set the minutes
+- `setSeconds` - Set the seconds
+- `setMilliseconds` - Set the milliseconds
+- `setTime` - Set the date from Unix timestamp
+
+### 6. Boundary (6 functions)
+Get the start or end of a time period.
+
+- `startOfYear` - Get the start of the year
+- `endOfYear` - Get the end of the year
+- `startOfMonth` - Get the start of the month
+- `endOfMonth` - Get the end of the month
+- `startOfDay` - Get the start of the day
+- `endOfDay` - Get the end of the day
+
+### 7. Truncation (7 functions)
+Zero out time components below a specified unit.
+
+- `truncYear` - Truncate to year (zero out month, day, time)
+- `truncMonth` - Truncate to month (zero out day, time)
+- `truncDay` - Truncate to day (zero out time)
+- `truncHour` - Truncate to hour (zero out minutes, seconds, ms)
+- `truncMinute` - Truncate to minute (zero out seconds, ms)
+- `truncSecond` - Truncate to second (zero out milliseconds)
+- `truncMillisecond` - Truncate to millisecond
+
+### 8. Formatting (2 functions)
+Convert between dates and strings.
+
+- `format` - Format a date to a string
+- `parse` - Parse a string to a date
+
+### 9. Utility (4 functions)
+Miscellaneous helper functions.
+
+- `now` - Get the current date and time
+- `min` - Get the earliest date from multiple dates
+- `max` - Get the latest date from multiple dates
+- `clamp` - Clamp a date within a range
+
+### 10. Constants & Types
+Exported constants and TypeScript type definitions.
+
+- `constants` - Library constants
+- `Interval` - Type for date intervals
+- `Locale` - Type for locale configuration
+- `TimeUnit` - Type for time units
+- `BoundsType` - Type for boundary options
+- `BetweenOption` - Type for between operation options
+
 ## Core Functions
 
 ### Current Time
