@@ -63,16 +63,25 @@ export function compare(
   const dateRight = new Date(date2);
 
   // Options normalization (case-insensitive order, default to ASC for invalid values)
-  // Handle both legacy string argument (for JS compatibility) and new options object
-  // Use type assertion to allow runtime flexibility while maintaining TypeScript types
+  /**
+   * Type assertion to allow runtime flexibility while maintaining TypeScript type safety.
+   *
+   * This enables JavaScript users to pass a string directly when the options object
+   * has only a single parameter, making the API more concise:
+   *   compare(date1, date2, "DESC")  // JavaScript: direct string (concise)
+   *   compare(date1, date2, { order: "DESC" })  // TypeScript: options object (type-safe)
+   *
+   * TypeScript users are required to use the options object for type safety,
+   * but the runtime accepts both forms for JavaScript flexibility.
+   */
   const opts = options as CompareOptions | string | undefined | null;
 
   // Extract order value from either string or options object
   let orderValue: string | undefined;
   if (typeof opts === "string") {
-    orderValue = opts; // Legacy string API
+    orderValue = opts; // Direct string for JavaScript users
   } else if (opts && typeof opts === "object" && "order" in opts) {
-    orderValue = opts.order; // New options object API
+    orderValue = opts.order; // Options object (TypeScript-enforced)
   }
 
   // Normalize order value (case-insensitive, defaults to ASC for invalid values)

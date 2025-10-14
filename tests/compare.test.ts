@@ -690,24 +690,24 @@ describe("compare", () => {
         expect(compare(date1, date2, { order: "desc" })).toBe(1);
       });
 
-      it("should support legacy string argument for JavaScript compatibility", () => {
+      it("should support direct string argument for JavaScript flexibility", () => {
         const date1 = new Date("2024-01-01");
         const date2 = new Date("2024-01-02");
 
-        // Legacy string API (for JavaScript users without TypeScript)
-        // @ts-expect-error Testing legacy string API for JS compatibility
+        // Direct string API (JavaScript flexibility - concise when options has single parameter)
+        // @ts-expect-error Testing direct string for JS flexibility
         expect(compare(date1, date2, "ASC")).toBe(-1);
-        // @ts-expect-error Testing legacy string API for JS compatibility
+        // @ts-expect-error Testing direct string for JS flexibility
         expect(compare(date1, date2, "DESC")).toBe(1);
 
-        // Case-insensitive legacy string
-        // @ts-expect-error Testing legacy string API for JS compatibility
+        // Case-insensitive direct string
+        // @ts-expect-error Testing direct string for JS flexibility
         expect(compare(date1, date2, "asc")).toBe(-1);
-        // @ts-expect-error Testing legacy string API for JS compatibility
+        // @ts-expect-error Testing direct string for JS flexibility
         expect(compare(date1, date2, "desc")).toBe(1);
 
-        // Invalid legacy string defaults to ASC
-        // @ts-expect-error Testing legacy string API for JS compatibility
+        // Invalid direct string defaults to ASC
+        // @ts-expect-error Testing direct string for JS flexibility
         expect(compare(date1, date2, "invalid")).toBe(-1);
       });
     });

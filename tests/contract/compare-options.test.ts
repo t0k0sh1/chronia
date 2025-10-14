@@ -183,47 +183,47 @@ describe("CompareOptions API Contracts", () => {
     });
   });
 
-  // Contract 11 - Legacy String Argument (JavaScript Compatibility)
-  describe("Contract 11: Legacy String Argument (JavaScript Compatibility)", () => {
+  // Contract 11 - Direct String Argument (JavaScript Flexibility)
+  describe("Contract 11: Direct String Argument (JavaScript Flexibility)", () => {
     it("should accept string 'ASC' as third argument", () => {
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "ASC")).toBe(-1);
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(later, earlier, "ASC")).toBe(1);
     });
 
     it("should accept string 'DESC' as third argument", () => {
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "DESC")).toBe(1);
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(later, earlier, "DESC")).toBe(-1);
     });
 
-    it("should handle case-insensitive legacy strings", () => {
-      // @ts-expect-error Testing legacy string API
+    it("should handle case-insensitive direct strings", () => {
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "asc")).toBe(-1);
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "desc")).toBe(1);
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "Asc")).toBe(-1);
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "Desc")).toBe(1);
     });
 
-    it("should default invalid legacy strings to ASC", () => {
-      // @ts-expect-error Testing legacy string API
+    it("should default invalid direct strings to ASC", () => {
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "invalid")).toBe(-1);
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       expect(compare(earlier, later, "xyz")).toBe(-1);
     });
 
-    it("should work with Array.sort() using legacy strings", () => {
+    it("should work with Array.sort() using direct strings", () => {
       const dates = [
         new Date("2024-01-01"),
         new Date("2024-01-03"),
         new Date("2024-01-02"),
       ];
-      // @ts-expect-error Testing legacy string API
+      // @ts-expect-error Testing direct string for JS flexibility
       dates.sort((a, b) => compare(a, b, "DESC"));
 
       expect(dates[0].toISOString()).toBe("2024-01-03T00:00:00.000Z");
