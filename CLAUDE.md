@@ -1,103 +1,117 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、Claude Code（claude.ai/code）がこのリポジトリ内のコードを扱う際のガイダンスを提供します。
 
-## Common Development Commands
+## 共通のルール
 
-- **Test**: `npm test` (uses Vitest)
+- 会話はすべて日本語で行ってください
+- 判断が必要な場合は、必ず手を止めて判断を仰いでください
+- コード内のコメントはすべてアメリカ英語を使ってください
+
+## 共通の開発コマンド
+
+- **テスト**: `npm test` (uses Vitest)
+- カバレッジ付きテスト：`npx vitest run --coverage`
 - **Lint**: `npm run lint` (ESLint with TypeScript)
-- **Build**: `npm run build` (builds both ESM and CJS modules)
-  - ESM only: `npm run build:esm`
-  - CJS only: `npm run build:cjs`
-- **Clean**: `npm run clean` (removes dist directory)
-- **Documentation**: `npx typedoc` (generates API documentation in docs/)
+- **ビルド**: `npm run build` (ESM と CJS の両方のモジュールを作成)
+- **クリーン**: `npm run clean` (dist/ ディレクトリを削除)
+- **ドキュメント生成**: `npx typedoc` (docs/ ディレクトリにAPIドキュメントを生成)
 
-## Pre-Commit Requirements
+## コミット前にやること
 
-**IMPORTANT**: Before creating any commit, you MUST:
-1. Run `npm run lint` to ensure code quality and style compliance
-2. Run `npm run build` to build ESM/CJS bundles
-3. Run `npx typedoc` to generate updated documentation
-4. **Update README.md** if functions were added, changed, or removed:
-   - Add documentation for new functions in appropriate sections
-   - Update documentation for modified functions
-   - Remove documentation for deleted functions
-   - Update imports in examples to include/exclude affected functions
-   - **Note**: Only update sections related to changed functions; full README review is not required
-5. Add `dist/`, `docs/`, and `README.md` (if updated) to the commit
+**IMPORTANT**: あらゆるコミットを作成する前に必ず実施すること（MUST）
 
-This ensures that built artifacts, API documentation, and user documentation are always in sync with source code changes.
+1. 修正したコードとJSDocコメントを突き合わせて、外部仕様に変更があればJSDocコメントを最新化します
+1. `npm run lint` を実行して、コード品質とスタイルの一貫性を確認します
+1. `npm run build` を実行して、ESM/CJS形式のバンドルをビルドします
+1. `npx typedoc` を実行して、最新のドキュメントを生成します
+1. dist/、docs/、および（更新があれば）README.md をコミットに追加します
 
-## Project Architecture
+これにより、ビルド成果物、APIドキュメント、ユーザードキュメントが常にソースコードの変更内容と整合する状態を保てます。
 
-This is a TypeScript date/time utility library with dual module support (ESM/CJS).
+## プロジェクト構成
 
-### Core Structure
+このプロジェクトは、ESM/CJS の両モジュール形式をサポートする TypeScript 製の日付・時刻ユーティリティライブラリです。
 
-- **src/index.ts**: Main entry point that re-exports all utilities
-- **src/format/**: Date formatting functionality with locale support
-- **src/addDays/**: Date arithmetic utilities
-- **src/i18n/**: Locale-specific formatting data (en-US, ja)
-- **src/_lib/**: Internal shared utilities
+### コア構成
 
-### Formatting System Architecture
+- src/index.ts：すべてのユーティリティを再エクスポートするメインエントリーポイント
+- src/i18n/：ロケール別のフォーマットデータ（例：en-US、ja）
+- src/\_lib/：内部で共有されるユーティリティ群
 
-The date formatting system follows a token-based approach:
+提供する関数は、src/addDays/index.ts のような形で src/ に関数名のディレクトリを作成し、中に index.ts を置く形で実装されています。
 
-1. **Tokenization** (`src/_lib/tokenize.ts`): Parses format patterns into tokens using regex
-2. **Formatters** (`src/_lib/formatters/`): Token handlers organized by category (year, month, day, etc.)
-3. **Localization** (`src/_lib/types.ts`, `src/i18n/`): Pluggable locale system via `Localize` interface
+### テスト構成
 
-### Key Design Patterns
+- Vitest を使用し、テーブル駆動テスト（`it.each`）を採用
+- 境界値テストを含む包括的なテストを実施
+- 通常ケースと例外的ケース（うるう年、紀元前の日付など）の両方をカバー
+- ローカライズ機能のテストでは、モック化した `localize` オブジェクトを使用
 
-- **Token System**: Format patterns like "yyyy-MM-dd" are tokenized and processed by specific formatters
-- **Locale Abstraction**: All text formatting goes through the `Localize` interface for i18n support
-- **Modular Functions**: Each utility is in its own directory with index.ts
-- **Dual Build**: Separate TypeScript configs for ESM/CJS outputs
+### テストファイルの配置
 
-### Test Structure
+- **ユニットテスト**：`tests/` ディレクトリに配置し、ソース構造をミラーリングすること
+  - 例：`src/isValid/index.ts` → `tests/isValid.test.ts`
+  - 例：`src/_lib/validators.ts` → `tests/_lib/validators.test.ts`
+- **契約テスト（Contract Tests）**：`specs/[feature]/contracts/` ディレクトリに配置すること
+  - 機能開発中に実装契約を検証するためのテスト
+  - 例：`specs/007-improvement-of-isvalid/contracts/internal-validator-usage.test.ts`
 
-- Uses Vitest with table-driven tests (`it.each`)
-- Tests are comprehensive with boundary value testing
-- Tests cover both normal and edge cases (leap years, BC dates, etc.)
-- Mock localize objects used for testing localization features
+### ビルド構成
 
-### Test File Organization
+- **tsconfig.json**：基本的な TypeScript 設定ファイル
+- 出力は `dist/` ディレクトリに生成され、モジュール形式ごとに分かれたディレクトリと型定義ファイルが含まれます
 
-- **Unit Tests**: MUST be placed in the `tests/` directory, mirroring the source structure
-  - Example: `src/isValid/index.ts` → `tests/isValid.test.ts`
-  - Example: `src/_lib/validators.ts` → `tests/_lib/validators.test.ts`
-- **Benchmark Tests**: MUST be placed in the `tests/` directory with `.bench.ts` extension
-  - Example: `tests/format.bench.ts` for performance testing
-- **Contract Tests**: Should be placed in `specs/[feature]/contracts/` directory
-  - These are for testing implementation contracts during feature development
-  - Example: `specs/007-improvement-of-isvalid/contracts/internal-validator-usage.test.ts`
+## コード品質ガイドライン
 
-### Build Configuration
+### 文字列リテラル
 
-- **tsconfig.json**: Base TypeScript configuration
-- **tsconfig.esm.json**: ESM build configuration
-- **tsconfig.cjs.json**: CJS build configuration
-- Outputs to `dist/` with separate directories for each module type and type definitions
+- TypeScript／JavaScript のコードでは、**必ず** 文字列リテラルにダブルクォート（`"`）を使用すること
+- これは ESLint の設定およびプロジェクトのコーディング規約との整合性を保つためです
+- 例：`return typeof value === "number"`（正しい） vs `return typeof value === 'number'`（誤り）
 
-## Code Quality Guidelines
+### 比較演算子
 
-### String Literals
-- **ALWAYS** use double quotes (`"`) for string literals in TypeScript/JavaScript code
-- This ensures consistency with the ESLint configuration and project coding standards
-- Example: `return typeof value === "number"` (correct) vs `return typeof value === 'number'` (incorrect)
+- **常に** 厳密な比較演算子（`===` および `!==`）を使用すること
+- 抽象的な比較演算子（`==` および `!=`）は型変換による予期しない動作を招くため、使用を禁止します
+- このルールは ESLint の設定（`eqeqeq: "error"`）とも一致しています
+- 例：
+  - 正しい：`if (value === null)`
+  - 誤り：`if (value == null)`
 
-### Implementation Verification
-- **VERY IMPORTANT**: When you have completed a task, you MUST run the following commands in order to ensure code quality:
-  1. `npm run lint` - Check for linting errors and code style issues
-  2. `npm test` - Ensure all tests pass
-  3. `npm run build` - Verify the code builds successfully
-- If any of these commands fail, fix the issues before proceeding or committing changes
-- Never commit code that fails linting, testing, or building
+### 型安全性
 
-### Performance Tests
-- **Performance tests should remain skipped by default** using `describe.skip()` or `it.skip()`
-- These tests use `performance.now()` and are unreliable in CI environments due to host machine load variations
-- **Only remove skip when specifically needed** for local performance validation during development
-- **Always re-add skip before committing** to maintain CI stability and resource efficiency
-- For dedicated performance testing, use benchmarking libraries like tinybench instead
+- **any** 型の使用は禁止します。必要な場合は `unknown` を使用し、明示的に型ガードを行うこと
+- `as` による型アサーションは最小限にとどめ、型推論で解決できるように設計すること
+- すべての公開関数は明示的に戻り値型を指定すること（型推論に依存しない）
+
+### コーディングスタイル
+
+- 関数名・変数名はキャメルケースを使用し、定数のみ大文字スネークケースを使用します
+- 未使用の変数・インポートはコミット前に削除してください
+- ファイル末尾には必ず改行を入れてください
+
+### エラー処理ポリシー
+
+- 例外は原則として使用しない
+- 戻り値がDate型の場合は`new Date(NaN)`、number型の場合は`NaN`を返すこと
+- 仕様上、どうしても例外を投げる必要がある場合は、必ず手を止めて判断を仰いでください
+
+### 関数追加・修正ルール
+
+- 新しい関数を追加する場合は、既存の構造に従って `src/[functionName]/index.ts` に配置すること
+- 公開関数（エクスポート対象）は必ず単体テストとJSDocを伴うこと
+- 破壊的変更（既存関数のシグネチャ変更、削除など）は事前にレビューを経て行うこと
+- すべての関数には少なくとも1つの境界値テストを含めること
+
+### 実装確認
+
+- **重要事項**：タスクを完了した後は、以下のコマンドを順番に実行してコード品質を確認すること
+  1. 修正したコードとJSDocコメントを突き合わせて、外部仕様に変更があればJSDocコメントを最新します
+  2. `npm run lint` - Lintエラーおよびコードスタイルの問題を確認します
+  3. `npm test` - すべてのテストが成功することを確認します
+  4. `npx vitest run --coverage` - カバレッジ付きテストを実行して、カバレッジが100%であることを確認します
+  5. `npm run build` - コードが正常にビルドされることを確認します
+- いずれかのコマンドが失敗した場合は、修正してから次に進む、またはコミットすること
+- Lint、テスト、またはビルドに失敗した状態のコードをコミットしてはいけません
+- 修正範囲外でエラーが発生した場合は、必ず手を止めて判断を仰いでください
