@@ -69,4 +69,11 @@ export * from "./now";
 export * from "./clamp";
 export * from "./compare";
 export * from "./constants";
-export type { Interval, Locale, TimeUnit, BoundsType, BetweenOption } from "./types";
+export type {
+  Interval,
+  Locale,
+  TimeUnit,
+  BoundsType,
+  BetweenOption,
+  CompareOptions,
+} from "./types";

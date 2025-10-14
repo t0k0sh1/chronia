@@ -426,13 +426,23 @@ type BetweenOption = {
      */
     bounds?: BoundsType;
 };
+/**
+ * Options for configuring the compare() function behavior.
+ */
+interface CompareOptions {
+    /**
+     * Sort order for comparison results.
+     * @default "ASC"
+     */
+    order?: "ASC" | "DESC";
+}
 
 /**
  * Format a Date object according to a format pattern.
  *
- * Supports Unicode format patterns with various tokens for year, month, day,
- * hour, minute, second, millisecond, era, and weekday formatting.
- * Includes support for localized formatting via optional Locale parameter.
+ * This function converts Date objects to formatted strings using Unicode format tokens.
+ * Supports the same token syntax as the parse() function for consistency. Includes support
+ * for localized formatting of month names, weekdays, day periods, and eras.
  *
  * @param date - The Date object to format
  * @param pattern - The format pattern using Unicode tokens (e.g., "yyyy-MM-dd HH:mm:ss")
@@ -441,31 +451,146 @@ type BetweenOption = {
  *
  * @example
  * ```typescript
- * const date = new Date(2024, 0, 15, 14, 30, 0);
+ * const date = new Date(2024, 0, 15, 14, 30, 45, 123);
  *
- * // Basic formatting
+ * // Basic date formatting
  * format(date, "yyyy-MM-dd"); // "2024-01-15"
+ * format(date, "dd/MM/yyyy"); // "15/01/2024"
+ *
+ * // Date and time combined
+ * format(date, "yyyy-MM-dd HH:mm:ss"); // "2024-01-15 14:30:45"
  * format(date, "dd/MM/yyyy HH:mm"); // "15/01/2024 14:30"
  *
- * // With literals
- * format(date, "'Today is' EEEE, MMMM dd"); // "Today is Monday, January 15"
- *
- * // 12-hour format
+ * // 12-hour format with AM/PM
  * format(date, "h:mm a"); // "2:30 PM"
+ * format(date, "hh:mm:ss a"); // "02:30:45 PM"
+ *
+ * // With milliseconds
+ * format(date, "HH:mm:ss.SSS"); // "14:30:45.123"
+ *
+ * // Year variations
+ * format(date, "y"); // "2024"
+ * format(date, "yy"); // "24"
+ * format(date, "yyy"); // "024"
+ * format(date, "yyyy"); // "2024"
+ *
+ * // Month variations
+ * format(date, "M"); // "1"
+ * format(date, "MM"); // "01"
+ * format(date, "MMM"); // "Jan" (abbreviated)
+ * format(date, "MMMM"); // "January" (full name)
+ * format(date, "MMMMM"); // "J" (narrow)
+ *
+ * // Weekday formatting
+ * format(date, "E"); // "Mon"
+ * format(date, "EEE"); // "Mon"
+ * format(date, "EEEE"); // "Monday"
+ * format(date, "EEEEE"); // "M"
+ *
+ * // Day period variations
+ * format(date, "h:mm a"); // "2:30 PM"
+ * format(date, "h:mm aa"); // "2:30 PM"
+ * format(date, "h:mm aaa"); // "2:30 PM"
+ * format(date, "h:mm aaaa"); // "2:30 P.M."
+ * format(date, "h:mm aaaaa"); // "2:30 p"
+ *
+ * // Era formatting
+ * const bcDate = new Date(-100, 0, 1); // 101 BC
+ * format(bcDate, "yyyy G"); // "0101 BC"
+ * format(bcDate, "yyyy GGGG"); // "0101 Before Christ"
+ * format(bcDate, "yyyy GGGGG"); // "0101 B"
+ *
+ * // Day of year
+ * format(date, "DDD"); // "015" (15th day of year)
+ *
+ * // Literal text in pattern (enclosed in quotes)
+ * format(date, "'Year' yyyy', Month' MM"); // "Year 2024, Month 01"
+ *
+ * // Escaped single quote in pattern
+ * format(date, "'It''s' yyyy"); // "It's 2024"
+ *
+ * // Complex formatting
+ * format(date, "EEEE, MMMM dd, yyyy 'at' h:mm a");
+ * // "Monday, January 15, 2024 at 2:30 PM"
+ *
+ * // ISO 8601-like format
+ * format(date, "yyyy-MM-dd'T'HH:mm:ss"); // "2024-01-15T14:30:45"
+ *
+ * // Localized formatting (English)
+ * import { enUS } from "./i18n/en-US";
+ * format(date, "MMMM dd, yyyy", enUS); // "January 15, 2024"
+ *
+ * // Localized formatting (Japanese)
+ * import { ja } from "./i18n/ja";
+ * format(date, "yyyy'年'M'月'd'日'", ja); // "2024年1月15日"
  * ```
  *
- * @example Format tokens:
- * - **Year**: y (1), yy (01), yyyy (2024)
- * - **Month**: M (1), MM (01), MMM (Jan), MMMM (January)
- * - **Day**: d (1), dd (01)
+ * @remarks
+ * **Supported Format Tokens:**
+ * - **Year**: y (variable), yy (2-digit), yyy (3-digit), yyyy (4-digit)
+ * - **Month**: M (1-12), MM (01-12), MMM (Jan/Feb/...), MMMM (January/February/...), MMMMM (J/F/M/...)
+ * - **Day**: d (1-31), dd (01-31)
  * - **Hour**: H (0-23), HH (00-23), h (1-12), hh (01-12)
- * - **Minute**: m (0), mm (00)
- * - **Second**: s (0), ss (00)
- * - **Millisecond**: S (1), SS (12), SSS (123)
- * - **Day Period**: a (AM/PM), aa (AM/PM), aaa (AM/PM)
- * - **Era**: G (AD), GG (AD), GGG (AD), GGGG (Anno Domini)
- * - **Weekday**: E/EE/EEE (Mon), EEEE (Monday)
- * - **Day of Year**: D (1), DD (01), DDD (001)
+ * - **Minute**: m (0-59), mm (00-59)
+ * - **Second**: s (0-59), ss (00-59)
+ * - **Millisecond**: S (0-9), SS (00-99), SSS (000-999)
+ * - **Day Period**: a/aa/aaa (AM/PM), aaaa (A.M./P.M.), aaaaa (a/p)
+ * - **Era**: G/GG/GGG (AD/BC), GGGG (Anno Domini/Before Christ), GGGGG (A/B)
+ * - **Weekday**: E/EE/EEE (Mon/Tue/...), EEEE (Monday/Tuesday/...), EEEEE (M/T/W/...)
+ * - **Day of Year**: D (1-366), DD (01-366), DDD (001-366)
+ *
+ * **Formatting Behavior:**
+ * - Literal text must be enclosed in single quotes ('text')
+ * - Use '' (two single quotes) to represent a literal single quote character
+ * - Tokens are case-sensitive (e.g., 'MM' vs 'mm')
+ * - Leading zeros are added based on token length (e.g., 'MM' → '01', 'M' → '1')
+ * - Invalid dates produce undefined behavior
+ *
+ * **Year Formatting:**
+ * - yy: Last 2 digits of year (2024 → "24", 1999 → "99")
+ * - yyy: Last 3 digits with zero padding (2024 → "024", 999 → "999")
+ * - yyyy: Full year with zero padding to 4 digits (2024 → "2024", 99 → "0099")
+ * - y: Variable length, no padding (2024 → "2024", 99 → "99")
+ * - BC years are represented as positive after adjustment (100 BC formats as "0100" with yyyy)
+ *
+ * **12-Hour Format:**
+ * - Use h/hh tokens for 12-hour display (1-12)
+ * - Combine with day period token (a/aa/aaa/aaaa/aaaaa) to show AM/PM
+ * - 00:00 displays as "12:00 AM" (midnight)
+ * - 12:00 displays as "12:00 PM" (noon)
+ * - 13:00 displays as "1:00 PM", etc.
+ *
+ * **Millisecond Formatting:**
+ * - S: Displays 1 digit (123ms → "1", 500ms → "5")
+ * - SS: Displays 2 digits (123ms → "12", 500ms → "50")
+ * - SSS: Displays 3 digits (123ms → "123", 500ms → "500")
+ *
+ * **Day of Year Formatting:**
+ * - Counts days from January 1st (1-indexed)
+ * - Respects leap years (366 days vs 365 days)
+ * - Example: February 1st → Day 32
+ *
+ * **Localization:**
+ * - Provide locale object to format localized text (month/weekday names, day periods, eras)
+ * - Without locale, falls back to English formatting
+ * - Locale affects: MMM/MMMM/MMMMM, E/EE/EEE/EEEE/EEEEE, a/aa/aaa/aaaa/aaaaa, G/GG/GGG/GGGG/GGGGG
+ *
+ * **Common Patterns:**
+ * - ISO 8601-like: "yyyy-MM-dd'T'HH:mm:ss" or "yyyy-MM-dd'T'HH:mm:ss.SSS"
+ * - US format: "MM/dd/yyyy" or "M/d/yyyy h:mm a"
+ * - European format: "dd/MM/yyyy" or "dd.MM.yyyy HH:mm"
+ * - Japanese format: "yyyy'年'M'月'd'日'" or "yyyy/MM/dd"
+ *
+ * **Performance Considerations:**
+ * - Pattern tokenization occurs on every call (no caching)
+ * - Complex patterns with many tokens may be slower
+ * - Localized formatting (with locale option) is slightly slower than English-only
+ * - For formatting many dates with same pattern, consider reusing the pattern string
+ *
+ * **Relationship with parse():**
+ * - format() and parse() use the same token syntax for consistency
+ * - parse(format(date, pattern), pattern) should produce equivalent date (if pattern includes all components)
+ * - Use format() to convert Date → string, parse() to convert string → Date
  */
 declare function format(date: Date, pattern: string, locale?: Locale): string;
 
@@ -3354,27 +3479,29 @@ declare function now(): Date;
 declare function clamp(date: Date | number, minDate: Date | number, maxDate: Date | number): Date;
 
 /**
- * Compare two Date objects or timestamps chronologically.
+ * Compare two Date objects or timestamps chronologically with configurable sort order.
  *
  * @param date1 - The first Date object or timestamp to compare
  * @param date2 - The second Date object or timestamp to compare
- * @param order - Optional sort order: "ASC" for ascending (default) or "DESC" for descending
+ * @param options - Comparison options with default { order: "ASC" }
  * @returns -1 if date1 < date2, 1 if date1 > date2, 0 if equal (adjusted for order)
- *
- * @throws {RangeError} When arguments are not valid Date objects/timestamps
+ *          Returns NaN if inputs are invalid
  *
  * @example
- * // Compare Date objects (existing behavior)
+ * // Compare Date objects with default ascending order
  * compare(new Date('2024-01-01'), new Date('2024-01-02')); // -1 (ascending)
- * compare(new Date('2024-01-01'), new Date('2024-01-02'), 'DESC'); // 1 (descending)
  * compare(new Date('2024-01-01'), new Date('2024-01-01')); // 0 (equal)
  *
  * @example
- * // Compare timestamps (new feature)
+ * // Compare with explicit descending order
+ * compare(new Date('2024-01-01'), new Date('2024-01-02'), { order: 'DESC' }); // 1 (descending)
+ *
+ * @example
+ * // Compare timestamps
  * const timestamp1 = new Date('2024-01-01').getTime();
  * const timestamp2 = new Date('2024-01-02').getTime();
  * compare(timestamp1, timestamp2); // -1 (ascending)
- * compare(timestamp1, timestamp2, 'DESC'); // 1 (descending)
+ * compare(timestamp1, timestamp2, { order: 'DESC' }); // 1 (descending)
  *
  * @example
  * // Compare mixed Date and timestamp inputs
@@ -3382,21 +3509,25 @@ declare function clamp(date: Date | number, minDate: Date | number, maxDate: Dat
  * compare(timestamp1, new Date('2024-01-02')); // -1
  *
  * @example
- * // Sort dates in ascending order
+ * // Sort dates in ascending order (default)
  * dates.sort(compare);
  *
  * @example
- * // Sort mixed arrays
- * mixed.sort((a, b) => compare(a, b, 'DESC'));
+ * // Sort dates in descending order
+ * dates.sort((a, b) => compare(a, b, { order: 'DESC' }));
  *
  * @example
- * // Order parameter is case-insensitive at runtime (though TypeScript types are strict)
+ * // Empty options object defaults to ascending order
+ * compare(date1, date2, {}); // Same as compare(date1, date2)
+ *
+ * @example
+ * // Order property is case-insensitive at runtime
  * // These work at runtime even though TypeScript will show type errors:
- * // compare(date1, date2, 'desc'); // treated as 'DESC'
- * // compare(date1, date2, 'asc');  // treated as 'ASC'
- * // compare(date1, date2, 'xyz');  // treated as 'ASC' (default)
+ * // compare(date1, date2, { order: 'desc' }); // treated as 'DESC'
+ * // compare(date1, date2, { order: 'asc' });  // treated as 'ASC'
+ * // compare(date1, date2, { order: 'xyz' });  // treated as 'ASC' (default)
  */
-declare function compare(date1: Date | number, date2: Date | number, order?: "ASC" | "DESC"): number;
+declare function compare(date1: Date | number, date2: Date | number, options?: CompareOptions): number;
 
 /**
  * Date constants for the minimum and maximum representable dates in JavaScript.
@@ -3417,4 +3548,4 @@ declare const MIN_DATE: Date;
  */
 declare const MAX_DATE: Date;
 
-export { type BetweenOption, type BoundsType, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export { type BetweenOption, type BoundsType, type CompareOptions, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
