@@ -191,6 +191,7 @@ Exported constants and TypeScript type definitions.
 - `TimeUnit` - Type for time units
 - `BoundsType` - Type for boundary options
 - `BetweenOption` - Type for between operation options
+- `CompareOptions` - Type for compare function options
 
 ## Core Functions
 
@@ -232,7 +233,8 @@ import { isAfter, compare } from "chronia";
 isAfter(new Date(2025, 0, 1), new Date(2024, 0, 1)); // true
 
 const dates = [new Date(2024, 0, 10), new Date(2024, 0, 20)];
-dates.sort(compare); // chronological order
+dates.sort(compare); // ascending order (default)
+dates.sort((a, b) => compare(a, b, { order: "DESC" })); // descending order
 ```
 
 ### Ranges & Differences

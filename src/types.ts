@@ -181,3 +181,14 @@ export type BetweenOption = {
    */
   bounds?: BoundsType;
 };
+
+/**
+ * Options for configuring the compare() function behavior.
+ */
+export interface CompareOptions {
+  /**
+   * Sort order for comparison results.
+   * @default "ASC"
+   */
+  order?: "ASC" | "DESC";
+}

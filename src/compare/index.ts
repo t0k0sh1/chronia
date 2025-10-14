@@ -1,27 +1,30 @@
 import { isValidDateOrNumber } from "../_lib/validators";
+import type { CompareOptions } from "../types";
 
 /**
- * Compare two Date objects or timestamps chronologically.
+ * Compare two Date objects or timestamps chronologically with configurable sort order.
  *
  * @param date1 - The first Date object or timestamp to compare
  * @param date2 - The second Date object or timestamp to compare
- * @param order - Optional sort order: "ASC" for ascending (default) or "DESC" for descending
+ * @param options - Comparison options with default { order: "ASC" }
  * @returns -1 if date1 < date2, 1 if date1 > date2, 0 if equal (adjusted for order)
- *
- * @throws {RangeError} When arguments are not valid Date objects/timestamps
+ *          Returns NaN if inputs are invalid
  *
  * @example
- * // Compare Date objects (existing behavior)
+ * // Compare Date objects with default ascending order
  * compare(new Date('2024-01-01'), new Date('2024-01-02')); // -1 (ascending)
- * compare(new Date('2024-01-01'), new Date('2024-01-02'), 'DESC'); // 1 (descending)
  * compare(new Date('2024-01-01'), new Date('2024-01-01')); // 0 (equal)
  *
  * @example
- * // Compare timestamps (new feature)
+ * // Compare with explicit descending order
+ * compare(new Date('2024-01-01'), new Date('2024-01-02'), { order: 'DESC' }); // 1 (descending)
+ *
+ * @example
+ * // Compare timestamps
  * const timestamp1 = new Date('2024-01-01').getTime();
  * const timestamp2 = new Date('2024-01-02').getTime();
  * compare(timestamp1, timestamp2); // -1 (ascending)
- * compare(timestamp1, timestamp2, 'DESC'); // 1 (descending)
+ * compare(timestamp1, timestamp2, { order: 'DESC' }); // 1 (descending)
  *
  * @example
  * // Compare mixed Date and timestamp inputs
@@ -29,24 +32,28 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * compare(timestamp1, new Date('2024-01-02')); // -1
  *
  * @example
- * // Sort dates in ascending order
+ * // Sort dates in ascending order (default)
  * dates.sort(compare);
  *
  * @example
- * // Sort mixed arrays
- * mixed.sort((a, b) => compare(a, b, 'DESC'));
+ * // Sort dates in descending order
+ * dates.sort((a, b) => compare(a, b, { order: 'DESC' }));
  *
  * @example
- * // Order parameter is case-insensitive at runtime (though TypeScript types are strict)
+ * // Empty options object defaults to ascending order
+ * compare(date1, date2, {}); // Same as compare(date1, date2)
+ *
+ * @example
+ * // Order property is case-insensitive at runtime
  * // These work at runtime even though TypeScript will show type errors:
- * // compare(date1, date2, 'desc'); // treated as 'DESC'
- * // compare(date1, date2, 'asc');  // treated as 'ASC'
- * // compare(date1, date2, 'xyz');  // treated as 'ASC' (default)
+ * // compare(date1, date2, { order: 'desc' }); // treated as 'DESC'
+ * // compare(date1, date2, { order: 'asc' });  // treated as 'ASC'
+ * // compare(date1, date2, { order: 'xyz' });  // treated as 'ASC' (default)
  */
 export function compare(
   date1: Date | number,
   date2: Date | number,
-  order?: "ASC" | "DESC",
+  options: CompareOptions = { order: "ASC" },
 ): number {
   // Validate inputs early for NaN cases
   if (!isValidDateOrNumber(date1) || !isValidDateOrNumber(date2)) return NaN;
@@ -55,16 +62,35 @@ export function compare(
   const dateLeft = new Date(date1);
   const dateRight = new Date(date2);
 
-  // Order parameter normalization (case-insensitive, default to ASC for invalid values)
+  // Options normalization (case-insensitive order, default to ASC for invalid values)
+  // Handle both legacy string argument (for JS compatibility) and new options object
   let normalizedOrder: "ASC" | "DESC" = "ASC";
-  if (order !== undefined && order !== null && typeof order === "string") {
-    const upperOrder = order.toUpperCase();
+
+  // Use type assertion to allow runtime flexibility while maintaining TypeScript types
+  const opts = options as CompareOptions | string | undefined | null;
+
+  // Check if options is a string (legacy API for JS users)
+  if (typeof opts === "string") {
+    const upperOrder = opts.toUpperCase();
+    if (upperOrder === "DESC") {
+      normalizedOrder = "DESC";
+    }
+  }
+  // Check if options is an object with order property (new API)
+  else if (
+    opts !== null &&
+    opts !== undefined &&
+    typeof opts === "object" &&
+    "order" in opts &&
+    typeof opts.order === "string"
+  ) {
+    const upperOrder = opts.order.toUpperCase();
     if (upperOrder === "DESC") {
       normalizedOrder = "DESC";
     }
     // Any other value (including "ASC", "asc", or invalid strings) defaults to "ASC"
   }
-  // null, undefined, and non-string values all default to "ASC"
+  // null, undefined options, or missing order property all default to "ASC"
 
   // Core comparison logic using Date.getTime()
   const timestamp1 = dateLeft.getTime();
