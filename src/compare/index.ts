@@ -64,33 +64,22 @@ export function compare(
 
   // Options normalization (case-insensitive order, default to ASC for invalid values)
   // Handle both legacy string argument (for JS compatibility) and new options object
-  let normalizedOrder: "ASC" | "DESC" = "ASC";
-
   // Use type assertion to allow runtime flexibility while maintaining TypeScript types
   const opts = options as CompareOptions | string | undefined | null;
 
-  // Check if options is a string (legacy API for JS users)
+  // Extract order value from either string or options object
+  let orderValue: string | undefined;
   if (typeof opts === "string") {
-    const upperOrder = opts.toUpperCase();
-    if (upperOrder === "DESC") {
-      normalizedOrder = "DESC";
-    }
+    orderValue = opts; // Legacy string API
+  } else if (opts && typeof opts === "object" && "order" in opts) {
+    orderValue = opts.order; // New options object API
   }
-  // Check if options is an object with order property (new API)
-  else if (
-    opts !== null &&
-    opts !== undefined &&
-    typeof opts === "object" &&
-    "order" in opts &&
-    typeof opts.order === "string"
-  ) {
-    const upperOrder = opts.order.toUpperCase();
-    if (upperOrder === "DESC") {
-      normalizedOrder = "DESC";
-    }
-    // Any other value (including "ASC", "asc", or invalid strings) defaults to "ASC"
-  }
-  // null, undefined options, or missing order property all default to "ASC"
+
+  // Normalize order value (case-insensitive, defaults to ASC for invalid values)
+  const normalizedOrder: "ASC" | "DESC" =
+    typeof orderValue === "string" && orderValue.toUpperCase() === "DESC"
+      ? "DESC"
+      : "ASC";
 
   // Core comparison logic using Date.getTime()
   const timestamp1 = dateLeft.getTime();
