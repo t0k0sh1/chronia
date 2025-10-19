@@ -76,4 +76,5 @@ export type {
   BoundsType,
   BetweenOption,
   CompareOptions,
+  ComparisonOptions,
 } from "./types";

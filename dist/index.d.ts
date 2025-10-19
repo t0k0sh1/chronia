@@ -436,6 +436,16 @@ interface CompareOptions {
      */
     order?: "ASC" | "DESC";
 }
+/**
+ * Options for configuring date comparison functions with unit granularity.
+ */
+type ComparisonOptions = {
+    /**
+     * The unit of comparison (year, month, day, hour, minute, second, millisecond).
+     * @default "millisecond"
+     */
+    unit?: TimeUnit;
+};
 
 /**
  * Format a Date object according to a format pattern.
@@ -1288,8 +1298,8 @@ declare function setMilliseconds(date: Date | number, milliseconds: number): Dat
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param opts - Optional configuration object
- * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is after date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1328,9 +1338,7 @@ declare function setMilliseconds(date: Date | number, milliseconds: number): Dat
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isAfter(a: Date | number, b: Date | number, opts?: {
-    unit?: TimeUnit;
-}): boolean;
+declare function isAfter(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
 
 /**
  * Check if the first date is after or equal to the second date.
@@ -1341,8 +1349,8 @@ declare function isAfter(a: Date | number, b: Date | number, opts?: {
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param opts - Optional configuration object
- * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is after or equal to date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1381,9 +1389,7 @@ declare function isAfter(a: Date | number, b: Date | number, opts?: {
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isAfterOrEqual(a: Date | number, b: Date | number, opts?: {
-    unit?: TimeUnit;
-}): boolean;
+declare function isAfterOrEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
 
 /**
  * Check if the first date is strictly before the second date.
@@ -1394,8 +1400,8 @@ declare function isAfterOrEqual(a: Date | number, b: Date | number, opts?: {
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param opts - Optional configuration object
- * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1434,9 +1440,7 @@ declare function isAfterOrEqual(a: Date | number, b: Date | number, opts?: {
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isBefore(a: Date | number, b: Date | number, opts?: {
-    unit?: TimeUnit;
-}): boolean;
+declare function isBefore(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
 
 /**
  * Check if the first date is before or equal to the second date.
@@ -1447,8 +1451,8 @@ declare function isBefore(a: Date | number, b: Date | number, opts?: {
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param opts - Optional configuration object
- * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before or equal to date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1487,9 +1491,7 @@ declare function isBefore(a: Date | number, b: Date | number, opts?: {
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isBeforeOrEqual(a: Date | number, b: Date | number, opts?: {
-    unit?: TimeUnit;
-}): boolean;
+declare function isBeforeOrEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
 
 /**
  * Check if a date falls between two boundary dates with configurable inclusion.
@@ -1499,8 +1501,8 @@ declare function isBeforeOrEqual(a: Date | number, b: Date | number, opts?: {
  *
  * @param date - The date to check as a Date object or timestamp (number)
  * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
- * @param opts - Optional configuration for boundary inclusion
- * @param opts.bounds - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only. Defaults to "()"
+ * @param [options={}] - Configuration options for boundary inclusion.
+ * @param [options.bounds="()"] - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only.
  * @returns True if date is between the boundaries according to the bounds configuration, false otherwise
  *
  * @example
@@ -1552,7 +1554,7 @@ declare function isBeforeOrEqual(a: Date | number, b: Date | number, opts?: {
  *   - "(]" - Start excluded, end included
  * - Invalid bounds values default to "()" behavior
  */
-declare function isBetween(date: Date | number, interval: Interval, opts?: BetweenOption): boolean;
+declare function isBetween(date: Date | number, interval: Interval, options?: BetweenOption): boolean;
 
 /**
  * Check if two dates are equal.
@@ -1563,8 +1565,8 @@ declare function isBetween(date: Date | number, interval: Interval, opts?: Betwe
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param opts - Optional configuration object
- * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is equal to date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1605,9 +1607,7 @@ declare function isBetween(date: Date | number, interval: Interval, opts?: Betwe
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  * - Two dates with the same timestamp are always equal (at millisecond precision)
  */
-declare function isEqual(a: Date | number, b: Date | number, opts?: {
-    unit?: TimeUnit;
-}): boolean;
+declare function isEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
 
 /**
  * Check if the given value is a valid Date or timestamp.
@@ -3548,4 +3548,4 @@ declare const MIN_DATE: Date;
  */
 declare const MAX_DATE: Date;
 
-export { type BetweenOption, type BoundsType, type CompareOptions, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export { type BetweenOption, type BoundsType, type CompareOptions, type ComparisonOptions, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
