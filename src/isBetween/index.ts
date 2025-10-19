@@ -107,7 +107,7 @@ export function isBetween(
   }
 
   // Get the bounds option, defaulting to "()" for backward compatibility
-  const bounds = options.bounds ?? "()";
+  const bounds = options?.bounds ?? "()";
   const startTime = effectiveStart.getTime();
   const endTime = effectiveEnd.getTime();
 

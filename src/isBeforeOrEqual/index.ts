@@ -63,7 +63,7 @@ export function isBeforeOrEqual(
   const dtA = new Date(a);
   const dtB = new Date(b);
 
-  const unit = options.unit ?? "millisecond";
+  const unit = options?.unit ?? "millisecond";
 
   if (unit === "millisecond") {
     return dtA.getTime() <= dtB.getTime();
