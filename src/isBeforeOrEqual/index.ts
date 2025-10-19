@@ -1,6 +1,6 @@
 import { truncateToUnit } from "../_lib/truncateToUnit";
 import { isValidDateOrNumber } from "../_lib/validators";
-import { TimeUnit } from "../types";
+import { ComparisonOptions } from "../types";
 
 /**
  * Check if the first date is before or equal to the second date.
@@ -11,8 +11,8 @@ import { TimeUnit } from "../types";
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param opts - Optional configuration object
- * @param opts.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before or equal to date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -54,9 +54,7 @@ import { TimeUnit } from "../types";
 export function isBeforeOrEqual(
   a: Date | number,
   b: Date | number,
-  opts?: {
-    unit?: TimeUnit;
-  },
+  options: ComparisonOptions = {},
 ): boolean {
   // Early validation for fast-fail behavior and code consistency across functions
   // Slight overhead of Date construction is acceptable for clarity and uniform validation
@@ -65,7 +63,7 @@ export function isBeforeOrEqual(
   const dtA = new Date(a);
   const dtB = new Date(b);
 
-  const unit = opts?.unit ?? "millisecond";
+  const unit = options?.unit ?? "millisecond";
 
   if (unit === "millisecond") {
     return dtA.getTime() <= dtB.getTime();

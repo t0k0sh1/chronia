@@ -192,3 +192,14 @@ export interface CompareOptions {
    */
   order?: "ASC" | "DESC";
 }
+
+/**
+ * Options for configuring date comparison functions with unit granularity.
+ */
+export type ComparisonOptions = {
+  /**
+   * The unit of comparison (year, month, day, hour, minute, second, millisecond).
+   * @default "millisecond"
+   */
+  unit?: TimeUnit;
+};
