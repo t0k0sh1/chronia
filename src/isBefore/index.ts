@@ -11,8 +11,8 @@ import { ComparisonOptions } from "../types";
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param options - Configuration options with default {}
- * @param options.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before date `b`, false otherwise or if either date is invalid
  *
  * @example

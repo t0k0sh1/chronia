@@ -1298,8 +1298,8 @@ declare function setMilliseconds(date: Date | number, milliseconds: number): Dat
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param options - Configuration options with default {}
- * @param options.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is after date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1349,8 +1349,8 @@ declare function isAfter(a: Date | number, b: Date | number, options?: Compariso
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param options - Configuration options with default {}
- * @param options.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is after or equal to date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1400,8 +1400,8 @@ declare function isAfterOrEqual(a: Date | number, b: Date | number, options?: Co
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param options - Configuration options with default {}
- * @param options.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1451,8 +1451,8 @@ declare function isBefore(a: Date | number, b: Date | number, options?: Comparis
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param options - Configuration options with default {}
- * @param options.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before or equal to date `b`, false otherwise or if either date is invalid
  *
  * @example
@@ -1501,8 +1501,8 @@ declare function isBeforeOrEqual(a: Date | number, b: Date | number, options?: C
  *
  * @param date - The date to check as a Date object or timestamp (number)
  * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
- * @param options - Configuration options for boundary inclusion with default {}
- * @param options.bounds - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only. Defaults to "()"
+ * @param [options={}] - Configuration options for boundary inclusion.
+ * @param [options.bounds="()"] - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only.
  * @returns True if date is between the boundaries according to the bounds configuration, false otherwise
  *
  * @example
@@ -1565,8 +1565,8 @@ declare function isBetween(date: Date | number, interval: Interval, options?: Be
  *
  * @param a - The first date as a Date object or timestamp (number)
  * @param b - The second date as a Date object or timestamp (number)
- * @param options - Configuration options with default {}
- * @param options.unit - The unit of comparison (year, month, day, hour, minute, second, millisecond). Defaults to "millisecond"
+ * @param [options={}] - Configuration options.
+ * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is equal to date `b`, false otherwise or if either date is invalid
  *
  * @example

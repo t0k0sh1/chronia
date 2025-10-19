@@ -10,8 +10,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @param date - The date to check as a Date object or timestamp (number)
  * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
- * @param options - Configuration options for boundary inclusion with default {}
- * @param options.bounds - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only. Defaults to "()"
+ * @param [options={}] - Configuration options for boundary inclusion.
+ * @param [options.bounds="()"] - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only.
  * @returns True if date is between the boundaries according to the bounds configuration, false otherwise
  *
  * @example
