@@ -10,8 +10,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @param date - The date to check as a Date object or timestamp (number)
  * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
- * @param opts - Optional configuration for boundary inclusion
- * @param opts.bounds - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only. Defaults to "()"
+ * @param options - Configuration options for boundary inclusion with default {}
+ * @param options.bounds - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only. Defaults to "()"
  * @returns True if date is between the boundaries according to the bounds configuration, false otherwise
  *
  * @example
@@ -66,7 +66,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
 export function isBetween(
   date: Date | number,
   interval: Interval,
-  opts?: BetweenOption,
+  options: BetweenOption = {},
 ): boolean {
   if (!isValidDateOrNumber(date)) return false;
 
@@ -107,7 +107,7 @@ export function isBetween(
   }
 
   // Get the bounds option, defaulting to "()" for backward compatibility
-  const bounds = opts?.bounds ?? "()";
+  const bounds = options.bounds ?? "()";
   const startTime = effectiveStart.getTime();
   const endTime = effectiveEnd.getTime();
 
