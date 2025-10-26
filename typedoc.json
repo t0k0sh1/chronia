@@ -1,6 +1,6 @@
 {
   "entryPoints": ["src/index.ts"],
-  "out": "docs",
+  "out": "site",
   "exclude": ["src/_lib/**/*"],
   "excludeExternals": true,
   "excludePrivate": true,

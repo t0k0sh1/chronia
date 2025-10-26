@@ -68,6 +68,8 @@ console.log(isAfter(nextWeek, current)); // true
 
 Chronia provides 70 functions organized into 10 categories:
 
+> 📚 **For AI Agents**: Detailed documentation optimized for AI comprehension is available in the [`docs/`](docs/) directory. See [`docs/README.md`](docs/README.md) for a complete guide.
+
 ### 1. Arithmetic (14 functions)
 Add or subtract time units from dates.
 
@@ -88,6 +90,8 @@ Add or subtract time units from dates.
 - `subMinutes` - Subtract minutes from a date
 - `subSeconds` - Subtract seconds from a date
 - `subMilliseconds` - Subtract milliseconds from a date
+
+📖 *Detailed documentation*: [Addition](docs/function-categories/arithmetic/addition.md) | [Subtraction](docs/function-categories/arithmetic/subtraction.md)
 
 ### 2. Comparison (14 functions)
 Compare dates and check for equality or relative ordering.
@@ -112,6 +116,8 @@ Compare dates and check for equality or relative ordering.
 **Validation:**
 - `isValid` - Check if a date is valid
 
+📖 *Detailed documentation*: [Relational](docs/function-categories/comparison/relational.md) | [Equality](docs/function-categories/comparison/equality.md) | [Validation](docs/function-categories/comparison/validation.md)
+
 ### 3. Difference (7 functions)
 Calculate the difference between two dates in specific units.
 
@@ -122,6 +128,8 @@ Calculate the difference between two dates in specific units.
 - `diffMinutes` - Calculate the difference in minutes
 - `diffSeconds` - Calculate the difference in seconds
 - `diffMilliseconds` - Calculate the difference in milliseconds
+
+📖 *Detailed documentation*: [Calculations](docs/function-categories/difference/calculations.md)
 
 ### 4. Getter (8 functions)
 Extract specific components from dates.
@@ -135,6 +143,8 @@ Extract specific components from dates.
 - `getMilliseconds` - Get the milliseconds
 - `getTime` - Get the Unix timestamp
 
+📖 *Detailed documentation*: [Extraction](docs/function-categories/getter/extraction.md)
+
 ### 5. Setter (8 functions)
 Set specific components of dates.
 
@@ -147,6 +157,8 @@ Set specific components of dates.
 - `setMilliseconds` - Set the milliseconds
 - `setTime` - Set the date from Unix timestamp
 
+📖 *Detailed documentation*: [Modification](docs/function-categories/setter/modification.md)
+
 ### 6. Boundary (6 functions)
 Get the start or end of a time period.
 
@@ -156,6 +168,8 @@ Get the start or end of a time period.
 - `endOfMonth` - Get the end of the month
 - `startOfDay` - Get the start of the day
 - `endOfDay` - Get the end of the day
+
+📖 *Detailed documentation*: [Periods](docs/function-categories/boundary/periods.md)
 
 ### 7. Truncation (7 functions)
 Zero out time components below a specified unit.
@@ -168,11 +182,15 @@ Zero out time components below a specified unit.
 - `truncSecond` - Truncate to second (zero out milliseconds)
 - `truncMillisecond` - Truncate to millisecond
 
+📖 *Detailed documentation*: [Units](docs/function-categories/truncation/units.md)
+
 ### 8. Formatting (2 functions)
 Convert between dates and strings.
 
 - `format` - Format a date to a string
 - `parse` - Parse a string to a date
+
+📖 *Detailed documentation*: [Conversion](docs/function-categories/formatting/conversion.md)
 
 ### 9. Utility (4 functions)
 Miscellaneous helper functions.
@@ -181,6 +199,8 @@ Miscellaneous helper functions.
 - `min` - Get the earliest date from multiple dates
 - `max` - Get the latest date from multiple dates
 - `clamp` - Clamp a date within a range
+
+📖 *Detailed documentation*: [Helpers](docs/function-categories/utility/helpers.md)
 
 ### 10. Constants & Types
 Exported constants and TypeScript type definitions.
@@ -192,6 +212,8 @@ Exported constants and TypeScript type definitions.
 - `BoundsType` - Type for boundary options
 - `BetweenOption` - Type for between operation options
 - `CompareOptions` - Type for compare function options
+
+📖 *Detailed documentation*: [Types](docs/function-categories/constants/types.md)
 
 ## Core Functions
 
@@ -214,7 +236,7 @@ format(date, "yyyy-MM-dd HH:mm:ss"); // "2024-01-15 00:00:00"
 parse("2024-01-15", "yyyy-MM-dd"); // Date object
 ```
 
-Supports standard Unicode tokens. See [API Reference](https://t0k0sh1.github.io/chronia/) for full list.
+Supports standard Unicode tokens. See [API Reference](https://t0k0sh1.github.io/chronia/site/) for full list.
 
 ### Date Arithmetic
 
@@ -258,7 +280,7 @@ isValid(new Date("invalid")); // false
 
 ⸻
 
-👉 For full API docs and more examples, see the [TypeDoc documentation](https://t0k0sh1.github.io/chronia/).
+👉 For full API docs and more examples, see the [TypeDoc documentation](https://t0k0sh1.github.io/chronia/site/).
 
 ## Error Handling Policy
 
@@ -294,6 +316,44 @@ Use `isValid()` to distinguish these cases.
 - Any breaking changes must be explicitly documented in the release notes and changelog
 - The official release of this library starts from **v1.0.0**
   - Versions in the **0.x.x range are considered beta releases** and do not strictly follow the above rules
+
+## AI Documentation
+
+Chronia includes comprehensive documentation specifically designed for AI agents (Claude, GitHub Copilot, etc.) to help them understand and correctly implement the library.
+
+### Documentation Structure
+
+The [`docs/`](docs/) directory contains three main sections:
+
+1. **[Function Categories](docs/function-categories/)** - Detailed documentation for all 70 functions
+   - Complete function signatures with examples
+   - AI guidance for recommending appropriate functions
+   - Common pitfalls and edge cases
+   - Cross-references to related functions
+
+2. **[Guidelines](docs/guidelines/)** - Development principles and technical specifications
+   - [Development Principles](docs/guidelines/development-principles.md) - Core philosophy and design patterns
+   - [Error Handling](docs/guidelines/error-handling.md) - No-exceptions policy and error patterns
+   - [Input Validation](docs/guidelines/input-validation.md) - Validation strategies
+   - [Common Use Cases](docs/guidelines/common-use-cases.md) - Practical implementation patterns
+   - [Project Structure](docs/guidelines/project-structure.md) - Codebase organization
+   - [Tech Stack](docs/guidelines/tech-stack.md) - Tools and technologies
+
+3. **[Troubleshooting](docs/troubleshooting/)** - Debugging and problem-solving guides
+   - [Common Pitfalls](docs/troubleshooting/common-pitfalls.md) - 20 common mistakes and solutions
+   - [Debugging Guide](docs/troubleshooting/debugging-guide.md) - Systematic debugging approach
+
+### For AI Agents
+
+Start with [`docs/README.md`](docs/README.md) for a complete navigation guide. The documentation includes:
+- Function-specific examples and patterns
+- AI response guidance for helping users
+- Cross-references between related functions
+- Common user questions mapped to documentation sections
+
+### For Developers Using AI Assistants
+
+Reference the [`docs/`](docs/) directory when asking AI assistants for help with Chronia. The structured documentation helps AI provide more accurate and context-aware responses.
 
 ## Contributing
 
