@@ -376,7 +376,7 @@ if (!isValid(result)) {
 ## Performance Considerations
 
 - **Chaining**: Multiple additions incur multiple Date object creations. For performance-critical code, consider using timestamp arithmetic with `getTime()` and `setTime()`.
-- **Large amounts**: Adding very large amounts (e.g., millions of days) is handled correctly but may be slower for month/year operations due to overflow checks.
+- **Large amounts**: Adding large amounts (e.g., millions of days) is handled correctly but may be slower for month/year operations due to overflow checks.
 
 ## Related Functions
 

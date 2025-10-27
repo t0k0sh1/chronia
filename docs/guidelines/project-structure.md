@@ -2,7 +2,7 @@
 
 ## Directory Layout
 
-```
+```plaintext
 chronia/
 ├── src/                      # Source code
 │   ├── addDays/
@@ -96,7 +96,7 @@ import { truncateToUnit } from "../_lib/truncateToUnit";
 
 ### Token System Architecture
 Format/parse share token system:
-```
+```plaintext
 formatters/
   index.ts          # Maps tokens → formatter functions
   tokens/
@@ -114,7 +114,7 @@ parsers/
 
 ## Build Output Structure
 
-```
+```plaintext
 dist/
 ├── index.js          # ESM bundle
 ├── index.cjs         # CommonJS bundle
@@ -126,7 +126,7 @@ dist/
 
 ## Testing Structure
 
-```
+```plaintext
 tests/
 ├── addDays.test.ts          # Function-specific tests
 ├── contract/
@@ -142,7 +142,7 @@ tests/
 ## Documentation Structure
 
 ### AI Documentation (`docs/`)
-```
+```plaintext
 docs/
 ├── README.md                        # AI documentation overview
 ├── function-categories/

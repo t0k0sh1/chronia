@@ -185,7 +185,7 @@ export default [
 ## Build Output
 
 ### Dual Module Format
-```
+```text
 dist/
 ├── index.js      # ESM (for modern bundlers)
 ├── index.cjs     # CommonJS (for Node.js)

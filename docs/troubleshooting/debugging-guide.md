@@ -607,7 +607,7 @@ console.log(result); // Feb 29, 2024
 - Result valid: true
 
 **Question:** Is this month-end adjustment intended behavior?
-```
+```markdown
 
 ## Related
 

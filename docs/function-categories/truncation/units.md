@@ -91,8 +91,8 @@ startOfDay(date);
 // truncMonth is like startOfMonth
 ```
 
-### Used Internally
-Many functions use truncation internally:
+### Internal Usage
+Many functions use truncation:
 - `isEqual` with unit option
 - `diff*` functions for unit-based calculations
 

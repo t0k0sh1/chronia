@@ -17,6 +17,7 @@ Parses a formatted string to a Date object. Returns Invalid Date if parsing fail
 ## Common Format Tokens
 
 ### Date Tokens
+
 | Token | Output | Example |
 |-------|--------|---------|
 | `y`, `yy` | Year (2-digit) | 24 |
@@ -31,6 +32,7 @@ Parses a formatted string to a Date object. Returns Invalid Date if parsing fail
 | `EEEE` | Weekday (full name) | Monday |
 
 ### Time Tokens
+
 | Token | Output | Example |
 |-------|--------|---------|
 | `H` | Hour 24h (0-23) | 0, 14 |

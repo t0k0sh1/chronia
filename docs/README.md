@@ -198,23 +198,23 @@ if (isAfter(deadline, now())) {
 
 ### When to Use Each Section
 
-**Function Categories** - Use when:
-- User asks about specific functions
-- Implementing date/time operations
-- Need examples of function usage
-- Understanding function signatures and behavior
+- **Function Categories** - Use when:
+  - User asks about specific functions
+  - Implementing date/time operations
+  - Need examples of function usage
+  - Understanding function signatures and behavior
 
-**Guidelines** - Use when:
-- Understanding project architecture
-- Learning development patterns
-- Implementing new features
-- Understanding error handling approach
+- **Guidelines** - Use when:
+  - Understanding project architecture
+  - Learning development patterns
+  - Implementing new features
+  - Understanding error handling approach
 
-**Troubleshooting** - Use when:
-- Debugging issues
-- User reports unexpected behavior
-- Helping users avoid common mistakes
-- Performance optimization
+- **Troubleshooting** - Use when:
+  - Debugging issues
+  - User reports unexpected behavior
+  - Helping users avoid common mistakes
+  - Performance optimization
 
 ### Recommended Reading Order
 

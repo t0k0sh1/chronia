@@ -83,9 +83,10 @@ chronia/
 
 ### 1. Directory Restructuring Component
 
-**Purpose**: Rename existing documentation directory and create new AI-focused structure
+#### Purpose
+Rename existing documentation directory and create new AI-focused structure
 
-**Implementation**:
+#### Implementation
 - Rename existing `docs/` directory to `site/`
 - Create new `docs/` directory with AI-focused content structure
 - Update TypeDoc configuration in `typedoc.json` to output to `site/` directory
@@ -93,14 +94,15 @@ chronia/
 
 ### 2. AI Documentation Generator Component
 
-**Purpose**: Create structured markdown documentation for AI consumption
+#### Purpose
+Create structured markdown documentation for AI consumption
 
-**Key Files**:
+#### Key Files
 - Function category directories with specific markdown files for each subcategory
 - Guidelines documentation including core development principles and common development scenarios
 - Troubleshooting guides with specific solutions
 
-**Guidelines Content Details**:
+#### Guidelines Content Details
 - `development-principles.md`: Core development principles including directory structure for new functions, TypeScript type safety with JavaScript compatibility, no-exception error handling policy, focus on high-frequency functions only, performance and robustness priorities, options parameter patterns
 - `project-structure.md`: Project structure and organization including directory layout, file naming conventions, module organization, and architectural patterns
 - `tech-stack.md`: Technology stack explanation including TypeScript 5.9+, Node.js LTS support, Vitest for testing, tsup for building, ESLint for linting, TypeDoc for documentation generation
@@ -108,11 +110,11 @@ chronia/
 - `input-validation.md`: Input validation approaches using _lib/validators.ts, isValidDateOrNumber and isValidNumber patterns
 - `common-use-cases.md`: Typical usage scenarios including date arithmetic, formatting/parsing, comparisons, and boundary operations
 
-**Troubleshooting Content Details**:
+#### Troubleshooting Content Details
 - `common-pitfalls.md`: Frequent mistakes including timezone handling, month indexing (0-11), leap year edge cases, invalid date propagation, and their solutions
 - `debugging-guide.md`: Debugging date/time issues including how to identify invalid dates, understanding error return values, testing with edge cases, and validation strategies
 
-**Content Structure**:
+#### Content Structure
 ```markdown
 # [Subcategory Name] Functions
 
@@ -134,9 +136,10 @@ Frequent mistakes and how to avoid them
 
 ### 3. README Enhancement Component
 
-**Purpose**: Enhance existing README.md with AI-friendly content while maintaining human readability
+#### Purpose
+Enhance existing README.md with AI-friendly content while maintaining human readability
 
-**Enhancements**:
+#### Enhancements
 - Add AI-specific sections without disrupting existing flow
 - Include links from each of the 10 function category sections to corresponding docs/ files
 - Add metadata for AI comprehension (library purpose, function count, categories)
@@ -145,9 +148,10 @@ Frequent mistakes and how to avoid them
 
 ### 4. GitHub Copilot Instructions Component
 
-**Purpose**: Provide comprehensive project context for GitHub Copilot
+#### Purpose
+Provide comprehensive project context for GitHub Copilot
 
-**Content Areas**:
+#### Content Areas
 - Document overview and prerequisites
 - Library overview with main features (referencing docs/guidelines/development-principles.md)
 - Technology stack overview (referencing docs/guidelines/tech-stack.md)
@@ -161,9 +165,10 @@ Frequent mistakes and how to avoid them
 
 ### 5. AGENTS.md Consolidation Component
 
-**Purpose**: Create single entry point for all AI-related documentation
+#### Purpose
+Create single entry point for all AI-related documentation
 
-**Structure**:
+#### Structure
 - Overview of AI documentation resources and their purposes
 - Links to category-specific documentation in docs/function-categories/
 - References to existing CLAUDE.md for Claude-specific guidance

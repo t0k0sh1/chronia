@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `isValid` function is the library's primary validation utility for checking whether a date or timestamp represents a valid moment in time. It is essential for error handling and input validation, allowing you to distinguish between genuine invalid inputs and valid negative comparison results.
+The `isValid` function is the library's primary validation utility for checking whether a date or timestamp represents a valid moment. It is essential for error handling and input validation, allowing you to distinguish between genuine invalid inputs and valid negative comparison results.
 
 ## Function
 

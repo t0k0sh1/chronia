@@ -122,7 +122,7 @@ function compare(
 ### 7. Function Organization
 
 **Directory Structure:**
-```
+```text
 src/
   addDays/
     index.ts       # Function implementation

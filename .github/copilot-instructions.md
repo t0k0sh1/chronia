@@ -49,12 +49,12 @@ Use these prefixes for review comments:
 
 ### Key Review Focus
 
-**Security**
+#### Security
 - No SQL injection vectors (not applicable for date library)
 - No XSS vulnerabilities in format outputs
 - Validate all user inputs
 
-**Chronia-Specific Rules**
+#### Chronia-Specific Rules
 - `[must]` Functions must never throw exceptions
 - `[must]` Functions must never mutate inputs
 - `[must]` All inputs must be validated before processing
@@ -64,22 +64,22 @@ Use these prefixes for review comments:
 - `[recommend]` Tests should cover Invalid Date, NaN, Infinity inputs
 - `[recommend]` Month-end edge cases should be tested (e.g., Jan 31 + 1 month)
 
-**Performance**
+#### Performance
 - Avoid unnecessary object creation in loops
 - Use early returns for invalid inputs
 - Optimize hot paths (millisecond comparisons)
 
-**Readability**
+#### Readability
 - Follow existing naming conventions (camelCase for functions)
 - One function per directory in `src/`
 - Comprehensive JSDoc with examples
 
-**Maintainability**
+#### Maintainability
 - Functions should have no dependencies on other public functions (except `_lib/`)
 - Single responsibility per function
 - Shared logic extracted to `_lib/`
 
-**Testing**
+#### Testing
 - Each function requires corresponding test file in `tests/`
 - Test edge cases: Invalid Date, NaN, Infinity, month-end, leap years
 - Coverage excludes `src/types.ts`, `src/i18n/`, config files
@@ -88,24 +88,24 @@ Use these prefixes for review comments:
 
 ### TypeScript/JavaScript
 
-**Type Safety**
+#### Type Safety
 - `[must]` Never use `any` type (use `unknown` if needed)
 - `[must]` Export types from `src/types.ts`
 - `[recommend]` Use union types (`Date | number`) for dual input support
 
-**Code Style**
+#### Code Style
 - `[must]` Use double quotes for strings
 - `[must]` Include semicolons
 - `[must]` Follow ESLint configuration in `eslint.config.js`
 - `[recommend]` Use `const` over `let` when possible
 - `[nits]` Consistent spacing and formatting
 
-**Error Handling**
+#### Error Handling
 - `[must]` Never use `try-catch` for Chronia functions
 - `[must]` Return error values instead of throwing
 - `[must]` Validate inputs before processing
 
-**Date Handling**
+#### Date Handling
 - `[must]` Accept both `Date` and `number` (timestamp)
 - `[must]` Return new Date instances, never mutate
 - `[must]` Use 0-based month indexing (0 = January)
