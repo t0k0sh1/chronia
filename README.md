@@ -91,7 +91,7 @@ Add or subtract time units from dates.
 - `subSeconds` - Subtract seconds from a date
 - `subMilliseconds` - Subtract milliseconds from a date
 
-📖 *Detailed documentation*: [Addition](docs/function-categories/arithmetic/addition.md) | [Subtraction](docs/function-categories/arithmetic/subtraction.md)
+📖 *Detailed documentation*: [Addition](docs/functions/arithmetic/addition.md) | [Subtraction](docs/functions/arithmetic/subtraction.md)
 
 ### 2. Comparison (14 functions)
 Compare dates and check for equality or relative ordering.
@@ -116,7 +116,7 @@ Compare dates and check for equality or relative ordering.
 **Validation:**
 - `isValid` - Check if a date is valid
 
-📖 *Detailed documentation*: [Relational](docs/function-categories/comparison/relational.md) | [Equality](docs/function-categories/comparison/equality.md) | [Validation](docs/function-categories/comparison/validation.md)
+📖 *Detailed documentation*: [Relational](docs/functions/comparison/relational.md) | [Equality](docs/functions/comparison/equality.md) | [Validation](docs/functions/comparison/validation.md)
 
 ### 3. Difference (7 functions)
 Calculate the difference between two dates in specific units.
@@ -129,7 +129,7 @@ Calculate the difference between two dates in specific units.
 - `diffSeconds` - Calculate the difference in seconds
 - `diffMilliseconds` - Calculate the difference in milliseconds
 
-📖 *Detailed documentation*: [Calculations](docs/function-categories/difference/calculations.md)
+📖 *Detailed documentation*: [Calculations](docs/functions/difference/calculations.md)
 
 ### 4. Getter (8 functions)
 Extract specific components from dates.
@@ -143,7 +143,7 @@ Extract specific components from dates.
 - `getMilliseconds` - Get the milliseconds
 - `getTime` - Get the Unix timestamp
 
-📖 *Detailed documentation*: [Extraction](docs/function-categories/getter/extraction.md)
+📖 *Detailed documentation*: [Extraction](docs/functions/getter/extraction.md)
 
 ### 5. Setter (8 functions)
 Set specific components of dates.
@@ -157,7 +157,7 @@ Set specific components of dates.
 - `setMilliseconds` - Set the milliseconds
 - `setTime` - Set the date from Unix timestamp
 
-📖 *Detailed documentation*: [Modification](docs/function-categories/setter/modification.md)
+📖 *Detailed documentation*: [Modification](docs/functions/setter/modification.md)
 
 ### 6. Boundary (6 functions)
 Get the start or end of a time period.
@@ -169,7 +169,7 @@ Get the start or end of a time period.
 - `startOfDay` - Get the start of the day
 - `endOfDay` - Get the end of the day
 
-📖 *Detailed documentation*: [Periods](docs/function-categories/boundary/periods.md)
+📖 *Detailed documentation*: [Periods](docs/functions/boundary/periods.md)
 
 ### 7. Truncation (7 functions)
 Zero out time components below a specified unit.
@@ -182,7 +182,7 @@ Zero out time components below a specified unit.
 - `truncSecond` - Truncate to second (zero out milliseconds)
 - `truncMillisecond` - Truncate to millisecond
 
-📖 *Detailed documentation*: [Units](docs/function-categories/truncation/units.md)
+📖 *Detailed documentation*: [Units](docs/functions/truncation/units.md)
 
 ### 8. Formatting (2 functions)
 Convert between dates and strings.
@@ -190,7 +190,7 @@ Convert between dates and strings.
 - `format` - Format a date to a string
 - `parse` - Parse a string to a date
 
-📖 *Detailed documentation*: [Conversion](docs/function-categories/formatting/conversion.md)
+📖 *Detailed documentation*: [Conversion](docs/functions/formatting/conversion.md)
 
 ### 9. Utility (4 functions)
 Miscellaneous helper functions.
@@ -200,7 +200,7 @@ Miscellaneous helper functions.
 - `max` - Get the latest date from multiple dates
 - `clamp` - Clamp a date within a range
 
-📖 *Detailed documentation*: [Helpers](docs/function-categories/utility/helpers.md)
+📖 *Detailed documentation*: [Helpers](docs/functions/utility/helpers.md)
 
 ### 10. Constants & Types
 Exported constants and TypeScript type definitions.
@@ -213,7 +213,7 @@ Exported constants and TypeScript type definitions.
 - `BetweenOption` - Type for between operation options
 - `CompareOptions` - Type for compare function options
 
-📖 *Detailed documentation*: [Types](docs/function-categories/constants/types.md)
+📖 *Detailed documentation*: [Types](docs/functions/constants/types.md)
 
 ## Core Functions
 
@@ -325,7 +325,7 @@ Chronia includes comprehensive documentation specifically designed for AI agents
 
 The [`docs/`](docs/) directory contains three main sections:
 
-1. **[Function Categories](docs/function-categories/)** - Detailed documentation for all 70 functions
+1. **[Function Categories](docs/functions/)** - Detailed documentation for all 70 functions
    - Complete function signatures with examples
    - AI guidance for recommending appropriate functions
    - Common pitfalls and edge cases

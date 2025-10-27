@@ -443,4 +443,4 @@ const formatted = format(result, "yyyy-MM-dd");
 - **Error Handling**: See `error-handling.md` for error return values
 - **Development Principles**: See `development-principles.md` for validation-first approach
 - **Validators**: Internal `_lib/validators.ts` (not exported, documented here)
-- **isValid Function**: See `docs/function-categories/comparison/validation.md`
+- **isValid Function**: See `docs/functions/comparison/validation.md`

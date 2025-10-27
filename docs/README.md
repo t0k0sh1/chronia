@@ -1,4 +1,4 @@
-# Chronia AI Documentation
+![Chronia](logo.png)
 
 ## Overview
 
@@ -10,42 +10,42 @@ This documentation is specifically designed for AI agents (like Claude, GitHub C
 
 This documentation is organized into three main sections:
 
-### 1. Function Categories (`function-categories/`)
+### 1. Function Categories (`functions/`)
 
 Detailed documentation for all Chronia functions, organized by category:
 
-- **[Arithmetic](function-categories/arithmetic/)**: Date/time addition and subtraction
-  - [Addition](function-categories/arithmetic/addition.md) - `addYears`, `addMonths`, `addDays`, `addHours`, `addMinutes`, `addSeconds`, `addMilliseconds`
-  - [Subtraction](function-categories/arithmetic/subtraction.md) - `subYears`, `subMonths`, `subDays`, `subHours`, `subMinutes`, `subSeconds`, `subMilliseconds`
+- **[Arithmetic](functions/arithmetic/)**: Date/time addition and subtraction
+  - [Addition](functions/arithmetic/addition.md) - `addYears`, `addMonths`, `addDays`, `addHours`, `addMinutes`, `addSeconds`, `addMilliseconds`
+  - [Subtraction](functions/arithmetic/subtraction.md) - `subYears`, `subMonths`, `subDays`, `subHours`, `subMinutes`, `subSeconds`, `subMilliseconds`
 
-- **[Comparison](function-categories/comparison/)**: Date comparison and validation
-  - [Relational](function-categories/comparison/relational.md) - `isAfter`, `isBefore`, `isAfterOrEqual`, `isBeforeOrEqual`, `isBetween`, `compare`
-  - [Equality](function-categories/comparison/equality.md) - `isEqual`, `isSameYear`, `isSameMonth`, `isSameDay`, `isSameHour`, `isSameMinute`, `isSameSecond`
-  - [Validation](function-categories/comparison/validation.md) - `isValid`
+- **[Comparison](functions/comparison/)**: Date comparison and validation
+  - [Relational](functions/comparison/relational.md) - `isAfter`, `isBefore`, `isAfterOrEqual`, `isBeforeOrEqual`, `isBetween`, `compare`
+  - [Equality](functions/comparison/equality.md) - `isEqual`, `isSameYear`, `isSameMonth`, `isSameDay`, `isSameHour`, `isSameMinute`, `isSameSecond`
+  - [Validation](functions/comparison/validation.md) - `isValid`
 
-- **[Difference](function-categories/difference/)**: Calculate time differences
-  - [Calculations](function-categories/difference/calculations.md) - `diffYears`, `diffMonths`, `diffDays`, `diffHours`, `diffMinutes`, `diffSeconds`, `diffMilliseconds`
+- **[Difference](functions/difference/)**: Calculate time differences
+  - [Calculations](functions/difference/calculations.md) - `diffYears`, `diffMonths`, `diffDays`, `diffHours`, `diffMinutes`, `diffSeconds`, `diffMilliseconds`
 
-- **[Getter](function-categories/getter/)**: Extract date components
-  - [Extraction](function-categories/getter/extraction.md) - `getYear`, `getMonth`, `getDay`, `getHours`, `getMinutes`, `getSeconds`, `getMilliseconds`, `getTime`
+- **[Getter](functions/getter/)**: Extract date components
+  - [Extraction](functions/getter/extraction.md) - `getYear`, `getMonth`, `getDay`, `getHours`, `getMinutes`, `getSeconds`, `getMilliseconds`, `getTime`
 
-- **[Setter](function-categories/setter/)**: Set date components
-  - [Modification](function-categories/setter/modification.md) - `setYear`, `setMonth`, `setDay`, `setHours`, `setMinutes`, `setSeconds`, `setMilliseconds`, `setTime`
+- **[Setter](functions/setter/)**: Set date components
+  - [Modification](functions/setter/modification.md) - `setYear`, `setMonth`, `setDay`, `setHours`, `setMinutes`, `setSeconds`, `setMilliseconds`, `setTime`
 
-- **[Boundary](function-categories/boundary/)**: Period boundaries
-  - [Periods](function-categories/boundary/periods.md) - `startOfYear`, `startOfMonth`, `startOfDay`, `endOfYear`, `endOfMonth`, `endOfDay`
+- **[Boundary](functions/boundary/)**: Period boundaries
+  - [Periods](functions/boundary/periods.md) - `startOfYear`, `startOfMonth`, `startOfDay`, `endOfYear`, `endOfMonth`, `endOfDay`
 
-- **[Truncation](function-categories/truncation/)**: Truncate to time units
-  - [Units](function-categories/truncation/units.md) - `truncYear`, `truncMonth`, `truncDay`, `truncHour`, `truncMinute`, `truncSecond`, `truncMillisecond`
+- **[Truncation](functions/truncation/)**: Truncate to time units
+  - [Units](functions/truncation/units.md) - `truncYear`, `truncMonth`, `truncDay`, `truncHour`, `truncMinute`, `truncSecond`, `truncMillisecond`
 
-- **[Formatting](function-categories/formatting/)**: Format and parse dates
-  - [Conversion](function-categories/formatting/conversion.md) - `format`, `parse`
+- **[Formatting](functions/formatting/)**: Format and parse dates
+  - [Conversion](functions/formatting/conversion.md) - `format`, `parse`
 
-- **[Utility](function-categories/utility/)**: Helper functions
-  - [Helpers](function-categories/utility/helpers.md) - `now`, `min`, `max`, `clamp`
+- **[Utility](functions/utility/)**: Helper functions
+  - [Helpers](functions/utility/helpers.md) - `now`, `min`, `max`, `clamp`
 
-- **[Constants](function-categories/constants/)**: Constants and types
-  - [Types](function-categories/constants/types.md) - `MIN_DATE`, `MAX_DATE`, TypeScript types
+- **[Constants](functions/constants/)**: Constants and types
+  - [Types](functions/constants/types.md) - `MIN_DATE`, `MAX_DATE`, TypeScript types
 
 ### 2. Guidelines (`guidelines/`)
 
@@ -221,7 +221,7 @@ if (isAfter(deadline, now())) {
 For new users/agents:
 1. Start with [Development Principles](guidelines/development-principles.md)
 2. Review [Error Handling](guidelines/error-handling.md)
-3. Browse [Function Categories](function-categories/) as needed
+3. Browse [Function Categories](functions/) as needed
 4. Reference [Common Use Cases](guidelines/common-use-cases.md) for patterns
 5. Check [Common Pitfalls](troubleshooting/common-pitfalls.md) when issues arise
 
@@ -243,12 +243,12 @@ When helping users with Chronia:
 
 | Question | Documentation Reference |
 |----------|------------------------|
-| "How do I add days to a date?" | [Arithmetic/Addition](function-categories/arithmetic/addition.md) |
+| "How do I add days to a date?" | [Arithmetic/Addition](functions/arithmetic/addition.md) |
 | "Why am I getting Invalid Date?" | [Error Handling](guidelines/error-handling.md), [Common Pitfalls](troubleshooting/common-pitfalls.md) |
-| "How do I format dates?" | [Formatting/Conversion](function-categories/formatting/conversion.md) |
-| "How do I compare dates?" | [Comparison/Relational](function-categories/comparison/relational.md) |
-| "How do I validate dates?" | [Comparison/Validation](function-categories/comparison/validation.md) |
-| "What's the difference between M and m?" | [Formatting/Conversion](function-categories/formatting/conversion.md#token-reference) |
+| "How do I format dates?" | [Formatting/Conversion](functions/formatting/conversion.md) |
+| "How do I compare dates?" | [Comparison/Relational](functions/comparison/relational.md) |
+| "How do I validate dates?" | [Comparison/Validation](functions/comparison/validation.md) |
+| "What's the difference between M and m?" | [Formatting/Conversion](functions/formatting/conversion.md#token-reference) |
 | "How do I handle timezones?" | [Common Pitfalls](troubleshooting/common-pitfalls.md#timezone-issues) |
 | "Why is my month wrong?" | [Common Pitfalls](troubleshooting/common-pitfalls.md#month-indexing) |
 

@@ -142,3 +142,5 @@ out
 
 # End of https://www.toptal.com/developers/gitignore/api/node
 
+# TypeDoc output (no longer used)
+site/

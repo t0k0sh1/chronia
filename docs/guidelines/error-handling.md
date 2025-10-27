@@ -352,4 +352,4 @@ describe("addDays error handling", () => {
 
 - **Input Validation**: See `input-validation.md` for validation helpers
 - **Development Principles**: See `development-principles.md` for no-exception policy
-- **Validation Function**: See `docs/function-categories/comparison/validation.md` for `isValid()` usage
+- **Validation Function**: See `docs/functions/comparison/validation.md` for `isValid()` usage

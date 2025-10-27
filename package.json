@@ -39,7 +39,6 @@
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
-    "docs": "typedoc",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "vitest tests/",
     "lint": "eslint ./src"

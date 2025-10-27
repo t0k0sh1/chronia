@@ -601,7 +601,7 @@ function validateAndClampDate(
 
 ## Related
 
-- **Function Categories**: See `docs/function-categories/` for detailed function documentation
+- **Function Categories**: See `docs/functions/` for detailed function documentation
 - **Error Handling**: See `error-handling.md` for error patterns
 - **Input Validation**: See `input-validation.md` for validation strategies
 - **Development Principles**: See `development-principles.md` for design philosophy

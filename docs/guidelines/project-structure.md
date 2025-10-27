@@ -30,7 +30,7 @@ chronia/
 │   ├── addMonths.test.ts
 │   └── contract/            # Contract tests
 ├── docs/                    # AI-focused documentation (NEW)
-│   ├── function-categories/
+│   ├── functions/
 │   ├── guidelines/
 │   └── troubleshooting/
 ├── site/                    # TypeDoc generated docs (RENAMED from docs/)
@@ -145,7 +145,7 @@ tests/
 ```plaintext
 docs/
 ├── README.md                        # AI documentation overview
-├── function-categories/
+├── functions/
 │   ├── arithmetic/
 │   │   ├── addition.md
 │   │   └── subtraction.md

@@ -279,16 +279,16 @@ export function goodFunction(date: Date): Date {
 - **Debugging Guide**: [docs/troubleshooting/debugging-guide.md](../docs/troubleshooting/debugging-guide.md)
 
 ### Function Categories
-- **Arithmetic**: [docs/function-categories/arithmetic/](../docs/function-categories/arithmetic/)
-- **Comparison**: [docs/function-categories/comparison/](../docs/function-categories/comparison/)
-- **Difference**: [docs/function-categories/difference/](../docs/function-categories/difference/)
-- **Getter**: [docs/function-categories/getter/](../docs/function-categories/getter/)
-- **Setter**: [docs/function-categories/setter/](../docs/function-categories/setter/)
-- **Boundary**: [docs/function-categories/boundary/](../docs/function-categories/boundary/)
-- **Truncation**: [docs/function-categories/truncation/](../docs/function-categories/truncation/)
-- **Formatting**: [docs/function-categories/formatting/](../docs/function-categories/formatting/)
-- **Utility**: [docs/function-categories/utility/](../docs/function-categories/utility/)
-- **Constants**: [docs/function-categories/constants/](../docs/function-categories/constants/)
+- **Arithmetic**: [docs/functions/arithmetic/](../docs/functions/arithmetic/)
+- **Comparison**: [docs/functions/comparison/](../docs/functions/comparison/)
+- **Difference**: [docs/functions/difference/](../docs/functions/difference/)
+- **Getter**: [docs/functions/getter/](../docs/functions/getter/)
+- **Setter**: [docs/functions/setter/](../docs/functions/setter/)
+- **Boundary**: [docs/functions/boundary/](../docs/functions/boundary/)
+- **Truncation**: [docs/functions/truncation/](../docs/functions/truncation/)
+- **Formatting**: [docs/functions/formatting/](../docs/functions/formatting/)
+- **Utility**: [docs/functions/utility/](../docs/functions/utility/)
+- **Constants**: [docs/functions/constants/](../docs/functions/constants/)
 
 ## Development Workflow
 
