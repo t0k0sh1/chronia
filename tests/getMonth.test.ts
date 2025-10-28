@@ -31,9 +31,9 @@ describe("getMonth", () => {
     });
 
     it("should handle all twelve months", () => {
-      for (let month = 1; month <= 12; month++) {
-        const date = new Date(2024, month - 1, 15); // month - 1 because Date constructor uses 0-based months
-        expect(getMonth(date)).toBe(month - 1);
+      for (let month = 0; month < 12; month++) {
+        const date = new Date(2024, month, 15);
+        expect(getMonth(date)).toBe(month);
       }
     });
   });
@@ -81,10 +81,10 @@ describe("getMonth", () => {
     });
 
     it("should handle various months via timestamp", () => {
-      for (let month = 1; month <= 12; month++) {
-        const date = new Date(2024, month - 1, 15);
+      for (let month = 0; month < 12; month++) {
+        const date = new Date(2024, month, 15);
         const timestamp = date.getTime();
-        expect(getMonth(timestamp)).toBe(month - 1);
+        expect(getMonth(timestamp)).toBe(month);
       }
     });
   });
