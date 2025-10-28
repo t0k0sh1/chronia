@@ -167,7 +167,7 @@ const december = new Date(2024, 11, 15);
 
 // getMonth() returns 0-11 (JavaScript standard)
 // For display to users, add 1 to convert to 1-12
-const displayMonth = getMonth(date) + 1;  // 0-11 → 1-12 for display
+const displayMonth = getMonth(january) + 1;  // 0-11 → 1-12 for display
 ```
 
 ### ❌ Pitfall 7: Month Overflow
