@@ -165,8 +165,9 @@ setMonth(date, 12);  // Invalid: month 12 doesn't exist (0-11)
 const january = new Date(2024, 0, 15);
 const december = new Date(2024, 11, 15);
 
-// When displaying to users, add 1
-const displayMonth = getMonth(date) + 1;  // 1-12 for users
+// getMonth() returns 0-11 (JavaScript standard)
+// For display to users, add 1 to convert to 1-12
+const displayMonth = getMonth(january) + 1;  // 0-11 → 1-12 for display
 ```
 
 ### ❌ Pitfall 7: Month Overflow
