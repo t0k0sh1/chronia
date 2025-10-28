@@ -772,28 +772,28 @@ declare function getMinutes(date: Date | number): number;
  * Get the month of the given date.
  *
  * This function validates arguments before processing and returns the month
- * (1-12, where January is 1 and December is 12) of the given date. Returns NaN for invalid input.
+ * (0-11, where January is 0 and December is 11) of the given date. Returns NaN for invalid input.
  *
  * @param date - The base date as a Date object or timestamp (number)
- * @returns The month as a number (1-12), or NaN if invalid
+ * @returns The month as a number (0-11, where 0 is January and 11 is December), or NaN if invalid
  *
  * @example
  * ```typescript
  * // Get month from Date object
  * const result = getMonth(new Date(2024, 5, 15)); // June
- * // Returns: 6
+ * // Returns: 5
  *
  * // Get month from timestamp
  * const result2 = getMonth(1704067200000); // 2024-01-01
- * // Returns: 1
+ * // Returns: 0
  *
  * // Leap year February
  * const result3 = getMonth(new Date(2024, 1, 29));
- * // Returns: 2
+ * // Returns: 1
  *
  * // December
  * const result4 = getMonth(new Date(2024, 11, 25));
- * // Returns: 12
+ * // Returns: 11
  *
  * // Invalid date returns NaN
  * const result5 = getMonth(new Date("invalid"));
@@ -805,7 +805,7 @@ declare function getMinutes(date: Date | number): number;
  * - Accepts both Date objects and numeric timestamps
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Returns the month in the local timezone
- * - Uses 1-based indexing (1-12) unlike JavaScript's native getMonth() (0-11)
+ * - Uses 0-based indexing (0-11), same as JavaScript's native getMonth()
  */
 declare function getMonth(date: Date | number): number;
 
