@@ -10,48 +10,58 @@ This documentation is specifically designed for AI agents (like Claude, GitHub C
 
 This documentation is organized into three main sections:
 
-### 1. Function Categories (`functions/`)
+### 1. Functions
 
 Detailed documentation for all Chronia functions, organized by category:
 
-- **[Arithmetic](functions/arithmetic/)**: Date/time addition and subtraction
+- **Arithmetic**: Date/time addition and subtraction
+
   - [Addition](functions/arithmetic/addition.md) - `addYears`, `addMonths`, `addDays`, `addHours`, `addMinutes`, `addSeconds`, `addMilliseconds`
   - [Subtraction](functions/arithmetic/subtraction.md) - `subYears`, `subMonths`, `subDays`, `subHours`, `subMinutes`, `subSeconds`, `subMilliseconds`
 
-- **[Comparison](functions/comparison/)**: Date comparison and validation
+- **Comparison**: Date comparison and validation
+
   - [Relational](functions/comparison/relational.md) - `isAfter`, `isBefore`, `isAfterOrEqual`, `isBeforeOrEqual`, `isBetween`, `compare`
   - [Equality](functions/comparison/equality.md) - `isEqual`, `isSameYear`, `isSameMonth`, `isSameDay`, `isSameHour`, `isSameMinute`, `isSameSecond`
   - [Validation](functions/comparison/validation.md) - `isValid`
 
-- **[Difference](functions/difference/)**: Calculate time differences
+- **Difference**: Calculate time differences
+
   - [Calculations](functions/difference/calculations.md) - `diffYears`, `diffMonths`, `diffDays`, `diffHours`, `diffMinutes`, `diffSeconds`, `diffMilliseconds`
 
-- **[Getter](functions/getter/)**: Extract date components
+- **Getter**: Extract date components
+
   - [Extraction](functions/getter/extraction.md) - `getYear`, `getMonth`, `getDay`, `getHours`, `getMinutes`, `getSeconds`, `getMilliseconds`, `getTime`
 
-- **[Setter](functions/setter/)**: Set date components
+- **Setter**: Set date components
+
   - [Modification](functions/setter/modification.md) - `setYear`, `setMonth`, `setDay`, `setHours`, `setMinutes`, `setSeconds`, `setMilliseconds`, `setTime`
 
-- **[Boundary](functions/boundary/)**: Period boundaries
+- **Boundary**: Period boundaries
+
   - [Periods](functions/boundary/periods.md) - `startOfYear`, `startOfMonth`, `startOfDay`, `endOfYear`, `endOfMonth`, `endOfDay`
 
-- **[Truncation](functions/truncation/)**: Truncate to time units
+- **Truncation**: Truncate to time units
+
   - [Units](functions/truncation/units.md) - `truncYear`, `truncMonth`, `truncDay`, `truncHour`, `truncMinute`, `truncSecond`, `truncMillisecond`
 
-- **[Formatting](functions/formatting/)**: Format and parse dates
+- **Formatting**: Format and parse dates
+
   - [Conversion](functions/formatting/conversion.md) - `format`, `parse`
 
-- **[Utility](functions/utility/)**: Helper functions
+- **Utility**: Helper functions
+
   - [Helpers](functions/utility/helpers.md) - `now`, `min`, `max`, `clamp`
 
-- **[Constants](functions/constants/)**: Constants and types
+- **Constants**: Constants and types
   - [Types](functions/constants/types.md) - `MIN_DATE`, `MAX_DATE`, TypeScript types
 
-### 2. Guidelines (`guidelines/`)
+### 2. Guidelines
 
 Development principles and technical specifications:
 
 - **[Development Principles](guidelines/development-principles.md)**: Core philosophy and 10 key principles
+
   - No-exceptions error handling
   - TypeScript type safety with JavaScript compatibility
   - Immutability
@@ -64,6 +74,7 @@ Development principles and technical specifications:
   - Local timezone by default
 
 - **[Project Structure](guidelines/project-structure.md)**: Directory layout and architecture
+
   - File naming conventions
   - Module organization
   - Token system architecture
@@ -71,6 +82,7 @@ Development principles and technical specifications:
   - Testing structure
 
 - **[Tech Stack](guidelines/tech-stack.md)**: Technologies and tools
+
   - TypeScript 5.9+
   - Node.js LTS support
   - Build tools (tsup, TypeDoc)
@@ -79,12 +91,14 @@ Development principles and technical specifications:
   - Zero runtime dependencies
 
 - **[Error Handling](guidelines/error-handling.md)**: Error handling patterns
+
   - Standardized error values (Invalid Date, NaN, false)
   - Error detection patterns
   - Common error scenarios
   - Error handling anti-patterns
 
 - **[Input Validation](guidelines/input-validation.md)**: Validation strategies
+
   - Validation utilities (`isValidDateOrNumber`, `isValidNumber`)
   - Validation-first implementation pattern
   - Common validation patterns
@@ -99,11 +113,12 @@ Development principles and technical specifications:
   - Sorting and ordering
   - Application patterns
 
-### 3. Troubleshooting (`troubleshooting/`)
+### 3. Troubleshooting
 
 Debugging and problem-solving guides:
 
 - **[Common Pitfalls](troubleshooting/common-pitfalls.md)**: 20 common mistakes and solutions
+
   - Invalid date handling
   - Timezone issues
   - Month indexing
@@ -128,6 +143,7 @@ Debugging and problem-solving guides:
 ### Core Concepts
 
 1. **No Exceptions**: Chronia never throws exceptions. Functions return:
+
    - `Invalid Date` (for Date functions)
    - `NaN` (for numeric functions)
    - `false` (for boolean functions)
@@ -142,22 +158,23 @@ Debugging and problem-solving guides:
 
 ### Function Categories Summary
 
-| Category | Purpose | Example Functions |
-|----------|---------|-------------------|
-| **Arithmetic** | Add/subtract time | `addDays`, `subMonths` |
-| **Comparison** | Compare dates | `isAfter`, `isEqual`, `isBetween` |
-| **Difference** | Calculate differences | `diffDays`, `diffHours` |
-| **Getter** | Extract components | `getYear`, `getMonth` |
-| **Setter** | Set components | `setYear`, `setMonth` |
-| **Boundary** | Period boundaries | `startOfDay`, `endOfMonth` |
-| **Truncation** | Truncate to units | `truncDay`, `truncHour` |
-| **Formatting** | Format/parse | `format`, `parse` |
-| **Utility** | Helpers | `now`, `min`, `max`, `clamp` |
-| **Constants** | Constants & types | `MIN_DATE`, `MAX_DATE` |
+| Category       | Purpose               | Example Functions                 |
+| -------------- | --------------------- | --------------------------------- |
+| **Arithmetic** | Add/subtract time     | `addDays`, `subMonths`            |
+| **Comparison** | Compare dates         | `isAfter`, `isEqual`, `isBetween` |
+| **Difference** | Calculate differences | `diffDays`, `diffHours`           |
+| **Getter**     | Extract components    | `getYear`, `getMonth`             |
+| **Setter**     | Set components        | `setYear`, `setMonth`             |
+| **Boundary**   | Period boundaries     | `startOfDay`, `endOfMonth`        |
+| **Truncation** | Truncate to units     | `truncDay`, `truncHour`           |
+| **Formatting** | Format/parse          | `format`, `parse`                 |
+| **Utility**    | Helpers               | `now`, `min`, `max`, `clamp`      |
+| **Constants**  | Constants & types     | `MIN_DATE`, `MAX_DATE`            |
 
 ### Common Patterns
 
 #### Validate Before Use
+
 ```typescript
 import { isValid, addDays } from "chronia";
 
@@ -169,6 +186,7 @@ const result = addDays(date, 7);
 ```
 
 #### Check Return Values
+
 ```typescript
 import { addMonths, isValid } from "chronia";
 
@@ -179,6 +197,7 @@ if (!isValid(result)) {
 ```
 
 #### Format for Display
+
 ```typescript
 import { format } from "chronia";
 
@@ -186,6 +205,7 @@ const formatted = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 ```
 
 #### Compare Dates
+
 ```typescript
 import { isAfter, isBefore, isSameDay } from "chronia";
 
@@ -199,12 +219,14 @@ if (isAfter(deadline, now())) {
 ### When to Use Each Section
 
 - **Function Categories** - Use when:
+
   - User asks about specific functions
   - Implementing date/time operations
   - Need examples of function usage
   - Understanding function signatures and behavior
 
 - **Guidelines** - Use when:
+
   - Understanding project architecture
   - Learning development patterns
   - Implementing new features
@@ -219,6 +241,7 @@ if (isAfter(deadline, now())) {
 ### Recommended Reading Order
 
 For new users/agents:
+
 1. Start with [Development Principles](guidelines/development-principles.md)
 2. Review [Error Handling](guidelines/error-handling.md)
 3. Browse [Function Categories](functions/) as needed
@@ -241,16 +264,16 @@ When helping users with Chronia:
 
 ### Common User Questions
 
-| Question | Documentation Reference |
-|----------|------------------------|
-| "How do I add days to a date?" | [Arithmetic/Addition](functions/arithmetic/addition.md) |
-| "Why am I getting Invalid Date?" | [Error Handling](guidelines/error-handling.md), [Common Pitfalls](troubleshooting/common-pitfalls.md) |
-| "How do I format dates?" | [Formatting/Conversion](functions/formatting/conversion.md) |
-| "How do I compare dates?" | [Comparison/Relational](functions/comparison/relational.md) |
-| "How do I validate dates?" | [Comparison/Validation](functions/comparison/validation.md) |
-| "What's the difference between M and m?" | [Formatting/Conversion](functions/formatting/conversion.md#token-reference) |
-| "How do I handle timezones?" | [Common Pitfalls](troubleshooting/common-pitfalls.md#timezone-issues) |
-| "Why is my month wrong?" | [Common Pitfalls](troubleshooting/common-pitfalls.md#month-indexing) |
+| Question                                 | Documentation Reference                                                                               |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| "How do I add days to a date?"           | [Arithmetic/Addition](functions/arithmetic/addition.md)                                               |
+| "Why am I getting Invalid Date?"         | [Error Handling](guidelines/error-handling.md), [Common Pitfalls](troubleshooting/common-pitfalls.md) |
+| "How do I format dates?"                 | [Formatting/Conversion](functions/formatting/conversion.md)                                           |
+| "How do I compare dates?"                | [Comparison/Relational](functions/comparison/relational.md)                                           |
+| "How do I validate dates?"               | [Comparison/Validation](functions/comparison/validation.md)                                           |
+| "What's the difference between M and m?" | [Formatting/Conversion](functions/formatting/conversion.md#token-reference)                           |
+| "How do I handle timezones?"             | [Common Pitfalls](troubleshooting/common-pitfalls.md#timezone-issues)                                 |
+| "Why is my month wrong?"                 | [Common Pitfalls](troubleshooting/common-pitfalls.md#month-indexing)                                  |
 
 ## Additional Resources
 
