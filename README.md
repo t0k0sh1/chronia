@@ -29,7 +29,7 @@ It offers a simple, consistent, and functional API that makes working with dates
 - 📅 **Comprehensive Utilities** – Formatting, parsing, arithmetic, comparison, ranges, differences
 - 🎯 **Consistent API** – Unified support for `Date` objects and timestamps
 - ✅ **Safe Error Handling** – No exceptions; standardized values (`Invalid Date`, `NaN`, `false`)
-- ⚡ **Well-tested** – 1700+ automated test cases ensure reliability
+- ⚡ **Well-tested** – 2100+ automated test cases ensure reliability
 
 ## Installation
 
