@@ -25,15 +25,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          cache: "pnpm"
 
-      - run: sfw npm install
-      - run: npm run lint
-      - run: npm run build --if-present
-      - run: npx vitest run --coverage
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+          run_install: false
+
+      - run: sfw pnpm install
+      - run: pnpm lint
+      - run: pnpm run build
+      - run: pnpm vitest run --coverage
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
           files: ./coverage/coverage-final.json
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
