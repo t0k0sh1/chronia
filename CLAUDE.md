@@ -9,33 +9,35 @@ Chronia is a TypeScript-first date/time utility library providing 70+ functions 
 ## Essential Commands
 
 ### Development Workflow
+
 ```bash
 # Install dependencies
 pnpm install
 
 # Lint code (enforces double quotes and semicolons)
-pnpm run lint
+pnpm lint
 
 # Build ESM/CJS dual modules with minification
-pnpm run build
+pnpm build
 
 # Run all tests
 pnpm test
 
 # Run all tests with coverage report
-npx vitest run --coverage
+pnpm vitest run --coverage
 
 # Run tests in watch mode
-npx vitest
+pnpm vitest
 
 # Run a single test file
-npx vitest tests/addDays.test.ts
+pnpm vitest tests/addDays.test.ts
 
 # Clean build artifacts
-pnpm run clean
+pnpm clean
 ```
 
 ### CI/CD
+
 - CI tests run on Node.js 18.x, 20.x, 22.x, 24.x
 - All PRs must pass linting, build, and test coverage checks
 - Coverage reports are uploaded to Codecov
@@ -43,6 +45,7 @@ pnpm run clean
 ## Architecture & Code Organization
 
 ### Directory Structure
+
 ```
 src/
   ├── {functionName}/index.ts    # Each function in its own directory
@@ -63,6 +66,7 @@ src/
 ### Core Patterns
 
 **Function Structure**: Each function follows a consistent pattern:
+
 1. Validate inputs using `isValidDateOrNumber()` or `isValidNumber()`
 2. Return error values (`new Date(NaN)`, `NaN`, or `false`) for invalid inputs
 3. Accept both `Date` objects and numeric timestamps
@@ -70,6 +74,7 @@ src/
 5. Include comprehensive JSDoc with examples
 
 **Example Function Pattern**:
+
 ```typescript
 export function addDays(date: Date | number, amount: number): Date {
   if (!isValidDateOrNumber(date) || !isValidNumber(amount))
@@ -83,6 +88,7 @@ export function addDays(date: Date | number, amount: number): Date {
 ```
 
 **Format/Parse Token System**:
+
 - `src/_lib/formatters/index.ts` maps tokens (y, M, d, H, etc.) to formatter functions
 - `src/_lib/parsers/index.ts` maps tokens to parser functions
 - Each token has its own implementation in `tokens/` subdirectories
@@ -112,6 +118,7 @@ export function addDays(date: Date | number, amount: number): Date {
 ## Important Implementation Details
 
 **Error Handling Policy**:
+
 - Never throw exceptions
 - Return standardized error values:
   - Date functions: `new Date(NaN)` (Invalid Date)
@@ -120,15 +127,18 @@ export function addDays(date: Date | number, amount: number): Date {
 - Use `isValid()` to detect invalid Date/number results
 
 **Input Validation**:
+
 - All public functions validate inputs via `_lib/validators.ts`
 - `isValidDateOrNumber(value)`: Checks for valid Date objects or finite numbers
 - `isValidNumber(value)`: Checks for finite numbers (excludes NaN, ±Infinity)
 
 **Date Arithmetic**:
+
 - Fractional amounts are truncated using `Math.trunc()` (not rounded)
 - Month/year arithmetic handles edge cases (e.g., Jan 31 + 1 month = Feb 28/29)
 
 **Format/Parse Consistency**:
+
 - Format and parse functions use the same token syntax
 - Tokenization logic shared in `_lib/tokenize.ts`
 

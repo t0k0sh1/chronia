@@ -11,6 +11,7 @@ Chronia is a TypeScript-first date/time utility library with 70+ functions acros
 ## Core Development Principles
 
 ### 1. No-Exceptions Error Handling
+
 - **Never throw exceptions**
 - Return standardized error values:
   - `Invalid Date` for Date functions
@@ -19,22 +20,26 @@ Chronia is a TypeScript-first date/time utility library with 70+ functions acros
 - Always validate inputs before processing
 
 ### 2. Immutability
+
 - **Never mutate input parameters**
 - Always return new instances
 - Use defensive copying
 
 ### 3. TypeScript Type Safety
+
 - Strict typing with TypeScript 5.9+
 - Accept both `Date` and `number` (timestamps)
 - Export comprehensive types from `src/types.ts`
 
 ### 4. Validation-First Approach
+
 - Validate all inputs using `_lib/validators.ts`
 - Use `isValidDateOrNumber()` for Date/number inputs
 - Use `isValidNumber()` for numeric amounts
 - Return error values immediately for invalid inputs
 
 ### 5. Fractional Amount Truncation
+
 - Use `Math.trunc()` for fractional amounts
 - Never round unless explicitly required
 
@@ -43,6 +48,7 @@ Chronia is a TypeScript-first date/time utility library with 70+ functions acros
 ### Classification
 
 Use these prefixes for review comments:
+
 - `[must]` - Mandatory fixes (violations of core principles, bugs)
 - `[recommend]` - Recommended fixes (performance, readability)
 - `[nits]` - Minor suggestions (style, minor improvements)
@@ -50,11 +56,13 @@ Use these prefixes for review comments:
 ### Key Review Focus
 
 #### Security
+
 - No SQL injection vectors (not applicable for date library)
 - No XSS vulnerabilities in format outputs
 - Validate all user inputs
 
 #### Chronia-Specific Rules
+
 - `[must]` Functions must never throw exceptions
 - `[must]` Functions must never mutate inputs
 - `[must]` All inputs must be validated before processing
@@ -65,21 +73,25 @@ Use these prefixes for review comments:
 - `[recommend]` Month-end edge cases should be tested (e.g., Jan 31 + 1 month)
 
 #### Performance
+
 - Avoid unnecessary object creation in loops
 - Use early returns for invalid inputs
 - Optimize hot paths (millisecond comparisons)
 
 #### Readability
+
 - Follow existing naming conventions (camelCase for functions)
 - One function per directory in `src/`
 - Comprehensive JSDoc with examples
 
 #### Maintainability
+
 - Functions should have no dependencies on other public functions (except `_lib/`)
 - Single responsibility per function
 - Shared logic extracted to `_lib/`
 
 #### Testing
+
 - Each function requires corresponding test file in `tests/`
 - Test edge cases: Invalid Date, NaN, Infinity, month-end, leap years
 - Coverage excludes `src/types.ts`, `src/i18n/`, config files
@@ -89,11 +101,13 @@ Use these prefixes for review comments:
 ### TypeScript/JavaScript
 
 #### Type Safety
+
 - `[must]` Never use `any` type (use `unknown` if needed)
 - `[must]` Export types from `src/types.ts`
 - `[recommend]` Use union types (`Date | number`) for dual input support
 
 #### Code Style
+
 - `[must]` Use double quotes for strings
 - `[must]` Include semicolons
 - `[must]` Follow ESLint configuration in `eslint.config.js`
@@ -101,11 +115,13 @@ Use these prefixes for review comments:
 - `[nits]` Consistent spacing and formatting
 
 #### Error Handling
+
 - `[must]` Never use `try-catch` for Chronia functions
 - `[must]` Return error values instead of throwing
 - `[must]` Validate inputs before processing
 
 #### Date Handling
+
 - `[must]` Accept both `Date` and `number` (timestamp)
 - `[must]` Return new Date instances, never mutate
 - `[must]` Use 0-based month indexing (0 = January)
@@ -115,7 +131,7 @@ Use these prefixes for review comments:
 
 When implementing new functions, follow this pattern:
 
-```typescript
+````typescript
 /**
  * Brief description of what this function does.
  *
@@ -135,18 +151,18 @@ When implementing new functions, follow this pattern:
 export function functionName(date: Date | number, amount: number): Date {
   // STEP 1: Validate all inputs first
   if (!isValidDateOrNumber(date) || !isValidNumber(amount)) {
-    return new Date(NaN);  // Return error value immediately
+    return new Date(NaN); // Return error value immediately
   }
 
   // STEP 2: Process with confidence (inputs are valid)
-  const dt = new Date(date);  // Create new instance
-  const truncatedAmount = Math.trunc(amount);  // Truncate fractional amounts
+  const dt = new Date(date); // Create new instance
+  const truncatedAmount = Math.trunc(amount); // Truncate fractional amounts
 
   // ... implementation logic ...
 
-  return dt;  // Return new instance
+  return dt; // Return new instance
 }
-```
+````
 
 ## Testing Template
 
@@ -198,6 +214,7 @@ describe("functionName", () => {
 ## Common Pitfalls to Catch
 
 ### Invalid Date Handling
+
 ```typescript
 // ❌ BAD: Truthy check
 if (date) {
@@ -212,28 +229,31 @@ if (isValid(date)) {
 ```
 
 ### Month Indexing
+
 ```typescript
 // ❌ BAD: 1-based month
-new Date(2024, 1, 15);  // This is February 15, not January 15!
+new Date(2024, 1, 15); // This is February 15, not January 15!
 
 // ✅ GOOD: 0-based month
-new Date(2024, 0, 15);  // January 15
+new Date(2024, 0, 15); // January 15
 ```
 
 ### Format Token Confusion
+
 ```typescript
 // ❌ BAD: Using 'm' for month
-format(date, "yyyy-mm-dd");  // mm = minutes, not month!
+format(date, "yyyy-mm-dd"); // mm = minutes, not month!
 
 // ✅ GOOD: Using 'M' for month
-format(date, "yyyy-MM-dd");  // MM = month
+format(date, "yyyy-MM-dd"); // MM = month
 ```
 
 ### Mutation
+
 ```typescript
 // ❌ BAD: Mutating input
 export function badFunction(date: Date): Date {
-  date.setDate(date.getDate() + 1);  // Mutates input!
+  date.setDate(date.getDate() + 1); // Mutates input!
   return date;
 }
 
@@ -246,11 +266,12 @@ export function goodFunction(date: Date): Date {
 ```
 
 ### Exception Throwing
+
 ```typescript
 // ❌ BAD: Throwing exceptions
 export function badFunction(date: Date): Date {
   if (!isValid(date)) {
-    throw new Error("Invalid date");  // Don't do this!
+    throw new Error("Invalid date"); // Don't do this!
   }
   // ...
 }
@@ -258,7 +279,7 @@ export function badFunction(date: Date): Date {
 // ✅ GOOD: Return error value
 export function goodFunction(date: Date): Date {
   if (!isValid(date)) {
-    return new Date(NaN);  // Return Invalid Date
+    return new Date(NaN); // Return Invalid Date
   }
   // ...
 }
@@ -267,11 +288,13 @@ export function goodFunction(date: Date): Date {
 ## Documentation References
 
 ### Essential Reading
+
 1. **[CLAUDE.md](../CLAUDE.md)** - Comprehensive instructions for Claude Code
 2. **[docs/README.md](../docs/README.md)** - AI documentation overview
 3. **[docs/guidelines/development-principles.md](../docs/guidelines/development-principles.md)** - Core philosophy
 
 ### Quick Links by Topic
+
 - **Error Handling**: [docs/guidelines/error-handling.md](../docs/guidelines/error-handling.md)
 - **Input Validation**: [docs/guidelines/input-validation.md](../docs/guidelines/input-validation.md)
 - **Common Use Cases**: [docs/guidelines/common-use-cases.md](../docs/guidelines/common-use-cases.md)
@@ -279,6 +302,7 @@ export function goodFunction(date: Date): Date {
 - **Debugging Guide**: [docs/troubleshooting/debugging-guide.md](../docs/troubleshooting/debugging-guide.md)
 
 ### Function Categories
+
 - **Arithmetic**: [docs/functions/arithmetic/](../docs/functions/arithmetic/)
 - **Comparison**: [docs/functions/comparison/](../docs/functions/comparison/)
 - **Difference**: [docs/functions/difference/](../docs/functions/difference/)
@@ -295,10 +319,9 @@ export function goodFunction(date: Date): Date {
 1. **Install dependencies**: `pnpm install`
 2. **Write code**: Add/modify functions in `src/`
 3. **Write tests**: Add tests in `tests/`
-4. **Lint**: `pnpm run lint`
+4. **Lint**: `pnpm lint`
 5. **Test**: `pnpm test`
-6. **Build**: `pnpm run build`
-7. **Generate docs**: `pnpm run docs` (optional)
+6. **Build**: `pnpm build`
 
 ## Node.js Version Support
 
