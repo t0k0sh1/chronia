@@ -36,14 +36,14 @@ It offers a simple, consistent, and functional API that makes working with dates
 Chronia requires **Node.js v18 or higher**.
 
 ```bash
+# Using pnpm (recommended)
+pnpm add chronia
+
 # Using npm
 npm install chronia
 
 # Using yarn
 yarn add chronia
-
-# Using pnpm
-pnpm add chronia
 ```
 
 ## Quick Start
@@ -362,9 +362,9 @@ Reference the [`docs/`](docs/) directory when asking AI assistants for help with
 3. Implement your changes with clear commits
 4. Add tests for any new functionality
 5. Run checks locally:
-   - `npm run lint` – ensure code style and quality
-   - `npm test` – ensure all tests pass
-   - `npm run build` – ensure the project builds successfully
+   - `pnpm run lint` – ensure code style and quality
+   - `pnpm test` – ensure all tests pass
+   - `pnpm run build` – ensure the project builds successfully
 6. Push your branch and open a pull request with a clear description
 
 ## Changelog

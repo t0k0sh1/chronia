@@ -11,16 +11,16 @@ Chronia is a TypeScript-first date/time utility library providing 70+ functions 
 ### Development Workflow
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Lint code (enforces double quotes and semicolons)
-npm run lint
+pnpm run lint
 
 # Build ESM/CJS dual modules with minification
-npm run build
+pnpm run build
 
 # Run all tests
-npm test
+pnpm test
 
 # Run all tests with coverage report
 npx vitest run --coverage
@@ -32,7 +32,7 @@ npx vitest
 npx vitest tests/addDays.test.ts
 
 # Clean build artifacts
-npm run clean
+pnpm run clean
 ```
 
 ### CI/CD

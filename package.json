@@ -39,13 +39,14 @@
   "scripts": {
     "build": "tsup",
     "clean": "rimraf dist",
-    "prepublishOnly": "npm run clean && npm run build",
+    "prepublishOnly": "pnpm run clean && pnpm run build",
     "test": "vitest tests/",
     "lint": "eslint ./src"
   },
   "engines": {
     "node": ">=18"
   },
+  "packageManager": "pnpm@10.0.0",
   "publishConfig": {
     "access": "public"
   },

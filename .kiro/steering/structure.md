@@ -510,9 +510,9 @@ strategy:
     node-version: [18.x, 20.x, 22.x, 24.x]  # All LTS versions
 
 steps:
-  - run: npm install
-  - run: npm run lint          # ✅ Must pass
-  - run: npm run build         # ✅ Must succeed
+  - run: pnpm install
+  - run: pnpm run lint          # ✅ Must pass
+  - run: pnpm run build         # ✅ Must succeed
   - run: npx vitest run --coverage  # ✅ Generate coverage
   - name: Upload to Codecov    # Coverage reporting
 ```

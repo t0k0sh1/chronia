@@ -55,7 +55,7 @@ export default defineConfig({
 });
 ```
 
-**Build Command:** `npm run build`
+**Build Command:** `pnpm run build`
 
 ### TypeDoc
 **Purpose:** API documentation generation
@@ -71,7 +71,7 @@ export default defineConfig({
 
 **Output:** Static HTML documentation in `site/`
 
-**Generation:** `npm run docs` (TypeDoc script)
+**Generation:** `pnpm run docs` (TypeDoc script)
 
 ## Testing
 
@@ -98,7 +98,7 @@ describe("addDays", () => {
 ```
 
 **Commands:**
-- `npm test`: Run all tests
+- `pnpm test`: Run all tests
 - `npx vitest`: Watch mode
 - `npx vitest run --coverage`: Coverage report
 
@@ -130,14 +130,14 @@ export default [
 ];
 ```
 
-**Lint Command:** `npm run lint`
+**Lint Command:** `pnpm run lint`
 
 **Scope:** Only `src/**/*.ts` (tests excluded)
 
 ## Package Management
 
-### npm
-**Lock File:** `package-lock.json`
+### pnpm
+**Lock File:** `pnpm-lock.yaml`
 
 **Key Scripts:**
 ```json
@@ -147,7 +147,7 @@ export default [
   "docs": "typedoc",
   "test": "vitest tests/",
   "lint": "eslint ./src",
-  "prepublishOnly": "npm run clean && npm run build"
+  "prepublishOnly": "pnpm run clean && pnpm run build"
 }
 ```
 
@@ -213,9 +213,9 @@ dist/
 **Registry:** npm (public)
 
 **Publish Process:**
-1. `npm run clean` - Remove old build
-2. `npm run build` - Build ESM/CJS
-3. `npm publish` - Publish to npm
+1. `pnpm run clean` - Remove old build
+2. `pnpm run build` - Build ESM/CJS
+3. `pnpm publish` - Publish to npm
 
 **Included Files:**
 - `dist/` - Build output
@@ -238,13 +238,13 @@ dist/
 
 ## Development Workflow
 
-1. **Install dependencies:** `npm install`
+1. **Install dependencies:** `pnpm install`
 2. **Write code:** Add/modify functions in `src/`
 3. **Write tests:** Add tests in `tests/`
-4. **Lint:** `npm run lint`
-5. **Test:** `npm test`
-6. **Build:** `npm run build`
-7. **Generate docs:** `npm run docs` (optional)
+4. **Lint:** `pnpm run lint`
+5. **Test:** `pnpm test`
+6. **Build:** `pnpm run build`
+7. **Generate docs:** `pnpm run docs` (optional)
 
 ## Performance Targets
 
