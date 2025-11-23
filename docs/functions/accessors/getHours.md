@@ -70,9 +70,9 @@ import { getHours } from 'chronia';
 const afternoon = new Date(2025, 0, 15, 14, 30);
 getHours(afternoon);  // Returns: 14
 
-// Get hours from timestamp
-const timestamp = 1704110400000; // 2024-01-01 12:00:00 local time
-getHours(timestamp);  // Returns: 12
+// Get hours from timestamp (note: uses local timezone)
+const timestamp = 1704110400000; // 2024-01-01T12:00:00.000Z in UTC
+getHours(timestamp);  // Returns: 12 (in UTC+0) or varies by timezone
 
 // Midnight (start of day)
 const midnight = new Date(2024, 0, 1, 0, 0, 0);

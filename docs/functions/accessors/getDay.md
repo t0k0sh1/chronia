@@ -71,9 +71,9 @@ const day = getDay(date);  // Returns: 15
 // Display formatted date component
 console.log(`Day: ${day}`);  // Output: "Day: 15"
 
-// Get day from timestamp
-const timestamp = 1704067200000; // 2024-01-01
-const day2 = getDay(timestamp);  // Returns: 1
+// Get day from timestamp (note: uses local timezone)
+const timestamp = 1704067200000; // 2024-01-01T00:00:00.000Z in UTC
+const day2 = getDay(timestamp);  // Returns: 1 (may vary by timezone)
 ```
 
 ### Date Calculations

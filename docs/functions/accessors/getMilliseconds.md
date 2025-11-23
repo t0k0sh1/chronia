@@ -69,7 +69,7 @@ const date = new Date(2024, 0, 15, 12, 30, 45, 123);
 getMilliseconds(date);  // Returns: 123
 
 // Get milliseconds from timestamp
-const timestamp = 1704067200500; // 500ms past epoch
+const timestamp = 1704067200500; // 2024-01-01T00:00:00.500Z in UTC
 getMilliseconds(timestamp);  // Returns: 500
 
 // Measure elapsed milliseconds

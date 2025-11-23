@@ -33,10 +33,10 @@ getYear(new Date(2025, 0, 15));  // 2025
 getMonth(new Date(2025, 0, 15));  // 0 (January)
 getDay(new Date(2025, 0, 15));  // 15
 
-// Timestamps
-getYear(1704067200000);  // 2024
+// Timestamps (note: functions use local timezone)
+getYear(1704067200000);  // 2024 (2024-01-01T00:00:00.000Z in UTC)
 getMonth(1704067200000);  // 0 (January)
-getDay(1704067200000);  // 1
+getDay(1704067200000);  // 1 (may vary by timezone)
 
 // Mixed types in the same application
 const date = new Date(2025, 5, 15);
