@@ -41,7 +41,7 @@
     "clean": "rimraf dist",
     "prepublishOnly": "pnpm run clean && pnpm run build",
     "test": "vitest tests/",
-    "test:pbt": "vitest tests/**/*.pbt.test.ts",
+    "test:pbt": "vitest .kiro/spec/**/*.pbt.test.ts",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint ./src",
     "lint:docs": "markdownlint-cli2 docs/**/*.md README.md"
