@@ -11,18 +11,21 @@ Use this guideline when writing tests for new or modified functions.
 Function testing follows a **two-phase approach**:
 
 ### Phase 1: TDD (Test-Driven Development)
+
 - **Framework**: Vitest
 - **Commands**: `pnpm test`, `pnpm test:coverage`
 - **Location**: `tests/` directory
 - **Purpose**: Implement and verify function behavior through unit tests
 
 ### Phase 2: Property-Based Testing (PBT)
+
 - **Framework**: fast-check
 - **Command**: `pnpm test:pbt`
 - **Location**: `.kiro/spec/<spec-name>/` directory (when spec exists)
 - **Purpose**: Verify implementation satisfies specification properties
 
 **IMPORTANT**:
+
 - Phase 1 (TDD) is always required for all functions
 - Phase 2 (PBT) is required only when a specification exists in `.kiro/spec/`
 - Phase 1 must be completed and passing before starting Phase 2
@@ -389,6 +392,7 @@ if (typeof unit !== 'string') {
 ### When to Use PBT
 
 Use Property-Based Testing when:
+
 - A specification exists in `.kiro/spec/<spec-name>/`
 - The specification defines properties or invariants
 - You need to verify the implementation against the specification
@@ -519,12 +523,13 @@ describe('idempotence', () => {
 
 **CRITICAL**: When a specification exists, place PBT files in:
 
-```
+```text
 .kiro/spec/<spec-name>/<function-name>.pbt.test.ts
 ```
 
 **Example**:
-```
+
+```text
 .kiro/spec/date-validation/isValid.pbt.test.ts
 .kiro/spec/date-validation/isBefore.pbt.test.ts
 ```
@@ -631,7 +636,7 @@ it('should handle epoch date', () => {
 
 ### Complete Testing Process
 
-```
+```text
 1. Write TDD tests in tests/ directory
 2. Implement function to pass TDD tests
 3. Run tests: pnpm test

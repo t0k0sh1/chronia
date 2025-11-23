@@ -172,6 +172,7 @@ export function addXxx(
 ```
 
 **Key Points**:
+
 - Always return a new Date object (immutability)
 - Validate both date and amount parameters
 - Use Math.floor() for fractional amounts
@@ -191,6 +192,7 @@ export function getXxx(date: Date | number): number {
 ```
 
 **Key Points**:
+
 - Return NaN for invalid inputs
 - Leverage native Date methods when possible
 - Keep implementation simple and focused
@@ -207,6 +209,7 @@ export function isXxx(value: unknown): value is ExpectedType {
 ```
 
 **Key Points**:
+
 - Use TypeScript type guards
 - No exceptions thrown
 - Clear boolean logic

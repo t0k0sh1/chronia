@@ -73,6 +73,7 @@ pnpm lint:docs
 ```
 
 **Common ESLint Rules**:
+
 - No unused variables
 - Consistent formatting (handled by Prettier)
 - No any types without justification
@@ -81,7 +82,7 @@ pnpm lint:docs
 
 ---
 
-### Testing
+### Testing Suite
 
 Run the complete test suite:
 
@@ -96,6 +97,7 @@ pnpm test <function-name>
 ```
 
 **Test Requirements**:
+
 - All tests must pass
 - Test coverage should be comprehensive
 - Include happy path, edge cases, and invalid inputs
@@ -111,6 +113,7 @@ pnpm build
 ```
 
 **Verify**:
+
 - No build errors
 - No TypeScript errors
 - Output files are generated in `dist/`
@@ -126,6 +129,7 @@ pnpm build
 When modifying an existing function, ensure:
 
 1. **All existing tests still pass**
+
    ```bash
    pnpm test
    ```
@@ -162,23 +166,28 @@ grep -r "functionName" tests/
 The following checks run automatically on pull requests:
 
 ### 1. Linting
+
 - ESLint must pass with no errors
 - Prettier formatting must be consistent
 
 ### 2. Type Checking
+
 - TypeScript compilation must succeed
 - No type errors allowed
 
 ### 3. Testing
+
 - All tests must pass
 - Coverage must meet thresholds
 - No failing or skipped tests
 
 ### 4. Build
+
 - Build must succeed
 - No warnings during build
 
 ### 5. Documentation
+
 - Documentation files must exist for new functions
 - Markdown files must be valid
 - Links must not be broken
@@ -192,23 +201,27 @@ The following checks run automatically on pull requests:
 When reviewing code (or self-reviewing):
 
 #### Correctness
+
 - [ ] Logic is correct and handles all cases
 - [ ] Edge cases are properly handled
 - [ ] Timezone handling is appropriate
 - [ ] Date arithmetic is correct (month boundaries, leap years)
 
 #### Performance
+
 - [ ] No unnecessary Date object creation
 - [ ] Fast paths exist for common cases
 - [ ] No redundant computations
 
 #### Maintainability
+
 - [ ] Code is readable and well-organized
 - [ ] Variable names are descriptive
 - [ ] Complex logic has explanatory comments
 - [ ] No code duplication
 
 #### API Design
+
 - [ ] Function signature is intuitive
 - [ ] Parameters are in logical order
 - [ ] Options are extensible
@@ -221,11 +234,13 @@ When reviewing code (or self-reviewing):
 ### Issue: Tests failing
 
 **Check**:
+
 ```bash
 pnpm test
 ```
 
 **Fix**:
+
 - Review test failure messages
 - Fix implementation to match expected behavior
 - Update tests if requirements have changed
@@ -236,16 +251,19 @@ pnpm test
 ### Issue: ESLint errors
 
 **Check**:
+
 ```bash
 pnpm lint
 ```
 
 **Fix**:
+
 ```bash
 pnpm lint:fix
 ```
 
 For errors that can't be auto-fixed:
+
 - Review the ESLint error message
 - Fix manually according to the rule
 - Add ESLint disable comment ONLY if absolutely necessary with justification
@@ -255,11 +273,13 @@ For errors that can't be auto-fixed:
 ### Issue: Build failures
 
 **Check**:
+
 ```bash
 pnpm build
 ```
 
 **Fix**:
+
 - Review build error messages (including TypeScript errors)
 - Add explicit type annotations if needed
 - Fix type mismatches
@@ -276,16 +296,19 @@ pnpm build
 Track these metrics over time:
 
 ### Test Coverage
+
 - Target: Comprehensive coverage for all new code
 - Ensure all code paths are tested (happy path, edge cases, error conditions)
 - Use TDD approach to drive implementation
 
 ### Code Complexity
+
 - Cyclomatic complexity: Max 10 per function
 - File length: Max 300 lines
 - Function length: Max 50 lines
 
 ### Build Size
+
 - Monitor bundle size impact of new functions
 - Ensure tree-shaking works correctly
 - Check for unintended dependency increases
@@ -297,29 +320,34 @@ Track these metrics over time:
 Quick reference checklist for new functions:
 
 **Design**:
+
 - [ ] `Date | number` parameters
 - [ ] `options?: OptionsType` pattern
 - [ ] Correct naming (is/get/add prefix)
 - [ ] Graceful error handling
 
 **Implementation**:
+
 - [ ] `src/<function-name>/index.ts`
 - [ ] Input validation
 - [ ] Performance optimized
 - [ ] JSDoc comments
 
 **Documentation**:
+
 - [ ] `docs/functions/<category>/<function-name>.md`
 - [ ] Category README updated
 - [ ] Examples are runnable
 
 **Testing**:
+
 - [ ] Happy path tests
 - [ ] Edge case tests
 - [ ] Invalid input tests
 - [ ] 100% coverage
 
 **Quality**:
+
 - [ ] ESLint passes
 - [ ] TypeScript compiles
 - [ ] All tests pass

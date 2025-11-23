@@ -230,6 +230,7 @@ export function isXxx(
 ```
 
 **Design Considerations**:
+
 - Support unit-based granularity via options
 - Return `false` for invalid inputs
 - Provide fast path for millisecond precision
@@ -248,6 +249,7 @@ export function addXxx(
 ```
 
 **Design Considerations**:
+
 - Return new Date object (immutability)
 - Return Invalid Date for invalid inputs
 - Support negative amounts for subtraction-like behavior
@@ -263,6 +265,7 @@ export function getXxx(date: Date | number): number
 ```
 
 **Design Considerations**:
+
 - Return `NaN` for invalid inputs
 - Use native Date methods when possible
 - No options needed (single responsibility)
@@ -278,6 +281,7 @@ export function isXxx(value: unknown): value is ExpectedType
 ```
 
 **Design Considerations**:
+
 - Use TypeScript type guards when applicable
 - Return boolean
 - No exceptions thrown
