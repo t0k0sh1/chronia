@@ -3,7 +3,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
 /**
  * Check if the given value is a valid Date or timestamp.
  *
- * This function validates whether a Date object or timestamp represents a valid date.
+ * This function checks if a Date object is valid (not Invalid Date) or if a timestamp is a finite number.
  * It returns false for Invalid Date, NaN, Infinity, and -Infinity values.
  *
  * @param date - The Date object or timestamp (number) to validate
