@@ -402,6 +402,7 @@ Detailed explanation of the function's behavior.
 
 ## See Also
 
+- [Markdown Style Guide](./markdown-style.md) - Markdown writing standards and HTML tag prohibition
 - [Category README Documentation Guidelines](./documentation-category.md) - Guidelines for writing category README files
 - [Function Design Guidelines](./function-design.md) - Guidelines for designing functions
 - [Function Implementation Guidelines](./function-implementation.md) - Guidelines for implementing functions
