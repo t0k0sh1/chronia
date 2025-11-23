@@ -8,13 +8,13 @@ This guide defines best practices for writing Markdown in the Chronia project. F
 
 ## Core Principles
 
-### HTMLタグの使用禁止
+### Prohibition of HTML Tags
 
 **Do NOT use HTML tags in Markdown documentation.**
 
 GitHub Pages uses Jekyll for static site generation, which may not render HTML elements consistently across different themes and configurations. To ensure proper rendering and maintain consistency, all documentation must use standard Markdown syntax only.
 
-**禁止される例**:
+**Bad Examples**:
 
 ```markdown
 <!-- ❌ BAD: HTML table -->
@@ -40,7 +40,7 @@ GitHub Pages uses Jekyll for static site generation, which may not render HTML e
 <center>Centered text</center>
 ```
 
-**推奨される代替**:
+**Recommended Alternatives**:
 
 ```markdown
 <!-- ✅ GOOD: Standard Markdown -->
@@ -61,13 +61,13 @@ GitHub Pages uses Jekyll for static site generation, which may not render HTML e
 
 ---
 
-## 推奨される代替パターン
+## Recommended Alternative Patterns
 
 ### Multi-column Layouts
 
-HTMLテーブルで段組レイアウトを実現する代わりに、見出しレベルと箇条書きリストを使用してください。
+Instead of using HTML tables for multi-column layouts, use heading levels and bulleted lists.
 
-**❌ 避けるべきパターン**:
+**❌ Patterns to Avoid**:
 
 ```markdown
 <table>
@@ -79,7 +79,7 @@ HTMLテーブルで段組レイアウトを実現する代わりに、見出し�
 </table>
 ```
 
-**✅ 推奨パターン**:
+**✅ Recommended Pattern**:
 
 ```markdown
 ### Column 1 Title
@@ -92,7 +92,7 @@ Content for column 2
 Content for column 3
 ```
 
-または、簡潔にリスト形式で:
+Or use a concise list format:
 
 ```markdown
 - **Column 1**: Content for column 1
@@ -102,9 +102,9 @@ Content for column 3
 
 ### Tables
 
-データ構造を表現する場合は、標準のMarkdownテーブル構文を使用してください。
+For representing data structures, use standard Markdown table syntax.
 
-**✅ 推奨パターン**:
+**✅ Recommended Pattern**:
 
 ```markdown
 | Column 1 | Column 2 | Column 3 |
@@ -115,9 +115,9 @@ Content for column 3
 
 ### Emphasis and Styling
 
-強調やスタイリングには標準のMarkdown記法を使用してください。
+Use standard Markdown notation for emphasis and styling.
 
-**✅ 推奨パターン**:
+**✅ Recommended Pattern**:
 
 ```markdown
 **Bold text**
@@ -128,9 +128,9 @@ Content for column 3
 
 ### Links and Images
 
-リンクと画像には標準のMarkdown記法を使用してください。
+Use standard Markdown notation for links and images.
 
-**✅ 推奨パターン**:
+**✅ Recommended Pattern**:
 
 ```markdown
 [Link text](https://example.com)
@@ -139,11 +139,11 @@ Content for column 3
 
 ---
 
-## Markdown構文のベストプラクティス
+## Markdown Syntax Best Practices
 
 ### Headings
 
-見出しレベルを適切に使用し、階層構造を明確にしてください。
+Use heading levels appropriately to create a clear hierarchical structure.
 
 ```markdown
 # H1: Document Title (page title only)
@@ -154,13 +154,13 @@ Content for column 3
 
 **Rules**:
 
-- H1は文書のタイトル専用（1つのファイルに1つのみ）
-- 見出しレベルを飛ばさない（H2の次はH3、H3の次はH4）
-- 見出しの前後に空行を追加
+- H1 is reserved for document titles only (one per file)
+- Don't skip heading levels (H2 follows H1, H3 follows H2, etc.)
+- Add blank lines before and after headings
 
 ### Lists
 
-リストは一貫性を持って記述してください。
+Write lists with consistency.
 
 ```markdown
 <!-- Unordered lists -->
@@ -178,13 +178,13 @@ Content for column 3
 
 **Rules**:
 
-- ネストされたリストは2スペースまたは4スペースでインデント
-- リスト項目間に空行を入れない（同じレベルの場合）
-- 異なるリストタイプ間には空行を入れる
+- Indent nested lists with 2 or 4 spaces
+- Don't add blank lines between items at the same level
+- Add blank lines between different list types
 
 ### Code Blocks
 
-コードブロックには言語識別子を指定してください。
+Always specify a language identifier for code blocks.
 
 ````markdown
 ```typescript
@@ -196,13 +196,13 @@ function example(): void {
 
 **Rules**:
 
-- 言語識別子を必ず指定（`typescript`, `javascript`, `bash`, etc.）
-- インラインコードには単一のバッククォート: `` `code` ``
-- コードブロックの前後に空行を追加
+- Always specify a language identifier (`typescript`, `javascript`, `bash`, etc.)
+- Use single backticks for inline code: `` `code` ``
+- Add blank lines before and after code blocks
 
 ### Blockquotes
 
-重要な情報や注意事項にはブロッククォートを使用してください。
+Use blockquotes for important information and notes.
 
 ```markdown
 > **Note**: This is an important note.
@@ -212,7 +212,7 @@ function example(): void {
 
 ### Horizontal Rules
 
-セクション区切りには水平線を使用できます。
+Use horizontal rules as section dividers.
 
 ```markdown
 ---
@@ -220,9 +220,9 @@ function example(): void {
 
 **Rules**:
 
-- 3つ以上のハイフン、アスタリスク、アンダースコアが使用可能
-- 前後に空行を追加
-- プロジェクト全体で一貫した記号を使用（Chroniaでは `---` を推奨）
+- Use three or more hyphens, asterisks, or underscores
+- Add blank lines before and after
+- Use consistent symbols throughout the project (Chronia recommends `---`)
 
 ---
 
@@ -230,7 +230,7 @@ function example(): void {
 
 ### Table Syntax
 
-GFMのテーブル構文を使用してください。
+Use GFM table syntax.
 
 ```markdown
 | Header 1 | Header 2 | Header 3 |
@@ -241,13 +241,13 @@ GFMのテーブル構文を使用してください。
 
 **Rules**:
 
-- ヘッダー行とデータ行の間に区切り行（`|---|---|---|`）を追加
-- セルの幅は自動調整されるため、手動で揃える必要はない
-- パイプ文字（`|`）をエスケープする場合は `\|` を使用
+- Add a separator row (`|---|---|---|`) between header and data rows
+- Cell widths are auto-adjusted; no need to align manually
+- Escape pipe characters with `\|` when needed
 
 ### Task Lists
 
-タスクリストはGFMでサポートされています。
+Task lists are supported in GFM.
 
 ```markdown
 - [ ] Incomplete task
@@ -256,7 +256,7 @@ GFMのテーブル構文を使用してください。
 
 ### Strikethrough
 
-取り消し線にはチルダを使用してください。
+Use tildes for strikethrough text.
 
 ```markdown
 ~~Strikethrough text~~
@@ -264,17 +264,17 @@ GFMのテーブル構文を使用してください。
 
 ---
 
-## 文書構造のガイドライン
+## Document Structure Guidelines
 
 ### File Organization
 
-- 各Markdownファイルは1つの明確なトピックに焦点を当てる
-- ファイル名はkebab-caseを使用（例: `markdown-style.md`）
-- READMEファイルはディレクトリの概要を提供
+- Each Markdown file should focus on one clear topic
+- Use kebab-case for file names (e.g., `markdown-style.md`)
+- README files should provide directory overviews
 
 ### Internal Links
 
-内部リンクには相対パスを使用してください。
+Use relative paths for internal links.
 
 ```markdown
 [Function Documentation Guidelines](./documentation-function.md)
@@ -283,7 +283,7 @@ GFMのテーブル構文を使用してください。
 
 ### External Links
 
-外部リンクには絶対URLを使用してください。
+Use absolute URLs for external links.
 
 ```markdown
 [GitHub Repository](https://github.com/t0k0sh1/chronia)
@@ -295,33 +295,33 @@ GFMのテーブル構文を使用してください。
 
 ### Linting
 
-すべてのMarkdownファイルはlintingを通過する必要があります。
+All Markdown files must pass linting.
 
 ```bash
 pnpm lint:docs
 ```
 
-このコマンドはMarkdownlintを実行し、構文エラーとスタイル違反をチェックします。
+This command runs Markdownlint to check for syntax errors and style violations.
 
 ### Common Lint Errors to Avoid
 
-- HTMLタグの使用
-- 不適切な見出し階層
-- 行末の空白文字
-- 連続した空行
-- コードブロックの言語識別子の欠落
+- Use of HTML tags
+- Improper heading hierarchy
+- Trailing whitespace at end of lines
+- Multiple consecutive blank lines
+- Missing language identifiers in code blocks
 
 ---
 
-## 例外
+## Exceptions
 
-以下の場合のみ、HTMLの使用が許可される場合があります:
+HTML usage may be permitted only in the following cases:
 
-1. **絶対に必要な場合のみ**: 標準Markdownでは表現できない特殊な要件
-2. **承認が必要**: プロジェクトメンテナーの明示的な承認が必要
-3. **文書化が必要**: なぜHTMLが必要なのかを文書化
+1. **Absolutely necessary**: Special requirements that cannot be expressed with standard Markdown
+2. **Approval required**: Explicit approval from project maintainers is required
+3. **Documentation required**: Document why HTML is necessary
 
-**Note**: 現在のところ、Chroniaプロジェクトでは例外は認められていません。すべての文書は標準Markdown記法で記述する必要があります。
+**Note**: Currently, no exceptions are permitted in the Chronia project. All documentation must be written using standard Markdown notation.
 
 ---
 

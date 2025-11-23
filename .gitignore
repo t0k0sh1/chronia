@@ -146,4 +146,4 @@ out
 site/
 
 # Kiro specification files (not managed in repository - specs maintained in docs/)
-.kiro/specs
+.kiro/specs/
