@@ -144,3 +144,6 @@ out
 
 # TypeDoc output (no longer used)
 site/
+
+# Kiro specification files (not managed in repository - specs maintained in docs/)
+.kiro/specs

@@ -22,59 +22,37 @@ Chronia is a modern, lightweight TypeScript date/time utility library with compr
 
 ### For Users
 
-<table>
-<tr>
-<td width="50%">
-
-**Getting Started**
+#### Getting Started
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Core Concepts](#core-concepts)
 
-**Function Reference**
+#### Function Reference
 - [Function Categories](#function-categories)
 - [Browse by Category](#browse-functions-by-category)
 - [Common Use Cases](#common-use-cases)
 
-</td>
-<td width="50%">
-
-**Advanced Topics**
+#### Advanced Topics
 - [Internationalization](#internationalization)
 - [Performance Tips](#performance-tips)
 - [Migration Guide](#migration-guide)
 
-**API Reference**
+#### API Reference
 - [Type Definitions](#type-definitions)
 - [Error Handling](#error-handling)
 
-</td>
-</tr>
-</table>
-
 ### For Contributors
 
-<table>
-<tr>
-<td width="50%">
-
-**Development Guidelines**
+#### Development Guidelines
 - [Guidelines Overview](./guidelines/)
 - [Function Design](./guidelines/function-design.md)
 - [Function Implementation](./guidelines/function-implementation.md)
 - [Function Testing](./guidelines/function-testing.md)
 
-</td>
-<td width="50%">
-
-**Documentation Standards**
+#### Documentation Standards
 - [Function Documentation](./guidelines/documentation-function.md)
 - [Category Documentation](./guidelines/documentation-category.md)
 - [Quality Checks](./guidelines/function-check.md)
-
-</td>
-</tr>
-</table>
 
 ---
 
@@ -256,35 +234,21 @@ Utility functions for date comparison
 
 ## Browse Functions by Category
 
-<table>
-<tr>
-<td width="33%">
-
-**Basic Operations**
+### Basic Operations
 - [Validations →](./functions/validations/)
 - [Accessors →](./functions/accessors/)
 - [Utilities →](./functions/utilities/)
 
-</td>
-<td width="33%">
-
-**Date Manipulation**
+### Date Manipulation
 - [Arithmetic →](./functions/arithmetic/)
 - [Mutators →](./functions/mutators/)
 - [Truncations →](./functions/truncations/)
 
-</td>
-<td width="33%">
-
-**Advanced Features**
+### Advanced Features
 - [Formatting →](./functions/formatting/)
 - [Parsing →](./functions/parsing/)
 - [Boundaries →](./functions/boundaries/)
 - [Comparisons →](./functions/comparisons/)
-
-</td>
-</tr>
-</table>
 
 ---
 

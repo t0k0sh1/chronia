@@ -524,6 +524,7 @@ interface InterfaceName {
 
 ## See Also
 
+- [Markdown Style Guide](./markdown-style.md) - Markdown writing standards and HTML tag prohibition
 - [Function Documentation Guidelines](./documentation-function.md) - Guidelines for writing individual function documentation
 - [Function Design Guidelines](./function-design.md) - Guidelines for designing functions
 - [Function Implementation Guidelines](./function-implementation.md) - Guidelines for implementing functions
