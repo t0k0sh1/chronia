@@ -49,9 +49,9 @@ The `setMonth` function creates a new Date instance with the month component mod
 - **Validation First**: Both arguments are validated before any conversion or processing occurs, ensuring consistent error handling
 - **Fractional Handling**: Fractional month values are truncated using `Math.trunc` (e.g., `5.9` becomes `5`, `-1.9` becomes `-1`)
 - **Month Overflow**: Months outside the 0-11 range are handled by JavaScript's native behavior (e.g., `13` becomes January of the next year, `-1` becomes December of the previous year)
-- **Day Overflow Protection**: When setting a month that has fewer days than the current date's day, the function adjusts to the last valid day of the target month
+- **Day Overflow Protection**: This function extends JavaScript's native behavior by detecting and adjusting day overflow. When setting a month that has fewer days than the current date's day, the function automatically adjusts to the last valid day of the target month
   - Example: January 31 → February becomes February 28 (or 29 in leap years)
-  - This prevents the native JavaScript behavior of rolling over to the next month
+  - This prevents the native JavaScript rollover behavior where Jan 31 → Feb would become March 2 or 3
 - **Time Preservation**: All time components (hours, minutes, seconds, milliseconds) are preserved from the original date
 - **No Exceptions**: Invalid inputs return Invalid Date rather than throwing exceptions
 

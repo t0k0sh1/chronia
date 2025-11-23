@@ -43,37 +43,43 @@ You will execute a comprehensive validation pipeline for code changes, ensuring:
 
 Execute the following steps in order:
 
-**Step 1: Pre-Validation Assessment**
+### Step 1: Pre-Validation Assessment
+
 - Identify all changed files in the working directory
 - Categorize changes (code, documentation, configuration, etc.)
 - Determine which validation steps are applicable
 
-**Step 2: Documentation-Implementation Review**
+### Step 2: Documentation-Implementation Review
+
 - For each modified function:
   - Extract the documentation comment
   - Analyze the implementation
   - Verify alignment between documentation and code
   - Flag any mismatches with specific line references
 
-**Step 3: Documentation Completeness Check**
+### Step 3: Documentation Completeness Check
+
 - Scan all functions in modified files
 - Verify presence of function documentation
 - Check documentation quality and completeness
 - Report any missing or inadequate documentation
 
-**Step 4: Lint Execution**
+### Step 4: Lint Execution
+
 - Run code linters on all modified code files
 - Run markdown linters on all modified markdown files
 - Collect and report all lint errors with full context
 - **STOP if lint errors exist** - do not proceed to testing or commit
 
-**Step 5: Test Suite Execution**
+### Step 5: Test Suite Execution
+
 - Execute the project's test suite
 - Monitor for any test failures
 - Collect detailed failure information if tests fail
 - **STOP if tests fail** - do not proceed to commit
 
-**Step 6: Git Operations (only if all validations pass)**
+### Step 6: Git Operations (only if all validations pass)
+
 - Stage all changes using GitHub MCP
 - Create a clear, descriptive commit message that:
   - Summarizes the changes concisely
