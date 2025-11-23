@@ -146,7 +146,7 @@ Use standard Markdown notation for links and images.
 Use heading levels appropriately to create a clear hierarchical structure.
 
 ```markdown
-# H1: Document Title (page title only)
+# H1: Document Title (one per file)
 ## H2: Major Sections
 ### H3: Subsections
 #### H4: Minor Subsections
