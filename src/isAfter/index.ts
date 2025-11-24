@@ -1,3 +1,4 @@
+import { compareDateTimes } from "../_lib/compareDates";
 import { truncateToUnit } from "../_lib/truncateToUnit";
 import { isValidDateOrNumber } from "../_lib/validators";
 import { ComparisonOptions } from "../types";
@@ -56,19 +57,16 @@ export function isAfter(
   b: Date | number,
   options: ComparisonOptions = {},
 ): boolean {
-  // Early validation for fast-fail behavior and code consistency across functions
-  // Slight overhead of Date construction is acceptable for clarity and uniform validation
-  if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
-
-  const dtA = new Date(a);
-  const dtB = new Date(b);
-
   const unit = options?.unit ?? "millisecond";
 
   if (unit === "millisecond") {
-    return dtA.getTime() > dtB.getTime();
+    return compareDateTimes(a, b) === 1;
   }
 
+  // Unit-based comparison requires validation and Date objects
+  if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
+  const dtA = new Date(a);
+  const dtB = new Date(b);
   const aTruncated = truncateToUnit(dtA, unit);
   const bTruncated = truncateToUnit(dtB, unit);
   return aTruncated.getTime() > bTruncated.getTime();

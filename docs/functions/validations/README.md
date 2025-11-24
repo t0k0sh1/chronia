@@ -12,6 +12,13 @@ Chronia provides a comprehensive suite of date validation and comparison functio
 |----------|-------------|
 | [`isValid`](./isValid.md) | Checks if a Date object or timestamp is valid |
 
+### Current Time Comparison
+
+| Function | Description | Equality Behavior |
+|----------|-------------|-------------------|
+| [`isFuture`](./isFuture.md) | Checks if a date is strictly in the future relative to current time | Returns `false` for current moment |
+| [`isPast`](./isPast.md) | Checks if a date is strictly in the past relative to current time | Returns `false` for current moment |
+
 ### Date Comparison
 
 | Function | Description | Equality Behavior |
@@ -97,14 +104,21 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 
 ## Choosing the Right Function
 
-### Validation vs Comparison vs Same-Time
+### Validation vs Current Time Comparison vs Date Comparison vs Same-Time
 
 **Validation Functions** (`isValid`):
 - Use to check if a date or timestamp is valid
 - Ideal for: input validation, error checking, data sanitization
 
+**Current Time Comparison Functions** (`isFuture`, `isPast`):
+- Use to compare a date against the current moment (Date.now())
+- No second date parameter required - automatically uses current time
+- Strict comparison - returns `false` for the exact current moment
+- Ideal for: deadline validation, session expiry, event filtering, cache validation
+
 **Comparison Functions** (`isBefore`, `isAfter`, `isBeforeOrEqual`, `isAfterOrEqual`, `isEqual`):
 - Use to compare the chronological order of two dates
+- Requires both dates as parameters
 - Support optional unit-based granularity
 - Ideal for: sorting, range validation, timeline operations
 
@@ -113,12 +127,28 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 - Fixed granularity (no options parameter)
 - Ideal for: grouping, filtering, same-day/month/year checks
 
+### Current Time Comparison vs Two-Date Comparison
+
+**When to use Current Time Comparison** (`isFuture`, `isPast`):
+- When checking against the current moment
+- When you don't have a second date to compare
+- When implementing time-based business logic (expiry, deadlines, upcoming events)
+- Example: "Has this session expired?" → `isPast(session.expiresAt)`
+- Example: "Is this event still upcoming?" → `isFuture(event.date)`
+
+**When to use Two-Date Comparison** (`isBefore`, `isAfter`, etc.):
+- When comparing two specific dates
+- When the reference date is not the current time
+- When implementing relative date logic
+- Example: "Is eventA before eventB?" → `isBefore(eventA, eventB)`
+- Example: "Was this submitted before the deadline?" → `isBeforeOrEqual(submission, deadline)`
+
 ### Strict vs Inclusive Comparisons
 
-**Strict Comparisons** (`isBefore`, `isAfter`):
+**Strict Comparisons** (`isBefore`, `isAfter`, `isFuture`, `isPast`):
 - Use when you need to exclude the boundary condition
 - Equality returns `false`
-- Ideal for: exclusive ranges, strict ordering
+- Ideal for: exclusive ranges, strict ordering, future/past distinction
 
 **Inclusive Comparisons** (`isBeforeOrEqual`, `isAfterOrEqual`):
 - Use when you need to include the boundary condition
@@ -130,10 +160,16 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 | Scenario | Recommended Function | Reason |
 |----------|---------------------|--------|
 | Validate user input | `isValid(date)` | Check if date is valid |
-| Check if event has passed | `isBefore(event, now())` | Strict past check |
+| Check if session expired | `isPast(session.expiresAt)` | Current time-based expiry check |
+| Check if event is upcoming | `isFuture(event.date)` | Current time-based future check |
+| Filter upcoming events | `events.filter(e => isFuture(e.date))` | Simple future filtering |
+| Filter past events | `events.filter(e => isPast(e.date))` | Simple past filtering |
+| Validate cache expiration | `isFuture(cache.expiresAt)` | Check if cache is still valid |
+| Check if deadline passed | `isPast(deadline)` | Strict past check against now |
+| Check if event has passed | `isBefore(event, now())` | Strict past check with explicit now |
 | Check if deadline has been met | `isBeforeOrEqual(submission, deadline)` | Includes deadline day |
 | Validate age requirement | `isAfterOrEqual(birthdate, minDate)` | Includes exact age |
-| Check future events | `isAfter(event, now())` | Strict future check |
+| Check future events | `isAfter(event, now())` | Strict future check with explicit now |
 | Detect duplicate timestamps | `isEqual(date1, date2)` | Exact equality |
 | Group events by day | `isSameDay(date1, date2)` | Same-day check |
 | Group events by month | `isSameMonth(date1, date2)` | Same-month check |
@@ -163,6 +199,72 @@ function processDate(date: Date | number): void {
     throw new Error('Invalid date provided');
   }
   // Process valid date
+}
+```
+
+### Session Expiry Checking
+
+```typescript
+import { isPast } from 'chronia';
+
+interface Session {
+  token: string;
+  expiresAt: Date;
+}
+
+function isSessionValid(session: Session): boolean {
+  // Session is valid if expiration time is still in the future
+  return !isPast(session.expiresAt);
+}
+
+function validateSession(session: Session): void {
+  if (isPast(session.expiresAt)) {
+    throw new Error('Session has expired');
+  }
+  // Proceed with valid session
+}
+```
+
+### Upcoming Events Filtering
+
+```typescript
+import { isFuture } from 'chronia';
+
+interface Event {
+  id: string;
+  name: string;
+  date: Date;
+}
+
+function getUpcomingEvents(events: Event[]): Event[] {
+  return events.filter(event => isFuture(event.date));
+}
+
+function hasUpcomingEvents(events: Event[]): boolean {
+  return events.some(event => isFuture(event.date));
+}
+```
+
+### Cache Validation
+
+```typescript
+import { isFuture } from 'chronia';
+
+interface CacheEntry<T> {
+  data: T;
+  expiresAt: number;
+}
+
+function getCachedData<T>(cache: CacheEntry<T>): T | null {
+  // Return data only if cache hasn't expired
+  if (isFuture(cache.expiresAt)) {
+    return cache.data;
+  }
+  return null;
+}
+
+function isCacheValid<T>(cache: CacheEntry<T>): boolean {
+  return isFuture(cache.expiresAt);
 }
 ```
 
