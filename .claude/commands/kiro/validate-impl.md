@@ -58,10 +58,12 @@ For each task, verify:
 - If not completed, flag as "Task not marked complete"
 
 #### Test Coverage Check
-- Tests exist for task-related functionality
-- Tests pass (no failures or errors)
-- Use Bash to run test commands (e.g., `npm test`, `pytest`)
-- If tests fail or don't exist, flag as "Test coverage issue"
+- **TDD tests exist** for task-related functionality (tests/ directory)
+- **TDD tests pass** (no failures or errors)
+- **Property-based tests exist** (if specification exists in `.kiro/specs/`)
+- **PBT tests pass** (run `pnpm test:pbt`)
+- Use Bash to run test commands (e.g., `pnpm test`, `pnpm test:pbt`)
+- If TDD or PBT tests fail or don't exist, flag as "Test coverage issue"
 
 #### Requirements Traceability
 - Identify EARS requirements related to the task

@@ -17,6 +17,8 @@ All contributors must follow these guidelines when designing, implementing, test
 | [**Function Design**](./function-design.md)                 | Design principles and interface patterns   | When designing new functions or refactoring interfaces  |
 | [**Function Implementation**](./function-implementation.md) | Implementation patterns and best practices | When implementing function bodies                       |
 | [**Function Testing**](./function-testing.md)               | Testing standards and patterns (TDD + PBT) | When writing tests for functions                        |
+| [**Test-Driven Development**](./test-driven-development.md) | TDD methodology and best practices         | When implementing functions with TDD approach           |
+| [**Property-Based Testing**](./property-based-testing.md)   | PBT-specific patterns and best practices   | When writing property-based tests with fast-check       |
 | [**Function Check**](./function-check.md)                   | Quality checks and CI/CD guidelines        | Before committing code and during code review           |
 
 ### Documentation
@@ -25,6 +27,7 @@ All contributors must follow these guidelines when designing, implementing, test
 |-----------------------------------------------------------|---------------------------------------------|----------------------------------------------|
 | [**Function Documentation**](./documentation-function.md) | Individual function documentation structure | When documenting individual functions        |
 | [**Category Documentation**](./documentation-category.md) | Category README documentation structure     | When creating or updating category overviews |
+| [**Markdown Style**](./markdown-style.md)                 | Markdown writing standards and conventions  | When writing or reviewing Markdown files     |
 
 ---
 
@@ -87,7 +90,13 @@ Phase 5: Commit & PR
 → [Function Design](./function-design.md)
 
 **Implementing a function?**
-→ [Function Implementation](./function-implementation.md) + [Function Testing](./function-testing.md)
+→ [Function Implementation](./function-implementation.md) + [Test-Driven Development](./test-driven-development.md)
+
+**Writing TDD tests?**
+→ [Test-Driven Development](./test-driven-development.md)
+
+**Writing property-based tests?**
+→ [Property-Based Testing](./property-based-testing.md)
 
 **Writing documentation?**
 → [Function Documentation](./documentation-function.md) or [Category Documentation](./documentation-category.md)
@@ -178,6 +187,84 @@ pnpm test:pbt            # Run all PBT tests
 ```
 
 [→ Read Full Guidelines](./function-testing.md)
+
+---
+
+### Test-Driven Development Guidelines
+
+**Purpose**: Define TDD methodology and best practices for implementation
+
+**Key Topics**:
+
+- Red-Green-Refactor cycle
+- Test structure and organization (Arrange-Act-Assert)
+- Test categories (happy path, edge cases, invalid inputs, options)
+- Test patterns by function category
+- Coverage requirements (100% target)
+
+**Critical Rules**:
+
+- Write tests before implementation (Red-Green-Refactor)
+- Tests in `tests/` directory
+- 100% coverage target for all code
+- Test both Date objects and timestamps
+- Test all edge cases and invalid inputs
+- Ensure test isolation (no shared state)
+
+**Test Categories**:
+
+1. **Happy Path**: Normal, expected usage
+2. **Edge Cases**: Boundaries, special dates, corner cases
+3. **Invalid Inputs**: Graceful error handling
+4. **Options**: Configurable behavior testing
+
+**Commands**:
+
+```bash
+pnpm test                 # Run all TDD tests
+pnpm test --watch         # Watch mode
+pnpm test:coverage        # With coverage report
+```
+
+[→ Read Full Guidelines](./test-driven-development.md)
+
+---
+
+### Property-Based Testing Guidelines
+
+**Purpose**: Define standards for property-based testing with fast-check
+
+**Key Topics**:
+
+- PBT validation strategies
+- Arbitraries and property design
+- Common property patterns (invariants, round-trip, idempotence)
+- Edge case handling in PBT
+- Root cause analysis for failures
+
+**Critical Rules**:
+
+- PBT required when specification exists in `.kiro/spec/`
+- Test files in `.kiro/spec/<spec-name>/<function-name>.pbt.test.ts`
+- Map tests to specification requirements
+- Compare against reference implementations
+- Use appropriate arbitraries for input generation
+
+**Key Validation Strategies**:
+
+1. Native JavaScript API comparison
+2. date-fns reference library comparison
+3. Mathematical properties verification
+4. Specification-defined invariants
+
+**Commands**:
+
+```bash
+pnpm test:pbt            # Run all property-based tests
+pnpm test:pbt <spec>     # Run tests for specific spec
+```
+
+[→ Read Full Guidelines](./property-based-testing.md)
 
 ---
 

@@ -51,6 +51,56 @@ Generate implementation tasks for feature **$1** based on approved requirements 
 - Mark optional test coverage subtasks with `- [ ]*` only when they strictly cover acceptance criteria already satisfied by core implementation and can be deferred post-MVP
 - If existing tasks.md found, merge with new content
 
+**Assign appropriate agents to tasks**:
+Each task must specify which agent should execute it. Follow CLAUDE.md's Code Development Workflow:
+- **Phase 1 (Design)**: Use `function-interface-designer` for interface definition tasks
+- **Phase 2 (Implementation)**: Use `function-implementer` for implementation and testing tasks
+- **Phase 3 (Quality Check)**: Use `code-reviewer` for code review tasks (required when code is modified)
+- **Phase 4 (PBT Validation)**: Use `pbt-spec-validator` for property-based testing (required when functions are created or modified)
+  - Guidelines: `docs/guidelines/property-based-testing.md`
+  - Input: `.kiro/specs/$1/requirements.md`
+  - Output: PBT tests in `.kiro/specs/$1/<function-name>.pbt.test.ts`
+- **Phase 5 (Documentation)**: Use `function-docs-writer` for documentation tasks
+- **Phase 6 (Commit & PR)**: Use `commit-pr-validator` for final validation, commit, and PR creation
+
+**Include mandatory final tasks**:
+1. **Linting & Build Verification Task** (if code was modified):
+   - Add after all implementation tasks are complete
+   - Task description: "Run linting and build checks to verify code quality and compilation"
+   - Commands: `pnpm lint`, `pnpm lint:docs`, `pnpm build`
+   - Execution: Direct Bash execution or use `function-implementer` agent
+   - Requirements: All implementation tasks completed
+   - If linting or build fails: Fix issues and re-run verification
+
+2. **Code Review Task** (if code was modified):
+   - Add after linting and build verification passes
+   - Task description: "Run code review to verify code quality, security, and adherence to guidelines"
+   - Agent: `code-reviewer`
+   - Requirements: Linting and build must pass
+   - Include iterative fix process: If issues found, use `function-implementer` to fix, then re-review until clean
+
+3. **Property-Based Testing Task** (if functions were created or modified):
+   - Add after code review passes
+   - Task description: "Validate implementation against specification using property-based testing"
+   - Agent: `pbt-spec-validator`
+   - Guidelines: Follow `docs/guidelines/property-based-testing.md` for PBT methodology
+   - Input: `.kiro/specs/$1/requirements.md` (specification requirements)
+   - Purpose: Requirements-based acceptance testing using fast-check to verify implementation satisfies specification properties
+   - Test Location: `.kiro/specs/$1/<function-name>.pbt.test.ts`
+   - Verification: Run `pnpm test:pbt` to validate all properties pass
+   - Requirements: Code review must pass, specification must exist in requirements.md
+
+4. **Documentation Tasks** (if code was modified):
+   - Add after PBT validation passes (or after code review if no PBT needed)
+   - Individual function documentation using `function-docs-writer`
+   - Category README updates using `function-docs-writer`
+
+5. **Commit & PR Task** (always required):
+   - Add as the final task
+   - Task description: "Create git commit and pull request with comprehensive description"
+   - Agent: `commit-pr-validator`
+   - Requirements: All previous tasks completed, all quality checks passed
+
 ### Step 3: Finalize
 
 **Write and update**:
@@ -69,6 +119,13 @@ Generate implementation tasks for feature **$1** based on approved requirements 
 - **Maximum 2 Levels**: Major tasks and sub-tasks only (no deeper nesting)
 - **Sequential Numbering**: Major tasks increment (1, 2, 3...), never repeat
 - **Task Integration**: Every task must connect to the system (no orphaned work)
+- **Agent Assignment**: Every task MUST specify which agent executes it (function-interface-designer, function-implementer, code-reviewer, pbt-spec-validator, function-docs-writer, or commit-pr-validator)
+- **Workflow Compliance**: Tasks MUST follow CLAUDE.md's 6-phase workflow in order
+- **Mandatory Linting & Build**: Linting and build verification task is REQUIRED when code is modified (runs after all implementation tasks)
+- **Mandatory Review**: Code review task is REQUIRED when code is modified (runs after linting and build pass)
+- **Mandatory PBT**: Property-based testing task is REQUIRED when functions are created or modified
+- **Mandatory Documentation**: Documentation tasks are REQUIRED when code is modified
+- **Final PR Task**: Commit & PR task is ALWAYS the final task
 </instructions>
 
 ## Tool Guidance
@@ -80,17 +137,32 @@ Generate implementation tasks for feature **$1** based on approved requirements 
 Provide brief summary in the language specified in spec.json:
 
 1. **Status**: Confirm tasks generated at `.kiro/specs/$1/tasks.md`
-2. **Task Summary**: 
+2. **Task Summary**:
    - Total: X major tasks, Y sub-tasks
    - All Z requirements covered
    - Average task size: 1-3 hours per sub-task
+   - Agent assignments: Appropriate agents assigned to each task
 3. **Quality Validation**:
    - ✅ All requirements mapped to tasks
    - ✅ Task dependencies verified
-   - ✅ Testing tasks included
-4. **Next Action**: Review tasks and proceed when ready
+   - ✅ Testing tasks included (TDD in Phase 2, PBT in Phase 4)
+   - ✅ Linting & build verification task included (if code modifications present)
+     - Runs after all implementation tasks
+     - Executes: `pnpm lint`, `pnpm lint:docs`, `pnpm build`
+   - ✅ Code review task included (if code modifications present)
+     - Runs after linting and build pass
+   - ✅ Property-based testing task included (if functions created/modified)
+     - Uses `pbt-spec-validator` agent
+     - Follows `docs/guidelines/property-based-testing.md`
+     - Input: `.kiro/specs/$1/requirements.md`
+   - ✅ Documentation tasks included (if code modifications present)
+   - ✅ Commit & PR task included as final step
+4. **Workflow Compliance**:
+   - Tasks follow CLAUDE.md's 6-phase workflow
+   - Appropriate agents assigned (function-interface-designer, function-implementer, code-reviewer, pbt-spec-validator, function-docs-writer, commit-pr-validator)
+5. **Next Action**: Review tasks and proceed when ready
 
-**Format**: Concise (under 200 words)
+**Format**: Concise (under 250 words)
 
 ## Safety & Fallback
 

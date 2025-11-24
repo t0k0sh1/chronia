@@ -16,6 +16,11 @@ Function testing follows a **two-phase approach**:
 - **Commands**: `pnpm test`, `pnpm test:coverage`
 - **Location**: `tests/` directory
 - **Purpose**: Implement and verify function behavior through unit tests
+- **Detailed Guidelines**: See [Test-Driven Development Guidelines](./test-driven-development.md) for:
+  - Red-Green-Refactor cycle
+  - Equivalence partitioning and boundary value analysis
+  - Test category priorities (edge cases > errors > options > happy path)
+  - TDD best practices and common pitfalls
 
 ### Phase 2: Property-Based Testing (PBT)
 
@@ -23,6 +28,10 @@ Function testing follows a **two-phase approach**:
 - **Command**: `pnpm test:pbt`
 - **Location**: `.kiro/spec/<spec-name>/` directory (when spec exists)
 - **Purpose**: Verify implementation satisfies specification properties
+- **Detailed Guidelines**: See [Property-Based Testing Guidelines](./property-based-testing.md) for:
+  - Requirements-based acceptance testing approach
+  - Arbitraries and property design
+  - Validation strategies and common property patterns
 
 **IMPORTANT**:
 
@@ -34,13 +43,21 @@ Function testing follows a **two-phase approach**:
 
 ### Phase 1: TDD Requirements
 
-Each function MUST have comprehensive test coverage including:
+Each function MUST have comprehensive test coverage following **equivalence partitioning and boundary value analysis** strategy:
 
-1. **Happy path**: Normal, expected usage
-2. **Edge cases**: Boundary values, special dates
-3. **Invalid inputs**: Invalid Date, NaN, Infinity
-4. **Type variations**: Both Date objects and timestamps
-5. **Options variations**: Different option combinations (if applicable)
+**Test Category Priority** (see [TDD Guidelines](./test-driven-development.md) for details):
+
+1. **Edge cases** (Highest Priority): Boundary values, special dates, calendar boundaries
+2. **Invalid inputs** (High Priority): Invalid Date, NaN, Infinity, out-of-range values
+3. **Options** (Medium Priority): Different option combinations (if applicable)
+4. **Happy path** (Minimum Necessary): One representative value per equivalence class
+
+**Key Strategy**:
+
+- **Minimize happy path tests**: Focus on representative values only
+- **Maximize edge case tests**: Boundaries are where bugs hide
+- **Comprehensive error handling**: Test all invalid input partitions
+- **Type variations**: Both Date objects and timestamps (different equivalence classes)
 
 ### Phase 2: PBT Requirements (when spec exists)
 
@@ -675,6 +692,8 @@ pnpm test:pbt <spec-name>/<function-name>
 
 ## See Also
 
+- [Test-Driven Development Guidelines](./test-driven-development.md) - Detailed TDD methodology and best practices
+- [Property-Based Testing Guidelines](./property-based-testing.md) - Detailed PBT patterns and strategies
 - [Function Design Guidelines](./function-design.md) - Guidelines for designing functions
 - [Function Implementation Guidelines](./function-implementation.md) - Guidelines for implementing functions
 - [Function Check Guidelines](./function-check.md) - Guidelines for quality checks

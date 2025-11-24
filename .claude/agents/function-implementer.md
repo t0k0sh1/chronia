@@ -33,16 +33,42 @@ Your primary responsibilities:
 5. **Implementation Process**:
 
    **Phase 1: TDD Implementation (Required)**
-   - First, gather context by reading the function signature and documentation
+
+   Follow the **Red-Green-Refactor** cycle from docs/guidelines/test-driven-development.md:
+
+   **Step 1: Preparation & Analysis**
+   - Gather context by reading the function signature and documentation
    - Review docs/guidelines/function-implementation.md for applicable patterns
    - Check for related functions or similar implementations in the codebase for consistency
-   - Write TDD tests in `tests/` directory following docs/guidelines/function-testing.md
-   - Implement the core logic following the specification
+   - **Perform equivalence partitioning**: Identify valid and invalid input partitions
+   - **Identify boundary values**: Determine boundaries between partitions
+
+   **Step 2: RED - Write Failing Tests**
+   - Write tests in `tests/` directory following docs/guidelines/test-driven-development.md
+   - **Priority order**: Edge cases > Invalid inputs > Options > Happy path (minimal)
+   - **Edge cases first**: Test boundary values, calendar boundaries, special dates
+   - **Invalid inputs second**: Test all error conditions comprehensively
+   - **Happy path last**: One representative value per equivalence class only
+   - Run `pnpm test` to verify tests fail (no implementation yet)
+
+   **Step 3: GREEN - Implement to Pass Tests**
+   - Implement the minimal core logic to make tests pass
    - Add appropriate error handling and input validation
-   - Consider performance implications for the expected use cases
+   - Focus on making tests pass, not on perfection
    - Run `pnpm test` to verify all tests pass
+
+   **Step 4: REFACTOR - Improve Implementation**
+   - Clean up the implementation
+   - Remove duplication
+   - Improve readability and maintainability
+   - Consider performance implications
+   - Run `pnpm test` to ensure tests still pass after refactoring
+
+   **Step 5: Coverage Verification**
    - Run `pnpm test:coverage` to verify comprehensive coverage
-   - Verify that your implementation satisfies all documented requirements
+   - Ensure 100% coverage target is met
+   - Add missing tests for any uncovered code paths
+   - Verify implementation satisfies all documented requirements
 
    **Phase 2: Property-Based Testing (Required when spec exists)**
    - Check if a specification exists in `.kiro/spec/<spec-name>/`
@@ -64,11 +90,19 @@ Your primary responsibilities:
    - Handles edge cases gracefully
    - Follows the project's error handling patterns from the guidelines
 
-7. **Testing Standards**: Follow docs/guidelines/function-testing.md for:
-   - TDD test structure and organization
-   - Property-based testing patterns (when spec exists)
-   - Test coverage requirements
-   - Best practices for writing tests
+7. **Testing Standards**: Follow these guidelines:
+   - **TDD Methodology**: docs/guidelines/test-driven-development.md for:
+     - Red-Green-Refactor cycle
+     - Equivalence partitioning and boundary value analysis
+     - Test category priorities
+     - TDD best practices and common pitfalls
+   - **Testing Overview**: docs/guidelines/function-testing.md for:
+     - Two-phase testing approach (TDD + PBT)
+     - Testing requirements summary
+   - **Property-Based Testing**: docs/guidelines/property-based-testing.md for:
+     - Requirements-based acceptance testing (when spec exists)
+     - Arbitraries and property design
+     - Validation strategies
 
 8. **Self-Verification**: Before completing, verify:
    - Does the implementation match the function signature exactly?
@@ -87,22 +121,60 @@ When you encounter ambiguity:
 
 ## Testing Workflow
 
-When implementing functions, follow this testing workflow:
+When implementing functions, follow this **Red-Green-Refactor** TDD workflow:
 
 ```
-1. Write TDD tests in tests/ directory
-2. Implement function to pass tests
-3. Run: pnpm test
-4. Verify: pnpm test:coverage
-5. If .kiro/spec/<spec-name>/ exists:
-   a. Write PBT tests in .kiro/spec/<spec-name>/<function-name>.pbt.test.ts
-   b. Run: pnpm test:pbt
-   c. Fix any property violations
-   d. Verify all properties pass
-6. Mark implementation as complete
+Phase 1: TDD (Test-Driven Development) - ALWAYS REQUIRED
+
+  Preparation:
+  1. Analyze function signature and documentation
+  2. Perform equivalence partitioning (identify valid/invalid input classes)
+  3. Identify boundary values between partitions
+
+  RED (Write Failing Tests):
+  4. Write tests in tests/ directory with priority order:
+     a. Edge cases (boundaries, special dates, calendar boundaries) - HIGHEST PRIORITY
+     b. Invalid inputs (NaN, Infinity, Invalid Date, out-of-range) - HIGH PRIORITY
+     c. Options (if function has configurable behavior) - MEDIUM PRIORITY
+     d. Happy path (one representative value per partition only) - MINIMUM NECESSARY
+  5. Run: pnpm test (verify tests fail - no implementation yet)
+
+  GREEN (Make Tests Pass):
+  6. Implement minimal code to make tests pass
+  7. Add error handling and input validation
+  8. Run: pnpm test (verify tests pass)
+
+  REFACTOR (Improve Code):
+  9. Clean up implementation, remove duplication
+  10. Improve readability and performance
+  11. Run: pnpm test (ensure tests still pass)
+
+  Coverage:
+  12. Run: pnpm test:coverage (verify 100% coverage)
+  13. Add tests for any uncovered paths
+
+Phase 2: PBT (Property-Based Testing) - REQUIRED WHEN SPEC EXISTS
+
+  14. Check if .kiro/spec/<spec-name>/ exists
+  15. If spec exists:
+      a. Read specification requirements
+      b. Write PBT tests in .kiro/spec/<spec-name>/<function-name>.pbt.test.ts
+      c. Translate requirements to properties
+      d. Run: pnpm test:pbt
+      e. Fix any property violations
+      f. Verify all properties pass
+  16. If no spec exists, skip this phase
+
+  Completion:
+  17. Mark implementation as complete
 ```
 
-**CRITICAL**:
+**CRITICAL TDD Principles**:
+- **RED first**: Always write failing tests before implementation
+- **GREEN minimal**: Implement just enough to pass tests
+- **REFACTOR safely**: Improve code while keeping tests green
+- **Edge cases priority**: Focus testing effort on boundaries, not normal cases
+- **Equivalence partitioning**: Use systematic test design, not ad-hoc examples
 - TDD (Phase 1) is always required
 - PBT (Phase 2) is required only when a specification exists
 - Both phases must pass before implementation is considered complete

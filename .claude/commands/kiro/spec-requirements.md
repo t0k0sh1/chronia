@@ -33,13 +33,35 @@ Generate complete requirements for feature **$1** based on the project descripti
    - Read `.kiro/settings/rules/ears-format.md` for EARS syntax rules
    - Read `.kiro/settings/templates/specs/requirements.md` for document structure
 
-3. **Generate Requirements**:
+3. **Branch Management**:
+   - Check current branch with `git branch --show-current`
+   - **If current branch is `main`**:
+     - Determine appropriate branch type based on feature:
+       - `feature/` - New features or functionality
+       - `docs/` - Documentation changes
+       - `fix/` - Bug fixes
+       - `refactor/` - Code refactoring
+       - `test/` - Test additions or improvements
+     - Construct branch name: `[type]/[feature-name]` (e.g., `feature/user-auth`, `docs/api-guide`)
+     - Check for existing branches (local and remote):
+       - Local: `git branch --list "[type]/[feature-name]"`
+       - Remote: `git branch --remotes --list "origin/[type]/[feature-name]"`
+     - **If branch already exists**: Inform user and STOP execution (user must resolve manually)
+     - **If branch does not exist**: Create and switch to new branch using `git switch -c [type]/[feature-name]`
+   - **If current branch is NOT `main`**:
+     - Display current branch name to user
+     - Use AskUserQuestion tool to confirm:
+       - Option 1: Continue using current branch
+       - Option 2: Create new branch from current branch
+     - If user chooses Option 2, follow same branch creation process as above (check existence, create if safe)
+
+4. **Generate Requirements**:
    - Create initial requirements based on project description
    - Group related functionality into logical requirement areas
    - Apply EARS format to all acceptance criteria
    - Use language specified in spec.json
 
-4. **Update Metadata**:
+5. **Update Metadata**:
    - Set `phase: "requirements-generated"`
    - Set `approvals.requirements.generated: true`
    - Update `updated_at` timestamp
