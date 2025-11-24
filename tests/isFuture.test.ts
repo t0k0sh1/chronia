@@ -59,6 +59,26 @@ describe("isFuture", () => {
     it("should return false for -Infinity", () => {
       expect(isFuture(-Infinity)).toBe(false);
     });
+
+    it("should return false for wrong type: string", () => {
+      // @ts-expect-error Testing runtime behavior with wrong type
+      expect(isFuture("2025-01-16")).toBe(false);
+    });
+
+    it("should return false for wrong type: object", () => {
+      // @ts-expect-error Testing runtime behavior with wrong type
+      expect(isFuture({})).toBe(false);
+    });
+
+    it("should return false for wrong type: null", () => {
+      // @ts-expect-error Testing runtime behavior with wrong type
+      expect(isFuture(null)).toBe(false);
+    });
+
+    it("should return false for wrong type: undefined", () => {
+      // @ts-expect-error Testing runtime behavior with wrong type
+      expect(isFuture(undefined)).toBe(false);
+    });
   });
 
   describe("happy path", () => {

@@ -392,7 +392,7 @@ Use the `function-docs-writer` agent with the **Category README Workflow** in th
 
 **CRITICAL**: Documentation must be completed AFTER implementation and BEFORE code review.
 
-```
+```markdown
 1. Implement/modify function(s) in src/
 2. Write/update tests (TDD)
 3. Run tests and ensure they pass
