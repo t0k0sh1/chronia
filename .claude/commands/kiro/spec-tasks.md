@@ -55,12 +55,12 @@ Generate implementation tasks for feature **$1** based on approved requirements 
 Each task must specify which agent should execute it. Follow CLAUDE.md's Code Development Workflow:
 - **Phase 1 (Design)**: Use `function-interface-designer` for interface definition tasks
 - **Phase 2 (Implementation)**: Use `function-implementer` for implementation and testing tasks
-- **Phase 3 (Quality Check)**: Use `code-reviewer` for code review tasks (required when code is modified)
-- **Phase 4 (PBT Validation)**: Use `pbt-spec-validator` for property-based testing (required when functions are created or modified)
+- **Phase 3 (Documentation)**: Use `function-docs-writer` for documentation tasks (required when code is modified)
+- **Phase 4 (Quality Check)**: Use `code-reviewer` for code review tasks (required when code is modified)
+- **Phase 5 (PBT Validation)**: Use `pbt-spec-validator` for property-based testing (required when functions are created or modified)
   - Guidelines: `docs/guidelines/property-based-testing.md`
   - Input: `.kiro/specs/$1/requirements.md`
   - Output: PBT tests in `.kiro/specs/$1/<function-name>.pbt.test.ts`
-- **Phase 5 (Documentation)**: Use `function-docs-writer` for documentation tasks
 - **Phase 6 (Commit & PR)**: Use `commit-pr-validator` for final validation, commit, and PR creation
 
 **Include mandatory final tasks**:
@@ -72,14 +72,23 @@ Each task must specify which agent should execute it. Follow CLAUDE.md's Code De
    - Requirements: All implementation tasks completed
    - If linting or build fails: Fix issues and re-run verification
 
-2. **Code Review Task** (if code was modified):
+2. **Documentation Tasks** (if code was modified):
    - Add after linting and build verification passes
-   - Task description: "Run code review to verify code quality, security, and adherence to guidelines"
+   - Task description: "Create comprehensive documentation for all new/modified functions"
+   - Agent: `function-docs-writer`
+   - Individual function documentation using Function Documentation Workflow
+   - Category README updates using Category README Workflow
+   - Verification: Run `pnpm lint:docs` to validate documentation quality
+   - Requirements: All implementation and linting tasks completed
+
+3. **Code Review Task** (if code was modified):
+   - Add after documentation tasks are complete
+   - Task description: "Run code review to verify code quality, security, documentation, and adherence to guidelines"
    - Agent: `code-reviewer`
-   - Requirements: Linting and build must pass
+   - Requirements: Linting, build, and documentation must be complete
    - Include iterative fix process: If issues found, use `function-implementer` to fix, then re-review until clean
 
-3. **Property-Based Testing Task** (if functions were created or modified):
+4. **Property-Based Testing Task** (if functions were created or modified):
    - Add after code review passes
    - Task description: "Validate implementation against specification using property-based testing"
    - Agent: `pbt-spec-validator`
@@ -89,11 +98,6 @@ Each task must specify which agent should execute it. Follow CLAUDE.md's Code De
    - Test Location: `.kiro/specs/$1/<function-name>.pbt.test.ts`
    - Verification: Run `pnpm test:pbt` to validate all properties pass
    - Requirements: Code review must pass, specification must exist in requirements.md
-
-4. **Documentation Tasks** (if code was modified):
-   - Add after PBT validation passes (or after code review if no PBT needed)
-   - Individual function documentation using `function-docs-writer`
-   - Category README updates using `function-docs-writer`
 
 5. **Commit & PR Task** (always required):
    - Add as the final task
@@ -145,21 +149,24 @@ Provide brief summary in the language specified in spec.json:
 3. **Quality Validation**:
    - ✅ All requirements mapped to tasks
    - ✅ Task dependencies verified
-   - ✅ Testing tasks included (TDD in Phase 2, PBT in Phase 4)
+   - ✅ Testing tasks included (TDD in Phase 2, PBT in Phase 5)
    - ✅ Linting & build verification task included (if code modifications present)
      - Runs after all implementation tasks
      - Executes: `pnpm lint`, `pnpm lint:docs`, `pnpm build`
+   - ✅ Documentation tasks included (if code modifications present)
+     - Runs after linting and build pass (Phase 3)
+     - Uses `function-docs-writer` agent
    - ✅ Code review task included (if code modifications present)
-     - Runs after linting and build pass
+     - Runs after documentation is complete (Phase 4)
    - ✅ Property-based testing task included (if functions created/modified)
      - Uses `pbt-spec-validator` agent
      - Follows `docs/guidelines/property-based-testing.md`
      - Input: `.kiro/specs/$1/requirements.md`
-   - ✅ Documentation tasks included (if code modifications present)
+     - Runs after code review passes (Phase 5)
    - ✅ Commit & PR task included as final step
 4. **Workflow Compliance**:
    - Tasks follow CLAUDE.md's 6-phase workflow
-   - Appropriate agents assigned (function-interface-designer, function-implementer, code-reviewer, pbt-spec-validator, function-docs-writer, commit-pr-validator)
+   - Appropriate agents assigned (function-interface-designer, function-implementer, function-docs-writer, code-reviewer, pbt-spec-validator, commit-pr-validator)
 5. **Next Action**: Review tasks and proceed when ready
 
 **Format**: Concise (under 250 words)

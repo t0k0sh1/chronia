@@ -1610,9 +1610,127 @@ declare function isBetween(date: Date | number, interval: Interval, options?: Be
 declare function isEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
 
 /**
+ * Checks if the given date is in the future relative to the current time.
+ *
+ * This function determines whether a date or timestamp occurs after the current moment.
+ * It performs a strict comparison at millisecond precision, returning `true` only when
+ * the given date is strictly after the current time. If the date equals the current time
+ * (same millisecond), it returns `false` because the date is in the present, not the future.
+ *
+ * @param date - The date to check (Date object or numeric timestamp)
+ *
+ * @returns `true` if the date is strictly in the future, `false` otherwise
+ *   - Returns `true` when date > Date.now() (strictly in the future)
+ *   - Returns `false` when date <= Date.now() (past or present)
+ *   - Returns `false` for invalid inputs (Invalid Date, NaN, Infinity, -Infinity)
+ *
+ * @example
+ * ```typescript
+ * // Future date (assuming current time is 2025-01-15T00:00:00Z)
+ * isFuture(new Date(2025, 0, 20));
+ * // Returns: true
+ *
+ * // Past date
+ * isFuture(new Date(2024, 11, 1));
+ * // Returns: false
+ *
+ * // Current time (exactly now)
+ * isFuture(Date.now());
+ * // Returns: false (present, not future)
+ *
+ * // Future timestamp
+ * isFuture(Date.now() + 1000);
+ * // Returns: true (1 second in the future)
+ *
+ * // Invalid Date
+ * isFuture(new Date(NaN));
+ * // Returns: false
+ *
+ * // Invalid timestamp: NaN
+ * isFuture(NaN);
+ * // Returns: false
+ *
+ * // Invalid timestamp: Infinity
+ * isFuture(Infinity);
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - This function uses `Date.now()` to obtain the current time at invocation
+ * - Comparison is performed at millisecond precision using `compareDateTimes` helper
+ * - Never throws exceptions; returns `false` for invalid inputs
+ * - Pure function (no side effects, but depends on current system time)
+ * - Accepts both Date objects and numeric timestamps for flexibility
+ * - Returns `false` when date equals current time (not strictly in the future)
+ *
+ * @see {@link isPast} - Check if a date is in the past
+ * @see {@link isAfter} - Check if one date is after another date
+ */
+declare function isFuture(date: Date | number): boolean;
+
+/**
+ * Checks if the given date is in the past relative to the current time.
+ *
+ * This function determines whether a date or timestamp occurs before the current moment.
+ * It performs a strict comparison at millisecond precision, returning `true` only when
+ * the given date is strictly before the current time. If the date equals the current time
+ * (same millisecond), it returns `false` because the date is in the present, not the past.
+ *
+ * @param date - The date to check (Date object or numeric timestamp)
+ *
+ * @returns `true` if the date is strictly in the past, `false` otherwise
+ *   - Returns `true` when date < Date.now() (strictly in the past)
+ *   - Returns `false` when date >= Date.now() (future or present)
+ *   - Returns `false` for invalid inputs (Invalid Date, NaN, Infinity, -Infinity)
+ *
+ * @example
+ * ```typescript
+ * // Past date (assuming current time is 2025-01-15T00:00:00Z)
+ * isPast(new Date(2024, 11, 1));
+ * // Returns: true
+ *
+ * // Future date
+ * isPast(new Date(2025, 0, 20));
+ * // Returns: false
+ *
+ * // Current time (exactly now)
+ * isPast(Date.now());
+ * // Returns: false (present, not past)
+ *
+ * // Past timestamp
+ * isPast(Date.now() - 1000);
+ * // Returns: true (1 second in the past)
+ *
+ * // Invalid Date
+ * isPast(new Date(NaN));
+ * // Returns: false
+ *
+ * // Invalid timestamp: NaN
+ * isPast(NaN);
+ * // Returns: false
+ *
+ * // Invalid timestamp: Infinity
+ * isPast(Infinity);
+ * // Returns: false
+ * ```
+ *
+ * @remarks
+ * - This function uses `Date.now()` to obtain the current time at invocation
+ * - Comparison is performed at millisecond precision using `compareDateTimes` helper
+ * - Never throws exceptions; returns `false` for invalid inputs
+ * - Pure function (no side effects, but depends on current system time)
+ * - Accepts both Date objects and numeric timestamps for flexibility
+ * - Returns `false` when date equals current time (not strictly in the past)
+ *
+ * @see {@link isFuture} - Check if a date is in the future
+ * @see {@link isBefore} - Check if one date is before another date
+ */
+declare function isPast(date: Date | number): boolean;
+
+/**
  * Check if the given value is a valid Date or timestamp.
  *
- * This function validates whether a Date object or timestamp represents a valid date.
+ * This function checks if a Date object is valid (not Invalid Date) or if a timestamp is a finite number.
  * It returns false for Invalid Date, NaN, Infinity, and -Infinity values.
  *
  * @param date - The Date object or timestamp (number) to validate
@@ -3548,4 +3666,4 @@ declare const MIN_DATE: Date;
  */
 declare const MAX_DATE: Date;
 
-export { type BetweenOption, type BoundsType, type CompareOptions, type ComparisonOptions, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export { type BetweenOption, type BoundsType, type CompareOptions, type ComparisonOptions, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isEqual, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };

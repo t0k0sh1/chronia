@@ -166,86 +166,12 @@ tasks during the spec-tasks phase and executed sequentially during implementatio
 
 ---
 
-### Phase 3: Quality Check (Code Review)
-**Agent**: `code-reviewer`
-
-**When to use**:
-- After Phase 2 (implementation & testing) is complete
-- Before committing any code changes
-- When significant code has been written or modified
-
-**Checks performed**:
-- Code quality and adherence to guidelines
-- Security vulnerabilities
-- Performance considerations
-- Maintainability and readability
-- Test coverage adequacy
-
-**Guidelines**: Follow `docs/guidelines/function-check.md`
-
-**Requirements**:
-- All linting checks pass (`pnpm lint`, `pnpm lint:docs`)
-- Build succeeds (`pnpm build`)
-- All tests pass (`pnpm test`)
-
-**Output**: Code review report with issues identified (if any)
-
-**Iterative Fix Process**:
-If the code review identifies issues:
-1. **Check Todo List**: Review Todo list for review feedback and identified issues
-2. **Fix Issues**: Use `function-implementer` agent to address all review feedback
-   - Provide the agent with specific issues from the review report
-   - Agent implements fixes following guidelines
-   - Agent updates tests if needed
-3. **Re-review**: Run `code-reviewer` agent again to verify fixes
-4. **Repeat**: Continue this cycle until all issues are resolved and review passes
-
-**Important**: Do NOT proceed to Phase 4 (PBT Validation) until Quality Check passes with no issues
-
----
-
-### Phase 4: PBT Validation (Property-Based Testing)
-**Agent**: `pbt-spec-validator`
-
-**When to use**:
-- After Phase 3 (quality check) passes
-- When functions have been created or modified
-- When a specification exists for the feature
-
-**What it validates**:
-- Implementation satisfies specification properties
-- Functions behave correctly across wide range of inputs
-- Edge cases and boundary conditions are handled
-- Specification requirements are met
-
-**Guidelines**: Follow `docs/guidelines/property-based-testing.md`
-
-**Requirements**:
-- Code review must pass (Phase 3 complete)
-- Specification must exist in `.kiro/specs/`
-- TDD tests must already pass
-
-**Output**: Property-based test results with pass/fail status
-
-**Iterative Fix Process**:
-If property-based tests fail:
-1. **Analyze Failures**: Review failing test cases and counterexamples
-2. **Fix Implementation**: Use `function-implementer` agent to fix issues
-   - Update function implementation to satisfy properties
-   - Ensure TDD tests still pass
-3. **Re-validate**: Run `pbt-spec-validator` again to verify fixes
-4. **Repeat**: Continue until all property-based tests pass
-
-**Important**: Do NOT proceed to Phase 5 (Documentation) until PBT validation passes
-
----
-
-### Phase 5: Documentation
+### Phase 3: Documentation
 **Agent**: `function-docs-writer`
 
 **When to use**:
-- After Phase 4 (PBT validation) passes (or Phase 3 if no PBT needed)
-- Before Phase 6 (commit & PR)
+- After Phase 2 (implementation & testing) is complete
+- Before Phase 4 (code review)
 - For new functions or modified function behavior
 
 **Workflows**:
@@ -263,6 +189,84 @@ If property-based tests fail:
 - Documentation reflects current implementation
 
 **Output**: Complete documentation for functions and categories
+
+**Important**: Documentation must be completed before code review (Phase 4) to ensure code and documentation consistency can be verified
+
+---
+
+### Phase 4: Quality Check (Code Review)
+**Agent**: `code-reviewer`
+
+**When to use**:
+- After Phase 3 (documentation) is complete
+- Before committing any code changes
+- When significant code has been written or modified
+
+**Checks performed**:
+- Code quality and adherence to guidelines
+- Security vulnerabilities
+- Performance considerations
+- Maintainability and readability
+- Test coverage adequacy
+- Documentation completeness and accuracy
+
+**Guidelines**: Follow `docs/guidelines/function-check.md`
+
+**Requirements**:
+- All linting checks pass (`pnpm lint`, `pnpm lint:docs`)
+- Build succeeds (`pnpm build`)
+- All tests pass (`pnpm test`)
+- Documentation exists for all new/modified functions (Phase 3 complete)
+
+**Output**: Code review report with issues identified (if any)
+
+**Iterative Fix Process**:
+If the code review identifies issues:
+1. **Check Todo List**: Review Todo list for review feedback and identified issues
+2. **Fix Issues**: Use `function-implementer` agent to address all review feedback
+   - Provide the agent with specific issues from the review report
+   - Agent implements fixes following guidelines
+   - Agent updates tests if needed
+3. **Re-review**: Run `code-reviewer` agent again to verify fixes
+4. **Repeat**: Continue this cycle until all issues are resolved and review passes
+
+**Important**: Do NOT proceed to Phase 5 (PBT Validation) until Quality Check passes with no issues
+
+---
+
+### Phase 5: PBT Validation (Property-Based Testing)
+**Agent**: `pbt-spec-validator`
+
+**When to use**:
+- After Phase 4 (quality check) passes
+- When functions have been created or modified
+- When a specification exists for the feature
+
+**What it validates**:
+- Implementation satisfies specification properties
+- Functions behave correctly across wide range of inputs
+- Edge cases and boundary conditions are handled
+- Specification requirements are met
+
+**Guidelines**: Follow `docs/guidelines/property-based-testing.md`
+
+**Requirements**:
+- Code review must pass (Phase 4 complete)
+- Specification must exist in `.kiro/specs/`
+- TDD tests must already pass
+
+**Output**: Property-based test results with pass/fail status
+
+**Iterative Fix Process**:
+If property-based tests fail:
+1. **Analyze Failures**: Review failing test cases and counterexamples
+2. **Fix Implementation**: Use `function-implementer` agent to fix issues
+   - Update function implementation to satisfy properties
+   - Ensure TDD tests still pass
+3. **Re-validate**: Run `pbt-spec-validator` again to verify fixes
+4. **Repeat**: Continue until all property-based tests pass
+
+**Important**: Do NOT proceed to Phase 6 (Commit & PR) until PBT validation passes
 
 ---
 
@@ -299,18 +303,19 @@ If property-based tests fail:
    └─ Run: pnpm lint, pnpm lint:docs, pnpm build
       ├─ Lint/build fail? → Fix issues and re-run
       └─ Pass? → Proceed to Phase 3
-3. Quality Check (Review)    → code-reviewer               → Code quality validation
+3. Documentation             → function-docs-writer         → Complete documentation
+   └─ Proceed to Phase 4
+4. Quality Check (Review)    → code-reviewer               → Code quality validation
    ├─ Issues found?
    │  ├─ YES → Check Todo list for review feedback
    │  │       → Use function-implementer to fix issues
    │  │       → Re-run code-reviewer (repeat until clean)
-   │  └─ NO  → Proceed to Phase 4
-4. PBT Validation            → pbt-spec-validator          → Property-based testing
+   │  └─ NO  → Proceed to Phase 5
+5. PBT Validation            → pbt-spec-validator          → Property-based testing
    ├─ Tests fail?
    │  ├─ YES → Use function-implementer to fix issues
    │  │       → Re-run pbt-spec-validator (repeat until pass)
-   │  └─ NO  → Proceed to Phase 5
-5. Documentation             → function-docs-writer         → Complete documentation
+   │  └─ NO  → Proceed to Phase 6
 6. Commit & PR               → commit-pr-validator         → Git commit & pull request
 ```
 
@@ -324,21 +329,25 @@ If property-based tests fail:
 - **Linting & Build Verification**: After Phase 2 (Implementation) completes:
   - Run `pnpm lint`, `pnpm lint:docs`, `pnpm build`
   - Fix any linting or build errors before proceeding to Phase 3
-  - Do NOT proceed to Quality Check until all checks pass
-- **Quality Check Iteration**: If Phase 3 (code-reviewer) identifies issues:
+  - Do NOT proceed to Documentation until all checks pass
+- **Documentation Requirement**: Phase 3 (Documentation) is MANDATORY after implementation
+  - Create/update function documentation files
+  - Update category README if needed
+  - Run `pnpm lint:docs` to verify documentation quality
+  - Do NOT proceed to Phase 4 until documentation is complete
+- **Quality Check Iteration**: If Phase 4 (code-reviewer) identifies issues:
   - Check Todo list for review feedback
   - Use `function-implementer` to fix ALL issues
   - Re-run `code-reviewer` to verify fixes
   - Repeat until review passes with no issues
-  - Do NOT proceed to Phase 4 until Quality Check is clean
-- **PBT Validation Iteration**: If Phase 4 (pbt-spec-validator) tests fail:
+  - Do NOT proceed to Phase 5 until Quality Check is clean
+- **PBT Validation Iteration**: If Phase 5 (pbt-spec-validator) tests fail:
   - Use `function-implementer` to fix implementation
   - Ensure TDD tests still pass
   - Re-run `pbt-spec-validator` to verify fixes
   - Repeat until all property-based tests pass
-  - Do NOT proceed to Phase 5 until PBT validation passes
-- **PBT Requirement**: Phase 4 is REQUIRED when functions are created or modified
-- Documentation (Phase 5) is MANDATORY before committing (Phase 6)
+  - Do NOT proceed to Phase 6 until PBT validation passes
+- **PBT Requirement**: Phase 5 is REQUIRED when functions are created or modified
 - **Non-Spec Task Verification**: When implementing tasks without `/kiro:spec-impl`:
   - For code changes: Run `pnpm lint`, `pnpm build`, `pnpm test` before committing
   - For documentation changes: Run `pnpm lint:docs` before committing
@@ -381,19 +390,19 @@ Use the `function-docs-writer` agent with the **Category README Workflow** in th
 
 ### Documentation Workflow Order
 
-**CRITICAL**: Documentation must be completed BEFORE committing changes.
+**CRITICAL**: Documentation must be completed AFTER implementation and BEFORE code review.
 
-```
+```markdown
 1. Implement/modify function(s) in src/
 2. Write/update tests (TDD)
 3. Run tests and ensure they pass
 4. Run linting and build (pnpm lint, pnpm build)
-5. Run code review (code-reviewer)
-6. Run property-based tests (pbt-spec-validator) - if functions created/modified
-7. Document individual function(s) using function-docs-writer (Function Documentation Workflow)
-8. Update category README using function-docs-writer (Category README Workflow)
-9. Run documentation linting (pnpm lint:docs)
-10. Verify all documentation is accurate and complete
+5. Document individual function(s) using function-docs-writer (Function Documentation Workflow)
+6. Update category README using function-docs-writer (Category README Workflow)
+7. Run documentation linting (pnpm lint:docs)
+8. Verify all documentation is accurate and complete
+9. Run code review (code-reviewer)
+10. Run property-based tests (pbt-spec-validator) - if functions created/modified
 11. Create git commit (commit-pr-validator)
 ```
 
