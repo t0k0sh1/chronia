@@ -78,6 +78,12 @@ Each task must specify which agent should execute it. Follow CLAUDE.md's Code De
    - Agent: `function-docs-writer`
    - Individual function documentation using Function Documentation Workflow
    - Category README updates using Category README Workflow
+   - **Project root README.md updates** (if new functions added):
+     - Update "Function Categories" section with new functions
+     - Update total function count (both occurrences in README.md)
+     - Update category function counts (e.g., "Comparison (14 functions)" → "Comparison (16 functions)")
+     - Add functions to appropriate category subsections
+     - Create new subsections if needed (e.g., **Current Time Comparison**)
    - Verification: Run `pnpm lint:docs` to validate documentation quality
    - Requirements: All implementation and linting tasks completed
 

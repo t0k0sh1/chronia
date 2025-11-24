@@ -33,6 +33,11 @@ Before submitting a new or modified function, verify all items:
 - [ ] Comprehensive JSDoc comments are present
 - [ ] Function documentation exists in `docs/functions/<category>/<function-name>.md`
 - [ ] Category README.md is updated (if function is new or behavior changed)
+- [ ] Project root README.md is updated (if new functions are added)
+  - [ ] "Function Categories" section includes new functions
+  - [ ] Total function count is updated (both occurrences: lines ~71 and ~345)
+  - [ ] Category function count is updated (e.g., "Comparison (14 functions)" → "Comparison (16 functions)")
+  - [ ] Functions are added to appropriate subsections (e.g., **Current Time Comparison**)
 - [ ] Examples in JSDoc are runnable and accurate
 - [ ] All parameters and return values are documented
 

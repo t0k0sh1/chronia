@@ -388,6 +388,35 @@ Use the `function-docs-writer` agent with the **Category README Workflow** in th
    - Modified common patterns that use the function
 3. **Before Committing**: Always ensure category README is up-to-date before creating a git commit
 
+#### Project Root README Documentation (Required)
+
+When new functions are added to the project, the project root `README.md` MUST be updated manually to maintain the "Function Categories" section:
+
+1. **When to Update**:
+   - When new functions are added to `src/` and exported in `src/index.ts`
+   - When the function count changes
+   - When new function categories or subsections are introduced
+
+2. **Update Procedure**:
+   - **Locate the "Function Categories" section** (typically around line 71)
+   - **Update total function count**: Change "X functions" to reflect the new total
+     - Example: "70 functions" → "72 functions"
+     - Update BOTH occurrences (main section header and documentation structure description)
+   - **Update category subsections**:
+     - Add new functions to the appropriate category subsection (e.g., **Relational**, **Equality**, **Current Time Comparison**, **Validation**)
+     - Update category function count (e.g., "Comparison (14 functions)" → "Comparison (16 functions)")
+     - Create new subsections if the function represents a new concept (e.g., **Current Time Comparison** for `isFuture`/`isPast`)
+   - **Update documentation links**: Add or modify links to relevant category documentation
+   - **Maintain consistency**: Keep subsection structure aligned with `docs/functions/<category>/README.md`
+   - **Verify formatting**: Run `pnpm lint:docs` to ensure Markdown quality
+
+3. **Function Count Calculation**:
+   - Count only exported functions in `src/index.ts`
+   - **Exclude**: `constants`, `types`, `i18n` (these are not functions)
+   - Example calculation: 73 exports - 1 (constants) - 1 (types) - 1 (i18n) = 70 functions
+
+**CRITICAL**: Project root `README.md` MUST be updated BEFORE committing when new functions are added. This ensures the main project documentation stays synchronized with the codebase.
+
 ### Documentation Workflow Order
 
 **CRITICAL**: Documentation must be completed AFTER implementation and BEFORE code review.
@@ -399,11 +428,15 @@ Use the `function-docs-writer` agent with the **Category README Workflow** in th
 4. Run linting and build (pnpm lint, pnpm build)
 5. Document individual function(s) using function-docs-writer (Function Documentation Workflow)
 6. Update category README using function-docs-writer (Category README Workflow)
-7. Run documentation linting (pnpm lint:docs)
-8. Verify all documentation is accurate and complete
-9. Run code review (code-reviewer)
-10. Run property-based tests (pbt-spec-validator) - if functions created/modified
-11. Create git commit (commit-pr-validator)
+7. Update project root README.md (if new functions added)
+   - Update "Function Categories" section with new functions
+   - Update total function count (both occurrences)
+   - Update category function counts
+8. Run documentation linting (pnpm lint:docs)
+9. Verify all documentation is accurate and complete
+10. Run code review (code-reviewer)
+11. Run property-based tests (pbt-spec-validator) - if functions created/modified
+12. Create git commit (commit-pr-validator)
 ```
 
 ### Responding to Feedback

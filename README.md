@@ -68,7 +68,7 @@ console.log(isAfter(nextWeek, current)); // true
 
 ## Function Categories
 
-Chronia provides 70 functions organized into 10 categories:
+Chronia provides 72 functions organized into 10 categories:
 
 > 📚 **For AI Agents**: Detailed documentation optimized for AI comprehension is available in the [`docs/`](docs/) directory. See [`docs/README.md`](docs/README.md) for a complete guide.
 
@@ -98,7 +98,7 @@ Add or subtract time units from dates.
 
 📖 _Detailed documentation_: [Addition](docs/functions/arithmetic/addition.md) | [Subtraction](docs/functions/arithmetic/subtraction.md)
 
-### 2. Comparison (14 functions)
+### 2. Comparison (16 functions)
 
 Compare dates and check for equality or relative ordering.
 
@@ -121,11 +121,16 @@ Compare dates and check for equality or relative ordering.
 - `isSameMinute` - Check if dates are in the same minute
 - `isSameSecond` - Check if dates are in the same second
 
+**Current Time Comparison:**
+
+- `isFuture` - Check if a date is in the future relative to current time
+- `isPast` - Check if a date is in the past relative to current time
+
 **Validation:**
 
 - `isValid` - Check if a date is valid
 
-📖 _Detailed documentation_: [Relational](docs/functions/comparison/relational.md) | [Equality](docs/functions/comparison/equality.md) | [Validation](docs/functions/comparison/validation.md)
+📖 _Detailed documentation_: [Relational](docs/functions/comparison/relational.md) | [Equality](docs/functions/comparison/equality.md) | [Current Time Comparison & Validation](docs/functions/validations/)
 
 ### 3. Difference (7 functions)
 
@@ -342,7 +347,7 @@ Chronia includes comprehensive documentation specifically designed for AI agents
 
 The [`docs/`](docs/) directory contains three main sections:
 
-1. **[Function Categories](docs/functions/)** - Detailed documentation for all 70 functions
+1. **[Function Categories](docs/functions/)** - Detailed documentation for all 72 functions
 
    - Complete function signatures with examples
    - AI guidance for recommending appropriate functions
