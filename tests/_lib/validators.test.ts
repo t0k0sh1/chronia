@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   isDateInstance,
   isValidDate,
+  isNumber,
   isValidNumber,
   isValidDateOrNumber,
 } from "../../src/_lib/validators";
@@ -179,6 +180,126 @@ describe("validators", () => {
 
       it("should return false for symbols", () => {
         expect(isValidDate(Symbol("date"))).toBe(false);
+      });
+    });
+  });
+
+  describe("isNumber", () => {
+    describe("edge cases and boundaries", () => {
+      it("should return true for zero", () => {
+        expect(isNumber(0)).toBe(true);
+      });
+
+      it("should return true for negative zero", () => {
+        expect(isNumber(-0)).toBe(true);
+      });
+
+      it("should return true for NaN (number type)", () => {
+        expect(isNumber(NaN)).toBe(true);
+      });
+
+      it("should return true for Infinity", () => {
+        expect(isNumber(Infinity)).toBe(true);
+      });
+
+      it("should return true for negative Infinity", () => {
+        expect(isNumber(-Infinity)).toBe(true);
+      });
+
+      it("should return true for Number.MIN_VALUE", () => {
+        expect(isNumber(Number.MIN_VALUE)).toBe(true);
+      });
+
+      it("should return true for Number.MAX_SAFE_INTEGER", () => {
+        expect(isNumber(Number.MAX_SAFE_INTEGER)).toBe(true);
+      });
+
+      it("should return true for Number.MIN_SAFE_INTEGER", () => {
+        expect(isNumber(Number.MIN_SAFE_INTEGER)).toBe(true);
+      });
+
+      it("should return true for Number.MAX_VALUE", () => {
+        expect(isNumber(Number.MAX_VALUE)).toBe(true);
+      });
+    });
+
+    describe("invalid inputs (non-number types)", () => {
+      it("should return false for string", () => {
+        expect(isNumber("123")).toBe(false);
+        expect(isNumber("")).toBe(false);
+        expect(isNumber("NaN")).toBe(false);
+      });
+
+      it("should return false for boolean", () => {
+        expect(isNumber(true)).toBe(false);
+        expect(isNumber(false)).toBe(false);
+      });
+
+      it("should return false for null", () => {
+        expect(isNumber(null)).toBe(false);
+      });
+
+      it("should return false for undefined", () => {
+        expect(isNumber(undefined)).toBe(false);
+      });
+
+      it("should return false for object", () => {
+        expect(isNumber({})).toBe(false);
+        expect(isNumber({ valueOf: () => 42 })).toBe(false);
+      });
+
+      it("should return false for array", () => {
+        expect(isNumber([])).toBe(false);
+        expect(isNumber([42])).toBe(false);
+      });
+
+      it("should return false for Date", () => {
+        expect(isNumber(new Date())).toBe(false);
+        expect(isNumber(new Date("invalid"))).toBe(false);
+      });
+
+      it("should return false for function", () => {
+        expect(isNumber(() => 42)).toBe(false);
+      });
+
+      it("should return false for symbol", () => {
+        expect(isNumber(Symbol("number"))).toBe(false);
+      });
+    });
+
+    describe("happy path (minimal necessary)", () => {
+      it("should return true for positive integer", () => {
+        expect(isNumber(42)).toBe(true);
+      });
+
+      it("should return true for negative integer", () => {
+        expect(isNumber(-42)).toBe(true);
+      });
+
+      it("should return true for float", () => {
+        expect(isNumber(3.14)).toBe(true);
+      });
+    });
+
+    describe("behavioral differences with isValidNumber", () => {
+      it("should return true for NaN while isValidNumber returns false", () => {
+        expect(isNumber(NaN)).toBe(true);
+        expect(isValidNumber(NaN)).toBe(false);
+      });
+
+      it("should return true for Infinity while isValidNumber returns false", () => {
+        expect(isNumber(Infinity)).toBe(true);
+        expect(isValidNumber(Infinity)).toBe(false);
+      });
+
+      it("should return true for -Infinity while isValidNumber returns false", () => {
+        expect(isNumber(-Infinity)).toBe(true);
+        expect(isValidNumber(-Infinity)).toBe(false);
+      });
+
+      it("should return true for finite numbers just like isValidNumber", () => {
+        expect(isNumber(42)).toBe(true);
+        expect(isValidNumber(42)).toBe(true);
       });
     });
   });
