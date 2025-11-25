@@ -246,6 +246,7 @@ describe("validators", () => {
       it("should return false for object", () => {
         expect(isNumber({})).toBe(false);
         expect(isNumber({ valueOf: () => 42 })).toBe(false);
+        expect(isNumber(new Number(42))).toBe(false);
       });
 
       it("should return false for array", () => {
