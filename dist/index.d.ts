@@ -1735,7 +1735,7 @@ declare function isPast(date: Date | number): boolean;
  * Date instance, including Invalid Date objects (e.g., `new Date("invalid")`).
  *
  * To check if a Date is both a Date instance AND has a valid date value,
- * use `isValid()` instead.
+ * use `isDate()` in combination with `isValid()`.
  *
  * @param value - The value to check (can be any type)
  * @returns True if the value is a Date instance, false otherwise
