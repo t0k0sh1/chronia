@@ -1,7 +1,97 @@
 import { describe, it, expect } from "vitest";
-import { isValidDate, isValidNumber, isValidDateOrNumber } from "../../src/_lib/validators";
+import {
+  isDateInstance,
+  isValidDate,
+  isValidNumber,
+  isValidDateOrNumber,
+} from "../../src/_lib/validators";
 
 describe("validators", () => {
+  describe("isDateInstance", () => {
+    describe("valid Date instances", () => {
+      it("should return true for valid Date object", () => {
+        const date = new Date(2025, 0, 1);
+        expect(isDateInstance(date)).toBe(true);
+      });
+
+      it("should return true for Invalid Date object", () => {
+        const invalidDate = new Date("invalid string");
+        expect(isDateInstance(invalidDate)).toBe(true);
+      });
+
+      it("should return true for epoch date", () => {
+        const epoch = new Date(0);
+        expect(isDateInstance(epoch)).toBe(true);
+      });
+
+      it("should return true for current date", () => {
+        const now = new Date();
+        expect(isDateInstance(now)).toBe(true);
+      });
+
+      it("should return true for negative timestamp date", () => {
+        const beforeEpoch = new Date(-86400000);
+        expect(isDateInstance(beforeEpoch)).toBe(true);
+      });
+    });
+
+    describe("non-Date values", () => {
+      it("should return false for number", () => {
+        expect(isDateInstance(123456789)).toBe(false);
+      });
+
+      it("should return false for timestamp 0", () => {
+        expect(isDateInstance(0)).toBe(false);
+      });
+
+      it("should return false for NaN", () => {
+        expect(isDateInstance(NaN)).toBe(false);
+      });
+
+      it("should return false for Infinity", () => {
+        expect(isDateInstance(Infinity)).toBe(false);
+      });
+
+      it("should return false for negative Infinity", () => {
+        expect(isDateInstance(-Infinity)).toBe(false);
+      });
+
+      it("should return false for string", () => {
+        expect(isDateInstance("2025-01-01")).toBe(false);
+      });
+
+      it("should return false for null", () => {
+        expect(isDateInstance(null)).toBe(false);
+      });
+
+      it("should return false for undefined", () => {
+        expect(isDateInstance(undefined)).toBe(false);
+      });
+
+      it("should return false for plain object", () => {
+        expect(isDateInstance({})).toBe(false);
+      });
+
+      it("should return false for array", () => {
+        expect(isDateInstance([])).toBe(false);
+      });
+
+      it("should return false for boolean", () => {
+        expect(isDateInstance(true)).toBe(false);
+        expect(isDateInstance(false)).toBe(false);
+      });
+
+      it("should return false for function", () => {
+        expect(isDateInstance(() => new Date())).toBe(false);
+      });
+
+      it("should return false for symbol", () => {
+        expect(isDateInstance(Symbol("date"))).toBe(false);
+      });
+    });
+  });
+
+
   describe("isValidDate", () => {
     describe("valid Date instances", () => {
       it("should return true for new Date()", () => {

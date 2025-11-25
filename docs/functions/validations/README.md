@@ -10,6 +10,7 @@ Chronia provides a comprehensive suite of date validation and comparison functio
 
 | Function | Description |
 |----------|-------------|
+| [`isDate`](./isDate.md) | Checks if a value is a Date object instance |
 | [`isValid`](./isValid.md) | Checks if a Date object or timestamp is valid |
 
 ### Current Time Comparison
@@ -80,6 +81,7 @@ isSameDay(NaN, new Date(2025, 0, 1));  // false
 Comparison functions (`isBefore`, `isAfter`, `isBeforeOrEqual`, `isAfterOrEqual`, `isEqual`) support optional unit-based comparison, allowing you to compare dates at different time scales:
 
 **Supported Units:**
+
 - `"year"` - Compare only years
 - `"month"` - Compare up to months
 - `"day"` - Compare up to days
@@ -106,23 +108,29 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 
 ### Validation vs Current Time Comparison vs Date Comparison vs Same-Time
 
-**Validation Functions** (`isValid`):
-- Use to check if a date or timestamp is valid
-- Ideal for: input validation, error checking, data sanitization
+**Validation Functions** (`isDate`, `isValid`):
+
+- `isDate`: Use to check if a value is a Date object instance (type checking)
+- `isValid`: Use to check if a date or timestamp represents a valid date value
+- Ideal for: input validation, error checking, data sanitization, type narrowing
+- Combined usage: `isDate(value) && isValid(value)` for complete validation
 
 **Current Time Comparison Functions** (`isFuture`, `isPast`):
+
 - Use to compare a date against the current moment (Date.now())
 - No second date parameter required - automatically uses current time
 - Strict comparison - returns `false` for the exact current moment
 - Ideal for: deadline validation, session expiry, event filtering, cache validation
 
 **Comparison Functions** (`isBefore`, `isAfter`, `isBeforeOrEqual`, `isAfterOrEqual`, `isEqual`):
+
 - Use to compare the chronological order of two dates
 - Requires both dates as parameters
 - Support optional unit-based granularity
 - Ideal for: sorting, range validation, timeline operations
 
 **Same-Time Functions** (`isSameYear`, `isSameMonth`, `isSameDay`, etc.):
+
 - Use to check if two dates represent the same time at a specific granularity
 - Fixed granularity (no options parameter)
 - Ideal for: grouping, filtering, same-day/month/year checks
@@ -130,6 +138,7 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 ### Current Time Comparison vs Two-Date Comparison
 
 **When to use Current Time Comparison** (`isFuture`, `isPast`):
+
 - When checking against the current moment
 - When you don't have a second date to compare
 - When implementing time-based business logic (expiry, deadlines, upcoming events)
@@ -137,6 +146,7 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 - Example: "Is this event still upcoming?" → `isFuture(event.date)`
 
 **When to use Two-Date Comparison** (`isBefore`, `isAfter`, etc.):
+
 - When comparing two specific dates
 - When the reference date is not the current time
 - When implementing relative date logic
@@ -146,11 +156,13 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 ### Strict vs Inclusive Comparisons
 
 **Strict Comparisons** (`isBefore`, `isAfter`, `isFuture`, `isPast`):
+
 - Use when you need to exclude the boundary condition
 - Equality returns `false`
 - Ideal for: exclusive ranges, strict ordering, future/past distinction
 
 **Inclusive Comparisons** (`isBeforeOrEqual`, `isAfterOrEqual`):
+
 - Use when you need to include the boundary condition
 - Equality returns `true`
 - Ideal for: deadlines, minimum requirements, range validation
@@ -159,6 +171,12 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 
 | Scenario | Recommended Function | Reason |
 |----------|---------------------|--------|
+| Check if value is Date instance | `isDate(value)` | Type checking for Date objects |
+| Type guard before Date methods | `isDate(value)` | Enables safe access to Date methods |
+| Distinguish Date from timestamp | `isDate(value)` | Differentiates Date objects from numbers |
+| Validate user input (type and validity) | `isDate(value) && isValid(value)` | Complete date validation |
+| Validate API response date | `isDate(data)` | Runtime type validation |
+| Filter Date instances from array | `array.filter(isDate)` | Extract only Date objects |
 | Validate user input | `isValid(date)` | Check if date is valid |
 | Check if session expired | `isPast(session.expiresAt)` | Current time-based expiry check |
 | Check if event is upcoming | `isFuture(event.date)` | Current time-based future check |
@@ -189,7 +207,7 @@ Given two dates `a` and `b`:
 
 ## Common Patterns
 
-### Input Validation
+### Validating Input Data
 
 ```typescript
 import { isValid } from 'chronia';
@@ -199,6 +217,76 @@ function processDate(date: Date | number): void {
     throw new Error('Invalid date provided');
   }
   // Process valid date
+}
+```
+
+### Type Checking with isDate
+
+```typescript
+import { isDate } from 'chronia';
+
+// Type guard for runtime type checking
+function processUnknownValue(value: unknown): void {
+  if (isDate(value)) {
+    // TypeScript knows 'value' is Date here
+    console.log(value.getTime());
+    console.log(value.toISOString());
+  } else {
+    console.log('Not a Date instance');
+  }
+}
+
+// Distinguish Date objects from timestamps
+function normalizeToDate(input: Date | number): Date {
+  if (isDate(input)) {
+    // Already a Date instance, return as-is
+    return input;
+  }
+  // It's a timestamp, convert to Date
+  return new Date(input);
+}
+```
+
+### Complete Date Validation (Type + Validity)
+
+```typescript
+import { isDate, isValid } from 'chronia';
+
+// Combine isDate and isValid for complete validation
+function isValidDateInstance(value: unknown): value is Date {
+  return isDate(value) && isValid(value);
+}
+
+// Valid Date instance
+isValidDateInstance(new Date(2025, 0, 1));  // true
+
+// Invalid Date instance (type check passes, validity fails)
+isValidDateInstance(new Date('invalid'));  // false
+
+// Timestamp (type check fails)
+isValidDateInstance(Date.now());  // false
+
+// Use in API response validation
+interface ApiResponse {
+  date: unknown;
+}
+
+function processApiDate(response: ApiResponse): Date | null {
+  const { date } = response;
+
+  // Check if it's a Date instance
+  if (!isDate(date)) {
+    console.error('Expected Date instance');
+    return null;
+  }
+
+  // Check if it's valid
+  if (!isValid(date)) {
+    console.error('Invalid Date instance');
+    return null;
+  }
+
+  return date;
 }
 ```
 
