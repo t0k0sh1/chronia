@@ -1782,6 +1782,67 @@ declare function isPast(date: Date | number): boolean;
 declare function isDate(value: unknown): value is Date;
 
 /**
+ * Validates whether the given year, month, and day combination represents a valid date.
+ *
+ * This function checks if the specified date actually exists in the Gregorian calendar.
+ * It validates that the month is between 1-12, the day is within the valid range for
+ * the given month (accounting for leap years), and all values are valid finite numbers.
+ *
+ * Note: This function uses 1-based month indexing (1 = January, 12 = December),
+ * which differs from JavaScript's Date constructor that uses 0-based indexing (0 = January).
+ *
+ * @param year - The year value (should be an integer; decimal values will use their integer part)
+ * @param month - The month value (1-12, where 1 = January and 12 = December)
+ * @param day - The day value (1 to the maximum day for the given month)
+ * @returns True if the date combination represents a valid existing date, false otherwise
+ *
+ * @remarks
+ * - Invalid inputs (NaN, Infinity, non-finite numbers) return false
+ * - Month must be in range 1-12; any value outside this range returns false
+ * - Day must be in range 1-31 depending on the month
+ * - February has 28 days in common years and 29 days in leap years
+ * - Leap years follow the Gregorian calendar rules:
+ *   - Divisible by 400: leap year
+ *   - Divisible by 100: not a leap year
+ *   - Divisible by 4: leap year
+ *   - Otherwise: not a leap year
+ * - Uses 1-based month indexing: `isExists(2024, 1, 15)` for January 15, 2024
+ * - Does not throw exceptions; returns false for any invalid input
+ *
+ * @example
+ * ```typescript
+ * // Valid dates
+ * isExists(2024, 2, 29);  // true - leap year, February has 29 days
+ * isExists(2024, 4, 30);  // true - April has 30 days
+ * isExists(2024, 12, 31); // true - December has 31 days
+ *
+ * // Invalid dates
+ * isExists(2023, 2, 29);  // false - common year, February has only 28 days
+ * isExists(2024, 2, 30);  // false - February never has 30 days
+ * isExists(2024, 4, 31);  // false - April has only 30 days
+ * isExists(2024, 13, 1);  // false - month must be 1-12
+ * isExists(2024, 0, 1);   // false - month must be 1-12
+ *
+ * // Invalid input values
+ * isExists(NaN, 1, 1);         // false - NaN is not a valid number
+ * isExists(2024, Infinity, 1); // false - Infinity is not a valid number
+ * isExists(2024.5, 1, 1);      // true - fractional year truncated to 2024
+ * ```
+ *
+ * @preconditions
+ * - year, month, and day should be valid finite numbers
+ * - month should be 1-12
+ * - day should be 1 to the maximum day for the given month
+ *
+ * @postconditions
+ * - Always returns a boolean value
+ * - Never throws an exception
+ * - Returns false for any invalid input
+ * - Immutable: does not modify any input values
+ */
+declare function isExists(year: number, month: number, day: number): boolean;
+
+/**
  * Check if the given value is a valid Date or timestamp.
  *
  * This function checks if a Date object is valid (not Invalid Date) or if a timestamp is a finite number.
@@ -3720,4 +3781,4 @@ declare const MIN_DATE: Date;
  */
 declare const MAX_DATE: Date;
 
-export { type BetweenOption, type BoundsType, type CompareOptions, type ComparisonOptions, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isDate, isEqual, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export { type BetweenOption, type BoundsType, type CompareOptions, type ComparisonOptions, type Interval, type Locale, MAX_DATE, MIN_DATE, type TimeUnit, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isDate, isEqual, isExists, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };

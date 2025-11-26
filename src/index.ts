@@ -31,6 +31,7 @@ export * from "./isEqual";
 export * from "./isFuture";
 export * from "./isPast";
 export * from "./isDate";
+export * from "./isExists";
 export * from "./isValid";
 export * from "./parse";
 export * from "./subDays";

@@ -38,14 +38,83 @@ You will read, analyze, and triage pull request review feedback, presenting stru
    - If exists: Read it to get PR number and existing tracking data
    - If not exists: Will be created after PR number is confirmed
 
-3. **Extract PR Number**
-   - If pr.md exists: Extract PR number from "PR Number: #XX" line
-   - If pr.md doesn't exist: Ask user for PR number or auto-detect from GitHub
+3. **Extract or Obtain PR Number**
+
+   **If pr.md exists**:
+   - Read the file content
+   - Extract PR number from "PR Number: #XX" line using regex pattern `PR Number: #(\d+)`
+   - This PR number will be used for all GitHub MCP operations
+   - Skip to Phase 1 (Fetch Review Feedback)
+
+   **If pr.md doesn't exist**:
+   - Use `AskUserQuestion` to request PR number from user
+   - **Question format** (in Japanese):
+     ```typescript
+     AskUserQuestion({
+       questions: [{
+         question: "PR追跡ファイル (pr.md) が見つかりません。レビューを取得するPR番号を教えてください。",
+         header: "PR番号",
+         multiSelect: false,
+         options: [
+           {
+             label: "PR番号を入力",
+             description: "Other欄にPR番号（数字のみ、例: 27）を入力してください"
+           }
+         ]
+       }]
+     })
+     ```
+   - User must provide PR number via "Other" text input
+   - Extract numeric PR number from user input (e.g., "27", "#27", "PR #27" → 27)
+
+   **After receiving PR number**:
+   1. **Verify PR exists**:
+      - Use `mcp__GitHub__get_pull_request` with the provided PR number
+      - Parse repository owner/name from git remote or use hardcoded values
+      - If API call fails or PR not found:
+        - Report error in Japanese: "PR #{number} が見つかりません。PR番号を確認してください。"
+        - Stop execution
+
+   2. **Create pr.md from template**:
+      - Load template from `.kiro/settings/templates/specs/pr.md`
+      - Get current branch name: `git branch --show-current`
+      - Replace ALL placeholders with actual values:
+        - `[PR_NUMBER]`: User-provided PR number (e.g., "27")
+        - `[PR_TITLE]`: From `get_pull_request` response (`title` field)
+        - `[PR_URL]`: From `get_pull_request` response (`html_url` field)
+        - `[BRANCH_NAME]`: From git command output
+        - `[CREATED_DATE]`: From `get_pull_request` response (`created_at` field)
+        - `[UPDATED_DATE]`: From `get_pull_request` response (`updated_at` field)
+        - `[count]`: Set to "0" (no reviews processed yet)
+        - `[resolved]`: Set to "0" (no issues resolved yet)
+        - `[total]`: Set to "0" (no total issues yet)
+      - Replace placeholder sections with initial empty state:
+        - Under "Critical Issues": Add "_No critical issues identified yet._"
+        - Under "Major Issues": Add "_No major issues identified yet._"
+        - Under "Minor Issues": Add "_No minor issues identified yet._"
+        - Under "Nitpicks": Add "_No nitpicks identified yet._"
+        - Under "Commits Addressing Feedback": Leave empty (will be filled during triage)
+        - Under "Notes": Add brief note: "PR tracking file created by pr-review-triager agent."
+      - Write to `.kiro/specs/[feature_name]/pr.md`
+
+   3. **Inform user in Japanese**:
+      - "PR追跡ファイルを作成しました: `.kiro/specs/[feature_name]/pr.md`"
+      - "PR #{number}: [PR Title]"
+      - "レビューフィードバックの取得を開始します。"
+
+   4. **Continue with normal triage flow**: Proceed to Phase 1
+
+   **If PR number cannot be determined**:
+   - If user input is invalid (not a number)
+   - If user cancels the question
+   - Report clear error in Japanese: "有効なPR番号が提供されませんでした。レビュートリアージを中止します。"
+   - Stop execution gracefully
 
 **Why This Matters**:
-- Eliminates need for user to repeatedly provide PR number
+- Eliminates need for user to repeatedly provide PR number in future runs
 - Maintains persistent tracking across multiple review cycles
 - Provides context from previous review rounds
+- Creates pr.md automatically if missing, ensuring consistent workflow
 
 ### Phase 1: Fetch Review Feedback (Efficient Approach)
 
@@ -320,26 +389,53 @@ AskUserQuestion({
 **CRITICAL**: After user decisions, update pr.md with the triage results.
 
 1. **Update pr.md File**
-   - If pr.md exists: Update it with new review feedback
-   - If pr.md doesn't exist: Create it from template (`.kiro/settings/templates/specs/pr.md`)
-   - Fill in all placeholders:
-     - `[PR_NUMBER]`: Actual PR number
-     - `[PR_TITLE]`: Actual PR title
-     - `[PR_URL]`: GitHub PR URL
-     - `[BRANCH_NAME]`: Current branch name
-     - `[CREATED_DATE]`, `[UPDATED_DATE]`: Actual dates
-   - Add all review feedback items to appropriate severity sections
-   - For each item, fill in:
-     - Issue number (sequential)
-     - Summary (brief title)
-     - Reviewer name and type
-     - Location (file:line)
-     - Description (detailed explanation)
-     - Action Plan (what to do)
-     - Status (based on user decision: "Not Started" / "Won't Fix")
-     - Reasoning (why fix or why not)
-   - Update checkbox status based on user decisions (checked if user chose to fix)
-   - Update "Review Summary" counts
+
+   **Note**: pr.md should already exist from Phase 0. If it was created in Phase 0, proceed with update. If it doesn't exist, this indicates an error in the workflow (Phase 0 was skipped or file was deleted).
+
+   **Read and Update pr.md**:
+   - Path: `.kiro/specs/[feature_name]/pr.md`
+   - **If pr.md exists** (normal case):
+     - Read the existing file content
+     - Preserve existing PR metadata (PR Number, Title, URL, Branch, Created Date)
+     - Update "Last Updated" field with current timestamp
+     - Preserve any existing review feedback items (don't delete previous rounds)
+     - Add new review feedback items to appropriate severity sections
+     - Update "Review Summary" counts based on new feedback
+
+   - **If pr.md doesn't exist** (error case - fallback behavior):
+     - Log warning: "Warning: pr.md was not found. It should have been created in Phase 0."
+     - Create from template (`.kiro/settings/templates/specs/pr.md`) as fallback
+     - Use same template replacement logic as Phase 0:
+       - `[PR_NUMBER]`: From Phase 0 or user input
+       - `[PR_TITLE]`: From `get_pull_request` response
+       - `[PR_URL]`: From `get_pull_request` response
+       - `[BRANCH_NAME]`: From `git branch --show-current`
+       - `[CREATED_DATE]`, `[UPDATED_DATE]`: From GitHub API
+       - `[count]`, `[resolved]`, `[total]`: Calculate from triage results
+     - Write to `.kiro/specs/[feature_name]/pr.md`
+
+   **Add Review Feedback Items** (for each triaged item):
+   - Place item in appropriate severity section (Critical/Major/Minor/Nitpick)
+   - For each item, include:
+     - **Issue number**: Sequential number within severity category (e.g., "1", "2", "3")
+     - **Summary**: Brief title describing the issue (e.g., "Security: XSS vulnerability in input handling")
+     - **Reviewer**: Reviewer name and type (e.g., "@maintainer-name (Maintainer)", "CodeRabbit (AI Bot)")
+     - **Location**: File path and line number (e.g., "`src/utils/validate.ts:45`")
+     - **Description**: Detailed explanation of the issue
+     - **Action Plan**: What needs to be done to fix it
+     - **Status**: Based on user decision:
+       - "Not Started" if user chose to fix
+       - "Won't Fix" if user chose not to fix
+       - "Completed" if already fixed (for subsequent review rounds)
+     - **Reasoning**: Why fix or why not (from triage analysis)
+
+   **Update Metadata**:
+   - Update checkbox status in "Review Status" section based on user decisions
+   - Update "Review Summary" counts:
+     - Total count for each severity
+     - Resolved count (how many user chose to fix or already fixed)
+     - Pending count (how many still need attention)
+   - Example: "Critical: 2 (1/2)" means 2 critical issues, 1 resolved, 2 total
 
 2. **Create Todo Items** for selected fixes using `TodoWrite`
    - Group by fix type (code vs documentation)
