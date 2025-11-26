@@ -96,6 +96,34 @@ Execute the following steps in order:
     - Related issues or tickets
   - Appropriate labels if applicable
 
+### Step 7: Create PR Tracking File (if spec-based development)
+
+**CRITICAL**: After PR is created, generate pr.md for spec-based development.
+
+1. **Detect if Spec-Based Development**
+   - Use `Bash` to run `git branch --show-current` to get current branch name
+   - Use `Glob` to search for spec directories: `.kiro/specs/*/spec.json`
+   - Read each `spec.json` to check if `feature_name` matches branch pattern
+   - If match found, this is spec-based development
+
+2. **Create PR Tracking File**
+   - Load template from `.kiro/settings/templates/specs/pr.md`
+   - Replace all placeholders with actual values:
+     - `[PR_NUMBER]`: Actual PR number from GitHub MCP response
+     - `[PR_TITLE]`: PR title
+     - `[PR_URL]`: PR HTML URL
+     - `[BRANCH_NAME]`: Current branch name
+     - `[CREATED_DATE]`: Current date/time
+     - `[UPDATED_DATE]`: Current date/time
+     - `[count]`: 0 (no reviews yet)
+   - Write to `.kiro/specs/[feature_name]/pr.md`
+   - Inform user that PR tracking file has been created
+
+3. **Output to User**
+   - Report PR URL and number
+   - Report pr.md location: `.kiro/specs/[feature_name]/pr.md`
+   - Explain that pr.md will be used for tracking review feedback
+
 ## Quality Standards
 
 - **Zero tolerance for lint errors**: All code and markdown must pass linting

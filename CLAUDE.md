@@ -445,6 +445,17 @@ When new functions are added to the project, the project root `README.md` MUST b
 
 **CRITICAL**: Always use the `pr-review-triager` agent to systematically read, analyze, and triage PR review feedback.
 
+**PR Tracking File**: For spec-based development, PR information and review feedback are tracked in `.kiro/specs/[spec-name]/pr.md`:
+- **Auto-generated**: Created by `commit-pr-validator` agent after PR creation
+- **Contains**: PR number, title, URL, branch name, review feedback with action items and status
+- **Benefits**:
+  - No need to repeatedly provide PR number to agents
+  - Persistent tracking across multiple review cycles
+  - Clear overview of all feedback and resolution status
+  - Structured todo list for addressing feedback
+
+**Template Location**: `.kiro/settings/templates/specs/pr.md`
+
 ##### Step 1: Read and Triage Review Feedback
 
 **When to use pr-review-triager**:
@@ -454,17 +465,24 @@ When new functions are added to the project, the project root `README.md` MUST b
 - When multiple reviewers provide conflicting feedback
 
 **What the agent does**:
-1. **Fetches all review feedback** using GitHub MCP tools
-2. **Categorizes by severity**: Critical, Major, Minor, Nitpick
-3. **Analyzes each item** with clear reasoning
-4. **Presents structured report** showing what to fix and what to skip
-5. **Asks user for decisions** on which items to address
-6. **Creates Todo items** for selected fixes
-7. **Recommends next agents** (function-implementer or function-docs-writer)
+1. **Detects PR tracking file** (`.kiro/specs/[spec-name]/pr.md`) to auto-load PR number
+2. **Fetches all review feedback** using GitHub MCP tools
+3. **Categorizes by severity**: Critical, Major, Minor, Nitpick
+4. **Analyzes each item** with clear reasoning
+5. **Presents structured report** showing what to fix and what to skip
+6. **Asks user for decisions** on which items to address
+7. **Updates pr.md** with all feedback items and user decisions
+8. **Creates Todo items** for selected fixes
+9. **Recommends next agents** (function-implementer or function-docs-writer)
 
 **Agent Usage**:
 ```bash
-# Use pr-review-triager agent
+# Use pr-review-triager agent (no need to specify PR number if pr.md exists)
+Task tool: pr-review-triager
+Prompt: "Analyze review feedback and provide triage recommendations.
+         Present findings with clear reasoning for each item."
+
+# If pr.md doesn't exist yet, specify PR number
 Task tool: pr-review-triager
 Prompt: "Analyze review feedback for PR #[number] and provide triage recommendations.
          Present findings with clear reasoning for each item."
