@@ -441,13 +441,190 @@ When new functions are added to the project, the project root `README.md` MUST b
 
 ### Responding to Feedback
 
+#### Pull Request Review Workflow
+
+**CRITICAL**: Always use the `pr-review-triager` agent to systematically read, analyze, and triage PR review feedback.
+
+**PR Tracking File**: For spec-based development, PR information and review feedback are tracked in `.kiro/specs/[spec-name]/pr.md`:
+- **Auto-generated**: Created by `commit-pr-validator` agent after PR creation
+- **Contains**: PR number, title, URL, branch name, review feedback with action items and status
+- **Benefits**:
+  - No need to repeatedly provide PR number to agents
+  - Persistent tracking across multiple review cycles
+  - Clear overview of all feedback and resolution status
+  - Structured todo list for addressing feedback
+
+**Template Location**: `.kiro/settings/templates/specs/pr.md`
+
+##### Step 1: Read and Triage Review Feedback
+
+**When to use pr-review-triager**:
+- After PR is created and review comments are received
+- Periodic check for new review feedback
+- Before deciding which feedback to address
+- When multiple reviewers provide conflicting feedback
+
+**What the agent does**:
+1. **Detects PR tracking file** (`.kiro/specs/[spec-name]/pr.md`) to auto-load PR number
+2. **Fetches all review feedback** using GitHub MCP tools
+3. **Categorizes by severity**: Critical, Major, Minor, Nitpick
+4. **Analyzes each item** with clear reasoning
+5. **Presents structured report** showing what to fix and what to skip
+6. **Asks user for decisions** on which items to address
+7. **Updates pr.md** with all feedback items and user decisions
+8. **Creates Todo items** for selected fixes
+9. **Recommends next agents** (function-implementer or function-docs-writer)
+
+**Agent Usage**:
+```bash
+# Use pr-review-triager agent (no need to specify PR number if pr.md exists)
+Task tool: pr-review-triager
+Prompt: "Analyze review feedback and provide triage recommendations.
+         Present findings with clear reasoning for each item."
+
+# If pr.md doesn't exist yet, specify PR number
+Task tool: pr-review-triager
+Prompt: "Analyze review feedback for PR #[number] and provide triage recommendations.
+         Present findings with clear reasoning for each item."
+```
+
+**Expected Output**:
+- Comprehensive triage report in English (structured markdown)
+- Clear categorization: MUST FIX / SHOULD FIX / CONSIDER / OPTIONAL / NO FIX NEEDED
+- Reasoning for each recommendation
+- User decision questions (in Japanese)
+- Action plan with agent prompts for fixes
+
+**Do NOT**:
+- Manually browse GitHub web interface
+- Ask user to copy/paste review comments
+- Use web scraping or unofficial APIs
+- Analyze feedback without using pr-review-triager agent (unless trivial)
+
+##### Step 2: Severity-Based Decision Criteria
+
+**Severity-Based Action Guidelines**:
+
+1. **Critical** (Security Vulnerabilities, Breaking Changes, Data Loss, Logic Errors):
+   - ✅ **MUST FIX**: Immediately address all critical issues
+   - Use `function-implementer` agent for code fixes
+   - Add regression tests to prevent recurrence
+   - Run full validation suite before pushing
+   - **Example**: "Security: Potential XSS vulnerability in input handling"
+
+2. **Major** (Performance Issues, API Design Flaws, Incorrect Behavior):
+   - ✅ **SHOULD FIX**: Address unless there's a strong technical reason not to
+   - Use `function-implementer` agent for implementation fixes
+   - If disagreeing, provide detailed technical justification in PR comments
+   - May require design discussion before fixing
+   - **Example**: "Performance: O(n²) algorithm should be O(n log n)"
+
+3. **Minor** (Code Style, Naming Conventions, Code Organization):
+   - 🤔 **CONSIDER**: Fix if aligned with project conventions
+   - Use `function-implementer` agent for code style fixes
+   - May discuss alternative approaches
+   - Balance consistency vs change overhead
+   - **Example**: "Style: Variable name should follow camelCase convention"
+
+4. **Nitpick** (Formatting, Comment Wording, Trivial Suggestions):
+   - 📝 **OPTIONAL**: Fix if quick and non-controversial
+   - Can defer to future refactoring
+   - Acknowledge but don't block PR on these
+   - **Example**: "Nitpick: Extra blank line at end of file"
+
+**Documentation-Specific Severity**:
+
+1. **Critical Documentation Issues**:
+   - Incorrect API documentation (wrong parameters, return types)
+   - Missing safety warnings or error conditions
+   - Broken or incorrect code examples
+   - ✅ **MUST FIX** with `function-docs-writer` agent
+
+2. **Major Documentation Issues**:
+   - Incomplete usage examples
+   - Missing edge case documentation
+   - Unclear or ambiguous descriptions
+   - ✅ **SHOULD FIX** with `function-docs-writer` agent
+
+3. **Minor Documentation Issues**:
+   - Typos, grammar issues
+   - Formatting inconsistencies
+   - Missing links or cross-references
+   - 🤔 **CONSIDER** fixing with `function-docs-writer` agent
+
+**Reviewer Priority**:
+- **Maintainer feedback** > Contributor feedback > AI bot suggestions
+- **AI bots** (Gemini Code Assist, CodeRabbit): Treat as automated static analysis
+  - Often catch edge cases and best practices
+  - Verify suggestions are relevant before applying
+- **Human reviewers**: Engage in discussion when needed
+  - Ask clarifying questions for ambiguous feedback
+  - Provide context if disagreeing
+
+##### Step 3: Address Selected Feedback
+
 When addressing user feedback or PR review comments that affect functionality:
 
-1. **Make Code Changes**: Implement the requested changes
-2. **Update Documentation**: Use `function-docs-writer` agent to update:
-   - Individual function documentation (if behavior changed)
-   - Category README (if functionality or use cases changed)
-3. **Commit Together**: Commit code changes and documentation updates together
+1. **Review User Decision**: Review triage report and decide which items to address
+   - Agent will ask for decisions via AskUserQuestion
+   - Consider severity, reasoning, and effort estimates
+2. **Fix Code Issues**: Use `function-implementer` agent to implement code changes
+   - Provide specific review feedback to the agent
+   - Agent implements fixes following project guidelines
+   - Agent updates tests if needed
+3. **Fix Documentation Issues**: Use `function-docs-writer` agent for documentation changes
+   - Individual function documentation updates
+   - Category README updates
+4. **Verify Fixes**: Run validation suite
+   - `pnpm lint` - Code quality
+   - `pnpm test` - All tests pass
+   - `pnpm build` - Compilation success
+   - `pnpm lint:docs` - Documentation quality (if docs changed)
+5. **Commit Changes**: Commit code and documentation updates together
+6. **Push Update**: Push changes to update the pull request
+
+**CRITICAL**: Always use appropriate agents for fixes:
+- **Code changes** → Use `function-implementer` agent
+- **Documentation changes** → Use `function-docs-writer` agent
+- **Never fix manually** → Always delegate to specialized agents
+
+**Fix Implementation Workflow**:
+
+For **code-related feedback**:
+```bash
+# 1. Use function-implementer agent
+Task tool: function-implementer
+Prompt: "Address the following review feedback: [paste specific feedback].
+         Fix the code in [file path] and update tests if needed."
+
+# 2. Verify the fix
+pnpm lint
+pnpm test
+pnpm build
+```
+
+For **documentation-related feedback**:
+```bash
+# 1. Use function-docs-writer agent
+Task tool: function-docs-writer
+Prompt: "Update documentation to address review feedback: [paste specific feedback].
+         Update [function/category] documentation in docs/functions/."
+
+# 2. Verify documentation quality
+pnpm lint:docs
+```
+
+**Complete Fix Validation Checklist**:
+- [ ] Review feedback read via GitHub MCP tools
+- [ ] Severity categorized and action determined
+- [ ] Code fixes implemented by `function-implementer` (if applicable)
+- [ ] Documentation fixes implemented by `function-docs-writer` (if applicable)
+- [ ] All tests pass (`pnpm test`)
+- [ ] Code quality verified (`pnpm lint`)
+- [ ] Build succeeds (`pnpm build`)
+- [ ] Documentation quality verified (`pnpm lint:docs`, if docs changed)
+- [ ] Changes committed with clear message referencing review feedback
+- [ ] PR updated with push
 
 ### Agent Usage
 
