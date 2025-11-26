@@ -26,7 +26,7 @@ function isExists(year: number, month: number, day: number): boolean
 
 ## Description
 
-The `isExists` function determines whether the specified year, month, and day combination represents a date that actually exists in the Gregorian calendar. Unlike JavaScript's Date constructor, it uses 1-based month indexing (1 = January, 12 = December) for more intuitive API usage. The function implements comprehensive leap year validation following Gregorian calendar rules and handles edge cases gracefully without throwing exceptions.
+The `isExists` function determines whether the specified year, month, and day combination represents a date that actually exists in the Gregorian calendar. Unlike JavaScript's Date constructor, it uses 1-based month indexing (1 = January, 12 = December) for more intuitive API usage. The function implements comprehensive leap year validation following the Gregorian calendar rules and handles edge cases gracefully without throwing exceptions.
 
 ### Specification
 
@@ -38,7 +38,7 @@ The `isExists` function determines whether the specified year, month, and day co
   - April, June, September, November: 1-30
   - February in common years: 1-28
   - February in leap years: 1-29
-- Leap years are correctly identified using Gregorian calendar rules:
+- Leap years are correctly identified using the Gregorian calendar rules:
   - Years divisible by 400: leap year (e.g., 2000, 2400)
   - Years divisible by 100 but not 400: not a leap year (e.g., 1900, 2100)
   - Years divisible by 4 but not 100: leap year (e.g., 2024, 2028)
@@ -151,10 +151,17 @@ function validateDateFields(yearInput: string, monthInput: string, dayInput: str
     return { valid: false, error: 'Please enter valid numbers' };
   }
 
+  // Basic range checks before calling isExists
+  if (month < 1 || month > 12) {
+    return { valid: false, error: 'Month must be between 1 and 12' };
+  }
+
+  if (day < 1) {
+    return { valid: false, error: 'Day must be at least 1' };
+  }
+
+  // Use isExists for complex validation (leap years, month-specific day limits)
   if (!isExists(year, month, day)) {
-    if (month < 1 || month > 12) {
-      return { valid: false, error: 'Month must be between 1 and 12' };
-    }
     if (month === 2 && day === 29) {
       return { valid: false, error: `${year} is not a leap year` };
     }
@@ -166,6 +173,8 @@ function validateDateFields(yearInput: string, monthInput: string, dayInput: str
 
 validateDateFields('2024', '2', '29');  // Returns: { valid: true }
 validateDateFields('2023', '2', '29');  // Returns: { valid: false, error: '2023 is not a leap year' }
+validateDateFields('2024', '13', '1');  // Returns: { valid: false, error: 'Month must be between 1 and 12' }
+validateDateFields('2024', '1', '0');   // Returns: { valid: false, error: 'Day must be at least 1' }
 ```
 
 ### Data Quality Checks

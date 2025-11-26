@@ -113,7 +113,7 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 
 - `isDate`: Use to check if a value is a Date object instance (type checking)
 - `isValid`: Use to check if a date or timestamp represents a valid date value
-- `isExists`: Use to validate year, month, and day components represent an existing date
+- `isExists`: Use to validate that year, month, and day components represent an existing date
 - Ideal for: input validation, error checking, data sanitization, type narrowing
 - Combined usage: `isDate(value) && isValid(value)` for complete validation
 - Component validation: `isExists(year, month, day)` for validating separate date parts
@@ -181,10 +181,10 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 | Validate API response date | `isDate(data)` | Runtime type validation |
 | Filter Date instances from array | `array.filter(isDate)` | Extract only Date objects |
 | Validate user input | `isValid(date)` | Check if date is valid |
-| Validate separate date components | `isExists(year, month, day)` | Check year/month/day represents valid date |
+| Validate separate date components | `isExists(year, month, day)` | Check that year/month/day represents a valid date |
 | Validate form with separate fields | `isExists(yearInput, monthInput, dayInput)` | Validate date parts before creating Date |
 | Check if leap year has Feb 29 | `isExists(year, 2, 29)` | Leap year validation |
-| Validate parsed date string | `isExists(parsedYear, parsedMonth, parsedDay)` | Check parsed components are valid |
+| Validate parsed date string | `isExists(parsedYear, parsedMonth, parsedDay)` | Check that parsed components are valid |
 | Check if session expired | `isPast(session.expiresAt)` | Current time-based expiry check |
 | Check if event is upcoming | `isFuture(event.date)` | Current time-based future check |
 | Filter upcoming events | `events.filter(e => isFuture(e.date))` | Simple future filtering |
@@ -257,18 +257,23 @@ function validateDateForm(year: number, month: number, day: number): {
   valid: boolean;
   error?: string;
 } {
+  // Basic range checks before calling isExists
+  if (month < 1 || month > 12) {
+    return { valid: false, error: 'Month must be between 1 and 12' };
+  }
+
+  if (day < 1) {
+    return { valid: false, error: 'Day must be at least 1' };
+  }
+
+  // Use isExists for complex validation (leap years, month-specific day limits)
   if (!isExists(year, month, day)) {
-    if (month < 1 || month > 12) {
-      return { valid: false, error: 'Month must be between 1 and 12' };
-    }
     if (month === 2 && day === 29) {
       return { valid: false, error: `${year} is not a leap year` };
     }
-    if (day < 1 || day > 31) {
-      return { valid: false, error: 'Invalid day value' };
-    }
     return { valid: false, error: 'This date does not exist' };
   }
+
   return { valid: true };
 }
 ```

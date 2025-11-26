@@ -349,7 +349,7 @@ Chronia includes comprehensive documentation specifically designed for AI agents
 
 The [`docs/`](docs/) directory contains three main sections:
 
-1. **[Function Categories](docs/functions/)** - Detailed documentation for all 73 functions
+1. **[Function Categories](docs/functions/)** - Detailed documentation for all 74 functions
 
    - Complete function signatures with examples
    - AI guidance for recommending appropriate functions
