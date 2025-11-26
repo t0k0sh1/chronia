@@ -39,6 +39,8 @@ export function isDateInstance(value: unknown): value is Date {
  *
  * This function is analogous to `isValidNumber` for the number type.
  *
+ * Date validity is evaluated using local timezone semantics of JavaScript Date objects.
+ *
  * @internal
  * @param value - Any value to validate
  * @returns true if value is a valid Date, false otherwise

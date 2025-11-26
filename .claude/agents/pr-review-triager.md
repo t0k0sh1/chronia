@@ -243,9 +243,9 @@ Generate a comprehensive triage report in this format:
 After presenting the triage report, use `AskUserQuestion` to gather user decisions:
 
 **Question Structure**:
-1. **For Critical Issues**: Confirm user wants to fix all (should be YES)
-2. **For Major Issues**: Confirm user wants to fix (should be YES unless strong reason)
-3. **For Minor Issues**: Ask which ones to address
+1. **For Critical Issues**: Confirm user will proceed with all fixes (should be YES)
+2. **For Major Issues**: Confirm user wants to address (should be YES unless strong reason)
+3. **For Minor Issues**: Ask if user will address any
 4. **For Nitpicks**: Ask if user wants to address any
 
 ### Use multiSelect for categories with multiple items
