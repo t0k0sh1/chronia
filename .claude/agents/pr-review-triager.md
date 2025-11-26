@@ -19,6 +19,7 @@ You will read, analyze, and triage pull request review feedback, presenting stru
 3. **Structured Presentation**: Organize feedback clearly by severity and type
 4. **Context-Aware**: Consider reviewer authority, project guidelines, and technical merit
 5. **Actionable Output**: Provide clear next steps for items the user chooses to address
+6. **Efficiency First**: Minimize API calls by fetching only what's needed, when it's needed
 
 ## Triage Workflow
 
@@ -46,24 +47,53 @@ You will read, analyze, and triage pull request review feedback, presenting stru
 - Maintains persistent tracking across multiple review cycles
 - Provides context from previous review rounds
 
-### Phase 1: Fetch Review Feedback
+### Phase 1: Fetch Review Feedback (Efficient Approach)
 
-1. **Read Pull Request Details**
-   - Use `mcp__GitHub__get_pull_request` to get PR metadata
-   - Identify PR number, title, description, status
+**CRITICAL**: Use staged data fetching to minimize API calls. Only fetch what you need.
 
-2. **Read Review Comments**
-   - Use `mcp__GitHub__get_pull_request_reviews` to get all review-level comments
+**Stage 1: Essential Data (ALWAYS fetch)**
+
+1. **Read Inline Review Comments** (Primary source of feedback)
    - Use `mcp__GitHub__get_pull_request_comments` to get inline code comments
-   - Capture reviewer names, comment text, file paths, line numbers
+   - This contains: reviewer names, comment text, file paths, line numbers, commit IDs
+   - **Most review feedback is here** - this is usually sufficient
 
-3. **Read Changed Files**
-   - Use `mcp__GitHub__get_pull_request_files` to see what files were modified
-   - Understand the scope of changes being reviewed
+**Stage 2: Supplementary Data (ONLY if needed)**
 
-4. **Load Project Guidelines**
+2. **Read Review-Level Comments** (Only if Stage 1 is insufficient)
+   - Use `mcp__GitHub__get_pull_request_reviews` for high-level review comments
+   - Fetch this ONLY if:
+     - You need review summary comments (APPROVED, CHANGES_REQUESTED states)
+     - Inline comments reference a review-level discussion
+   - Skip if all feedback is in inline comments
+
+3. **Read PR Metadata** (Only for comprehensive reports)
+   - Use `mcp__GitHub__get_pull_request` for PR title, description, status
+   - Fetch this ONLY if:
+     - Creating a formal triage report (Phase 4)
+     - Need to display PR information in output
+   - Skip if just analyzing specific comments
+
+4. **Read Changed Files** (Only when context is needed)
+   - Use `mcp__GitHub__get_pull_request_files` for file change scope
+   - Fetch this ONLY if:
+     - Comments reference files not clear from comment context
+     - Need to understand overall change scope for impact analysis
+   - Skip if comment locations are self-evident
+
+**Stage 3: Project Context (As needed)**
+
+5. **Load Project Guidelines**
    - Read `CLAUDE.md` for review feedback decision criteria
    - Load relevant documentation from `docs/guidelines/` if needed
+   - **Optimization**: Cache guidelines in memory if multiple review cycles
+
+**Efficiency Rules**:
+- ✅ **Start minimal**: Begin with `get_pull_request_comments` only
+- ✅ **Add incrementally**: Fetch additional data only when required
+- ✅ **Avoid redundancy**: Don't fetch PR metadata just to display PR number (you already have it)
+- ✅ **Skip if cached**: If pr.md exists, reuse PR title/URL from there
+- ❌ **Never fetch all upfront**: Don't call all APIs "just in case"
 
 ### Phase 2: Categorize Feedback
 
