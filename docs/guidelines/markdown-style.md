@@ -181,6 +181,33 @@ Write lists with consistency.
 - Indent nested lists with 2 or 4 spaces
 - Don't add blank lines between items at the same level
 - Add blank lines between different list types
+- **CRITICAL**: Add blank lines before and after lists
+
+**Common Mistake** (Missing Blank Lines):
+
+```markdown
+<!-- ❌ BAD: No blank line before list -->
+This is some text.
+- Item 1
+- Item 2
+
+<!-- ❌ BAD: No blank line after list -->
+- Item 1
+- Item 2
+This is some text.
+```
+
+**Correct Usage** (With Blank Lines):
+
+```markdown
+<!-- ✅ GOOD: Blank line before and after list -->
+This is some text.
+
+- Item 1
+- Item 2
+
+This is some text.
+```
 
 ### Code Blocks
 
@@ -198,7 +225,96 @@ function example(): void {
 
 - Always specify a language identifier (`typescript`, `javascript`, `bash`, etc.)
 - Use single backticks for inline code: `` `code` ``
-- Add blank lines before and after code blocks
+- **CRITICAL**: Add blank lines before and after code blocks (MD031: blanks-around-fences)
+
+**Common Mistake** (Missing Blank Lines):
+
+````markdown
+<!-- ❌ BAD: No blank line before code block -->
+This is some text.
+```typescript
+const example = "code";
+```
+
+<!-- ❌ BAD: No blank line after code block -->
+```typescript
+const example = "code";
+```
+This is some text.
+````
+
+**Correct Usage** (With Blank Lines):
+
+````markdown
+<!-- ✅ GOOD: Blank line before and after code block -->
+This is some text.
+
+```typescript
+const example = "code";
+```
+
+This is some text.
+````
+
+#### Nested Code Blocks
+
+When you need to show code blocks **inside** a code block (e.g., documenting markdown syntax or showing example output that contains code), use **4 backticks** for the outer block and **3 backticks** for the inner blocks.
+
+**❌ Incorrect (will break rendering)**:
+
+Using 3 backticks for both outer and inner blocks will cause parsing errors. The inner code block will prematurely close the outer block.
+
+**✅ Correct (4 backticks for outer, 3 for inner)**:
+
+`````markdown
+````markdown
+# Example Output
+
+```bash
+some command
+```
+````
+`````
+
+**Common Use Cases**:
+
+1. **Documenting Markdown Syntax**:
+   - Showing how to write code blocks in documentation
+   - Example: Agent prompts that include code examples
+
+2. **Example Output Templates**:
+   - Showing what an agent or tool should output
+   - Templates that contain code blocks
+
+3. **Multi-level Code Examples**:
+   - Tutorials showing nested code structures
+   - Documentation generators output examples
+
+**Example from Agent Documentation**:
+
+`````markdown
+````markdown
+## Recommended Workflow
+
+**Agent Prompt**:
+```bash
+pnpm test
+pnpm build
+```
+
+**Expected Output**:
+```
+All tests passed!
+```
+````
+`````
+
+**Rules for Nested Blocks**:
+
+- Outer block: Use 4 backticks (````)
+- Inner blocks: Use 3 backticks (```)
+- Always specify language for both outer and inner blocks when applicable
+- Ensure proper closing of all blocks (match opening backtick count)
 
 ### Blockquotes
 

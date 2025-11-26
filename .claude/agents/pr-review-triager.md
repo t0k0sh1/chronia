@@ -276,7 +276,7 @@ Based on user decisions:
    - Provide specific prompts for each agent
 
 3. **Generate Fix Workflow**:
-```markdown
+````markdown
 ## Recommended Fix Workflow
 
 ### Code Fixes (function-implementer)
@@ -315,7 +315,7 @@ Run the following to verify fixes:
 - `pnpm test` (all tests pass)
 - `pnpm build` (compilation)
 - `pnpm lint:docs` (if docs changed)
-```
+````
 
 ## Quality Standards
 
