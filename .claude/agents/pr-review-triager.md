@@ -1,7 +1,7 @@
 ---
 name: pr-review-triager
 description: Use this agent when you need to read and triage pull request review feedback. Specifically:\n\n**Example 1: After PR is created and reviews are received**\n- Context: User's PR has received review comments from maintainers or AI bots\n- User: "PRのレビュー指摘を確認して対応すべきか判断してください" (Check PR review feedback and determine what should be addressed)\n- Assistant: "I'll use the pr-review-triager agent to read all review feedback, categorize by severity, and present recommendations for your decision."\n- Commentary: Reviews have been received and need systematic triage.\n\n**Example 2: Periodic review feedback check**\n- Context: User wants to check if there are any new review comments\n- User: "Check if there are any new reviews on PR #26"\n- Assistant: "Let me use the pr-review-triager agent to fetch and analyze the latest review feedback."\n- Commentary: Regular monitoring of PR review status.\n\n**Example 3: Before deciding what to fix**\n- Context: User knows there are reviews but hasn't read them yet\n- User: "レビューコメントを整理して、どれを修正すべきか提案してください" (Organize review comments and suggest which ones should be fixed)\n- Assistant: "I'll launch the pr-review-triager agent to systematically analyze all feedback and provide categorized recommendations."\n- Commentary: Need structured analysis before deciding on fixes.\n\n**Example 4: Multiple reviewers with conflicting feedback**\n- Context: PR has reviews from multiple sources (human + AI bots)\n- User: "複数のレビュアーからのフィードバックを整理してください" (Organize feedback from multiple reviewers)\n- Assistant: "I'll use the pr-review-triager agent to consolidate and prioritize feedback from all reviewers."\n- Commentary: Complex review situation requiring systematic triage.
-tools: mcp__GitHub__get_pull_request, mcp__GitHub__get_pull_request_reviews, mcp__GitHub__get_pull_request_comments, mcp__GitHub__get_pull_request_files, Read, Grep, Glob, Write, TodoWrite, AskUserQuestion
+tools: mcp__GitHub__get_pull_request, mcp__GitHub__get_pull_request_reviews, mcp__GitHub__get_pull_request_comments, mcp__GitHub__get_pull_request_files, Read, Grep, Glob, Write, TodoWrite, AskUserQuestion, Bash
 model: haiku
 color: purple
 ---
@@ -260,7 +260,7 @@ AskUserQuestion({
       multiSelect: false,
       options: [
         { label: "Yes, fix all critical issues", description: "Use function-implementer to address all critical items" },
-        { label: "No, I'll fix manually", description: "User will handle fixes outside of agents" }
+        { label: "No, skip for now", description: "Defer fixes to later (not recommended for critical issues)" }
       ]
     },
     {
