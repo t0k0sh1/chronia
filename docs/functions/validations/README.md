@@ -12,6 +12,7 @@ Chronia provides a comprehensive suite of date validation and comparison functio
 |----------|-------------|
 | [`isDate`](./isDate.md) | Checks if a value is a Date object instance |
 | [`isValid`](./isValid.md) | Checks if a Date object or timestamp is valid |
+| [`isExists`](./isExists.md) | Validates whether year, month, and day represent an existing date |
 
 ### Current Time Comparison
 
@@ -108,12 +109,14 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 
 ### Validation vs Current Time Comparison vs Date Comparison vs Same-Time
 
-**Validation Functions** (`isDate`, `isValid`):
+**Validation Functions** (`isDate`, `isValid`, `isExists`):
 
 - `isDate`: Use to check if a value is a Date object instance (type checking)
 - `isValid`: Use to check if a date or timestamp represents a valid date value
+- `isExists`: Use to validate year, month, and day components represent an existing date
 - Ideal for: input validation, error checking, data sanitization, type narrowing
 - Combined usage: `isDate(value) && isValid(value)` for complete validation
+- Component validation: `isExists(year, month, day)` for validating separate date parts
 
 **Current Time Comparison Functions** (`isFuture`, `isPast`):
 
@@ -178,6 +181,10 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 | Validate API response date | `isDate(data)` | Runtime type validation |
 | Filter Date instances from array | `array.filter(isDate)` | Extract only Date objects |
 | Validate user input | `isValid(date)` | Check if date is valid |
+| Validate separate date components | `isExists(year, month, day)` | Check year/month/day represents valid date |
+| Validate form with separate fields | `isExists(yearInput, monthInput, dayInput)` | Validate date parts before creating Date |
+| Check if leap year has Feb 29 | `isExists(year, 2, 29)` | Leap year validation |
+| Validate parsed date string | `isExists(parsedYear, parsedMonth, parsedDay)` | Check parsed components are valid |
 | Check if session expired | `isPast(session.expiresAt)` | Current time-based expiry check |
 | Check if event is upcoming | `isFuture(event.date)` | Current time-based future check |
 | Filter upcoming events | `events.filter(e => isFuture(e.date))` | Simple future filtering |
@@ -217,6 +224,74 @@ function processDate(date: Date | number): void {
     throw new Error('Invalid date provided');
   }
   // Process valid date
+}
+```
+
+### Validating Date Components
+
+```typescript
+import { isExists } from 'chronia';
+
+// Validate separate year/month/day inputs before creating Date
+function createDateFromComponents(year: number, month: number, day: number): Date | null {
+  // Note: isExists uses 1-based month (1=January, 12=December)
+  if (!isExists(year, month, day)) {
+    return null;
+  }
+
+  // Convert to 0-based month for JavaScript Date constructor
+  return new Date(year, month - 1, day);
+}
+
+// Valid dates
+createDateFromComponents(2024, 2, 29);  // Date object - leap year Feb 29
+createDateFromComponents(2024, 4, 30);  // Date object - April 30
+
+// Invalid dates return null
+createDateFromComponents(2023, 2, 29);  // null - not a leap year
+createDateFromComponents(2024, 4, 31);  // null - April has only 30 days
+createDateFromComponents(2024, 13, 1);  // null - invalid month
+
+// Form validation with detailed error messages
+function validateDateForm(year: number, month: number, day: number): {
+  valid: boolean;
+  error?: string;
+} {
+  if (!isExists(year, month, day)) {
+    if (month < 1 || month > 12) {
+      return { valid: false, error: 'Month must be between 1 and 12' };
+    }
+    if (month === 2 && day === 29) {
+      return { valid: false, error: `${year} is not a leap year` };
+    }
+    if (day < 1 || day > 31) {
+      return { valid: false, error: 'Invalid day value' };
+    }
+    return { valid: false, error: 'This date does not exist' };
+  }
+  return { valid: true };
+}
+```
+
+### Leap Year Validation
+
+```typescript
+import { isExists } from 'chronia';
+
+// Check if a year is a leap year by testing February 29
+function isLeapYear(year: number): boolean {
+  return isExists(year, 2, 29);
+}
+
+// Test various years
+isLeapYear(2024);  // true - divisible by 4, not a century year
+isLeapYear(2000);  // true - divisible by 400
+isLeapYear(1900);  // false - divisible by 100 but not 400
+isLeapYear(2023);  // false - not divisible by 4
+
+// Validate date with leap year awareness
+function getDaysInFebruary(year: number): number {
+  return isExists(year, 2, 29) ? 29 : 28;
 }
 ```
 
