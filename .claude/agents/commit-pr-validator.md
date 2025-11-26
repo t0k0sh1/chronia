@@ -98,31 +98,54 @@ Execute the following steps in order:
 
 ### Step 7: Create PR Tracking File (if spec-based development)
 
-**CRITICAL**: After PR is created, generate pr.md for spec-based development.
+**CRITICAL**: After PR is created, ALWAYS generate or update pr.md for spec-based development.
 
 1. **Detect if Spec-Based Development**
    - Use `Bash` to run `git branch --show-current` to get current branch name
    - Use `Glob` to search for spec directories: `.kiro/specs/*/spec.json`
    - Read each `spec.json` to check if `feature_name` matches branch pattern
-   - If match found, this is spec-based development
+   - If match found, this is spec-based development → proceed to Step 2
+   - If not found, skip this step
 
-2. **Create PR Tracking File**
+2. **Check if PR Tracking File Already Exists**
+   - Check for `.kiro/specs/[feature_name]/pr.md`
+   - If exists: Read existing pr.md and update PR information only (keep existing review feedback)
+   - If not exists: Create new pr.md from template
+
+3. **Create or Update PR Tracking File**
+
+   **If pr.md does NOT exist** (new PR):
    - Load template from `.kiro/settings/templates/specs/pr.md`
-   - Replace all placeholders with actual values:
-     - `[PR_NUMBER]`: Actual PR number from GitHub MCP response
-     - `[PR_TITLE]`: PR title
-     - `[PR_URL]`: PR HTML URL
-     - `[BRANCH_NAME]`: Current branch name
-     - `[CREATED_DATE]`: Current date/time
-     - `[UPDATED_DATE]`: Current date/time
-     - `[count]`: 0 (no reviews yet)
+   - Replace ALL placeholders with actual values:
+     - `[PR_NUMBER]`: Actual PR number from GitHub MCP response (e.g., "27")
+     - `[PR_TITLE]`: PR title from GitHub MCP response
+     - `[PR_URL]`: PR HTML URL from GitHub MCP response
+     - `[BRANCH_NAME]`: Current branch name from `git branch --show-current`
+     - `[CREATED_DATE]`: PR created_at timestamp from GitHub MCP response
+     - `[UPDATED_DATE]`: PR updated_at timestamp from GitHub MCP response
+     - `[count]`: Set to "0" (no reviews yet)
+     - `[resolved]`: Set to "0" (nothing resolved yet)
+     - `[total]`: Set to "0" (no issues yet)
+   - Replace placeholder sections with initial content:
+     - Under "Critical Issues", "Major Issues", etc.: Add "_No [severity] issues identified yet._"
+     - Under "Commits Addressing Feedback": Add initial commit info
+     - Under "Notes": Add implementation summary and quality verification status
    - Write to `.kiro/specs/[feature_name]/pr.md`
-   - Inform user that PR tracking file has been created
 
-3. **Output to User**
+   **If pr.md ALREADY exists** (PR update/re-push):
+   - Read existing pr.md file
+   - Update ONLY the following fields:
+     - `Last Updated`: New timestamp
+     - Add new commit to "Commits Addressing Feedback" section if applicable
+   - Preserve all existing review feedback sections (do not modify)
+   - Write updated content back to `.kiro/specs/[feature_name]/pr.md`
+
+4. **Output to User** (in Japanese)
    - Report PR URL and number
    - Report pr.md location: `.kiro/specs/[feature_name]/pr.md`
-   - Explain that pr.md will be used for tracking review feedback
+   - If new file: "PR追跡ファイルを作成しました。今後のレビューフィードバックはこのファイルで追跡されます。"
+   - If updated: "PR追跡ファイルを更新しました。"
+   - Explain: "pr-review-triagerエージェントを使用する際、このファイルからPR番号が自動的に読み込まれます。"
 
 ## Quality Standards
 
