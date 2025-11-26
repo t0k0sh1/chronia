@@ -441,9 +441,11 @@ When new functions are added to the project, the project root `README.md` MUST b
 
 ### Responding to Feedback
 
-#### Reading Pull Request Review Feedback
+#### Pull Request Review Workflow
 
 **CRITICAL**: Always use the `pr-review-triager` agent to systematically read, analyze, and triage PR review feedback.
+
+##### Step 1: Read and Triage Review Feedback
 
 **When to use pr-review-triager**:
 - After PR is created and review comments are received
@@ -505,39 +507,7 @@ mcp__GitHub__get_pull_request_comments(owner: "t0k0sh1", repo: "chronia", pull_n
 - Use web scraping or unofficial APIs
 - Analyze feedback without using pr-review-triager agent (unless trivial)
 
-#### Addressing Review Feedback
-
-When addressing user feedback or PR review comments that affect functionality:
-
-1. **Triage Review Feedback**: Use `pr-review-triager` agent (recommended)
-   - Agent reads all feedback using GitHub MCP tools
-   - Categorizes by severity and provides reasoning
-   - Presents structured report for user decision
-   - Alternatively: Read manually using GitHub MCP tools (see above)
-2. **User Decision**: Review triage report and decide which items to address
-   - Agent will ask for decisions via AskUserQuestion
-   - Consider severity, reasoning, and effort estimates
-3. **Fix Code Issues**: Use `function-implementer` agent to implement code changes
-   - Provide specific review feedback to the agent
-   - Agent implements fixes following project guidelines
-   - Agent updates tests if needed
-4. **Fix Documentation Issues**: Use `function-docs-writer` agent for documentation changes
-   - Individual function documentation updates
-   - Category README updates
-5. **Verify Fixes**: Run validation suite
-   - `pnpm lint` - Code quality
-   - `pnpm test` - All tests pass
-   - `pnpm build` - Compilation success
-   - `pnpm lint:docs` - Documentation quality (if docs changed)
-6. **Commit Changes**: Commit code and documentation updates together
-7. **Push Update**: Push changes to update the pull request
-
-#### Review Feedback Decision Criteria
-
-**CRITICAL**: Always use appropriate agents for fixes:
-- **Code changes** → Use `function-implementer` agent
-- **Documentation changes** → Use `function-docs-writer` agent
-- **Never fix manually** → Always delegate to specialized agents
+##### Step 2: Severity-Based Decision Criteria
 
 **Severity-Based Action Guidelines**:
 
@@ -596,6 +566,33 @@ When addressing user feedback or PR review comments that affect functionality:
 - **Human reviewers**: Engage in discussion when needed
   - Ask clarifying questions for ambiguous feedback
   - Provide context if disagreeing
+
+##### Step 3: Address Selected Feedback
+
+When addressing user feedback or PR review comments that affect functionality:
+
+1. **Review User Decision**: Review triage report and decide which items to address
+   - Agent will ask for decisions via AskUserQuestion
+   - Consider severity, reasoning, and effort estimates
+2. **Fix Code Issues**: Use `function-implementer` agent to implement code changes
+   - Provide specific review feedback to the agent
+   - Agent implements fixes following project guidelines
+   - Agent updates tests if needed
+3. **Fix Documentation Issues**: Use `function-docs-writer` agent for documentation changes
+   - Individual function documentation updates
+   - Category README updates
+4. **Verify Fixes**: Run validation suite
+   - `pnpm lint` - Code quality
+   - `pnpm test` - All tests pass
+   - `pnpm build` - Compilation success
+   - `pnpm lint:docs` - Documentation quality (if docs changed)
+5. **Commit Changes**: Commit code and documentation updates together
+6. **Push Update**: Push changes to update the pull request
+
+**CRITICAL**: Always use appropriate agents for fixes:
+- **Code changes** → Use `function-implementer` agent
+- **Documentation changes** → Use `function-docs-writer` agent
+- **Never fix manually** → Always delegate to specialized agents
 
 **Fix Implementation Workflow**:
 

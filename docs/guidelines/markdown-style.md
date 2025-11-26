@@ -258,7 +258,7 @@ This is some text.
 
 #### Nested Code Blocks
 
-When you need to show code blocks **inside** a code block (e.g., documenting markdown syntax or showing example output that contains code), use **4 backticks** for the outer block and **3 backticks** for the inner blocks.
+When you need to show code blocks **inside** a code block (e.g., documenting Markdown syntax or showing example output that contains code), use **4 backticks** for the outer block and **3 backticks** for the inner blocks.
 
 **❌ Incorrect (will break rendering)**:
 
