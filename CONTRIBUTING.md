@@ -1,6 +1,6 @@
 # Contributing to Chronia
 
-Thank you for your interest in contributing to Chronia! We welcome contributions from the community and are grateful for your help in making this project better.
+Thank you for your interest in contributing to Chronia! We welcome contributions from the community and are grateful for helping improve this project.
 
 Chronia is a modern, lightweight TypeScript date/time utility library designed to provide reliable, type-safe, and tree-shakable date manipulation functions for JavaScript and TypeScript developers.
 
@@ -25,8 +25,9 @@ Before you begin, ensure you have the following installed:
 ### Setup Steps
 
 ```bash
-# 1. Install pnpm (if you haven't already)
-npm install -g pnpm
+# 1. Enable Corepack (if you haven't already)
+# Corepack is a tool bundled with Node.js to manage package managers.
+corepack enable
 
 # 2. Fork the repository
 # Go to https://github.com/t0k0sh1/chronia and click "Fork"
@@ -132,12 +133,12 @@ Chronia follows the [Conventional Commits](https://www.conventionalcommits.org/)
 
 ### Scope
 
-The scope is optional but recommended. It should indicate the area of the codebase affected (e.g., `comparison`, `formatting`, `parsing`).
+The scope is optional but recommended. It should indicate the area of the codebase affected (e.g., `comparisons`, `formatting`, `parsing`).
 
 ### Examples
 
 ```text
-feat(comparison): add isFuture and isPast functions
+feat(comparisons): add isFuture and isPast functions
 
 Add two new functions for comparing dates with current time.
 - isFuture: checks if date is in the future
@@ -172,7 +173,7 @@ Add examples for yarn and bun package managers.
 ### Test File Locations
 
 - **TDD Tests**: Place unit tests in the `tests/` directory.
-- **Property-Based Tests**: If applicable, property-based tests go in `.kiro/specs/` (used for specification-driven development).
+- **Property-Based Tests**: If applicable, property-based tests go in `.kiro/specs/` (used for specification-driven development; advanced/optional—this directory is used by maintainers for structured feature development).
 
 ### Running Tests
 

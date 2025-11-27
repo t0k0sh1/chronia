@@ -34,10 +34,8 @@ Instead, please use one of the following methods:
 
 We strongly encourage you to report vulnerabilities using GitHub Security Advisories, which allows for private disclosure:
 
-1. Navigate to the [Chronia repository](https://github.com/t0k0sh1/chronia)
-2. Click on the **"Security"** tab
-3. Click **"Report a vulnerability"**
-4. Fill out the vulnerability report form
+1. Go to the [Report a Vulnerability page](https://github.com/t0k0sh1/chronia/security/advisories/new).
+2. Fill out the vulnerability report form with as much detail as possible.
 
 Using this method ensures that the vulnerability remains private until a fix is released, reducing the risk of exploitation.
 
@@ -69,8 +67,8 @@ When you report a vulnerability, here's what you can expect:
 
 Chronia employs several tools and practices to maintain security:
 
-- **Dependabot**: Automatically checks for vulnerable dependencies on a weekly basis and creates pull requests to update them.
-- **Snyk**: Continuous vulnerability scanning for known security issues in our dependencies.
+- **Dependabot**: Automatically checks for vulnerable dependencies and creates pull requests to update them. This project has Dependabot enabled for automated dependency updates.
+- **Snyk**: We are evaluating continuous vulnerability scanning for known security issues in our dependencies (not yet configured).
 - **npm Trusted Publishing**: We use OIDC-based authentication for secure, tokenless publishing to npm, reducing the risk of compromised credentials.
 
 ## Scope
