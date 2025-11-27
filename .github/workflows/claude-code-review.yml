@@ -12,8 +12,8 @@ on:
 
 jobs:
   claude-review:
-    # Skip for dependabot PRs and when CLAUDE_CODE_OAUTH_TOKEN is not available
-    if: secrets.CLAUDE_CODE_OAUTH_TOKEN != '' && github.actor != 'dependabot[bot]'
+    # Skip for dependabot PRs (secrets are not available for Dependabot)
+    if: github.actor != 'dependabot[bot]'
 
     # Optional: Filter by PR author
     # if: |
