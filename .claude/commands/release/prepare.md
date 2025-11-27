@@ -117,6 +117,33 @@ This step was previously used for commit parsing. It is now reserved for future 
 
 **Result**: The manually maintained `[Unreleased]` entries are preserved and promoted to the release version, and a fresh empty `[Unreleased]` section is created for future development.
 
+## Step 8.5: Generate RELEASE.md
+
+1. Extract the newly created version section from CHANGELOG.md:
+   ```bash
+   awk "/^## \\[$newVersion\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md > RELEASE.md
+   ```
+
+2. If extraction is empty or fails:
+   - Display warning: "Failed to extract CHANGELOG entry for RELEASE.md"
+   - Create default content:
+     ```markdown
+     # Release v{newVersion}
+
+     See CHANGELOG.md for details.
+     ```
+   - Write default content to RELEASE.md:
+     ```bash
+     echo "# Release v$newVersion\n\nSee CHANGELOG.md for details." > RELEASE.md
+     ```
+
+3. Verify RELEASE.md was created successfully:
+   ```bash
+   test -f RELEASE.md && echo "✓ RELEASE.md created" || echo "✗ RELEASE.md creation failed"
+   ```
+
+**Purpose**: This ensures RELEASE.md contains the exact content that will be published when the release is created.
+
 ## Step 9: Validation
 
 Run all validation commands in sequence:
@@ -143,7 +170,7 @@ If all validations pass:
 
 1. Stage changed files:
    ```bash
-   git add package.json CHANGELOG.md
+   git add package.json CHANGELOG.md RELEASE.md
    ```
 
 2. Create commit with message:
@@ -172,6 +199,7 @@ If all validations pass:
 
    - [x] Version bumped in package.json
    - [x] CHANGELOG.md updated
+   - [x] RELEASE.md created
    - [x] All tests passing
    - [x] Build successful
    - [ ] PR approved and merged

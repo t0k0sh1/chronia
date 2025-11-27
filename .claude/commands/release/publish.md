@@ -111,40 +111,50 @@ If user confirms:
    git push origin v{currentVersion}
    ```
 
-## Step 8: Extract CHANGELOG Entry
+## Step 8: Verify RELEASE.md
 
-1. Read `CHANGELOG.md`
-
-2. Extract section for current version using awk:
+1. Check if RELEASE.md exists in project root:
    ```bash
-   # Note: currentVersion variable should contain the version number (e.g., "1.2.3")
-   awk "/^## \\[$currentVersion\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md
+   test -f RELEASE.md && echo "exists" || echo "missing"
    ```
 
-3. Save extracted content to temporary file `/tmp/release-notes.md`
+2. If RELEASE.md exists:
+   - Read and display its content for user verification:
+     ```bash
+     cat RELEASE.md
+     ```
+   - Proceed to Step 9
 
-4. If extraction is empty or CHANGELOG.md doesn't exist:
+3. If RELEASE.md does NOT exist:
    ```
-   ⚠️  Warning: Could not extract CHANGELOG entry for v{currentVersion}
+   ❌ Error: RELEASE.md not found
 
-   Using default release notes.
-   ```
-   Create default notes:
-   ```markdown
-   Release v{currentVersion}
+   RELEASE.md should have been created during release preparation.
 
-   See CHANGELOG.md for details.
+   Possible causes:
+   - Release PR was not created with `/release:prepare`
+   - RELEASE.md was accidentally deleted
+   - Release branch was not properly merged
+
+   Solutions:
+   1. Check if release PR was merged: gh pr list --state merged
+   2. Re-run `/release:prepare` if needed
+   3. Manually create RELEASE.md with release notes:
+      awk "/^## \\[$currentVersion\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md > RELEASE.md
    ```
+   Abort execution.
+
+**Rationale**: Since `/release:prepare` now creates RELEASE.md as part of the release PR, `/release:publish` should simply use the existing file rather than regenerating it. This ensures the release notes are reviewed as part of the PR process.
 
 ## Step 9: Create GitHub Release
 
 1. Prepare gh CLI command:
-   - Base command: `gh release create v{currentVersion} --title "v{currentVersion}" --notes-file /tmp/release-notes.md`
+   - Base command: `gh release create v{currentVersion} --title "v{currentVersion}" --notes-file RELEASE.md`
    - If `isPreRelease == true`, add `--prerelease` flag
 
 2. Execute command:
    ```bash
-   gh release create v{currentVersion} --title "v{currentVersion}" --notes-file /tmp/release-notes.md [--prerelease]
+   gh release create v{currentVersion} --title "v{currentVersion}" --notes-file RELEASE.md [--prerelease]
    ```
 
 3. If command fails:
@@ -209,12 +219,17 @@ Handle these error cases:
      git push --delete origin vX.Y.Z
    ```
 
-4. **CHANGELOG entry not found**:
+4. **RELEASE.md not found**:
    ```
-   Warning: Could not extract CHANGELOG entry for vX.Y.Z
+   Error: RELEASE.md not found in project root
 
-   Continuing with default release notes.
-   You can edit the release notes on GitHub after creation.
+   RELEASE.md should exist after merging the release PR.
+
+   Check if the release PR was properly prepared:
+     gh pr list --state merged --limit 5
+
+   If needed, manually create RELEASE.md with:
+     awk "/^## \\[{currentVersion}\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md > RELEASE.md
    ```
 
 5. **GitHub CLI error**:
