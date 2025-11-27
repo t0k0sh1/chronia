@@ -411,10 +411,28 @@ Before running release commands, ensure you have:
 
 2. **Trusted Publishing** configured on npmjs:
 
-   - This project uses OIDC trusted publishing (no NPM_TOKEN required)
+   **This project uses OIDC (OpenID Connect) Trusted Publishing** - a secure, token-less authentication method that eliminates the need for long-lived `NPM_TOKEN` secrets.
+
+   **How it works:**
+   - GitHub Actions uses OIDC to prove its identity to npmjs
+   - npm verifies the workflow is running from the authorized repository and workflow file
+   - No manual token management or rotation required
+   - Enhanced security through short-lived, automatically generated credentials
+
+   **Setup required:**
    - Configure trusted publishing on npmjs: <https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools>
    - Add GitHub Actions as a trusted publisher for the `chronia` package
-   - Required settings: Repository `t0k0sh1/chronia`, Workflow file `.github/workflows/publish.yml`
+   - Required settings:
+     - **Package name**: `chronia`
+     - **Repository**: `t0k0sh1/chronia`
+     - **Workflow file**: `.github/workflows/publish.yml`
+     - **Environment**: (leave empty for default)
+
+   **Why no `NODE_AUTH_TOKEN` in workflow:**
+   - The workflow uses `id-token: write` permission (line 9 in publish.yml)
+   - GitHub automatically provides an OIDC token to the workflow
+   - `pnpm publish --provenance` authenticates using this OIDC token
+   - See workflow file for the complete configuration
 
 3. **Clean working directory** on the `main` branch:
 
@@ -454,15 +472,14 @@ You will be prompted to select a version type:
 
 1. Creates branch `release/vX.Y.Z`
 2. Updates `package.json` with new version
-3. Parses git commit history since last release tag
-4. Classifies commits by Conventional Commits format:
-   - `feat:` → CHANGELOG "Added" section
-   - `fix:` → CHANGELOG "Fixed" section
-   - `docs:` → CHANGELOG "Changed" section
-5. Updates CHANGELOG.md with new version section
+3. Reads manually maintained `[Unreleased]` section from CHANGELOG.md
+4. Promotes `[Unreleased]` content to new version section (e.g., `[1.2.3] - 2024-12-01`)
+5. Replaces `[Unreleased]` section with fresh empty template for future development
 6. Runs validation: `pnpm lint`, `pnpm lint:docs`, `pnpm build`, `pnpm test`
 7. Commits changes: `chore(release): prepare vX.Y.Z`
 8. Pushes branch and creates PR
+
+**Note**: This follows the "Keep a Changelog" philosophy where developers manually maintain the `[Unreleased]` section during development (guided by `function-docs-writer` agent), and the release command promotes that content to a versioned release.
 
 **After running:**
 

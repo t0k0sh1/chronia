@@ -62,51 +62,50 @@ If file doesn't exist, use default configuration.
    git checkout -b release/vX.Y.Z
    ```
 
-## Step 6: Parse Commit History
+## Step 6: Read Unreleased CHANGELOG Entries
 
-1. Get the last release tag:
+**Important**: This workflow follows the "Keep a Changelog" philosophy. Developers manually maintain the `[Unreleased]` section during development (guided by `function-docs-writer` agent). During release preparation, we promote that content to a versioned section.
+
+1. Read current `CHANGELOG.md`
+2. Extract the content of the `## [Unreleased]` section:
    ```bash
-   git describe --tags --abbrev=0 2>/dev/null || echo ""
+   awk '/^## \[Unreleased\]/ {flag=1; next} /^## / {flag=0} flag' CHANGELOG.md
    ```
-2. If no tag exists, use entire history (from first commit to HEAD)
-3. Parse commits from last tag to HEAD:
-   ```bash
-   git log <last_tag>..HEAD --pretty=format:"%s"
-   ```
-   (If no last tag, use just `git log HEAD --pretty=format:"%s"`)
+3. Store the extracted content (this will become the new version's content)
+4. If CHANGELOG.md doesn't exist or `[Unreleased]` section is empty:
+   - Issue a warning: "No unreleased changes found in CHANGELOG.md"
+   - Suggest: "Please ensure changes are documented in the [Unreleased] section before preparing a release"
+   - Optionally, you may still proceed with an empty release (user decision)
 
-## Step 7: Classify Commits
+## Step 7: (Reserved for Future Use)
 
-For each commit message, classify by Conventional Commits type:
-- `feat:` or `feat(...)` → "Added" section
-- `fix:` or `fix(...)` → "Fixed" section
-- `docs:` or `docs(...)` → "Changed" section
-- Other types (`chore`, `refactor`, `test`, `style`, `perf`, `ci`, `build`) → **EXCLUDE from CHANGELOG**
+This step was previously used for commit parsing. It is now reserved for future enhancements.
 
-Group commits by section (Added/Changed/Fixed).
+**Note**: If you need to supplement the CHANGELOG with commit-based entries (e.g., for changes not manually documented), you can:
+1. Parse commit history as before (git log)
+2. Classify by Conventional Commits type
+3. Add these entries to the extracted Unreleased content
+4. Clearly mark auto-generated entries for review
 
 ## Step 8: Generate CHANGELOG Entry
 
-1. Read current `CHANGELOG.md` (if exists)
-2. Read template from `.kiro/settings/templates/changelog.md`
-3. Generate new version section:
+1. Read template from `.kiro/settings/templates/changelog.md`
+2. Create new version section using the extracted `[Unreleased]` content:
    - Replace `{{VERSION}}` with new version (e.g., "1.2.3")
    - Replace `{{DATE}}` with current date (YYYY-MM-DD format)
-   - Populate sections (Added/Changed/Fixed) with classified commits
-   - Remove empty sections
-4. If CHANGELOG.md exists:
-   - Replace `## [Unreleased]` section with new version section
-   - Keep existing version sections below
-5. If CHANGELOG.md doesn't exist:
+   - Use the content extracted from `[Unreleased]` section in Step 6
+3. Update CHANGELOG.md:
+   - Replace the `## [Unreleased]` section with:
+     - New empty `## [Unreleased]` section (with empty subsections: Added/Changed/Fixed/Removed)
+     - Followed by the new version section (e.g., `## [1.2.3] - 2024-12-01`)
+   - Keep all existing version sections below
+4. If CHANGELOG.md doesn't exist:
    - Create new file using template structure
-   - Add header and Unreleased section
+   - Add header
+   - Add empty `## [Unreleased]` section
    - Add new version section
 
-Format for each commit entry:
-```markdown
-- `functionName` - Brief description (if commit mentions function)
-- Brief description (for general commits)
-```
+**Result**: The manually maintained `[Unreleased]` entries are preserved and promoted to the release version, and a fresh empty `[Unreleased]` section is created for future development.
 
 ## Step 9: Validation
 
