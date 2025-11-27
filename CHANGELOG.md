@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Removed
+
+## [0.1.12] - 2025-11-27
+
+### Added
+
 #### Comparison Functions
 - `isFuture` - Check if a date is in the future relative to current time
 - `isPast` - Check if a date is in the past relative to current time
