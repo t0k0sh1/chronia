@@ -121,21 +121,17 @@ This step was previously used for commit parsing. It is now reserved for future 
 
 1. Extract the newly created version section from CHANGELOG.md:
    ```bash
-   awk "/^## \\[$newVersion\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md > RELEASE.md
+   awk '/^## / && f {exit} /^## \['"$newVersion"'\]/ {f=1} f' CHANGELOG.md > RELEASE.md
    ```
 
-2. If extraction is empty or fails:
-   - Display warning: "Failed to extract CHANGELOG entry for RELEASE.md"
-   - Create default content:
-     ```markdown
-     # Release v{newVersion}
-
-     See CHANGELOG.md for details.
-     ```
-   - Write default content to RELEASE.md:
-     ```bash
-     echo "# Release v$newVersion\n\nSee CHANGELOG.md for details." > RELEASE.md
-     ```
+2. Check if extraction was successful and create fallback if needed:
+   ```bash
+   if [ ! -s RELEASE.md ]; then
+     echo "⚠️  Warning: Failed to extract CHANGELOG entry for RELEASE.md"
+     echo "Creating default content..."
+     printf "# Release v%s\n\nSee CHANGELOG.md for details.\n" "$newVersion" > RELEASE.md
+   fi
+   ```
 
 3. Verify RELEASE.md was created successfully:
    ```bash

@@ -126,7 +126,7 @@ If user confirms:
    - Proceed to Step 9
 
 3. If RELEASE.md does NOT exist:
-   ```
+   ```bash
    ❌ Error: RELEASE.md not found
 
    RELEASE.md should have been created during release preparation.
@@ -140,7 +140,7 @@ If user confirms:
    1. Check if release PR was merged: gh pr list --state merged
    2. Re-run `/release:prepare` if needed
    3. Manually create RELEASE.md with release notes:
-      awk "/^## \\[$currentVersion\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md > RELEASE.md
+      awk '/^## / && f {exit} /^## \['"$currentVersion"'\]/ {f=1} f' CHANGELOG.md > RELEASE.md
    ```
    Abort execution.
 
@@ -220,7 +220,7 @@ Handle these error cases:
    ```
 
 4. **RELEASE.md not found**:
-   ```
+   ```bash
    Error: RELEASE.md not found in project root
 
    RELEASE.md should exist after merging the release PR.
@@ -229,7 +229,7 @@ Handle these error cases:
      gh pr list --state merged --limit 5
 
    If needed, manually create RELEASE.md with:
-     awk "/^## \\[{currentVersion}\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md > RELEASE.md
+     awk '/^## / && f {exit} /^## \['"$currentVersion"'\]/ {f=1} f' CHANGELOG.md > RELEASE.md
    ```
 
 5. **GitHub CLI error**:
