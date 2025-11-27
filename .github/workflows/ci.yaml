@@ -37,6 +37,7 @@ jobs:
       - run: pnpm vitest run --coverage
 
       - name: Upload coverage reports to Codecov
+        if: secrets.CODECOV_TOKEN != ''
         uses: codecov/codecov-action@v5
         with:
           files: ./coverage/coverage-final.json
