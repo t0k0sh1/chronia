@@ -379,15 +379,14 @@ Reference the [`docs/`](docs/) directory when asking AI assistants for help with
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Implement your changes with clear commits
-4. Add tests for any new functionality
-5. Run checks locally:
-   - `pnpm lint` – ensure code style and quality
-   - `pnpm test` – ensure all tests pass
-   - `pnpm build` – ensure the project builds successfully
-6. Push your branch and open a pull request with a clear description
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
+
+- Development environment setup
+- Coding standards and commit conventions
+- Testing requirements
+- Pull request process
+
+For security vulnerabilities, see our [Security Policy](SECURITY.md).
 
 ## For Maintainers: Release Process
 
