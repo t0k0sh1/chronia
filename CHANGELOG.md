@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+#### Comparison Functions
+- `isFuture` - Check if a date is in the future relative to current time
+- `isPast` - Check if a date is in the past relative to current time
+- `isDate` - Check if a value is a Date object instance
+- `isExists` - Check if year, month, and day represent an existing date
+
 ### Changed
 
 ### Fixed

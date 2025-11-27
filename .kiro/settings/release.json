@@ -1,0 +1,13 @@
+{
+  "branchPrefix": "release/",
+  "tagPrefix": "v",
+  "changelog": {
+    "format": "keep-a-changelog",
+    "includedTypes": ["feat", "fix", "docs"],
+    "sections": {
+      "feat": "Added",
+      "fix": "Fixed",
+      "docs": "Changed"
+    }
+  }
+}

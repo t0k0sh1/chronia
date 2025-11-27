@@ -13,11 +13,6 @@
 
 A modern, lightweight TypeScript date/time utility library with comprehensive formatting, parsing, and manipulation capabilities.
 
-> **Note**
-> This library is currently in the **v0.1.x** stage.
-> Breaking changes may occur at any time without prior notice.
-> A stable API will be introduced starting from v1.0.0
-
 ## Overview
 
 Chronia is a modern date and time utility library for JavaScript and TypeScript.
@@ -393,6 +388,247 @@ Reference the [`docs/`](docs/) directory when asking AI assistants for help with
    - `pnpm test` – ensure all tests pass
    - `pnpm build` – ensure the project builds successfully
 6. Push your branch and open a pull request with a clear description
+
+## For Maintainers: Release Process
+
+This project uses automated release management through Claude Code slash commands and GitHub Actions.
+
+### Prerequisites
+
+Before running release commands, ensure you have:
+
+1. **GitHub CLI (gh)** installed and authenticated:
+   ```bash
+   # macOS
+   brew install gh
+
+   # Linux/Windows - see https://github.com/cli/cli#installation
+
+   # Authenticate
+   gh auth login
+   ```
+
+2. **Trusted Publishing** configured on npmjs:
+   - This project uses OIDC trusted publishing (no NPM_TOKEN required)
+   - Configure trusted publishing on npmjs: https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools
+   - Add GitHub Actions as a trusted publisher for the `chronia` package
+   - Required settings: Repository `t0k0sh1/chronia`, Workflow file `.github/workflows/publish.yml`
+
+3. **Clean working directory** on the `main` branch:
+   ```bash
+   git checkout main
+   git pull origin main
+   git status  # Should show no uncommitted changes
+   ```
+
+### Release Workflow
+
+The complete release process consists of three steps:
+
+#### Step 1: Prepare Release (`/release:prepare`)
+
+This command automates release preparation by:
+- Creating a release branch (`release/vX.Y.Z`)
+- Updating `package.json` version
+- Generating CHANGELOG.md entry from commit history
+- Running validation checks (lint, test, build)
+- Creating a pull request
+
+**Usage:**
+```bash
+/release:prepare
+```
+
+You will be prompted to select a version type:
+- **major** - Breaking changes (e.g., 1.5.0 → 2.0.0)
+- **minor** - New features (e.g., 1.5.0 → 1.6.0)
+- **patch** - Bug fixes (e.g., 1.5.0 → 1.5.1)
+
+**What happens:**
+1. Creates branch `release/vX.Y.Z`
+2. Updates `package.json` with new version
+3. Parses git commit history since last release tag
+4. Classifies commits by Conventional Commits format:
+   - `feat:` → CHANGELOG "Added" section
+   - `fix:` → CHANGELOG "Fixed" section
+   - `docs:` → CHANGELOG "Changed" section
+5. Updates CHANGELOG.md with new version section
+6. Runs validation: `pnpm lint`, `pnpm lint:docs`, `pnpm build`, `pnpm test`
+7. Commits changes: `chore(release): prepare vX.Y.Z`
+8. Pushes branch and creates PR
+
+**After running:**
+1. Review the pull request
+2. Merge the PR into `main`
+3. Proceed to Step 2
+
+#### Step 2: Publish Release (`/release:publish`)
+
+This command creates the GitHub release after verifying the version is unpublished:
+- Checks npmjs registry to prevent duplicate releases
+- Creates git tag (`vX.Y.Z`)
+- Creates GitHub release with CHANGELOG notes
+- Triggers automatic npm publishing (via GitHub Actions)
+
+**Usage:**
+```bash
+/release:publish
+```
+
+**What happens:**
+1. Reads version from `package.json`
+2. Checks if version exists on npmjs (using `pnpm view chronia@X.Y.Z`)
+3. If version already published → **Error**: "リリース準備ブランチの作成を忘れている可能性があります"
+4. If version unpublished → Prompts for confirmation
+5. Creates git tag: `vX.Y.Z`
+6. Extracts CHANGELOG entry for this version
+7. Creates GitHub release with CHANGELOG as release notes
+8. GitHub Actions automatically publishes to npmjs
+
+**Optional: Pre-release**
+
+To create a pre-release (beta, alpha, etc.):
+```bash
+/release:publish --pre-release
+```
+
+This marks the GitHub release as "pre-release" and the npm Publish Workflow will skip it.
+
+#### Step 3: Automatic npm Publishing
+
+Once the GitHub release is created, the npm Publish Workflow automatically:
+- Installs dependencies
+- Builds the package
+- Publishes to npmjs with provenance metadata
+
+**Monitoring:**
+- Check workflow status: https://github.com/t0k0sh1/chronia/actions
+- Verify npm publication: https://www.npmjs.com/package/chronia
+
+### Configuration
+
+Release behavior can be customized in `.kiro/settings/release.json`:
+
+```json
+{
+  "branchPrefix": "release/",
+  "tagPrefix": "v",
+  "changelog": {
+    "format": "keep-a-changelog",
+    "includedTypes": ["feat", "fix", "docs"],
+    "sections": {
+      "feat": "Added",
+      "fix": "Fixed",
+      "docs": "Changed"
+    }
+  }
+}
+```
+
+**Options:**
+- `branchPrefix` - Release branch name prefix (default: `"release/"`)
+- `tagPrefix` - Git tag prefix (default: `"v"`)
+- `changelog.includedTypes` - Commit types included in CHANGELOG (default: `["feat", "fix", "docs"]`)
+- `changelog.sections` - Mapping of commit types to CHANGELOG sections
+
+### Troubleshooting
+
+#### Error: "Branch release/vX.Y.Z already exists"
+
+**Cause:** A previous release preparation was interrupted or the branch was not deleted after merging.
+
+**Solution:**
+```bash
+git branch -D release/vX.Y.Z  # Delete local branch
+git push --delete origin release/vX.Y.Z  # Delete remote branch (if exists)
+```
+
+Then run `/release:prepare` again.
+
+#### Error: "Version X.Y.Z is already published on npm"
+
+**Cause:** The version in `package.json` matches a version already released on npmjs. This typically means you forgot to run `/release:prepare` or the release PR was not merged.
+
+**Solution:**
+1. Check published versions: `pnpm view chronia versions`
+2. Run `/release:prepare` to create a new release branch with incremented version
+3. Merge the release PR
+4. Run `/release:publish` again
+
+#### Error: "Tag vX.Y.Z already exists"
+
+**Cause:** A git tag with the same version already exists, possibly from a previous failed release attempt.
+
+**Solution:**
+```bash
+git tag -d vX.Y.Z  # Delete local tag
+git push --delete origin vX.Y.Z  # Delete remote tag
+```
+
+Then run `/release:publish` again.
+
+#### Error: "Validation failed" during `/release:prepare`
+
+**Cause:** Code quality checks (lint, test, build) failed.
+
+**Solution:**
+1. Review the error output to identify the failing check
+2. Fix the issues on the `main` branch
+3. Delete the release branch:
+   ```bash
+   git checkout main
+   git branch -D release/vX.Y.Z
+   ```
+4. Run `/release:prepare` again after fixes are merged
+
+#### Error: "Failed to create PR" or "Failed to create GitHub release"
+
+**Cause:** GitHub CLI authentication issue or network problem.
+
+**Solution:**
+1. Verify GitHub CLI authentication:
+   ```bash
+   gh auth status
+   gh auth login  # If not authenticated
+   ```
+2. Check network connectivity
+3. For PR creation failure: Create PR manually at `https://github.com/t0k0sh1/chronia/pull/new/release/vX.Y.Z`
+4. For release creation failure: The tag was created, so you can create the release manually via GitHub UI or by running `/release:publish` again
+
+#### npm Publish Workflow Failed
+
+**Cause:** Build failure, trusted publishing authentication issue, or npmjs service issue.
+
+**Solution:**
+1. Check workflow logs: https://github.com/t0k0sh1/chronia/actions
+2. If authentication failed:
+   - Verify trusted publishing is configured on npmjs for the `chronia` package
+   - Ensure the repository and workflow file paths match exactly
+   - Check that the workflow has `id-token: write` permission
+3. Re-trigger the workflow by editing the GitHub release (triggers re-run)
+4. Alternatively, publish manually with a token:
+   ```bash
+   pnpm build
+   npm publish --access public
+   ```
+
+### CHANGELOG Update Guidelines
+
+When using the `function-docs-writer` agent to document new functions or modifications, the agent will prompt you to update CHANGELOG.md:
+
+- **New functions** → Add to `## [Unreleased]` → `### Added` section
+- **Modified behavior** → Add to `## [Unreleased]` → `### Changed` section
+- **Bug fixes** → Add to `## [Unreleased]` → `### Fixed` section
+
+Format:
+```markdown
+## [Unreleased]
+
+### Added
+- `functionName` - Brief description
+```
+
+The `/release:prepare` command will automatically convert the `[Unreleased]` section to a versioned section (e.g., `[1.6.0] - 2024-12-01`).
 
 ## Changelog
 
