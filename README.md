@@ -398,6 +398,7 @@ This project uses automated release management through Claude Code slash command
 Before running release commands, ensure you have:
 
 1. **GitHub CLI (gh)** installed and authenticated:
+
    ```bash
    # macOS
    brew install gh
@@ -409,12 +410,14 @@ Before running release commands, ensure you have:
    ```
 
 2. **Trusted Publishing** configured on npmjs:
+
    - This project uses OIDC trusted publishing (no NPM_TOKEN required)
-   - Configure trusted publishing on npmjs: https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools
+   - Configure trusted publishing on npmjs: <https://docs.npmjs.com/generating-provenance-statements#using-third-party-package-publishing-tools>
    - Add GitHub Actions as a trusted publisher for the `chronia` package
    - Required settings: Repository `t0k0sh1/chronia`, Workflow file `.github/workflows/publish.yml`
 
 3. **Clean working directory** on the `main` branch:
+
    ```bash
    git checkout main
    git pull origin main
@@ -428,6 +431,7 @@ The complete release process consists of three steps:
 #### Step 1: Prepare Release (`/release:prepare`)
 
 This command automates release preparation by:
+
 - Creating a release branch (`release/vX.Y.Z`)
 - Updating `package.json` version
 - Generating CHANGELOG.md entry from commit history
@@ -435,16 +439,19 @@ This command automates release preparation by:
 - Creating a pull request
 
 **Usage:**
+
 ```bash
 /release:prepare
 ```
 
 You will be prompted to select a version type:
+
 - **major** - Breaking changes (e.g., 1.5.0 → 2.0.0)
 - **minor** - New features (e.g., 1.5.0 → 1.6.0)
 - **patch** - Bug fixes (e.g., 1.5.0 → 1.5.1)
 
 **What happens:**
+
 1. Creates branch `release/vX.Y.Z`
 2. Updates `package.json` with new version
 3. Parses git commit history since last release tag
@@ -458,6 +465,7 @@ You will be prompted to select a version type:
 8. Pushes branch and creates PR
 
 **After running:**
+
 1. Review the pull request
 2. Merge the PR into `main`
 3. Proceed to Step 2
@@ -465,17 +473,20 @@ You will be prompted to select a version type:
 #### Step 2: Publish Release (`/release:publish`)
 
 This command creates the GitHub release after verifying the version is unpublished:
+
 - Checks npmjs registry to prevent duplicate releases
 - Creates git tag (`vX.Y.Z`)
 - Creates GitHub release with CHANGELOG notes
 - Triggers automatic npm publishing (via GitHub Actions)
 
 **Usage:**
+
 ```bash
 /release:publish
 ```
 
 **What happens:**
+
 1. Reads version from `package.json`
 2. Checks if version exists on npmjs (using `pnpm view chronia@X.Y.Z`)
 3. If version already published → **Error**: "リリース準備ブランチの作成を忘れている可能性があります"
@@ -485,9 +496,10 @@ This command creates the GitHub release after verifying the version is unpublish
 7. Creates GitHub release with CHANGELOG as release notes
 8. GitHub Actions automatically publishes to npmjs
 
-**Optional: Pre-release**
+##### Optional: Pre-release
 
 To create a pre-release (beta, alpha, etc.):
+
 ```bash
 /release:publish --pre-release
 ```
@@ -497,13 +509,15 @@ This marks the GitHub release as "pre-release" and the npm Publish Workflow will
 #### Step 3: Automatic npm Publishing
 
 Once the GitHub release is created, the npm Publish Workflow automatically:
+
 - Installs dependencies
 - Builds the package
 - Publishes to npmjs with provenance metadata
 
 **Monitoring:**
-- Check workflow status: https://github.com/t0k0sh1/chronia/actions
-- Verify npm publication: https://www.npmjs.com/package/chronia
+
+- Check workflow status: <https://github.com/t0k0sh1/chronia/actions>
+- Verify npm publication: <https://www.npmjs.com/package/chronia>
 
 ### Configuration
 
@@ -526,6 +540,7 @@ Release behavior can be customized in `.kiro/settings/release.json`:
 ```
 
 **Options:**
+
 - `branchPrefix` - Release branch name prefix (default: `"release/"`)
 - `tagPrefix` - Git tag prefix (default: `"v"`)
 - `changelog.includedTypes` - Commit types included in CHANGELOG (default: `["feat", "fix", "docs"]`)
@@ -538,6 +553,7 @@ Release behavior can be customized in `.kiro/settings/release.json`:
 **Cause:** A previous release preparation was interrupted or the branch was not deleted after merging.
 
 **Solution:**
+
 ```bash
 git branch -D release/vX.Y.Z  # Delete local branch
 git push --delete origin release/vX.Y.Z  # Delete remote branch (if exists)
@@ -550,6 +566,7 @@ Then run `/release:prepare` again.
 **Cause:** The version in `package.json` matches a version already released on npmjs. This typically means you forgot to run `/release:prepare` or the release PR was not merged.
 
 **Solution:**
+
 1. Check published versions: `pnpm view chronia versions`
 2. Run `/release:prepare` to create a new release branch with incremented version
 3. Merge the release PR
@@ -560,6 +577,7 @@ Then run `/release:prepare` again.
 **Cause:** A git tag with the same version already exists, possibly from a previous failed release attempt.
 
 **Solution:**
+
 ```bash
 git tag -d vX.Y.Z  # Delete local tag
 git push --delete origin vX.Y.Z  # Delete remote tag
@@ -572,13 +590,16 @@ Then run `/release:publish` again.
 **Cause:** Code quality checks (lint, test, build) failed.
 
 **Solution:**
+
 1. Review the error output to identify the failing check
 2. Fix the issues on the `main` branch
 3. Delete the release branch:
+
    ```bash
    git checkout main
    git branch -D release/vX.Y.Z
    ```
+
 4. Run `/release:prepare` again after fixes are merged
 
 #### Error: "Failed to create PR" or "Failed to create GitHub release"
@@ -586,11 +607,14 @@ Then run `/release:publish` again.
 **Cause:** GitHub CLI authentication issue or network problem.
 
 **Solution:**
+
 1. Verify GitHub CLI authentication:
+
    ```bash
    gh auth status
    gh auth login  # If not authenticated
    ```
+
 2. Check network connectivity
 3. For PR creation failure: Create PR manually at `https://github.com/t0k0sh1/chronia/pull/new/release/vX.Y.Z`
 4. For release creation failure: The tag was created, so you can create the release manually via GitHub UI or by running `/release:publish` again
@@ -600,13 +624,15 @@ Then run `/release:publish` again.
 **Cause:** Build failure, trusted publishing authentication issue, or npmjs service issue.
 
 **Solution:**
-1. Check workflow logs: https://github.com/t0k0sh1/chronia/actions
+
+1. Check workflow logs: <https://github.com/t0k0sh1/chronia/actions>
 2. If authentication failed:
    - Verify trusted publishing is configured on npmjs for the `chronia` package
    - Ensure the repository and workflow file paths match exactly
    - Check that the workflow has `id-token: write` permission
 3. Re-trigger the workflow by editing the GitHub release (triggers re-run)
 4. Alternatively, publish manually with a token:
+
    ```bash
    pnpm build
    npm publish --access public
@@ -621,6 +647,7 @@ When using the `function-docs-writer` agent to document new functions or modific
 - **Bug fixes** → Add to `## [Unreleased]` → `### Fixed` section
 
 Format:
+
 ```markdown
 ## [Unreleased]
 
