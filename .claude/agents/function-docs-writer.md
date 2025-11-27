@@ -234,8 +234,7 @@ After completing function documentation, consider updating CHANGELOG.md to track
 Map commit types to CHANGELOG sections:
 - `feat:` → `### Added` section
 - `fix:` → `### Fixed` section
-- `docs:` → `### Changed` section (if documentation-only)
-- `refactor:` → `### Changed` section
+- `docs:` → `### Changed` section (only for user-facing documentation changes like API docs, README, or guides; skip internal/comment-only changes)
 
 ### Unreleased Section Structure
 

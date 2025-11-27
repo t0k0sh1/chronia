@@ -115,9 +115,10 @@ If user confirms:
 
 1. Read `CHANGELOG.md`
 
-2. Extract section for current version using awk or sed:
+2. Extract section for current version using awk:
    ```bash
-   awk '/^## \[{currentVersion}\]/ {flag=1; next} /^## / {flag=0} flag' CHANGELOG.md
+   # Note: currentVersion variable should contain the version number (e.g., "1.2.3")
+   awk "/^## \\[$currentVersion\\]/ {flag=1; next} /^## / {flag=0} flag" CHANGELOG.md
    ```
 
 3. Save extracted content to temporary file `/tmp/release-notes.md`
@@ -139,7 +140,7 @@ If user confirms:
 
 1. Prepare gh CLI command:
    - Base command: `gh release create v{currentVersion} --title "v{currentVersion}" --notes-file /tmp/release-notes.md`
-   - If `isPreRelease == true`, add `-p` flag
+   - If `isPreRelease == true`, add `--prerelease` flag
 
 2. Execute command:
    ```bash

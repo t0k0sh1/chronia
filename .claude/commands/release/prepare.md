@@ -42,25 +42,35 @@ Read `.kiro/settings/release.json` to load configuration:
 
 If file doesn't exist, use default configuration.
 
-## Step 4: Calculate New Version
+## Step 4: Calculate New Version (Pre-check)
 
 1. Read current version from `package.json`
-2. Use `pnpm version <major|minor|patch> --no-git-tag-version` to update package.json
-3. Read the new version from package.json after update
-4. Store new version as `vX.Y.Z` (e.g., "v1.2.3")
+2. Calculate the new version number based on user's selection (major/minor/patch):
+   - major: X+1.0.0 (e.g., 1.5.0 → 2.0.0)
+   - minor: X.Y+1.0 (e.g., 1.5.0 → 1.6.0)
+   - patch: X.Y.Z+1 (e.g., 1.5.0 → 1.5.1)
+3. Store new version as `vX.Y.Z` (e.g., "v1.6.0")
+4. **Do NOT modify package.json yet** - modification happens after branch creation
 
 ## Step 5: Create Release Branch
 
-1. Create branch name: `{branchPrefix}v{newVersion}` (e.g., "release/v1.2.3")
+1. Create branch name: `{branchPrefix}{newVersion}` (e.g., "release/v1.6.0")
 2. Check if branch already exists:
    ```bash
-   git rev-parse --verify release/vX.Y.Z
+   git rev-parse --verify release/vX.Y.Z 2>/dev/null
    ```
-3. If branch exists, abort with error: "Branch release/vX.Y.Z already exists. Please delete it first or use a different version."
+3. If branch exists (exit code 0), abort with error: "Branch release/vX.Y.Z already exists. Please delete it first or use a different version."
 4. Create and checkout branch:
    ```bash
    git checkout -b release/vX.Y.Z
    ```
+5. **Now on the new branch**, update package.json with new version:
+   ```bash
+   pnpm version <major|minor|patch> --no-git-tag-version
+   ```
+6. Verify the version was updated correctly
+
+**Rationale**: By creating the branch first, we ensure that if branch creation fails, the main branch's package.json remains unchanged. This prevents leaving the repository in an inconsistent state.
 
 ## Step 6: Read Unreleased CHANGELOG Entries
 
