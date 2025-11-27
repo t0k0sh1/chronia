@@ -1,7 +1,7 @@
 ---
 name: function-docs-writer
 description: Use this agent when you need to create or update documentation in the docs/functions/ directory. This includes both individual function documentation and category README files. Examples of triggering conditions:\n\n<example>\nContext: User has just implemented a new function and wants documentation generated.\nuser: "I've just finished writing the parseUserInput function in src/utils/parser.ts. Can you document it?"\nassistant: "I'll use the function-docs-writer agent to create comprehensive documentation for this function."\n<Task tool invocation to function-docs-writer agent>\n</example>\n\n<example>\nContext: User mentions they've added several new utility functions.\nuser: "I added three new helper functions in src/helpers/validation.ts - validateEmail, validatePhone, and validateAddress. These need documentation."\nassistant: "Let me use the function-docs-writer agent to generate documentation for all three validation functions according to the project's documentation guidelines."\n<Task tool invocation to function-docs-writer agent>\n</example>\n\n<example>\nContext: User wants to create a category README.\nuser: "Create a README.md for the validations category that covers all the validation functions."\nassistant: "I'll use the function-docs-writer agent to create a comprehensive category README for the validations category."\n<Task tool invocation to function-docs-writer agent>\n</example>\n\n<example>\nContext: User is working on a feature and the assistant notices undocumented functions.\nuser: "The authentication feature is complete."\nassistant: "Great! I notice there are several functions in src/auth/ that don't have documentation yet. Let me use the function-docs-writer agent to create the necessary documentation files."\n<Task tool invocation to function-docs-writer agent>\n</example>\n\nProactively suggest using this agent when:\n- New functions are implemented in the src/ directory\n- Existing functions are significantly modified\n- The user mentions completing a feature that includes new functions\n- Documentation files in docs/functions/ are missing or outdated\n- Category README files need to be created or updated
-tools: mcp__context7__resolve-library-id, mcp__context7__get-library-docs, Read, Edit, Write, TodoWrite, Glob, Grep
+tools: Read, Edit, Write, TodoWrite, Glob, Grep, mcp__Serena__list_dir, mcp__Serena__find_file, mcp__Serena__search_for_pattern, mcp__Serena__get_symbols_overview, mcp__Serena__find_symbol, mcp__Serena__find_referencing_symbols, mcp__Serena__replace_symbol_body, mcp__Serena__insert_after_symbol, mcp__Serena__insert_before_symbol, mcp__Serena__rename_symbol, mcp__Serena__write_memory, mcp__Serena__read_memory, mcp__Serena__list_memories, mcp__Serena__delete_memory, mcp__Serena__edit_memory, mcp__Serena__activate_project, mcp__Serena__get_current_config, mcp__Serena__check_onboarding_performed, mcp__Serena__onboarding, mcp__Serena__think_about_collected_information, mcp__Serena__think_about_task_adherence, mcp__Serena__think_about_whether_you_are_done, mcp__Serena__initial_instructions, mcp__Sequential_Thinking__sequentialthinking, mcp__Context7__resolve-library-id, mcp__Context7__get-library-docs
 model: sonnet
 color: purple
 ---
@@ -205,3 +205,114 @@ Your documentation files must be valid Markdown that renders correctly and follo
 - Use case guide provides clear decision-making criteria
 
 Remember: Accuracy is paramount. Your documentation will be used by developers to understand and use these functions correctly. Any errors or omissions could lead to bugs or misuse.
+
+---
+
+## CHANGELOG.md Update Guidance
+
+After completing function documentation, consider updating CHANGELOG.md to track changes for future releases.
+
+### When to Update CHANGELOG
+
+1. **New Function Created**:
+   - Add entry to `## [Unreleased]` → `### Added` section
+   - Format: `- \`functionName\` - Brief description`
+   - Example: `- \`isExists\` - Check if year, month, and day represent an existing date`
+
+2. **Function Behavior Modified**:
+   - Add entry to `## [Unreleased]` → `### Changed` section
+   - Describe what changed and why
+   - Example: `- \`isBefore\` - Updated to handle timezone differences correctly`
+
+3. **Bug Fixed**:
+   - Add entry to `## [Unreleased]` → `### Fixed` section
+   - Describe the bug and fix
+   - Example: `- \`addDays\` - Fixed incorrect calculation for month boundaries`
+
+### CHANGELOG Entry Format (Conventional Commits)
+
+Map commit types to CHANGELOG sections:
+- `feat:` → `### Added` section
+- `fix:` → `### Fixed` section
+- `docs:` → `### Changed` section (only for user-facing documentation changes like API docs, README, or guides; skip internal/comment-only changes)
+
+### Unreleased Section Structure
+
+```markdown
+## [Unreleased]
+
+### Added
+- New features go here
+
+### Changed
+- Modifications to existing features
+
+### Fixed
+- Bug fixes
+
+### Removed
+- Deprecated/removed features
+```
+
+### If CHANGELOG.md Does Not Exist
+
+Create new CHANGELOG.md following Keep a Changelog format:
+1. Add header with format explanation:
+   ```markdown
+   # Changelog
+
+   All notable changes to this project will be documented in this file.
+
+   The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+   and this project adheres to [Semantic Versioning](https://semver.org/).
+   ```
+2. Create Unreleased section with subsections (Added/Changed/Fixed/Removed)
+3. Add initial version section with current documentation
+
+### Example Workflow
+
+1. **Create/update function documentation** using Function Documentation Workflow
+2. **Determine change type**:
+   - New function → Added
+   - Modified behavior → Changed
+   - Bug fix → Fixed
+3. **Open CHANGELOG.md** (create if doesn't exist)
+4. **Add entry to appropriate Unreleased subsection**:
+   - Use function name in inline code format
+   - Write brief, clear description
+5. **Save CHANGELOG.md**
+
+### Example CHANGELOG Updates
+
+**For new function**:
+```markdown
+## [Unreleased]
+
+### Added
+- `isExists` - Check if year, month, and day represent an existing date
+- `isFuture` - Check if a date is in the future relative to current time
+```
+
+**For modified function**:
+```markdown
+## [Unreleased]
+
+### Changed
+- `isBefore` - Updated comparison logic to handle timezone-aware dates
+```
+
+**For bug fix**:
+```markdown
+## [Unreleased]
+
+### Fixed
+- `addMonths` - Fixed incorrect day calculation when adding months across year boundaries
+```
+
+### Important Notes
+
+- Keep entries concise but informative (one line per change)
+- Use consistent formatting with inline code for function names
+- Group related changes in the same subsection
+- Don't include internal refactoring or test changes (unless user-facing impact)
+- Maintain chronological order within sections (most recent first)
