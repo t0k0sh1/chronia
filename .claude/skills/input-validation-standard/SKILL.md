@@ -1,6 +1,7 @@
 ---
 name: input-validation-standard
 description: Standardizes input validation patterns for type safety and robustness using internal validator utilities. Use when validating function parameters at entry points, handling Date and number inputs, implementing type guards, or writing defensive code for edge cases.
+allowed-tools: Read,Edit,mcp__Serena__find_symbol,mcp__Serena__search_for_pattern
 ---
 
 ## Description

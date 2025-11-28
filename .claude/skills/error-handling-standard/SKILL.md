@@ -1,6 +1,7 @@
 ---
 name: error-handling-standard
 description: Defines the "no exceptions for invalid dates" philosophy and return value patterns for graceful degradation. Use when deciding return values for invalid inputs or choosing between throwing exceptions vs returning safe defaults.
+allowed-tools: Read,Edit,Grep
 ---
 
 ## Description

@@ -1,6 +1,7 @@
 ---
 name: coding-standards
 description: Enforces TypeScript coding standards and architectural patterns for the Chronia date/time library. Use when designing function signatures, implementing new functions, reviewing code for consistency, or creating JSDoc documentation for public APIs.
+allowed-tools: Read,Edit,Write,Grep,Glob,mcp__Serena__find_symbol,mcp__Serena__get_symbols_overview
 ---
 
 ## Description
