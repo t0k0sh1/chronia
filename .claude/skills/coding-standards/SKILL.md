@@ -72,9 +72,9 @@ Enforces TypeScript coding standards and architectural patterns for the Chronia 
 export function isBefore(
   a: Date | number,
   b: Date | number,
-  options?: ComparisonOptions
+  options: ComparisonOptions = {}
 ): boolean {
-  const unit = options?.unit ?? "millisecond";
+  const unit = options.unit ?? "millisecond";
   // Implementation
 }
 
@@ -167,12 +167,12 @@ export function isValid(date: Date | number): boolean {
 export function isBefore(
   a: Date | number,
   b: Date | number,
-  options?: ComparisonOptions,
+  options: ComparisonOptions = {}
 ): boolean {
   // Validate inputs early
   if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
 
-  const unit = options?.unit ?? "millisecond";
+  const unit = options.unit ?? "millisecond";
 
   // Fast path for millisecond precision (most common case)
   if (unit === "millisecond") {
@@ -246,6 +246,6 @@ export type TimeUnit =
 - **TypeScript strict mode required**: All code MUST compile with `strict: true` in tsconfig.json.
 - **No runtime dependencies**: The library must remain dependency-free for minimal bundle size.
 - **No exceptions for invalid dates**: Functions MUST return appropriate default values (false, NaN, Invalid Date) instead of throwing.
-  _See also: [error-handling-standard skill](../error-handling-standard/SKILL.md) for detailed error handling patterns._
+  _See also: [error-handling-standard skill](../error-handling-standard/SKILL.md) for detailed error-handling patterns._
 - **Modular structure enforced**: Each function MUST reside in `src/<function-name>/index.ts` with no exceptions.
 - **Breaking changes require major version**: Changing default behavior, removing options, or changing return types requires a major version bump.
