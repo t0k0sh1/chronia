@@ -122,23 +122,33 @@ export function formatDate(date: Date | number, pattern: string): string {
 }
 ```
 
-### Example 6: Exception for programming errors (NOT for invalid dates)
+### Example 6: Exception for programming errors with options validation
 
-**Context**: Only throw exceptions for configuration/option errors, never for invalid dates
+**Context**: Validating both dates and configuration options, throwing only for invalid options
 
 ```typescript
-export function formatDate(date: Date | number, pattern: string): string {
-  // Invalid date → return default, DON'T throw
-  if (!isValidDateOrNumber(date)) return "";
+type BoundsOption = "()" | "(]" | "[)" | "[]";
+
+export function isWithinInterval(
+  date: Date | number,
+  start: Date | number,
+  end: Date | number,
+  bounds: BoundsOption = "()"
+): boolean {
+  // Invalid dates → return default, DON'T throw
+  if (!isValidDateOrNumber(date) || !isValidDateOrNumber(start) || !isValidDateOrNumber(end)) {
+    return false;
+  }
 
   // Invalid option → throw with clear message
-  const validPatterns = ["YYYY-MM-DD", "DD/MM/YYYY", "MM/DD/YYYY"];
-  if (!validPatterns.includes(pattern)) {
+  const validBounds: BoundsOption[] = ["()", "(]", "[)", "[]"];
+  if (!validBounds.includes(bounds)) {
     throw new Error(
-      `Invalid pattern: expected one of ${validPatterns.join(", ")}, got "${pattern}"`
+      `Invalid bounds: expected one of ${validBounds.join(", ")}, got "${bounds}"`
     );
   }
-  // ...
+
+  // ... implementation
 }
 ```
 

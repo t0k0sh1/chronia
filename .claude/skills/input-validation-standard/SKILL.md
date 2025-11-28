@@ -47,7 +47,7 @@ Standardizes input validation patterns for type safety and robustness using inte
 ### Step 5: Handle Multiple Parameters
 
 1. For functions with multiple inputs, validate all before processing
-2. Use logical AND (`&&`) to ensure all validations pass. In early-return patterns, this is typically written as OR (`||`) of the negated validations (e.g., `if (!isValidA || !isValidB) return default;`), which is logically equivalent to `if (!(isValidA && isValidB)) return default;`
+2. Use early return with OR (`||`) of negated validations: `if (!isValidA || !isValidB) return default;`
 3. Example: `if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return default;`
 
 ### Step 6: Type Guards (Advanced)
