@@ -28,8 +28,7 @@ Defines the "no exceptions for invalid dates" philosophy and return value patter
 2. **Comparison functions** (e.g., `isBefore`, `isAfter`): Return `false` for invalid inputs
 3. **Transformation functions**:
    - Date-returning functions (e.g., `addDays`, `setMonth`): Return `new Date(NaN)` (Invalid Date) for invalid inputs
-   - String-returning functions (e.g., `formatDate`): Return empty string `""` or a safe empty value appropriate for the return type
-   - Other return types: Return a "safe empty" value appropriate for the return type (e.g., `[]` for arrays, `{}` for objects)
+   - String-returning and other return types (e.g., `formatDate`, array/object-returning functions): Return an empty string `""` or a "safe empty" value appropriate for the return type (e.g., `[]` for arrays, `{}` for objects)
 4. **Accessor functions** (e.g., `getYear`, `getMonth`): Return `NaN` for invalid inputs
 
 ### Step 3: Never Throw for Invalid Dates
