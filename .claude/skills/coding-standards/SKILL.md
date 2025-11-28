@@ -50,7 +50,7 @@ Enforces TypeScript coding standards and architectural patterns for the Chronia 
 3. **Meaningful names**: Use descriptive variable and function names that clearly communicate intent.
 4. **Avoid duplication**: Extract common logic to internal utilities in `src/_lib/`.
 
-## Tool Required
+## Tools Required
 
 - **Read**: For reading existing source files to understand patterns
 - **Edit**: For modifying existing function implementations
@@ -91,7 +91,7 @@ export type ComparisonOptions = {
 
 **Context**: Implementing a new function
 
-````typescript
+```typescript
 // src/addDays/index.ts
 import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
 
@@ -107,6 +107,9 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * addDays(new Date(2025, 0, 1), 5);
  * // Returns: 2025-01-06
  * ```
+ *
+ * @remarks
+ * If the date or amount is invalid, an Invalid Date is returned.
  */
 export function addDays(date: Date | number, amount: number): Date {
   if (!isValidDateOrNumber(date) || !isValidNumber(amount))
@@ -116,13 +119,13 @@ export function addDays(date: Date | number, amount: number): Date {
   dt.setDate(dt.getDate() + Math.trunc(amount));
   return dt;
 }
-````
+```
 
 ### Example 3: JSDoc with comprehensive documentation
 
 **Context**: Documenting a validation function
 
-````typescript
+```typescript
 /**
  * Check if the given value is a valid Date or timestamp.
  *
@@ -153,7 +156,7 @@ export function addDays(date: Date | number, amount: number): Date {
 export function isValid(date: Date | number): boolean {
   return isValidDateOrNumber(date);
 }
-````
+```
 
 ### Example 4: Performance-optimized implementation
 
@@ -165,6 +168,9 @@ export function isBefore(
   b: Date | number,
   options: ComparisonOptions = {},
 ): boolean {
+  // Validate inputs early
+  if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
+
   const unit = options?.unit ?? "millisecond";
 
   // Fast path for millisecond precision (most common case)
@@ -173,7 +179,6 @@ export function isBefore(
   }
 
   // Slower path for unit-based comparison
-  if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
   const dtA = new Date(a);
   const dtB = new Date(b);
   const aTruncated = truncateToUnit(dtA, unit);

@@ -25,7 +25,10 @@ Defines the "no exceptions for invalid dates" philosophy and return value patter
 
 1. **Validation functions** (e.g., `isValid`, `isDate`): Return `false` for invalid inputs
 2. **Comparison functions** (e.g., `isBefore`, `isAfter`): Return `false` for invalid inputs
-3. **Transformation functions** (e.g., `addDays`, `setMonth`): Return `new Date(NaN)` (Invalid Date) for invalid inputs
+3. **Transformation functions**:
+   - Date-returning functions (e.g., `addDays`, `setMonth`): Return `new Date(NaN)` (Invalid Date) for invalid inputs
+   - String-returning functions (e.g., `formatDate`): Return empty string `""` or a safe empty value appropriate for the return type
+   - Other return types: Return a "safe empty" value appropriate for the return type (e.g., `[]` for arrays, `{}` for objects)
 4. **Accessor functions** (e.g., `getYear`, `getMonth`): Return `NaN` for invalid inputs
 
 ### Step 3: Never Throw for Invalid Dates
@@ -38,7 +41,7 @@ Defines the "no exceptions for invalid dates" philosophy and return value patter
 1. When exceptions are necessary (for options/configuration errors), include valid alternatives in the message
 2. Format: `"Invalid {param}: expected one of {validOptions}, got {actual}"`
 
-## Tool Required
+## Tools Required
 
 - **Read**: For reading existing error handling patterns
 - **Edit**: For implementing return value logic
@@ -73,7 +76,7 @@ export function isBefore(a: Date | number, b: Date | number): boolean {
 
 ### Example 3: Transformation function → Return `new Date(NaN)` (Invalid Date)
 
-**Context**: Transformation functions return Invalid Date for invalid inputs
+**Context**: Transformation functions that return Date objects return Invalid Date for invalid inputs
 
 ```typescript
 export function addDays(date: Date | number, amount: number): Date {
@@ -99,7 +102,27 @@ export function getYear(date: Date | number): number {
 }
 ```
 
-### Example 5: Exception for programming errors (NOT for invalid dates)
+### Example 5: Transformation function → Return safe empty value for string
+
+**Context**: Transformation functions that return strings return empty string for invalid inputs
+
+```typescript
+export function formatDate(date: Date | number, pattern: string): string {
+  // Invalid date → return safe default, DON'T throw
+  if (!isValidDateOrNumber(date)) return ""; // ← Return empty string
+
+  // Invalid option → throw with clear message
+  const validPatterns = ["YYYY-MM-DD", "DD/MM/YYYY", "MM/DD/YYYY"];
+  if (!validPatterns.includes(pattern)) {
+    throw new Error(
+      `Invalid pattern: expected one of ${validPatterns.join(", ")}, got "${pattern}"`
+    );
+  }
+  // ... implementation
+}
+```
+
+### Example 6: Exception for programming errors (NOT for invalid dates)
 
 **Context**: Only throw exceptions for configuration/option errors, never for invalid dates
 
@@ -122,7 +145,8 @@ export function formatDate(date: Date | number, pattern: string): string {
 ## Best Practices
 
 - **Never throw for invalid dates**: Invalid Date, NaN, Infinity → always return safe defaults, never throw
-- **Consistent return values by category**: Validation/Comparison→false, Transformation→Invalid Date, Accessor→NaN
+- **Consistent return values by category**: Validation/Comparison→false, Transformation→type-appropriate safe value, Accessor→NaN
+- **Type-appropriate defaults**: Choose defaults that make sense for the return type (false, NaN, Invalid Date for dates, "" for strings, etc.)
 - **Throw only for programming errors**: Invalid options/configuration can throw with clear messages
 - **Include valid alternatives in error messages**: List valid options when throwing for configuration errors
 - **Document return behavior**: In JSDoc `@remarks`, explicitly state which invalid inputs return which defaults
@@ -139,5 +163,5 @@ export function formatDate(date: Date | number, pattern: string): string {
 ## Constraints
 
 - **No exceptions for invalid dates**: MUST NOT throw for Invalid Date, NaN, Infinity, -Infinity
-- **Category-specific defaults required**: MUST use designated defaults (validation/comparison→false, transformation→Invalid Date, accessor→NaN)
+- **Category-specific defaults required**: MUST use designated defaults (validation/comparison→false, transformation→type-appropriate safe value, accessor→NaN)
 - **Exception messages must include alternatives**: When throwing for options, MUST list valid values

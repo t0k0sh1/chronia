@@ -55,7 +55,7 @@ Standardizes input validation patterns for type safety and robustness using inte
 2. Follow the pattern in `src/_lib/validators.ts` for consistency
 3. Combine simple validators with OR/AND logic for complex validations
 
-## Tool Required
+## Tools Required
 
 - **Read**: For reading `src/_lib/validators.ts` and existing validation patterns
 - **Edit**: For implementing validation logic in functions
