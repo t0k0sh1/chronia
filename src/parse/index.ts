@@ -60,6 +60,15 @@
  * const date11 = parse("2024年1月15日", "yyyy'年'M'月'd'日'", { locale: ja });
  * // Returns: Date(2024, 0, 15)
  *
+ * // Month-only parsing with 31st reference date (day resets to 1)
+ * const refDate31 = new Date(2024, 0, 31); // Jan 31
+ * const date16 = parse("Feb", "MMM", { referenceDate: refDate31 });
+ * // Returns: Date(2024, 1, 1) - Feb 1st (NOT Mar 2nd/3rd - rollover prevented)
+ *
+ * // Explicit day parsing overrides month parser's day=1 default
+ * const date17 = parse("Feb 15", "MMM dd", { referenceDate: refDate31 });
+ * // Returns: Date(2024, 1, 15) - Feb 15th
+ *
  * // Weekday parsing (for validation, doesn't affect result)
  * const date12 = parse("Monday, 2024-01-15", "EEEE, yyyy-MM-dd");
  * // Returns: Date(2024, 0, 15)
@@ -120,6 +129,9 @@
  * - Validates arguments before processing (consistent with library patterns)
  * - Missing date components use reference date values (or current date if not specified)
  * - Time components default to 00:00:00.000 when not specified in pattern
+ * - **Month parsing resets day to 1** to prevent JavaScript Date rollover (e.g., parsing "Feb" on the 31st yields Feb 1st, not March 2nd/3rd)
+ * - Explicit day parsing (pattern contains d/dd tokens) overrides the month parser's day=1 default
+ * - Time-only parsing (no date tokens) preserves the reference date completely
  * - Literal text must be enclosed in single quotes ('text')
  * - Use '' (two single quotes) to represent a literal single quote character
  * - Pattern must match input exactly (including delimiters and spacing)
@@ -202,6 +214,7 @@ export function parse(
     year: referenceDate.getFullYear(),
     month: referenceDate.getMonth(),
     day: referenceDate.getDate(),
+    _initialDay: referenceDate.getDate(), // Track initial day value
     hours: 0,
     minutes: 0,
     seconds: 0,

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { parse } from "../src/parse";
 import { Locale } from "../src/types";
 
@@ -123,6 +123,34 @@ describe("parse", () => {
     });
   });
 
+  describe("month parsing day reset behavior", () => {
+    it("resets day to 1 when parsing month-only to prevent rollover", () => {
+      const referenceDate = new Date(2024, 0, 31); // Jan 31
+
+      // Numeric month
+      const result1 = parse("02", "MM", { referenceDate });
+      expect(result1.getMonth()).toBe(1); // February
+      expect(result1.getDate()).toBe(1);  // Day reset to 1
+
+      // Text month
+      const result2 = parse("Feb", "MMM", { referenceDate });
+      expect(result2.getMonth()).toBe(1);
+      expect(result2.getDate()).toBe(1);
+    });
+
+    it("allows explicit day to override month parser default", () => {
+      const referenceDate = new Date(2024, 0, 31);
+      const result = parse("02-15", "MM-dd", { referenceDate });
+      expect(result.getDate()).toBe(15); // Explicit day overrides
+    });
+
+    it("preserves reference date for time-only parsing", () => {
+      const referenceDate = new Date(2024, 0, 31, 0, 0, 0);
+      const result = parse("14:30", "HH:mm", { referenceDate });
+      expect(result.getDate()).toBe(31); // 31st preserved
+    });
+  });
+
   describe("weekday parsing", () => {
     it.each([
       ["Sun", "EEE"],
@@ -220,19 +248,32 @@ describe("parse", () => {
 
   describe("with localization", () => {
     const mockLocale: Locale = {
-      era: (era) => (era ? "н.э." : "до н.э."),
-      month: (month) => {
-        const months = [
+      era: {
+        narrow: ["до н.э.", "н.э."],
+        abbr: ["до н.э.", "н.э."],
+        wide: ["до нашей эры", "нашей эры"],
+      },
+      month: {
+        narrow: ["Я", "Ф", "М", "А", "М", "И", "И", "А", "С", "О", "Н", "Д"],
+        abbr: [
+          "янв", "фев", "мар", "апр", "мая", "июн",
+          "июл", "авг", "сен", "окт", "ноя", "дек",
+        ],
+        wide: [
           "января", "февраля", "марта", "апреля", "мая", "июня",
           "июля", "августа", "сентября", "октября", "ноября", "декабря",
-        ];
-        return months[month];
+        ],
       },
-      weekday: (weekday) => {
-        const weekdays = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
-        return weekdays[weekday];
+      weekday: {
+        narrow: ["В", "П", "В", "С", "Ч", "П", "С"],
+        abbr: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+        wide: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
       },
-      dayPeriod: (period) => (period === "am" ? "ДП" : "ПП"),
+      dayPeriod: {
+        narrow: ["д", "п"],
+        abbr: ["ДП", "ПП"],
+        wide: ["ДП (утро)", "ПП (вечер)"],
+      },
     };
 
     it("parses localized month names", () => {

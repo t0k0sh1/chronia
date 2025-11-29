@@ -158,6 +158,11 @@ import { Locale } from "../types";
  * - Use format() to convert Date → string, parse() to convert string → Date
  */
 export function format(date: Date, pattern: string, locale?: Locale): string {
+  // Return "Invalid Date" for invalid dates (consistent with date-fns)
+  if (isNaN(date.getTime())) {
+    return "Invalid Date";
+  }
+
   const tokens = tokenize(pattern);
   let result = "";
 
@@ -166,7 +171,17 @@ export function format(date: Date, pattern: string, locale?: Locale): string {
     if (handler) {
       result += handler(date, token, locale);
     } else {
-      result += token.replace(/''/g, "'").replace(/^'|'$/g, "");
+      // Handle escaped quotes and literal text
+      if (token === "''") {
+        // Two consecutive quotes → single quote character
+        result += "'";
+      } else if (token.startsWith("'") && token.endsWith("'")) {
+        // Literal text enclosed in quotes: remove outer quotes and unescape inner quotes
+        result += token.slice(1, -1).replace(/''/g, "'");
+      } else {
+        // Other tokens (like punctuation) are added as-is
+        result += token;
+      }
     }
   }
 

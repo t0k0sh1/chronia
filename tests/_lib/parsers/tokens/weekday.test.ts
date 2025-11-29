@@ -16,18 +16,26 @@ describe("parseWeekday", () => {
   });
 
   const mockLocale: Locale = {
-    era: () => "",
-    month: () => "",
-    weekday: (weekday, options) => {
-      const narrow = ["S", "M", "T", "W", "T", "F", "S"];
-      const abbreviated = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const wide = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-      if (options?.width === "narrow") return narrow[weekday];
-      if (options?.width === "wide") return wide[weekday];
-      return abbreviated[weekday]; // abbreviated default
+    era: {
+      narrow: ["B", "A"],
+      abbr: ["BC", "AD"],
+      wide: ["Before Christ", "Anno Domini"],
     },
-    dayPeriod: () => "",
+    month: {
+      narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+      abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      wide: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    },
+    weekday: {
+      narrow: ["S", "M", "T", "W", "T", "F", "S"],
+      abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    },
+    dayPeriod: {
+      narrow: ["a", "p"],
+      abbr: ["AM", "PM"],
+      wide: ["AM (morning)", "PM (afternoon)"],
+    },
   };
 
   describe("with localization", () => {
@@ -256,14 +264,30 @@ describe("parseWeekday", () => {
     });
 
     it("handles unknown token with locale (default case)", () => {
-      const mockLocale: Locale = {
-        era: () => "",
-        month: () => "",
-        weekday: (weekday) => ["日", "月", "火", "水", "木", "金", "土"][weekday],
-        dayPeriod: () => "",
+      const jaLocale: Locale = {
+        era: {
+          narrow: ["紀", "西"],
+          abbr: ["BC", "AD"],
+          wide: ["紀元前", "西暦"],
+        },
+        month: {
+          narrow: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+          abbr: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+          wide: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        },
+        weekday: {
+          narrow: ["日", "月", "火", "水", "木", "金", "土"],
+          abbr: ["日", "月", "火", "水", "木", "金", "土"],
+          wide: ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+        },
+        dayPeriod: {
+          narrow: ["午前", "午後"],
+          abbr: ["午前", "午後"],
+          wide: ["午前", "午後"],
+        },
       };
       const dateComponents = createDateComponents();
-      const result = parseWeekday("月", 0, "EEEEEE", mockLocale, dateComponents);
+      const result = parseWeekday("月", 0, "EEEEEE", jaLocale, dateComponents);
       expect(result).not.toBeNull();
       expect(result!.position).toBe(1);
     });

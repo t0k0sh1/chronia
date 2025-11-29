@@ -1,4 +1,5 @@
 import { Parser } from "../../../types";
+import { getMonthName } from "../../localeHelpers";
 
 export const parseMonth: Parser = (input, position, token, locale, dateComponents) => {
   // Handle numeric month formats
@@ -21,37 +22,26 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
     if (month < 1 || month > 12) return null;
 
     dateComponents.month = month - 1; // Convert to 0-based index
+    // Reset day to 1 only if day wasn't explicitly parsed
+    if (dateComponents.day === dateComponents._initialDay) {
+      dateComponents.day = 1;
+    }
     return { position: position + monthStr.length };
   }
 
   // Handle text month formats (MMM, MMMM, MMMMM)
-  if (locale && (token === "MMM" || token === "MMMM" || token === "MMMMM")) {
-    const width = token === "MMM" ? "abbreviated" : token === "MMMM" ? "wide" : "narrow";
+  if (token === "MMM" || token === "MMMM" || token === "MMMMM") {
+    const width = token === "MMM" ? "abbr" : token === "MMMM" ? "wide" : "narrow";
 
     // Try to match each month
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
-      const monthName = locale.month(monthIndex, { width });
+      const monthName = getMonthName(locale, monthIndex, width);
       if (input.startsWith(monthName, position)) {
         dateComponents.month = monthIndex;
-        return { position: position + monthName.length };
-      }
-    }
-  } else if (token === "MMM" || token === "MMMM" || token === "MMMMM") {
-    // Fallback to English month names
-    const months = {
-      MMM: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      MMMM: [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-      ],
-      MMMMM: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
-    };
-
-    const monthList = months[token as keyof typeof months];
-    for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
-      const monthName = monthList[monthIndex];
-      if (input.startsWith(monthName, position)) {
-        dateComponents.month = monthIndex;
+        // Reset day to 1 only if day wasn't explicitly parsed
+        if (dateComponents.day === dateComponents._initialDay) {
+          dateComponents.day = 1;
+        }
         return { position: position + monthName.length };
       }
     }
