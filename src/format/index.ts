@@ -109,7 +109,9 @@ import { Locale } from "../types";
  * - Use '' (two single quotes) to represent a literal single quote character
  * - Tokens are case-sensitive (e.g., 'MM' vs 'mm')
  * - Leading zeros are added based on token length (e.g., 'MM' → '01', 'M' → '1')
- * - Invalid dates produce undefined behavior
+ * - Invalid dates return the string "Invalid Date" (consistent with date-fns)
+ * - All formatting uses the Date object's local timezone (as provided by JavaScript's Date API)
+ * - No timezone conversion is performed; the formatted output reflects the Date object's timezone
  *
  * **Year Formatting:**
  * - yy: Last 2 digits of year (2024 → "24", 1999 → "99")
@@ -158,6 +160,11 @@ import { Locale } from "../types";
  * - Use format() to convert Date → string, parse() to convert string → Date
  */
 export function format(date: Date, pattern: string, locale?: Locale): string {
+  // Return "Invalid Date" for invalid dates (consistent with date-fns)
+  if (isNaN(date.getTime())) {
+    return "Invalid Date";
+  }
+
   const tokens = tokenize(pattern);
   let result = "";
 
@@ -166,7 +173,17 @@ export function format(date: Date, pattern: string, locale?: Locale): string {
     if (handler) {
       result += handler(date, token, locale);
     } else {
-      result += token.replace(/''/g, "'").replace(/^'|'$/g, "");
+      // Handle escaped quotes and literal text
+      if (token === "''") {
+        // Two consecutive quotes → single quote character
+        result += "'";
+      } else if (token.startsWith("'") && token.endsWith("'")) {
+        // Literal text enclosed in quotes: remove outer quotes and unescape inner quotes
+        result += token.slice(1, -1).replace(/''/g, "'");
+      } else {
+        // Other tokens (like punctuation) are added as-is
+        result += token;
+      }
     }
   }
 

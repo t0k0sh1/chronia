@@ -4,34 +4,25 @@ import { Locale } from "../src/types";
 
 // モック locale
 const mockLocale: Locale = {
-  era: (era, options) => {
-    if (options?.width === "narrow") return era ? "A" : "B";
-    if (options?.width === "wide") return era ? "Anno Domini" : "Before Christ";
-    return era ? "AD" : "BC";
+  era: {
+    narrow: ["B", "A"],
+    abbr: ["BC", "AD"],
+    wide: ["Before Christ", "Anno Domini"],
   },
-  month: () => "",
-  weekday: (weekday, options) => {
-    const abbreviated = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const wide = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const narrow = ["S", "M", "T", "W", "T", "F", "S"];
-
-    if (options?.width === "wide") return wide[weekday];
-    if (options?.width === "narrow") return narrow[weekday];
-    return abbreviated[weekday];
+  month: {
+    narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+    abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    wide: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
   },
-  dayPeriod: (period, options) => {
-    if (options?.width === "narrow") return period === "am" ? "a" : "p";
-    if (options?.width === "wide")
-      return period === "am" ? "ante meridiem" : "post meridiem";
-    return period === "am" ? "AM" : "PM";
+  weekday: {
+    narrow: ["S", "M", "T", "W", "T", "F", "S"],
+    abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  },
+  dayPeriod: {
+    narrow: ["a", "p"],
+    abbr: ["AM", "PM"],
+    wide: ["ante meridiem", "post meridiem"],
   },
 };
 
@@ -253,16 +244,17 @@ describe("format - second tokens", () => {
 
 describe("format - millisecond tokens", () => {
   it.each([
-    [new Date(2025, 0, 1, 12, 0, 0, 7), "S", "7"],
-    [new Date(2025, 0, 1, 12, 0, 0, 7), "SS", "07"],
+    // date-fns compatible: S = hundreds, SS = tens, SSS = full
+    [new Date(2025, 0, 1, 12, 0, 0, 7), "S", "0"], // 7ms → Math.floor(7/100) = 0
+    [new Date(2025, 0, 1, 12, 0, 0, 7), "SS", "00"], // 7ms → Math.floor(7/10) = 0 → "00"
     [new Date(2025, 0, 1, 12, 0, 0, 7), "SSS", "007"],
 
-    [new Date(2025, 0, 1, 12, 0, 0, 45), "S", "4"],
-    [new Date(2025, 0, 1, 12, 0, 0, 45), "SS", "45"],
+    [new Date(2025, 0, 1, 12, 0, 0, 45), "S", "0"], // 45ms → Math.floor(45/100) = 0
+    [new Date(2025, 0, 1, 12, 0, 0, 45), "SS", "04"], // 45ms → Math.floor(45/10) = 4 → "04"
     [new Date(2025, 0, 1, 12, 0, 0, 45), "SSS", "045"],
 
-    [new Date(2025, 0, 1, 12, 0, 0, 123), "S", "1"],
-    [new Date(2025, 0, 1, 12, 0, 0, 123), "SS", "12"],
+    [new Date(2025, 0, 1, 12, 0, 0, 123), "S", "1"], // 123ms → Math.floor(123/100) = 1
+    [new Date(2025, 0, 1, 12, 0, 0, 123), "SS", "12"], // 123ms → Math.floor(123/10) = 12
     [new Date(2025, 0, 1, 12, 0, 0, 123), "SSS", "123"],
   ])("date %s with pattern %s → %s", (date, pattern, expected) => {
     expect(format(date, pattern)).toBe(expected);

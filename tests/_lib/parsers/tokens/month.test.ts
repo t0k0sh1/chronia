@@ -16,20 +16,60 @@ describe("parseMonth", () => {
   });
 
   const mockLocale: Locale = {
-    era: () => "",
-    month: (month, options) => {
-      const months = {
-        narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
-        abbreviated: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        wide: [
-          "January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December"
-        ],
-      };
-      return months[options?.width || "abbreviated"][month];
+    era: {
+      narrow: ["B", "A"],
+      abbr: ["BC", "AD"],
+      wide: ["Before Christ", "Anno Domini"],
     },
-    weekday: () => "",
-    dayPeriod: () => "",
+    month: {
+      narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+      abbr: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+      wide: [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ],
+    },
+    weekday: {
+      narrow: ["S", "M", "T", "W", "T", "F", "S"],
+      abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      wide: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+    },
+    dayPeriod: {
+      narrow: ["a", "p"],
+      abbr: ["AM", "PM"],
+      wide: ["AM (morning)", "PM (afternoon)"],
+    },
   };
 
   describe("M pattern (single digit month)", () => {
@@ -233,6 +273,75 @@ describe("parseMonth", () => {
     });
   });
 
+  describe("case-insensitive matching", () => {
+    describe("MMM pattern (abbreviated)", () => {
+      it.each([
+        ["jan", 0],  // lowercase
+        ["JAN", 0],  // uppercase
+        ["Jan", 0],  // mixed case
+        ["feb", 1],  // lowercase
+        ["FEB", 1],  // uppercase
+        ["dec", 11], // lowercase
+        ["DEC", 11], // uppercase
+      ])("parses %s as month %d (case-insensitive)", (input, expectedMonth) => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth(input, 0, "MMM", undefined, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(3);
+        expect(dateComponents.month).toBe(expectedMonth);
+      });
+    });
+
+    describe("MMMM pattern (full name)", () => {
+      it.each([
+        ["january", 0],   // lowercase
+        ["JANUARY", 0],   // uppercase
+        ["January", 0],   // mixed case
+        ["february", 1],  // lowercase
+        ["FEBRUARY", 1],  // uppercase
+        ["december", 11], // lowercase
+        ["DECEMBER", 11], // uppercase
+      ])("parses %s as month %d (case-insensitive)", (input, expectedMonth) => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth(input, 0, "MMMM", undefined, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(input.length);
+        expect(dateComponents.month).toBe(expectedMonth);
+      });
+    });
+
+    describe("MMMMM pattern (narrow)", () => {
+      it.each([
+        ["j", 0],  // lowercase
+        ["J", 0],  // uppercase
+        ["f", 1],  // lowercase
+        ["F", 1],  // uppercase
+        ["d", 11], // lowercase
+        ["D", 11], // uppercase
+      ])("parses %s as month %d (case-insensitive)", (input, expectedMonth) => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth(input, 0, "MMMMM", undefined, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(1);
+        expect(dateComponents.month).toBe(expectedMonth);
+      });
+    });
+
+    describe("with localization", () => {
+      it("parses localized month names case-insensitively", () => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth("jan", 0, "MMM", mockLocale, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(3);
+        expect(dateComponents.month).toBe(0);
+      });
+    });
+  });
+
   describe("edge cases", () => {
     it("prefers longer matches first", () => {
       const dateComponents = createDateComponents();
@@ -244,13 +353,6 @@ describe("parseMonth", () => {
       expect(dateComponents.month).toBe(2);
     });
 
-    it("handles case sensitivity", () => {
-      const dateComponents = createDateComponents();
-      // Should not match different case without localization handling it
-      const result = parseMonth("jan", 0, "MMM", undefined, dateComponents);
-      expect(result).toBeNull();
-    });
-
     it("returns null for empty numeric string", () => {
       const dateComponents = createDateComponents();
       const result = parseMonth("abc", 0, "M", undefined, dateComponents);
@@ -258,14 +360,30 @@ describe("parseMonth", () => {
     });
 
     it("returns null when locale text format doesn't match", () => {
-      const mockLocale: Locale = {
-        era: () => "",
-        month: (month) => ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"][month],
-        weekday: () => "",
-        dayPeriod: () => "",
+      const chineseLocale: Locale = {
+        era: {
+          narrow: ["前", "公"],
+          abbr: ["公元前", "公元"],
+          wide: ["公元前", "公元"],
+        },
+        month: {
+          narrow: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+          abbr: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+          wide: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+        },
+        weekday: {
+          narrow: ["日", "一", "二", "三", "四", "五", "六"],
+          abbr: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+          wide: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+        },
+        dayPeriod: {
+          narrow: ["上", "下"],
+          abbr: ["上午", "下午"],
+          wide: ["上午", "下午"],
+        },
       };
       const dateComponents = createDateComponents();
-      const result = parseMonth("January", 0, "MMMM", mockLocale, dateComponents);
+      const result = parseMonth("January", 0, "MMMM", chineseLocale, dateComponents);
       expect(result).toBeNull();
     });
   });

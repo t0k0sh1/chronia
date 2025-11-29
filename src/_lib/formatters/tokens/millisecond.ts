@@ -1,14 +1,17 @@
 import { Formatter } from "../../../types";
 
 export const formatMillisecond: Formatter = (date, token) => {
-  const millisStr = String(date.getMilliseconds());
+  const millis = date.getMilliseconds();
   switch (token) {
     case "SSS":
-      return millisStr.padStart(3, "0");
+      return String(millis).padStart(3, "0");
     case "SS":
-      return millisStr.padStart(2, "0").slice(0, 2);
+      // date-fns: SS represents tens of milliseconds (0-99)
+      return String(Math.floor(millis / 10)).padStart(2, "0");
     case "S":
+      // date-fns: S represents hundreds of milliseconds (0-9)
+      return String(Math.floor(millis / 100));
     default:
-      return millisStr.slice(0, 1);
+      return String(Math.floor(millis / 100));
   }
 };

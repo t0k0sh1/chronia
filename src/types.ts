@@ -1,57 +1,162 @@
 /**
- * Localization interface for formatting date/time components.
+ * Width option for locale data formatting.
  *
- * Provides methods to localize various date/time components based on locale-specific formats.
- * Each method accepts an optional width parameter to control the output format:
- * - "narrow": Shortest possible representation (e.g., "M" for Monday)
- * - "abbreviated": Short form (e.g., "Mon" for Monday)
- * - "wide": Full form (e.g., "Monday")
+ * Specifies the width/length of locale-specific strings:
+ * - "narrow": Shortest possible representation (e.g., "M" for Monday, "Jan")
+ * - "abbr": Abbreviated form (e.g., "Mon" for Monday, "Jan" for January)
+ * - "wide": Full form (e.g., "Monday", "January")
+ */
+export type LocaleWidth = "narrow" | "abbr" | "wide";
+
+/**
+ * Data-driven locale structure for internationalization.
+ *
+ * Provides localized strings for date/time components indexed by value.
+ * All data is stored as readonly arrays to ensure immutability and prevent
+ * accidental modifications to locale data.
+ *
+ * The structure separates data (this type) from access logic, allowing:
+ * - Improved readability: all locale data is visible in one place
+ * - Better maintainability: data and logic are decoupled
+ * - Enhanced extensibility: new locales can be added without modifying format/parse functions
+ * - Type safety: invalid width specifications are caught at compile time
  */
 export type Locale = {
   /**
-   * Format era (BC/AD).
+   * Era names (BC/AD) indexed by era value.
    *
-   * @param era - 0 for BC (Before Christ), 1 for AD (Anno Domini)
-   * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-   * @returns Localized era string
+   * Arrays contain localized representations of eras:
+   * - Index 0: Before Christ (BC) representation
+   * - Index 1: Anno Domini (AD) representation
+   *
+   * Each width provides the appropriate verbosity level:
+   * - "narrow": Shortest form (e.g., "B" for BC, "A" for AD)
+   * - "abbr": Abbreviated form (e.g., "BC", "AD")
+   * - "wide": Full form (e.g., "Before Christ", "Anno Domini")
+   *
+   * @example
+   * ```typescript
+   * const enUS: Locale = {
+   *   era: {
+   *     narrow: ["B", "A"],
+   *     abbr: ["BC", "AD"],
+   *     wide: ["Before Christ", "Anno Domini"],
+   *   },
+   *   // ...
+   * };
+   * ```
    */
-  era: (
-    era: 0 | 1,
-    options?: { width: "narrow" | "abbreviated" | "wide" },
-  ) => string;
+  era: {
+    /** Shortest era representation (2 elements: BC, AD) */
+    narrow: readonly [string, string];
+    /** Abbreviated era representation (2 elements: BC, AD) */
+    abbr: readonly [string, string];
+    /** Full era representation (2 elements: BC, AD) */
+    wide: readonly [string, string];
+  };
+
   /**
-   * Format month name.
+   * Month names indexed by month value (0-based).
    *
-   * @param month - Month index (0-11, where 0 is January)
-   * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-   * @returns Localized month name
+   * Arrays contain localized month names for each month:
+   * - Index 0: January
+   * - Index 1: February
+   * - ... through ...
+   * - Index 11: December
+   *
+   * Each width provides the appropriate verbosity level:
+   * - "narrow": Shortest form (e.g., "J" for January, "F" for February)
+   * - "abbr": Abbreviated form (e.g., "Jan", "Feb")
+   * - "wide": Full form (e.g., "January", "February")
+   *
+   * @example
+   * ```typescript
+   * const enUS: Locale = {
+   *   month: {
+   *     narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+   *     abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+   *     wide: ["January", "February", ..., "December"],
+   *   },
+   *   // ...
+   * };
+   * ```
    */
-  month: (
-    month: number,
-    options?: { width: "narrow" | "abbreviated" | "wide" },
-  ) => string;
+  month: {
+    /** Shortest month representation (12 elements: Jan-Dec) */
+    narrow: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    /** Abbreviated month representation (12 elements: Jan-Dec) */
+    abbr: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    /** Full month representation (12 elements: Jan-Dec) */
+    wide: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+  };
+
   /**
-   * Format weekday name.
+   * Weekday names indexed by weekday value (0-based, Sunday first).
    *
-   * @param weekday - Weekday index (0-6, where 0 is Sunday)
-   * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-   * @returns Localized weekday name
+   * Arrays contain localized weekday names for each day:
+   * - Index 0: Sunday
+   * - Index 1: Monday
+   * - ... through ...
+   * - Index 6: Saturday
+   *
+   * Each width provides the appropriate verbosity level:
+   * - "narrow": Shortest form (e.g., "S" for Sunday, "M" for Monday)
+   * - "abbr": Abbreviated form (e.g., "Sun", "Mon")
+   * - "wide": Full form (e.g., "Sunday", "Monday")
+   *
+   * @example
+   * ```typescript
+   * const enUS: Locale = {
+   *   weekday: {
+   *     narrow: ["S", "M", "T", "W", "T", "F", "S"],
+   *     abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+   *     wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+   *   },
+   *   // ...
+   * };
+   * ```
    */
-  weekday: (
-    weekday: number,
-    options?: { width: "narrow" | "abbreviated" | "wide" },
-  ) => string;
+  weekday: {
+    /** Shortest weekday representation (7 elements: Sun-Sat) */
+    narrow: readonly [string, string, string, string, string, string, string];
+    /** Abbreviated weekday representation (7 elements: Sun-Sat) */
+    abbr: readonly [string, string, string, string, string, string, string];
+    /** Full weekday representation (7 elements: Sun-Sat) */
+    wide: readonly [string, string, string, string, string, string, string];
+  };
+
   /**
-   * Format day period (AM/PM).
+   * Day period names (AM/PM) indexed by period value.
    *
-   * @param period - "am" for morning, "pm" for afternoon/evening
-   * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-   * @returns Localized day period string
+   * Arrays contain localized representations of day periods:
+   * - Index 0: Morning/Ante Meridiem (AM)
+   * - Index 1: Afternoon/Evening/Post Meridiem (PM)
+   *
+   * Each width provides the appropriate verbosity level:
+   * - "narrow": Shortest form (e.g., "a" for AM, "p" for PM)
+   * - "abbr": Abbreviated form (e.g., "AM", "PM")
+   * - "wide": Full form (e.g., "AM (morning)", "PM (afternoon)")
+   *
+   * @example
+   * ```typescript
+   * const enUS: Locale = {
+   *   dayPeriod: {
+   *     narrow: ["a", "p"],
+   *     abbr: ["AM", "PM"],
+   *     wide: ["AM (morning)", "PM (afternoon)"],
+   *   },
+   *   // ...
+   * };
+   * ```
    */
-  dayPeriod: (
-    period: "am" | "pm",
-    options?: { width: "narrow" | "abbreviated" | "wide" },
-  ) => string;
+  dayPeriod: {
+    /** Shortest day period representation (2 elements: AM, PM) */
+    narrow: readonly [string, string];
+    /** Abbreviated day period representation (2 elements: AM, PM) */
+    abbr: readonly [string, string];
+    /** Full day period representation (2 elements: AM, PM) */
+    wide: readonly [string, string];
+  };
 };
 
 /**
@@ -85,6 +190,7 @@ export type DateComponents = {
   year: number;
   month: number;
   day: number;
+  _initialDay: number; // Track initial day value to detect explicit day parsing
   hours: number;
   minutes: number;
   seconds: number;

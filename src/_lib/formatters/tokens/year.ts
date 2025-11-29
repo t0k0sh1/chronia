@@ -9,7 +9,8 @@ export const formatYear: Formatter = (date, token) => {
     case "yyyy":
       return yearStr.padStart(4, "0");
     case "yyy":
-      return yearStr.slice(-3).padStart(3, "0");
+      // Unicode standard (TR35): minimum 3 digits for 'yyy' token
+      return yearStr.padStart(3, "0");
     case "yy":
       return yearStr.slice(-2).padStart(2, "0");
     case "y":

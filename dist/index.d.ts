@@ -319,55 +319,151 @@ declare function addSeconds(date: Date | number, amount: number): Date;
 declare function addYears(date: Date | number, amount: number): Date;
 
 /**
- * Localization interface for formatting date/time components.
+ * Data-driven locale structure for internationalization.
  *
- * Provides methods to localize various date/time components based on locale-specific formats.
- * Each method accepts an optional width parameter to control the output format:
- * - "narrow": Shortest possible representation (e.g., "M" for Monday)
- * - "abbreviated": Short form (e.g., "Mon" for Monday)
- * - "wide": Full form (e.g., "Monday")
+ * Provides localized strings for date/time components indexed by value.
+ * All data is stored as readonly arrays to ensure immutability and prevent
+ * accidental modifications to locale data.
+ *
+ * The structure separates data (this type) from access logic, allowing:
+ * - Improved readability: all locale data is visible in one place
+ * - Better maintainability: data and logic are decoupled
+ * - Enhanced extensibility: new locales can be added without modifying format/parse functions
+ * - Type safety: invalid width specifications are caught at compile time
  */
 type Locale = {
     /**
-     * Format era (BC/AD).
+     * Era names (BC/AD) indexed by era value.
      *
-     * @param era - 0 for BC (Before Christ), 1 for AD (Anno Domini)
-     * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-     * @returns Localized era string
+     * Arrays contain localized representations of eras:
+     * - Index 0: Before Christ (BC) representation
+     * - Index 1: Anno Domini (AD) representation
+     *
+     * Each width provides the appropriate verbosity level:
+     * - "narrow": Shortest form (e.g., "B" for BC, "A" for AD)
+     * - "abbr": Abbreviated form (e.g., "BC", "AD")
+     * - "wide": Full form (e.g., "Before Christ", "Anno Domini")
+     *
+     * @example
+     * ```typescript
+     * const enUS: Locale = {
+     *   era: {
+     *     narrow: ["B", "A"],
+     *     abbr: ["BC", "AD"],
+     *     wide: ["Before Christ", "Anno Domini"],
+     *   },
+     *   // ...
+     * };
+     * ```
      */
-    era: (era: 0 | 1, options?: {
-        width: "narrow" | "abbreviated" | "wide";
-    }) => string;
+    era: {
+        /** Shortest era representation (2 elements: BC, AD) */
+        narrow: readonly [string, string];
+        /** Abbreviated era representation (2 elements: BC, AD) */
+        abbr: readonly [string, string];
+        /** Full era representation (2 elements: BC, AD) */
+        wide: readonly [string, string];
+    };
     /**
-     * Format month name.
+     * Month names indexed by month value (0-based).
      *
-     * @param month - Month index (0-11, where 0 is January)
-     * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-     * @returns Localized month name
+     * Arrays contain localized month names for each month:
+     * - Index 0: January
+     * - Index 1: February
+     * - ... through ...
+     * - Index 11: December
+     *
+     * Each width provides the appropriate verbosity level:
+     * - "narrow": Shortest form (e.g., "J" for January, "F" for February)
+     * - "abbr": Abbreviated form (e.g., "Jan", "Feb")
+     * - "wide": Full form (e.g., "January", "February")
+     *
+     * @example
+     * ```typescript
+     * const enUS: Locale = {
+     *   month: {
+     *     narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+     *     abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+     *     wide: ["January", "February", ..., "December"],
+     *   },
+     *   // ...
+     * };
+     * ```
      */
-    month: (month: number, options?: {
-        width: "narrow" | "abbreviated" | "wide";
-    }) => string;
+    month: {
+        /** Shortest month representation (12 elements: Jan-Dec) */
+        narrow: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+        /** Abbreviated month representation (12 elements: Jan-Dec) */
+        abbr: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+        /** Full month representation (12 elements: Jan-Dec) */
+        wide: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    };
     /**
-     * Format weekday name.
+     * Weekday names indexed by weekday value (0-based, Sunday first).
      *
-     * @param weekday - Weekday index (0-6, where 0 is Sunday)
-     * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-     * @returns Localized weekday name
+     * Arrays contain localized weekday names for each day:
+     * - Index 0: Sunday
+     * - Index 1: Monday
+     * - ... through ...
+     * - Index 6: Saturday
+     *
+     * Each width provides the appropriate verbosity level:
+     * - "narrow": Shortest form (e.g., "S" for Sunday, "M" for Monday)
+     * - "abbr": Abbreviated form (e.g., "Sun", "Mon")
+     * - "wide": Full form (e.g., "Sunday", "Monday")
+     *
+     * @example
+     * ```typescript
+     * const enUS: Locale = {
+     *   weekday: {
+     *     narrow: ["S", "M", "T", "W", "T", "F", "S"],
+     *     abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+     *     wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+     *   },
+     *   // ...
+     * };
+     * ```
      */
-    weekday: (weekday: number, options?: {
-        width: "narrow" | "abbreviated" | "wide";
-    }) => string;
+    weekday: {
+        /** Shortest weekday representation (7 elements: Sun-Sat) */
+        narrow: readonly [string, string, string, string, string, string, string];
+        /** Abbreviated weekday representation (7 elements: Sun-Sat) */
+        abbr: readonly [string, string, string, string, string, string, string];
+        /** Full weekday representation (7 elements: Sun-Sat) */
+        wide: readonly [string, string, string, string, string, string, string];
+    };
     /**
-     * Format day period (AM/PM).
+     * Day period names (AM/PM) indexed by period value.
      *
-     * @param period - "am" for morning, "pm" for afternoon/evening
-     * @param options.width - Format width: "narrow", "abbreviated", or "wide"
-     * @returns Localized day period string
+     * Arrays contain localized representations of day periods:
+     * - Index 0: Morning/Ante Meridiem (AM)
+     * - Index 1: Afternoon/Evening/Post Meridiem (PM)
+     *
+     * Each width provides the appropriate verbosity level:
+     * - "narrow": Shortest form (e.g., "a" for AM, "p" for PM)
+     * - "abbr": Abbreviated form (e.g., "AM", "PM")
+     * - "wide": Full form (e.g., "AM (morning)", "PM (afternoon)")
+     *
+     * @example
+     * ```typescript
+     * const enUS: Locale = {
+     *   dayPeriod: {
+     *     narrow: ["a", "p"],
+     *     abbr: ["AM", "PM"],
+     *     wide: ["AM (morning)", "PM (afternoon)"],
+     *   },
+     *   // ...
+     * };
+     * ```
      */
-    dayPeriod: (period: "am" | "pm", options?: {
-        width: "narrow" | "abbreviated" | "wide";
-    }) => string;
+    dayPeriod: {
+        /** Shortest day period representation (2 elements: AM, PM) */
+        narrow: readonly [string, string];
+        /** Abbreviated day period representation (2 elements: AM, PM) */
+        abbr: readonly [string, string];
+        /** Full day period representation (2 elements: AM, PM) */
+        wide: readonly [string, string];
+    };
 };
 /**
  * Time unit for date/time operations.
@@ -554,7 +650,9 @@ type ComparisonOptions = {
  * - Use '' (two single quotes) to represent a literal single quote character
  * - Tokens are case-sensitive (e.g., 'MM' vs 'mm')
  * - Leading zeros are added based on token length (e.g., 'MM' → '01', 'M' → '1')
- * - Invalid dates produce undefined behavior
+ * - Invalid dates return the string "Invalid Date" (consistent with date-fns)
+ * - All formatting uses the Date object's local timezone (as provided by JavaScript's Date API)
+ * - No timezone conversion is performed; the formatted output reflects the Date object's timezone
  *
  * **Year Formatting:**
  * - yy: Last 2 digits of year (2024 → "24", 1999 → "99")
@@ -1945,6 +2043,15 @@ declare function isValid(date: Date | number): boolean;
  * const date11 = parse("2024年1月15日", "yyyy'年'M'月'd'日'", { locale: ja });
  * // Returns: Date(2024, 0, 15)
  *
+ * // Month-only parsing with 31st reference date (day resets to 1)
+ * const refDate31 = new Date(2024, 0, 31); // Jan 31
+ * const date16 = parse("Feb", "MMM", { referenceDate: refDate31 });
+ * // Returns: Date(2024, 1, 1) - Feb 1st (NOT Mar 2nd/3rd - rollover prevented)
+ *
+ * // Explicit day parsing overrides month parser's day=1 default
+ * const date17 = parse("Feb 15", "MMM dd", { referenceDate: refDate31 });
+ * // Returns: Date(2024, 1, 15) - Feb 15th
+ *
  * // Weekday parsing (for validation, doesn't affect result)
  * const date12 = parse("Monday, 2024-01-15", "EEEE, yyyy-MM-dd");
  * // Returns: Date(2024, 0, 15)
@@ -1990,21 +2097,24 @@ declare function isValid(date: Date | number): boolean;
  * @remarks
  * **Supported Parse Tokens:**
  * - **Year**: y (variable), yy (2-digit, 50-99→19XX, 00-49→20XX), yyy (3-digit), yyyy (4-digit)
- * - **Month**: M (1-12), MM (01-12), MMM (Jan/Feb/...), MMMM (January/February/...), MMMMM (J/F/M/...)
+ * - **Month**: M (1-12), MM (01-12), MMM (Jan/Feb/..., case-insensitive), MMMM (January/February/..., case-insensitive), MMMMM (J/F/M/..., case-insensitive)
  * - **Day**: d (1-31), dd (01-31)
  * - **Hour**: H (0-23), HH (00-23), h (1-12), hh (01-12)
  * - **Minute**: m (0-59), mm (00-59)
  * - **Second**: s (0-59), ss (00-59)
  * - **Millisecond**: S (0-9, ×100), SS (00-99, ×10), SSS (000-999)
  * - **Day Period**: a/aa/aaa (AM/PM, case-insensitive), aaaa (A.M./P.M.), aaaaa (a/p)
- * - **Era**: G/GG/GGG (AD/BC), GGGG (Anno Domini/Before Christ), GGGGG (A/B)
- * - **Weekday**: E/EE/EEE (Mon/Tue/...), EEEE (Monday/Tuesday/...), EEEEE (M/T/W/...)
+ * - **Era**: G/GG/GGG (AD/BC, case-insensitive), GGGG (Anno Domini/Before Christ, case-insensitive), GGGGG (A/B, case-insensitive)
+ * - **Weekday**: E/EE/EEE (Mon/Tue/..., case-insensitive), EEEE (Monday/Tuesday/..., case-insensitive), EEEEE (M/T/W/..., case-insensitive)
  * - **Day of Year**: D (1-366), DD (01-366), DDD (001-366)
  *
  * **Parsing Behavior:**
  * - Validates arguments before processing (consistent with library patterns)
  * - Missing date components use reference date values (or current date if not specified)
  * - Time components default to 00:00:00.000 when not specified in pattern
+ * - **Month parsing resets day to 1** to prevent JavaScript Date rollover (e.g., parsing "Feb" on the 31st yields Feb 1st, not March 2nd/3rd)
+ * - Explicit day parsing (pattern contains d/dd tokens) overrides the month parser's day=1 default
+ * - Time-only parsing (no date tokens) preserves the reference date completely
  * - Literal text must be enclosed in single quotes ('text')
  * - Use '' (two single quotes) to represent a literal single quote character
  * - Pattern must match input exactly (including delimiters and spacing)
@@ -2012,6 +2122,9 @@ declare function isValid(date: Date | number): boolean;
  * - No exceptions thrown - always returns a Date object (valid or invalid)
  * - Use isValid() to check if parsing succeeded
  * - Locale option enables parsing of localized month names, weekdays, and day periods
+ * - **Timezone handling**: Parsed dates are created in the local timezone (as per JavaScript's Date API)
+ * - No timezone conversion is performed; the resulting Date object uses the system's local timezone
+ * - Timezone tokens (z, Z, X, etc.) are not supported; parsed times are always interpreted as local time
  *
  * **Year Parsing:**
  * - yy: Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)

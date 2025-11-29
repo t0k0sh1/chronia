@@ -60,6 +60,15 @@
  * const date11 = parse("2024年1月15日", "yyyy'年'M'月'd'日'", { locale: ja });
  * // Returns: Date(2024, 0, 15)
  *
+ * // Month-only parsing with 31st reference date (day resets to 1)
+ * const refDate31 = new Date(2024, 0, 31); // Jan 31
+ * const date16 = parse("Feb", "MMM", { referenceDate: refDate31 });
+ * // Returns: Date(2024, 1, 1) - Feb 1st (NOT Mar 2nd/3rd - rollover prevented)
+ *
+ * // Explicit day parsing overrides month parser's day=1 default
+ * const date17 = parse("Feb 15", "MMM dd", { referenceDate: refDate31 });
+ * // Returns: Date(2024, 1, 15) - Feb 15th
+ *
  * // Weekday parsing (for validation, doesn't affect result)
  * const date12 = parse("Monday, 2024-01-15", "EEEE, yyyy-MM-dd");
  * // Returns: Date(2024, 0, 15)
@@ -105,21 +114,24 @@
  * @remarks
  * **Supported Parse Tokens:**
  * - **Year**: y (variable), yy (2-digit, 50-99→19XX, 00-49→20XX), yyy (3-digit), yyyy (4-digit)
- * - **Month**: M (1-12), MM (01-12), MMM (Jan/Feb/...), MMMM (January/February/...), MMMMM (J/F/M/...)
+ * - **Month**: M (1-12), MM (01-12), MMM (Jan/Feb/..., case-insensitive), MMMM (January/February/..., case-insensitive), MMMMM (J/F/M/..., case-insensitive)
  * - **Day**: d (1-31), dd (01-31)
  * - **Hour**: H (0-23), HH (00-23), h (1-12), hh (01-12)
  * - **Minute**: m (0-59), mm (00-59)
  * - **Second**: s (0-59), ss (00-59)
  * - **Millisecond**: S (0-9, ×100), SS (00-99, ×10), SSS (000-999)
  * - **Day Period**: a/aa/aaa (AM/PM, case-insensitive), aaaa (A.M./P.M.), aaaaa (a/p)
- * - **Era**: G/GG/GGG (AD/BC), GGGG (Anno Domini/Before Christ), GGGGG (A/B)
- * - **Weekday**: E/EE/EEE (Mon/Tue/...), EEEE (Monday/Tuesday/...), EEEEE (M/T/W/...)
+ * - **Era**: G/GG/GGG (AD/BC, case-insensitive), GGGG (Anno Domini/Before Christ, case-insensitive), GGGGG (A/B, case-insensitive)
+ * - **Weekday**: E/EE/EEE (Mon/Tue/..., case-insensitive), EEEE (Monday/Tuesday/..., case-insensitive), EEEEE (M/T/W/..., case-insensitive)
  * - **Day of Year**: D (1-366), DD (01-366), DDD (001-366)
  *
  * **Parsing Behavior:**
  * - Validates arguments before processing (consistent with library patterns)
  * - Missing date components use reference date values (or current date if not specified)
  * - Time components default to 00:00:00.000 when not specified in pattern
+ * - **Month parsing resets day to 1** to prevent JavaScript Date rollover (e.g., parsing "Feb" on the 31st yields Feb 1st, not March 2nd/3rd)
+ * - Explicit day parsing (pattern contains d/dd tokens) overrides the month parser's day=1 default
+ * - Time-only parsing (no date tokens) preserves the reference date completely
  * - Literal text must be enclosed in single quotes ('text')
  * - Use '' (two single quotes) to represent a literal single quote character
  * - Pattern must match input exactly (including delimiters and spacing)
@@ -127,6 +139,9 @@
  * - No exceptions thrown - always returns a Date object (valid or invalid)
  * - Use isValid() to check if parsing succeeded
  * - Locale option enables parsing of localized month names, weekdays, and day periods
+ * - **Timezone handling**: Parsed dates are created in the local timezone (as per JavaScript's Date API)
+ * - No timezone conversion is performed; the resulting Date object uses the system's local timezone
+ * - Timezone tokens (z, Z, X, etc.) are not supported; parsed times are always interpreted as local time
  *
  * **Year Parsing:**
  * - yy: Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)
@@ -202,6 +217,7 @@ export function parse(
     year: referenceDate.getFullYear(),
     month: referenceDate.getMonth(),
     day: referenceDate.getDate(),
+    _initialDay: referenceDate.getDate(), // Track initial day value
     hours: 0,
     minutes: 0,
     seconds: 0,

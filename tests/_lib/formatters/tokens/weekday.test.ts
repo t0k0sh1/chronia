@@ -3,26 +3,26 @@ import { formatWeekday } from "../../../../src/_lib/formatters/tokens/weekday";
 import { Locale } from "../../../../src/types";
 
 const mockLocale: Locale = {
-  era: () => "",
-  month: () => "",
-  weekday: (weekday, options) => {
-    const abbreviated = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const wide = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
-    const narrow = ["S", "M", "T", "W", "T", "F", "S"];
-
-    if (options?.width === "wide") return wide[weekday];
-    if (options?.width === "narrow") return narrow[weekday];
-    return abbreviated[weekday];
+  era: {
+    narrow: ["B", "A"],
+    abbr: ["BC", "AD"],
+    wide: ["Before Christ", "Anno Domini"],
   },
-  dayPeriod: () => "",
+  month: {
+    narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+    abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    wide: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  },
+  weekday: {
+    narrow: ["S", "M", "T", "W", "T", "F", "S"],
+    abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  },
+  dayPeriod: {
+    narrow: ["a", "p"],
+    abbr: ["AM", "PM"],
+    wide: ["AM (morning)", "PM (afternoon)"],
+  },
 };
 
 describe("formatWeekday", () => {

@@ -3,13 +3,25 @@ import { formatDayPeriod } from "../../../../src/_lib/formatters/tokens/dayPerio
 import { Locale } from "../../../../src/types";
 
 const mockLocale: Locale = {
-  era: () => "",
-  month: () => "",
-  weekday: () => "",
-  dayPeriod: (period, options) => {
-    if (options?.width === "narrow") return period === "am" ? "a" : "p";
-    if (options?.width === "wide") return period === "am" ? "午前" : "午後";
-    return period === "am" ? "AM" : "PM"; // abbreviated
+  era: {
+    narrow: ["B", "A"],
+    abbr: ["BC", "AD"],
+    wide: ["Before Christ", "Anno Domini"],
+  },
+  month: {
+    narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+    abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    wide: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+  },
+  weekday: {
+    narrow: ["S", "M", "T", "W", "T", "F", "S"],
+    abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  },
+  dayPeriod: {
+    narrow: ["a", "p"],
+    abbr: ["AM", "PM"],
+    wide: ["午前", "午後"],
   },
 };
 
@@ -24,8 +36,9 @@ describe("formatDayPeriod", () => {
     // --- localize abbreviated (a, aa, aaa) ---
     { hour: 9, token: "a", locale: mockLocale, expected: "AM" },
     { hour: 9, token: "aa", locale: mockLocale, expected: "AM" },
-    { hour: 9, token: "aaa", locale: mockLocale, expected: "AM" },
+    { hour: 9, token: "aaa", locale: mockLocale, expected: "am" }, // date-fns: lowercase for aaa
     { hour: 15, token: "a", locale: mockLocale, expected: "PM" },
+    { hour: 15, token: "aaa", locale: mockLocale, expected: "pm" }, // date-fns: lowercase for aaa
 
     // --- localize wide (aaaa) ---
     { hour: 9, token: "aaaa", locale: mockLocale, expected: "午前" },

@@ -3,9 +3,14 @@ import { formatMonth } from "../../../../src/_lib/formatters/tokens/month";
 import { Locale } from "../../../../src/types";
 
 const mockLocale: Locale = {
-  era: () => "",
-  month: (month, options) => {
-    const abbreviated = [
+  era: {
+    narrow: ["B", "A"],
+    abbr: ["BC", "AD"],
+    wide: ["Before Christ", "Anno Domini"],
+  },
+  month: {
+    narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+    abbr: [
       "Jan",
       "Feb",
       "Mar",
@@ -18,8 +23,8 @@ const mockLocale: Locale = {
       "Oct",
       "Nov",
       "Dec",
-    ];
-    const wide = [
+    ],
+    wide: [
       "January",
       "February",
       "March",
@@ -32,14 +37,26 @@ const mockLocale: Locale = {
       "October",
       "November",
       "December",
-    ];
-    const narrow = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
-    if (options?.width === "wide") return wide[month];
-    if (options?.width === "narrow") return narrow[month];
-    return abbreviated[month];
+    ],
   },
-  weekday: () => "",
-  dayPeriod: () => "",
+  weekday: {
+    narrow: ["S", "M", "T", "W", "T", "F", "S"],
+    abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    wide: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ],
+  },
+  dayPeriod: {
+    narrow: ["a", "p"],
+    abbr: ["AM", "PM"],
+    wide: ["AM (morning)", "PM (afternoon)"],
+  },
 };
 
 describe("formatMonth", () => {

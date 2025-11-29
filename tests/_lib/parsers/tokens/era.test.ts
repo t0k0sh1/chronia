@@ -16,14 +16,26 @@ describe("parseEra", () => {
   });
 
   const mockLocale: Locale = {
-    era: (era, options) => {
-      if (options?.width === "narrow") return era ? "A" : "B";
-      if (options?.width === "wide") return era ? "Anno Domini" : "Before Christ";
-      return era ? "AD" : "BC"; // abbreviated
+    era: {
+      narrow: ["B", "A"],
+      abbr: ["BC", "AD"],
+      wide: ["Before Christ", "Anno Domini"],
     },
-    month: () => "",
-    weekday: () => "",
-    dayPeriod: () => "",
+    month: {
+      narrow: [],
+      abbr: [],
+      wide: [],
+    },
+    weekday: {
+      narrow: [],
+      abbr: [],
+      wide: [],
+    },
+    dayPeriod: {
+      narrow: ["", ""],
+      abbr: ["", ""],
+      wide: ["", ""],
+    },
   };
 
   describe("with localization", () => {

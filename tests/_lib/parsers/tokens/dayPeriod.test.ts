@@ -16,13 +16,25 @@ describe("parseDayPeriod", () => {
   });
 
   const mockLocale: Locale = {
-    era: () => "",
-    month: () => "",
-    weekday: () => "",
-    dayPeriod: (period, options) => {
-      if (options?.width === "narrow") return period === "am" ? "a" : "p";
-      if (options?.width === "wide") return period === "am" ? "Morning" : "Evening";
-      return period === "am" ? "AM" : "PM"; // abbreviated
+    era: {
+      narrow: ["B", "A"],
+      abbr: ["BC", "AD"],
+      wide: ["Before Christ", "Anno Domini"],
+    },
+    month: {
+      narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+      abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      wide: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    },
+    weekday: {
+      narrow: ["S", "M", "T", "W", "T", "F", "S"],
+      abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    },
+    dayPeriod: {
+      narrow: ["a", "p"],
+      abbr: ["AM", "PM"],
+      wide: ["Morning", "Evening"],
     },
   };
 
@@ -204,13 +216,25 @@ describe("parseDayPeriod", () => {
 
     it("handles localized strings that might conflict", () => {
       const conflictLocale: Locale = {
-        era: () => "",
-        month: () => "",
-        weekday: () => "",
-        dayPeriod: (period, options) => {
-          // Intentionally create potential conflicts
-          if (options?.width === "narrow") return period === "am" ? "A" : "P";
-          return period === "am" ? "ANTE" : "POST";
+        era: {
+          narrow: ["B", "A"],
+          abbr: ["BC", "AD"],
+          wide: ["Before Christ", "Anno Domini"],
+        },
+        month: {
+          narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+          abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          wide: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        },
+        weekday: {
+          narrow: ["S", "M", "T", "W", "T", "F", "S"],
+          abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+          wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        },
+        dayPeriod: {
+          narrow: ["A", "P"],
+          abbr: ["ANTE", "POST"],
+          wide: ["ANTE", "POST"],
         },
       };
 

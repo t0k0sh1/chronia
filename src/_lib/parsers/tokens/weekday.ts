@@ -1,45 +1,34 @@
 import { Parser } from "../../../types";
+import { getWeekdayName } from "../../localeHelpers";
 
 export const parseWeekday: Parser = (input, position, token, locale, _dateComponents) => {
   // Weekday parsing doesn't affect the date components directly
   // It's mainly for validation - ensuring the parsed weekday matches the date
 
-  if (locale) {
-    const widthMap: { [key: string]: "narrow" | "abbreviated" | "wide" } = {
-      "E": "abbreviated",
-      "EE": "abbreviated",
-      "EEE": "abbreviated",
-      "EEEE": "wide",
-      "EEEEE": "narrow",
-    };
-
-    const width = widthMap[token] || "abbreviated";
-
-    // Try to match each weekday
-    for (let weekdayIndex = 0; weekdayIndex < 7; weekdayIndex++) {
-      const weekdayName = locale.weekday(weekdayIndex, { width });
-      if (input.startsWith(weekdayName, position)) {
-        // We don't set the date based on weekday, just validate it matches
-        return { position: position + weekdayName.length };
-      }
-    }
-  }
-
-  // Fallback to English weekday names
-  const weekdayFormats: { [key: string]: string[] } = {
-    "E": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    "EE": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    "EEE": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    "EEEE": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    "EEEEE": ["S", "M", "T", "W", "T", "F", "S"],
+  // Determine width based on token
+  const widthMap: { [key: string]: "narrow" | "abbr" | "wide" } = {
+    "E": "abbr",
+    "EE": "abbr",
+    "EEE": "abbr",
+    "EEEE": "wide",
+    "EEEEE": "narrow",
   };
 
-  const weekdays = weekdayFormats[token];
-  if (weekdays) {
-    for (const weekdayName of weekdays) {
-      if (input.startsWith(weekdayName, position)) {
-        return { position: position + weekdayName.length };
-      }
+  // Use default width "abbr" for unknown tokens when locale is provided
+  // Return null for unknown tokens when locale is not provided
+  const width = widthMap[token] || (locale ? "abbr" : undefined);
+
+  // Return null for unsupported tokens when no locale
+  if (!width) {
+    return null;
+  }
+
+  // Try to match each weekday
+  for (let weekdayIndex = 0; weekdayIndex < 7; weekdayIndex++) {
+    const weekdayName = getWeekdayName(locale, weekdayIndex, width);
+    if (input.startsWith(weekdayName, position)) {
+      // We don't set the date based on weekday, just validate it matches
+      return { position: position + weekdayName.length };
     }
   }
 
