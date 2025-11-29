@@ -63,8 +63,8 @@ describe("ja Locale Data Structure", () => {
 
   describe("Era names", () => {
     it("should have correct narrow era names", () => {
-      // date-fns compatible: BC/AC for narrow
-      expect(ja.era.narrow).toEqual(["BC", "AC"]);
+      // International standard: BC/AD for narrow (Anno Domini)
+      expect(ja.era.narrow).toEqual(["BC", "AD"]);
     });
 
     it("should have correct abbreviated era names", () => {

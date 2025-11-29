@@ -139,6 +139,9 @@
  * - No exceptions thrown - always returns a Date object (valid or invalid)
  * - Use isValid() to check if parsing succeeded
  * - Locale option enables parsing of localized month names, weekdays, and day periods
+ * - **Timezone handling**: Parsed dates are created in the local timezone (as per JavaScript's Date API)
+ * - No timezone conversion is performed; the resulting Date object uses the system's local timezone
+ * - Timezone tokens (z, Z, X, etc.) are not supported; parsed times are always interpreted as local time
  *
  * **Year Parsing:**
  * - yy: Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)

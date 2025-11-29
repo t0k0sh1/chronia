@@ -187,9 +187,9 @@ describe("getEraName", () => {
     });
 
     it("should work with Japanese locale (narrow)", () => {
-      // date-fns compatible values
+      // International standard values (Anno Domini)
       expect(getEraName(ja, 0, "narrow")).toBe("BC");
-      expect(getEraName(ja, 1, "narrow")).toBe("AC");
+      expect(getEraName(ja, 1, "narrow")).toBe("AD");
     });
 
     it("should work with Japanese locale (abbr)", () => {
@@ -304,6 +304,54 @@ describe("getDayPeriod", () => {
 
     it("should handle 'pm' period", () => {
       expect(getDayPeriod(enUS, "pm")).toBe("PM");
+    });
+  });
+});
+
+describe("Input validation", () => {
+  describe("getMonthName - out of range values", () => {
+    it("should fallback to January (0) for negative month values", () => {
+      expect(getMonthName(enUS, -1)).toBe("Jan");
+      expect(getMonthName(enUS, -10)).toBe("Jan");
+      expect(getMonthName(enUS, -100, "wide")).toBe("January");
+    });
+
+    it("should fallback to January (0) for month values > 11", () => {
+      expect(getMonthName(enUS, 12)).toBe("Jan");
+      expect(getMonthName(enUS, 100)).toBe("Jan");
+      expect(getMonthName(enUS, 999, "wide")).toBe("January");
+    });
+
+    it("should work correctly with valid boundary values", () => {
+      expect(getMonthName(enUS, 0)).toBe("Jan"); // January (minimum)
+      expect(getMonthName(enUS, 11)).toBe("Dec"); // December (maximum)
+    });
+
+    it("should fallback to January for NaN values", () => {
+      expect(getMonthName(enUS, NaN)).toBe("Jan");
+    });
+  });
+
+  describe("getWeekdayName - out of range values", () => {
+    it("should fallback to Sunday (0) for negative weekday values", () => {
+      expect(getWeekdayName(enUS, -1)).toBe("Sun");
+      expect(getWeekdayName(enUS, -10)).toBe("Sun");
+      expect(getWeekdayName(enUS, -100, "wide")).toBe("Sunday");
+    });
+
+    it("should fallback to Sunday (0) for weekday values > 6", () => {
+      expect(getWeekdayName(enUS, 7)).toBe("Sun");
+      expect(getWeekdayName(enUS, 100)).toBe("Sun");
+      expect(getWeekdayName(enUS, 999, "wide")).toBe("Sunday");
+    });
+
+    it("should work correctly with valid boundary values", () => {
+      expect(getWeekdayName(enUS, 0)).toBe("Sun"); // Sunday (minimum)
+      expect(getWeekdayName(enUS, 6)).toBe("Sat"); // Saturday (maximum)
+    });
+
+    it("should fallback to Sunday for NaN values", () => {
+      expect(getWeekdayName(enUS, NaN)).toBe("Sun");
     });
   });
 });

@@ -109,7 +109,9 @@ import { Locale } from "../types";
  * - Use '' (two single quotes) to represent a literal single quote character
  * - Tokens are case-sensitive (e.g., 'MM' vs 'mm')
  * - Leading zeros are added based on token length (e.g., 'MM' → '01', 'M' → '1')
- * - Invalid dates produce undefined behavior
+ * - Invalid dates return the string "Invalid Date" (consistent with date-fns)
+ * - All formatting uses the Date object's local timezone (as provided by JavaScript's Date API)
+ * - No timezone conversion is performed; the formatted output reflects the Date object's timezone
  *
  * **Year Formatting:**
  * - yy: Last 2 digits of year (2024 → "24", 1999 → "99")

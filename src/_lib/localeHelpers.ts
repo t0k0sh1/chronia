@@ -50,7 +50,10 @@ export function getMonthName(
   width: LocaleWidth = "abbr"
 ): string {
   const targetLocale = locale || defaultLocale;
-  return targetLocale.month[width][month];
+  // Validate month is within valid range [0, 11]
+  // If out of range, fallback to 0 (January) for graceful degradation
+  const validMonth = month >= 0 && month <= 11 ? month : 0;
+  return targetLocale.month[width][validMonth];
 }
 
 /**
@@ -102,7 +105,10 @@ export function getWeekdayName(
   width: LocaleWidth = "abbr"
 ): string {
   const targetLocale = locale || defaultLocale;
-  return targetLocale.weekday[width][weekday];
+  // Validate weekday is within valid range [0, 6]
+  // If out of range, fallback to 0 (Sunday) for graceful degradation
+  const validWeekday = weekday >= 0 && weekday <= 6 ? weekday : 0;
+  return targetLocale.weekday[width][validWeekday];
 }
 
 /**

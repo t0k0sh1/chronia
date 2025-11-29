@@ -33,10 +33,11 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
   if (token === "MMM" || token === "MMMM" || token === "MMMMM") {
     const width = token === "MMM" ? "abbr" : token === "MMMM" ? "wide" : "narrow";
 
-    // Try to match each month
+    // Try to match each month (case-insensitive)
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
       const monthName = getMonthName(locale, monthIndex, width);
-      if (input.startsWith(monthName, position)) {
+      const inputSlice = input.slice(position, position + monthName.length);
+      if (inputSlice.toLowerCase() === monthName.toLowerCase()) {
         dateComponents.month = monthIndex;
         // Reset day to 1 only if day wasn't explicitly parsed
         if (dateComponents.day === dateComponents._initialDay) {

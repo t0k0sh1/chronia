@@ -167,10 +167,7 @@ You can create custom locales by implementing the `Locale` type:
 ### Locale Type Definition
 
 ```typescript
-import { Locale, LocaleWidth } from 'chronia';
-
-type LocaleWidth = "narrow" | "abbr" | "wide";
-
+// Type definitions (exported from 'chronia')
 type Locale = {
   era: {
     narrow: readonly [string, string];  // BC, AD
@@ -287,11 +284,11 @@ Each array must contain the exact number of elements:
 
 ### Immutability
 
-All arrays should be marked as `readonly`:
+All arrays should be marked as `readonly` using `as const`:
 
 ```typescript
 // Correct
-narrow: readonly ["B", "A"]
+narrow: ["B", "A"] as const
 
 // Incorrect (not readonly)
 narrow: ["B", "A"]
@@ -467,7 +464,7 @@ export const enUS: Locale = {
   dayPeriod: {
     narrow: ["a", "p"],
     abbr: ["AM", "PM"],
-    wide: ["AM (morning)", "PM (afternoon)"],
+    wide: ["a.m.", "p.m."],
   },
 };
 ```
@@ -479,8 +476,8 @@ See the complete definition: [`src/i18n/ja/index.ts`](../../src/i18n/ja/index.ts
 ```typescript
 export const ja: Locale = {
   era: {
-    narrow: ["紀", "西"],
-    abbr: ["BC", "AD"],
+    narrow: ["BC", "AD"],
+    abbr: ["紀元前", "西暦"],
     wide: ["紀元前", "西暦"],
   },
   month: {

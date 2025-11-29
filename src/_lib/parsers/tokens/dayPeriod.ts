@@ -3,11 +3,14 @@ import { getDayPeriod } from "../../localeHelpers";
 
 export const parseDayPeriod: Parser = (input, position, token, locale, dateComponents) => {
   // Try AM - check longer strings first
+  // Filter out null/undefined/empty strings for defensive programming
   const amVariants = [
     getDayPeriod(locale, "am", "wide"),
     getDayPeriod(locale, "am", "abbr"),
     getDayPeriod(locale, "am", "narrow"),
-  ].sort((a, b) => b.length - a.length); // Sort by length descending
+  ]
+    .filter((variant): variant is string => Boolean(variant) && variant.length > 0)
+    .sort((a, b) => b.length - a.length); // Sort by length descending
 
   for (const amText of amVariants) {
     if (input.startsWith(amText, position)) {
@@ -17,11 +20,14 @@ export const parseDayPeriod: Parser = (input, position, token, locale, dateCompo
   }
 
   // Try PM - check longer strings first
+  // Filter out null/undefined/empty strings for defensive programming
   const pmVariants = [
     getDayPeriod(locale, "pm", "wide"),
     getDayPeriod(locale, "pm", "abbr"),
     getDayPeriod(locale, "pm", "narrow"),
-  ].sort((a, b) => b.length - a.length); // Sort by length descending
+  ]
+    .filter((variant): variant is string => Boolean(variant) && variant.length > 0)
+    .sort((a, b) => b.length - a.length); // Sort by length descending
 
   for (const pmText of pmVariants) {
     if (input.startsWith(pmText, position)) {

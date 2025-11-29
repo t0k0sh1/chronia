@@ -83,11 +83,11 @@ export type Locale = {
    */
   month: {
     /** Shortest month representation (12 elements: Jan-Dec) */
-    narrow: readonly string[];
+    narrow: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
     /** Abbreviated month representation (12 elements: Jan-Dec) */
-    abbr: readonly string[];
+    abbr: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
     /** Full month representation (12 elements: Jan-Dec) */
-    wide: readonly string[];
+    wide: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
   };
 
   /**
@@ -118,11 +118,11 @@ export type Locale = {
    */
   weekday: {
     /** Shortest weekday representation (7 elements: Sun-Sat) */
-    narrow: readonly string[];
+    narrow: readonly [string, string, string, string, string, string, string];
     /** Abbreviated weekday representation (7 elements: Sun-Sat) */
-    abbr: readonly string[];
+    abbr: readonly [string, string, string, string, string, string, string];
     /** Full weekday representation (7 elements: Sun-Sat) */
-    wide: readonly string[];
+    wide: readonly [string, string, string, string, string, string, string];
   };
 
   /**

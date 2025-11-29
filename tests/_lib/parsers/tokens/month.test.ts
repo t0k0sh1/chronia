@@ -273,6 +273,75 @@ describe("parseMonth", () => {
     });
   });
 
+  describe("case-insensitive matching", () => {
+    describe("MMM pattern (abbreviated)", () => {
+      it.each([
+        ["jan", 0],  // lowercase
+        ["JAN", 0],  // uppercase
+        ["Jan", 0],  // mixed case
+        ["feb", 1],  // lowercase
+        ["FEB", 1],  // uppercase
+        ["dec", 11], // lowercase
+        ["DEC", 11], // uppercase
+      ])("parses %s as month %d (case-insensitive)", (input, expectedMonth) => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth(input, 0, "MMM", undefined, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(3);
+        expect(dateComponents.month).toBe(expectedMonth);
+      });
+    });
+
+    describe("MMMM pattern (full name)", () => {
+      it.each([
+        ["january", 0],   // lowercase
+        ["JANUARY", 0],   // uppercase
+        ["January", 0],   // mixed case
+        ["february", 1],  // lowercase
+        ["FEBRUARY", 1],  // uppercase
+        ["december", 11], // lowercase
+        ["DECEMBER", 11], // uppercase
+      ])("parses %s as month %d (case-insensitive)", (input, expectedMonth) => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth(input, 0, "MMMM", undefined, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(input.length);
+        expect(dateComponents.month).toBe(expectedMonth);
+      });
+    });
+
+    describe("MMMMM pattern (narrow)", () => {
+      it.each([
+        ["j", 0],  // lowercase
+        ["J", 0],  // uppercase
+        ["f", 1],  // lowercase
+        ["F", 1],  // uppercase
+        ["d", 11], // lowercase
+        ["D", 11], // uppercase
+      ])("parses %s as month %d (case-insensitive)", (input, expectedMonth) => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth(input, 0, "MMMMM", undefined, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(1);
+        expect(dateComponents.month).toBe(expectedMonth);
+      });
+    });
+
+    describe("with localization", () => {
+      it("parses localized month names case-insensitively", () => {
+        const dateComponents = createDateComponents();
+        const result = parseMonth("jan", 0, "MMM", mockLocale, dateComponents);
+
+        expect(result).not.toBeNull();
+        expect(result!.position).toBe(3);
+        expect(dateComponents.month).toBe(0);
+      });
+    });
+  });
+
   describe("edge cases", () => {
     it("prefers longer matches first", () => {
       const dateComponents = createDateComponents();
@@ -282,13 +351,6 @@ describe("parseMonth", () => {
       expect(result).not.toBeNull();
       expect(result!.position).toBe(5);
       expect(dateComponents.month).toBe(2);
-    });
-
-    it("handles case sensitivity", () => {
-      const dateComponents = createDateComponents();
-      // Should not match different case without localization handling it
-      const result = parseMonth("jan", 0, "MMM", undefined, dateComponents);
-      expect(result).toBeNull();
     });
 
     it("returns null for empty numeric string", () => {

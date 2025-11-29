@@ -12,7 +12,8 @@ A modern, lightweight TypeScript date/time utility library with comprehensive fo
 - **Package Manager**: pnpm 10.23.0
 
 ## Project Structure
-```
+
+```text
 chronia/
 ├── src/              # Source code
 │   ├── _lib/        # Internal utilities (tree-shakable)

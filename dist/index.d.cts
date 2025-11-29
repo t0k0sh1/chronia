@@ -392,11 +392,11 @@ type Locale = {
      */
     month: {
         /** Shortest month representation (12 elements: Jan-Dec) */
-        narrow: readonly string[];
+        narrow: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
         /** Abbreviated month representation (12 elements: Jan-Dec) */
-        abbr: readonly string[];
+        abbr: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
         /** Full month representation (12 elements: Jan-Dec) */
-        wide: readonly string[];
+        wide: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
     };
     /**
      * Weekday names indexed by weekday value (0-based, Sunday first).
@@ -426,11 +426,11 @@ type Locale = {
      */
     weekday: {
         /** Shortest weekday representation (7 elements: Sun-Sat) */
-        narrow: readonly string[];
+        narrow: readonly [string, string, string, string, string, string, string];
         /** Abbreviated weekday representation (7 elements: Sun-Sat) */
-        abbr: readonly string[];
+        abbr: readonly [string, string, string, string, string, string, string];
         /** Full weekday representation (7 elements: Sun-Sat) */
-        wide: readonly string[];
+        wide: readonly [string, string, string, string, string, string, string];
     };
     /**
      * Day period names (AM/PM) indexed by period value.
@@ -650,7 +650,9 @@ type ComparisonOptions = {
  * - Use '' (two single quotes) to represent a literal single quote character
  * - Tokens are case-sensitive (e.g., 'MM' vs 'mm')
  * - Leading zeros are added based on token length (e.g., 'MM' → '01', 'M' → '1')
- * - Invalid dates produce undefined behavior
+ * - Invalid dates return the string "Invalid Date" (consistent with date-fns)
+ * - All formatting uses the Date object's local timezone (as provided by JavaScript's Date API)
+ * - No timezone conversion is performed; the formatted output reflects the Date object's timezone
  *
  * **Year Formatting:**
  * - yy: Last 2 digits of year (2024 → "24", 1999 → "99")
@@ -2120,6 +2122,9 @@ declare function isValid(date: Date | number): boolean;
  * - No exceptions thrown - always returns a Date object (valid or invalid)
  * - Use isValid() to check if parsing succeeded
  * - Locale option enables parsing of localized month names, weekdays, and day periods
+ * - **Timezone handling**: Parsed dates are created in the local timezone (as per JavaScript's Date API)
+ * - No timezone conversion is performed; the resulting Date object uses the system's local timezone
+ * - Timezone tokens (z, Z, X, etc.) are not supported; parsed times are always interpreted as local time
  *
  * **Year Parsing:**
  * - yy: Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)

@@ -6,11 +6,17 @@ import { Locale } from "../../types";
  * Note: In Japanese, narrow and abbreviated forms are often identical for
  * certain components (weekday, dayPeriod), which is a characteristic of
  * the language.
+ *
+ * @remarks Era Notation
+ * This locale uses "AD" (Anno Domini) for the narrow era format, following
+ * international standards (ISO, Unicode CLDR). Note that date-fns v4.1.0
+ * uses "AC" in its Japanese locale, which is non-standard. Chronia prioritizes
+ * correctness over compatibility in this case.
  */
 export const ja: Locale = {
   era: {
-    // Narrow: BC, AC (date-fns compatible)
-    narrow: ["BC", "AC"] as const,
+    // Narrow: BC, AD (international standard - Anno Domini)
+    narrow: ["BC", "AD"] as const,
     // Abbreviated: 紀元前 (Before Christ), 西暦 (Anno Domini)
     abbr: ["紀元前", "西暦"] as const,
     // Wide: 紀元前 (Before Christ), 西暦 (Anno Domini)
