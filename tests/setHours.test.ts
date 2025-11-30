@@ -1,110 +1,256 @@
 import { describe, it, expect } from "vitest";
 import { setHours } from "../src/setHours";
 
-describe("setHours", () => {
-  it.each([
-    // --- Valid cases ---
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45, 123),
-      hours: 18,
-      expected: new Date(2025, 0, 15, 18, 30, 45, 123),
-      desc: "sets hours to 18",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      hours: 0,
-      expected: new Date(2025, 0, 15, 0, 30, 45),
-      desc: "sets hours to 0 (midnight)",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      hours: 23,
-      expected: new Date(2025, 0, 15, 23, 30, 45),
-      desc: "sets hours to 23",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      hours: 12,
-      expected: new Date(2025, 0, 15, 12, 30, 45),
-      desc: "sets hours to same hour",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45, 123),
-      hours: 14.9,
-      expected: new Date(2025, 0, 15, 14, 30, 45, 123),
-      desc: "truncates fractional hours",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      hours: -1,
-      expected: new Date(2025, 0, 14, 23, 30, 45),
-      desc: "negative hours rolls back to previous day",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      hours: 24,
-      expected: new Date(2025, 0, 16, 0, 30, 45),
-      desc: "hour 24 rolls over to next day",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45),
-      hours: 48,
-      expected: new Date(2025, 0, 17, 0, 30, 45),
-      desc: "large hour value rolls over multiple days",
-    },
-    {
-      date: new Date(2025, 0, 1, 12, 30, 45),
-      hours: -25,
-      expected: new Date(2024, 11, 30, 23, 30, 45),
-      desc: "large negative hours crosses month boundary",
-    },
-    {
-      date: new Date(2025, 0, 15, 12, 30, 45).getTime(),
-      hours: 18,
-      expected: new Date(2025, 0, 15, 18, 30, 45),
-      desc: "accepts timestamp input",
-    },
+/**
+ * Test Design for setHours
+ *
+ * Function signature: setHours(date: Date | number, hours: number): Date
+ *
+ * Equivalence Partitioning:
+ * - Class 1: Valid Date object + valid hours (0-23) → Returns new Date with hours set
+ * - Class 2: Valid timestamp + valid hours (0-23) → Returns new Date with hours set
+ * - Class 3: Valid Date + hours overflow/underflow → Returns new Date with day adjusted
+ * - Class 4: Invalid Date object + valid hours → Returns Invalid Date
+ * - Class 5: Valid Date + invalid hours (NaN, Infinity, -Infinity) → Returns Invalid Date
+ *
+ * Boundary Value Analysis:
+ * - Hour boundaries: 0 (midnight), 23 (end of day)
+ * - Hour overflow: 24 (next day), -1 (previous day)
+ * - Fractional hours: Truncation behavior
+ *
+ * Immutability Requirement:
+ * - Original date must never be mutated
+ */
 
-    // --- Invalid cases ---
-    {
-      date: new Date("invalid"),
-      hours: 12,
-      expected: new Date(NaN),
-      desc: "returns Invalid Date when base is invalid",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      hours: NaN,
-      expected: new Date(NaN),
-      desc: "returns Invalid Date when hours is NaN",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      hours: Infinity,
-      expected: new Date(NaN),
-      desc: "returns Invalid Date when hours is Infinity",
-    },
-    {
-      date: new Date(2025, 0, 15),
-      hours: -Infinity,
-      expected: new Date(NaN),
-      desc: "returns Invalid Date when hours is -Infinity",
-    },
-  ])("$desc", ({ date, hours, expected }) => {
-    const result = setHours(date as Date | number, hours);
-    if (isNaN(expected.getTime())) {
-      expect(isNaN(result.getTime())).toBe(true);
-    } else {
-      expect(result.getTime()).toBe(expected.getTime());
-    }
+describe("setHours", () => {
+  describe("Equivalence Class 1: Valid Date object + valid hours", () => {
+    it("should set hours to mid-day hour", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45, 123);
+      const hours = 18;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getFullYear()).toBe(2025);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(15);
+      expect(result.getHours()).toBe(18);
+      expect(result.getMinutes()).toBe(30);
+      expect(result.getSeconds()).toBe(45);
+      expect(result.getMilliseconds()).toBe(123);
+    });
+
+    it("should set hours to 0 (midnight, boundary)", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const hours = 0;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getHours()).toBe(0);
+      expect(result.getMinutes()).toBe(30);
+      expect(result.getSeconds()).toBe(45);
+    });
+
+    it("should set hours to 23 (end of day, boundary)", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const hours = 23;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getHours()).toBe(23);
+      expect(result.getMinutes()).toBe(30);
+      expect(result.getSeconds()).toBe(45);
+    });
+
+    it("should set hours to same hour (no change)", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const hours = 12;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
+    });
+
+    it("should truncate fractional hours", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45, 123);
+      const hours = 14.9;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getHours()).toBe(14); // floor(14.9) = 14
+    });
   });
 
-  it("does not mutate the original date", () => {
-    const original = new Date(2025, 0, 15, 12, 30, 45);
-    const originalTime = original.getTime();
+  describe("Equivalence Class 2: Valid timestamp + valid hours", () => {
+    it("should accept timestamp input", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const timestamp = date.getTime();
+      const hours = 18;
 
-    setHours(original, 18);
+      // Act
+      const result = setHours(timestamp, hours);
 
-    expect(original.getTime()).toBe(originalTime);
+      // Assert
+      expect(result.getFullYear()).toBe(2025);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(15);
+      expect(result.getHours()).toBe(18);
+    });
+  });
+
+  describe("Equivalence Class 3: Valid Date + hours overflow/underflow", () => {
+    it("should handle negative hours (rolls back to previous day)", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const hours = -1;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getFullYear()).toBe(2025);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(14); // Previous day
+      expect(result.getHours()).toBe(23); // 23:30:45
+    });
+
+    it("should handle hour 24 (rolls over to next day)", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const hours = 24;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getFullYear()).toBe(2025);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(16); // Next day
+      expect(result.getHours()).toBe(0); // 00:30:45
+    });
+
+    it("should handle large hour value (rolls over multiple days)", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const hours = 48; // 2 days forward
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getFullYear()).toBe(2025);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(17); // 2 days later
+      expect(result.getHours()).toBe(0);
+    });
+
+    it("should handle large negative hours (crosses month boundary)", () => {
+      // Arrange
+      const date = new Date(2025, 0, 1, 12, 30, 45); // Jan 1, 2025
+      const hours = -25;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(11); // December
+      expect(result.getDate()).toBe(30); // Dec 30, 2024
+      expect(result.getHours()).toBe(23);
+    });
+  });
+
+  describe("Equivalence Class 4: Invalid Date object + valid hours", () => {
+    it("should return Invalid Date when base date is invalid", () => {
+      // Arrange
+      const invalidDate = new Date("invalid");
+      const hours = 12;
+
+      // Act
+      const result = setHours(invalidDate, hours);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+  });
+
+  describe("Equivalence Class 5: Valid Date + invalid hours", () => {
+    it("should return Invalid Date when hours is NaN", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15);
+      const hours = NaN;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when hours is Infinity", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15);
+      const hours = Infinity;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when hours is -Infinity", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15);
+      const hours = -Infinity;
+
+      // Act
+      const result = setHours(date, hours);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+  });
+
+  describe("Immutability: Original date must not be mutated", () => {
+    it("should not mutate the original Date object", () => {
+      // Arrange
+      const original = new Date(2025, 0, 15, 12, 30, 45);
+      const originalTime = original.getTime();
+
+      // Act
+      setHours(original, 18);
+
+      // Assert
+      expect(original.getTime()).toBe(originalTime);
+    });
+
+    it("should not mutate when input is timestamp", () => {
+      // Arrange
+      const date = new Date(2025, 0, 15, 12, 30, 45);
+      const timestamp = date.getTime();
+
+      // Act
+      const result = setHours(timestamp, 18);
+
+      // Assert
+      expect(timestamp).toBe(date.getTime()); // Timestamp is immutable by nature
+      expect(result.getHours()).toBe(18);
+    });
   });
 });
