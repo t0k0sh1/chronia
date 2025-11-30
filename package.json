@@ -44,7 +44,7 @@
     "prepublishOnly": "pnpm run clean && pnpm run build",
     "test": "vitest tests/",
     "test:pbt": "vitest .kiro/specs/**/*.pbt.test.ts",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage tests/",
     "lint": "eslint ./src",
     "lint:docs": "markdownlint-cli2 docs/**/*.md README.md"
   },
