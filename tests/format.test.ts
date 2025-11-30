@@ -27,6 +27,17 @@ const mockLocale: Locale = {
 };
 
 describe("format - year tokens", () => {
+  /**
+   * Equivalence partitioning:
+   * - AD years: 1-digit (9), 3-digit (999), 4-digit (2025), 5-digit (12345)
+   * - BC years: ISO year 0 = 1 BC, -1 = 2 BC, -999 = 1000 BC
+   * - Patterns: yyyy (4-digit padded), yy (2-digit), y (unpadded)
+   *
+   * Boundary values:
+   * - Small years: 9, 999 (padding behavior)
+   * - Large years: 12345 (exceeds 4 digits)
+   * - BC years: 0, -1, -999 (negative to positive conversion)
+   */
   it.each([
     // AD
     [2025, "yyyy", "2025"],
@@ -65,6 +76,15 @@ describe("format - year tokens", () => {
 });
 
 describe("format - month tokens", () => {
+  /**
+   * Equivalence partitioning:
+   * - Single-digit months (1-9): Test with M (no padding)
+   * - Double-digit months (10-12): Test with M and MM (with padding)
+   *
+   * Category values coverage checklist (months 1-12):
+   * ✓ 1 (January), ✓ 9 (September), ✓ 12 (December)
+   * Note: Representative values from single-digit (1, 9) and double-digit (12) ranges
+   */
   it.each([
     [new Date(2025, 0, 1), "M", "1"],
     [new Date(2025, 8, 6), "M", "9"],
@@ -357,8 +377,177 @@ describe("format - weekday tokens", () => {
 });
 
 describe("format - edge cases", () => {
-  it("returns empty string for empty pattern", () => {
-    const date = new Date(2024, 0, 15);
-    expect(format(date, "")).toBe("");
+  /**
+   * Equivalence partitioning:
+   * - Valid dates with edge patterns: Empty pattern, very long pattern
+   * - Invalid dates: Invalid Date, NaN timestamp
+   * - Boundary dates: Leap year Feb 29, year boundary, min/max dates
+   */
+
+  describe("pattern edge cases", () => {
+    it("returns empty string for empty pattern", () => {
+      const date = new Date(2024, 0, 15);
+      expect(format(date, "")).toBe("");
+    });
+
+    it("handles very long pattern", () => {
+      const date = new Date(2024, 5, 15, 14, 30, 45, 123);
+      const pattern =
+        "yyyy-MM-dd HH:mm:ss.SSS EEEE (day DDD of year) G era";
+      const result = format(date, pattern);
+      expect(result).toContain("2024");
+      expect(result).toContain("06");
+      expect(result).toContain("15");
+    });
+  });
+
+  describe("invalid input handling", () => {
+    it("returns 'Invalid Date' string for Invalid Date object", () => {
+      const invalidDate = new Date("invalid");
+      expect(format(invalidDate, "yyyy-MM-dd")).toBe("Invalid Date");
+    });
+
+    it("returns 'Invalid Date' string for Date from NaN", () => {
+      const invalidDate = new Date(NaN);
+      expect(format(invalidDate, "yyyy-MM-dd")).toBe("Invalid Date");
+    });
+
+    it("returns 'Invalid Date' string for Date from Infinity", () => {
+      const invalidDate = new Date(Infinity);
+      expect(format(invalidDate, "yyyy-MM-dd")).toBe("Invalid Date");
+    });
+
+    it("returns 'Invalid Date' string for Date from -Infinity", () => {
+      const invalidDate = new Date(-Infinity);
+      expect(format(invalidDate, "yyyy-MM-dd")).toBe("Invalid Date");
+    });
+  });
+
+  describe("boundary dates", () => {
+    it("handles leap year Feb 29", () => {
+      const leapDay = new Date(2024, 1, 29);
+      expect(format(leapDay, "yyyy-MM-dd")).toBe("2024-02-29");
+      expect(format(leapDay, "DDD")).toBe("060"); // Day 60 of year
+    });
+
+    it("handles year boundary (Dec 31 → Jan 1)", () => {
+      const lastDayOfYear = new Date(2024, 11, 31, 23, 59, 59);
+      const firstDayOfYear = new Date(2025, 0, 1, 0, 0, 0);
+
+      expect(format(lastDayOfYear, "yyyy-MM-dd HH:mm:ss")).toBe(
+        "2024-12-31 23:59:59",
+      );
+      expect(format(firstDayOfYear, "yyyy-MM-dd HH:mm:ss")).toBe(
+        "2025-01-01 00:00:00",
+      );
+    });
+
+    it("handles minimum and maximum safe dates", () => {
+      // JavaScript Date range: -8640000000000000 ~ 8640000000000000
+      const minDate = new Date(-8640000000000000);
+      const maxDate = new Date(8640000000000000);
+
+      // These should format without errors (actual values may vary)
+      const minResult = format(minDate, "yyyy");
+      const maxResult = format(maxDate, "yyyy");
+
+      expect(typeof minResult).toBe("string");
+      expect(typeof maxResult).toBe("string");
+      expect(minResult).not.toBe("Invalid Date");
+      expect(maxResult).not.toBe("Invalid Date");
+    });
+  });
+
+  /**
+   * Literal text and quote escaping (Section 1.2.3 of test-design.md)
+   *
+   * Equivalence partitioning for pattern strings:
+   * - Class 2: Literal text patterns (single-quoted text)
+   * - Class 3: Escaped quote patterns (two consecutive quotes)
+   * - Class 4: Mixed patterns (combination of above)
+   *
+   * Pattern Syntax Rules:
+   * - Literal text must be enclosed in single quotes (e.g., 'at', 'Year')
+   * - Two single quotes ('') represent a literal single quote character
+   * - Unrecognized characters outside quotes are passed through as-is
+   */
+  describe("literal text and quote escaping", () => {
+    const date = new Date(2024, 0, 15, 14, 30, 45);
+
+    describe("literal text patterns (Class 2)", () => {
+      it.each([
+        {
+          pattern: "'Year' yyyy",
+          expected: "Year 2024",
+          desc: "Simple literal text",
+        },
+        {
+          pattern: "'Month' MM",
+          expected: "Month 01",
+          desc: "Literal text with month token",
+        },
+        {
+          pattern: "yyyy 'at' HH:mm",
+          expected: "2024 at 14:30",
+          desc: "Literal text between tokens",
+        },
+      ])("$desc", ({ pattern, expected }) => {
+        expect(format(date, pattern)).toBe(expected);
+      });
+    });
+
+    describe("escaped quote patterns (Class 3)", () => {
+      it.each([
+        {
+          pattern: "yyyy''MM''dd",
+          expected: "2024'01'15",
+          desc: "Escaped quotes between tokens",
+        },
+        {
+          pattern: "''yyyy''",
+          expected: "'2024'",
+          desc: "Escaped quotes at boundaries",
+        },
+        {
+          pattern: "HH''mm''ss",
+          expected: "14'30'45",
+          desc: "Multiple escaped quotes",
+        },
+      ])("$desc", ({ pattern, expected }) => {
+        expect(format(date, pattern)).toBe(expected);
+      });
+    });
+
+    describe("mixed patterns (Class 4)", () => {
+      it.each([
+        {
+          pattern: "'It''s' yyyy",
+          expected: "It's 2024",
+          desc: "Literal with escaped quote",
+        },
+        {
+          pattern: "'Today''s date:' yyyy-MM-dd",
+          expected: "Today's date: 2024-01-15",
+          desc: "Complex literal with escaped quote and tokens",
+        },
+        {
+          pattern: "'Year' yyyy', Month' MM",
+          expected: "Year 2024, Month 01",
+          desc: "Multiple literals in one pattern",
+        },
+      ])("$desc", ({ pattern, expected }) => {
+        expect(format(date, pattern)).toBe(expected);
+      });
+
+      it("handles consecutive escaped quotes", () => {
+        expect(format(date, "yyyy''''MM")).toBe("2024''01");
+      });
+
+      it("handles complex real-world format", () => {
+        expect(format(date, "EEEE, MMMM dd, yyyy 'at' h:mm a")).toBe(
+          "Monday, January 15, 2024 at 2:30 PM",
+        );
+      });
+    });
   });
 });
