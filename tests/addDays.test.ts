@@ -394,4 +394,61 @@ describe("addDays", () => {
       expect(result.getMilliseconds()).toBe(123);
     });
   });
+
+  describe("Type validation: Invalid date argument types", () => {
+    it("should return Invalid Date when date is null", () => {
+      // Arrange
+      const invalidInput = null;
+
+      // Act
+      const result = addDays(invalidInput as any, 1);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when date is undefined", () => {
+      // Arrange
+      const invalidInput = undefined;
+
+      // Act
+      const result = addDays(invalidInput as any, 1);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when date is boolean", () => {
+      // Arrange
+      const invalidInput = true;
+
+      // Act
+      const result = addDays(invalidInput as any, 1);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when date is object", () => {
+      // Arrange
+      const invalidInput = {};
+
+      // Act
+      const result = addDays(invalidInput as any, 1);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when date is array", () => {
+      // Arrange
+      const invalidInput = [];
+
+      // Act
+      const result = addDays(invalidInput as any, 1);
+
+      // Assert
+      expect(isNaN(result.getTime())).toBe(true);
+    });
+  });
 });

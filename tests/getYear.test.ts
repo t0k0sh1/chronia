@@ -88,7 +88,7 @@ describe("getYear", () => {
       const result = getYear(timestamp);
 
       // Assert
-      expect(result).toBe(1970);
+      expect(result).toBe(new Date(0).getFullYear()); // Local year (timezone-agnostic)
     });
 
     it("should accept positive timestamp", () => {

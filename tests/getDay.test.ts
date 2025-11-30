@@ -88,7 +88,7 @@ describe("getDay", () => {
       const result = getDay(timestamp);
 
       // Assert
-      expect(result).toBe(1); // January 1st
+      expect(result).toBe(new Date(0).getDate()); // Local day (timezone-agnostic)
     });
 
     it("should accept positive timestamp", () => {
