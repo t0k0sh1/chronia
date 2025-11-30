@@ -486,11 +486,6 @@ describe("format - edge cases", () => {
           expected: "Month 01",
           desc: "Literal text with month token",
         },
-        {
-          pattern: "yyyy 'at' HH:mm",
-          expected: "2024 at 14:30",
-          desc: "Literal text between tokens",
-        },
       ])("$desc", ({ pattern, expected }) => {
         expect(format(date, pattern)).toBe(expected);
       });
@@ -521,6 +516,11 @@ describe("format - edge cases", () => {
     describe("mixed patterns (Class 4)", () => {
       it.each([
         {
+          pattern: "yyyy 'at' HH:mm",
+          expected: "2024 at 14:30",
+          desc: "Literal text between tokens",
+        },
+        {
           pattern: "'It''s' yyyy",
           expected: "It's 2024",
           desc: "Literal with escaped quote",
@@ -547,6 +547,28 @@ describe("format - edge cases", () => {
         expect(format(date, "EEEE, MMMM dd, yyyy 'at' h:mm a")).toBe(
           "Monday, January 15, 2024 at 2:30 PM",
         );
+      });
+    });
+
+    describe("invalid syntax patterns (Class 6)", () => {
+      it.each([
+        {
+          pattern: "yyyy'MM",
+          desc: "Unmatched quote",
+        },
+        {
+          pattern: "'incomplete",
+          desc: "Unclosed literal",
+        },
+        {
+          pattern: "''",
+          desc: "Lone escaped quotes",
+        },
+      ])("handles $desc: $pattern", ({ pattern }) => {
+        // Document actual behavior for invalid syntax
+        // Implementation may pass through as-is, throw error, or produce unexpected output
+        const result = format(date, pattern);
+        expect(typeof result).toBe("string");
       });
     });
   });

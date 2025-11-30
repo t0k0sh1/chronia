@@ -144,7 +144,7 @@ describe('getMonth - equivalence partitioning for date parameter', () => {
 
   it('should return NaN for invalid date (Invalid Class)', () => {
     const invalidDate = new Date('invalid'); // Representative value: Invalid Date
-    expect(getMonth(invalidDate)).toBe(NaN);
+    expect(getMonth(invalidDate)).toBeNaN();
   });
 });
 ```
@@ -223,12 +223,12 @@ describe('processDate - type variation coverage', () => {
 
 String pattern parameters (used in `format` and `parse` functions) should be divided into equivalence classes based on the pattern syntax rules.
 
-**Target Functions**: `format`, `parse`
+**Target Functions**: `format` (Note: `parse` function may have different equivalence classes and will be documented separately when needed)
 
 **Equivalence Classes for Pattern Strings**:
 
-- **Class 1: Token-only patterns** - Patterns containing only recognized format tokens
-  - Representative values: `"yyyy-MM-dd"`, `"HH:mm:ss"`, `"yyyy-MM-dd HH:mm:ss.SSS"`
+- **Class 1: Token-only patterns** - Patterns containing only recognized format tokens (no separators or unrecognized characters)
+  - Representative values: `"yyyyMMdd"`, `"HHmmss"`, `"yyyyMMddHHmmssSSS"`
   - Behavior: All tokens are replaced with formatted date/time components
 - **Class 2: Literal text patterns** - Patterns with text enclosed in single quotes
   - Representative values: `"'Year' yyyy"`, `"'Month' MM"`, `"'at' HH:mm"`
@@ -242,6 +242,10 @@ String pattern parameters (used in `format` and `parse` functions) should be div
 - **Class 5: Unrecognized characters** - Patterns with characters outside quotes
   - Representative values: `"yyyy-MM-dd"` (hyphens), `"yyyy/MM/dd"` (slashes), `"yyyy.MM.dd"` (periods)
   - Behavior: Unrecognized characters are passed through as-is
+- **Class 6: Invalid syntax patterns** - Patterns with malformed quote syntax
+  - Representative values: `"yyyy'MM"` (unmatched quote), `"'incomplete"` (unclosed literal), `"''''"` (ambiguous escaped quotes), `"''"` (lone escaped quotes)
+  - Behavior: Implementation-dependent (may pass through as-is, throw error, or produce unexpected output)
+  - Note: These patterns should be tested to document actual behavior
 
 **Pattern Syntax Rules** (from format function specification):
 
@@ -1285,9 +1289,9 @@ describe('function-name - Invalid Date handling', () => {
   describe('accessor functions', () => {
     it('should return NaN for Invalid Date', () => {
       const invalidDate = new Date('invalid');
-      expect(getYear(invalidDate)).toBe(NaN);
-      expect(getMonth(invalidDate)).toBe(NaN);
-      expect(getDay(invalidDate)).toBe(NaN);
+      expect(getYear(invalidDate)).toBeNaN();
+      expect(getMonth(invalidDate)).toBeNaN();
+      expect(getDay(invalidDate)).toBeNaN();
     });
   });
 
