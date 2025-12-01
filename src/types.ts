@@ -309,3 +309,16 @@ export type ComparisonOptions = {
    */
   unit?: TimeUnit;
 };
+
+/**
+ * Timezone object containing IANA identifier and timezone code.
+ *
+ * @see {@link https://www.iana.org/time-zones} - IANA Time Zone Database
+ */
+export type TZ = {
+  /** IANA timezone name (e.g., 'Asia/Tokyo', 'America/New_York') */
+  readonly ianaName: string;
+
+  /** Timezone identifier code (e.g., 'JST', 'EST', 'PST') */
+  readonly identifier: string;
+};

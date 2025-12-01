@@ -1,0 +1,1 @@
+'use strict';var o={ianaName:"Etc/UTC",identifier:"UTC"};var e={ianaName:"Asia/Tokyo",identifier:"JST"};var t={ianaName:"America/New_York",identifier:"EST"};var r={ianaName:"America/Los_Angeles",identifier:"PST"};var i={ianaName:"Europe/London",identifier:"GMT"};exports.EST=t;exports.GMT=i;exports.JST=e;exports.PST=r;exports.UTC=o;
