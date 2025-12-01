@@ -1,99 +1,289 @@
 import { describe, it, expect } from "vitest";
 import { truncateToUnit } from "../../src/_lib/truncateToUnit";
 
-describe("truncateToUnit (local time based)", () => {
-  type Case = {
-    unit:
-      | "year"
-      | "month"
-      | "day"
-      | "hour"
-      | "minute"
-      | "second"
-      | "millisecond";
-    input: Date;
-    expected: Date;
-  };
+describe("truncateToUnit", () => {
+  describe("happy path", () => {
+    it("should truncate to year (typical mid-year date)", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 678);
 
-  const cases: Case[] = [
-    {
-      unit: "year",
-      input: new Date(2025, 8, 10, 15, 45, 30, 123),
-      expected: new Date(2025, 0, 1, 0, 0, 0, 0),
-    },
-    {
-      unit: "month",
-      input: new Date(2025, 8, 10, 15, 45, 30, 123),
-      expected: new Date(2025, 8, 1, 0, 0, 0, 0),
-    },
-    {
-      unit: "day",
-      input: new Date(2025, 8, 10, 15, 45, 30, 123),
-      expected: new Date(2025, 8, 10, 0, 0, 0, 0),
-    },
-    {
-      unit: "hour",
-      input: new Date(2025, 8, 10, 15, 45, 30, 123),
-      expected: new Date(2025, 8, 10, 15, 0, 0, 0),
-    },
-    {
-      unit: "minute",
-      input: new Date(2025, 8, 10, 15, 45, 30, 123),
-      expected: new Date(2025, 8, 10, 15, 45, 0, 0),
-    },
-    {
-      unit: "second",
-      input: new Date(2025, 8, 10, 15, 45, 30, 123),
-      expected: new Date(2025, 8, 10, 15, 45, 30, 0),
-    },
-    {
-      unit: "millisecond",
-      input: new Date(2025, 8, 10, 15, 45, 30, 123),
-      expected: new Date(2025, 8, 10, 15, 45, 30, 123),
-    },
-  ];
+      // Act
+      const result = truncateToUnit(date, "year");
 
-  it.each(cases)(
-    "should truncate $unit correctly",
-    ({ unit, input, expected }) => {
-      expect(truncateToUnit(input, unit)).toEqual(expected);
-    },
-  );
-
-  describe("boundary values", () => {
-    it("year: Dec 31 just before midnight → Jan 1", () => {
-      const d = new Date(2025, 11, 31, 23, 59, 59, 999);
-      expect(truncateToUnit(d, "year")).toEqual(
-        new Date(2025, 0, 1, 0, 0, 0, 0),
-      );
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
     });
 
-    it("month: last day just before midnight", () => {
-      const d = new Date(2025, 1, 28, 23, 59, 59, 999); // 2025-02-28
-      expect(truncateToUnit(d, "month")).toEqual(
-        new Date(2025, 1, 1, 0, 0, 0, 0),
-      );
+    it("should truncate to month (typical mid-month date)", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 678);
+
+      // Act
+      const result = truncateToUnit(date, "month");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 1, 0, 0, 0, 0).getTime());
     });
 
-    it("day: just before midnight", () => {
-      const d = new Date(2025, 8, 10, 23, 59, 59, 999);
-      expect(truncateToUnit(d, "day")).toEqual(
-        new Date(2025, 8, 10, 0, 0, 0, 0),
-      );
+    it("should truncate to day (typical mid-day time)", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 678);
+
+      // Act
+      const result = truncateToUnit(date, "day");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 0, 0, 0, 0).getTime());
     });
 
-    it("minute: boundary second", () => {
-      const d = new Date(2025, 8, 10, 15, 45, 59, 999);
-      expect(truncateToUnit(d, "minute")).toEqual(
-        new Date(2025, 8, 10, 15, 45, 0, 0),
-      );
+    it("should truncate to hour (typical mid-hour time)", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 678);
+
+      // Act
+      const result = truncateToUnit(date, "hour");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 14, 0, 0, 0).getTime());
     });
 
-    it("second: boundary millisecond", () => {
-      const d = new Date(2025, 8, 10, 15, 45, 30, 999);
-      expect(truncateToUnit(d, "second")).toEqual(
-        new Date(2025, 8, 10, 15, 45, 30, 0),
-      );
+    it("should truncate to minute (typical mid-minute time)", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 678);
+
+      // Act
+      const result = truncateToUnit(date, "minute");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 14, 30, 0, 0).getTime());
+    });
+
+    it("should truncate to second (typical mid-second time)", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 678);
+
+      // Act
+      const result = truncateToUnit(date, "second");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 14, 30, 45, 0).getTime());
+    });
+
+    it("should return unchanged Date for millisecond", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 678);
+
+      // Act
+      const result = truncateToUnit(date, "millisecond");
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
+    });
+  });
+
+  describe("edge cases", () => {
+    it("should handle year boundary - first day of year", () => {
+      // Arrange
+      const date = new Date(2024, 0, 1, 14, 30, 45, 678);
+
+      // Act
+      const resultYear = truncateToUnit(date, "year");
+      const resultMonth = truncateToUnit(date, "month");
+
+      // Assert
+      expect(resultYear.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
+      expect(resultMonth.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle year boundary - last day of year", () => {
+      // Arrange
+      const date = new Date(2024, 11, 31, 23, 59, 59, 999);
+
+      // Act
+      const result = truncateToUnit(date, "year");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle month boundary - first day of month", () => {
+      // Arrange
+      const date = new Date(2024, 6, 1, 14, 30, 45, 678);
+
+      // Act
+      const resultMonth = truncateToUnit(date, "month");
+      const resultDay = truncateToUnit(date, "day");
+
+      // Assert
+      expect(resultMonth.getTime()).toBe(new Date(2024, 6, 1, 0, 0, 0, 0).getTime());
+      expect(resultDay.getTime()).toBe(new Date(2024, 6, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle month boundary - last day of month", () => {
+      // Arrange
+      const date = new Date(2024, 1, 28, 23, 59, 59, 999);
+
+      // Act
+      const result = truncateToUnit(date, "month");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 1, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle day boundary - midnight", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 0, 0, 0, 0);
+
+      // Act
+      const result = truncateToUnit(date, "day");
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
+    });
+
+    it("should handle day boundary - end of day", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 23, 59, 59, 999);
+
+      // Act
+      const result = truncateToUnit(date, "day");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle hour boundary - start of hour", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 0, 0, 0);
+
+      // Act
+      const result = truncateToUnit(date, "hour");
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
+    });
+
+    it("should handle hour boundary - end of hour", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 59, 59, 999);
+
+      // Act
+      const result = truncateToUnit(date, "hour");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 14, 0, 0, 0).getTime());
+    });
+
+    it("should handle minute boundary - start of minute", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 0, 0);
+
+      // Act
+      const result = truncateToUnit(date, "minute");
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
+    });
+
+    it("should handle minute boundary - end of minute", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 59, 999);
+
+      // Act
+      const result = truncateToUnit(date, "minute");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 14, 30, 0, 0).getTime());
+    });
+
+    it("should handle second boundary - start of second", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 0);
+
+      // Act
+      const result = truncateToUnit(date, "second");
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
+    });
+
+    it("should handle second boundary - end of second", () => {
+      // Arrange
+      const date = new Date(2024, 6, 15, 14, 30, 45, 999);
+
+      // Act
+      const result = truncateToUnit(date, "second");
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 6, 15, 14, 30, 45, 0).getTime());
+    });
+
+    it("should handle leap year February 29th", () => {
+      // Arrange
+      const date = new Date(2024, 1, 29, 14, 30, 45, 678);
+
+      // Act
+      const resultYear = truncateToUnit(date, "year");
+      const resultMonth = truncateToUnit(date, "month");
+
+      // Assert
+      expect(resultYear.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
+      expect(resultMonth.getTime()).toBe(new Date(2024, 1, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should not modify original Date object", () => {
+      // Arrange
+      const originalDate = new Date(2024, 6, 15, 14, 30, 45, 678);
+      const originalTime = originalDate.getTime();
+
+      // Act
+      truncateToUnit(originalDate, "year");
+
+      // Assert
+      expect(originalDate.getTime()).toBe(originalTime);
+    });
+
+    it("should return new Date object, not reference to input", () => {
+      // Arrange
+      const originalDate = new Date(2024, 6, 15, 14, 30, 45, 678);
+
+      // Act
+      const result = truncateToUnit(originalDate, "year");
+
+      // Assert
+      expect(result).not.toBe(originalDate);
+      expect(result).toBeInstanceOf(Date);
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return Invalid Date when Date is invalid", () => {
+      // Arrange
+      const invalidDate = new Date("invalid");
+
+      // Act
+      const result = truncateToUnit(invalidDate, "year");
+
+      // Assert
+      expect(Number.isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when input is NaN", () => {
+      // Act
+      const result = truncateToUnit(NaN as any, "year");
+
+      // Assert
+      expect(Number.isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when input is Infinity", () => {
+      // Arrange & Act
+      const resultPositive = truncateToUnit(Infinity as any, "year");
+      const resultNegative = truncateToUnit(-Infinity as any, "year");
+
+      // Assert
+      expect(Number.isNaN(resultPositive.getTime())).toBe(true);
+      expect(Number.isNaN(resultNegative.getTime())).toBe(true);
     });
   });
 });

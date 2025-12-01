@@ -13,6 +13,7 @@ export const parseSecond: Parser = (input, position, token, _locale, dateCompone
     secondStr += char;
   }
 
+  if (secondStr.length === 0) return null;
   if (token === "ss" && secondStr.length !== 2) return null;
 
   const second = parseInt(secondStr, 10);

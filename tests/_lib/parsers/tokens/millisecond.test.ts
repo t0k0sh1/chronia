@@ -15,160 +15,286 @@ describe("parseMillisecond", () => {
     hours12: null,
   });
 
-  describe("S pattern (single digit millisecond)", () => {
-    it.each([
-      ["1", 0, 100], // 1 -> 100ms
-      ["5", 0, 500], // 5 -> 500ms
-      ["9", 0, 900], // 9 -> 900ms
-      ["0", 0, 0],   // 0 -> 0ms
-    ])("parses %s as %d milliseconds", (input, position, expectedMs) => {
+  describe("happy path", () => {
+    it("should parse with 'S' pattern (tenths, 1 digit)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseMillisecond(input, position, "S", undefined, dateComponents);
 
+      // Act
+      const result = parseMillisecond("5", 0, "S", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + 1);
-      expect(dateComponents.milliseconds).toBe(expectedMs);
+      expect(result!.position).toBe(1);
+      expect(dateComponents.milliseconds).toBe(500);
     });
 
-    it("returns null for invalid format", () => {
+    it("should parse with 'SS' pattern (hundredths, 2 digits)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseMillisecond("a", 0, "S", undefined, dateComponents)).toBeNull(); // Not digit
-      expect(parseMillisecond("", 0, "S", undefined, dateComponents)).toBeNull(); // Empty
-    });
-  });
+      // Act
+      const result = parseMillisecond("50", 0, "SS", undefined, dateComponents);
 
-  describe("SS pattern (two-digit millisecond)", () => {
-    it.each([
-      ["12", 0, 120], // 12 -> 120ms
-      ["50", 0, 500], // 50 -> 500ms
-      ["99", 0, 990], // 99 -> 990ms
-      ["00", 0, 0],   // 00 -> 0ms
-      ["01", 0, 10],  // 01 -> 10ms
-    ])("parses %s as %d milliseconds", (input, position, expectedMs) => {
-      const dateComponents = createDateComponents();
-      const result = parseMillisecond(input, position, "SS", undefined, dateComponents);
-
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + 2);
-      expect(dateComponents.milliseconds).toBe(expectedMs);
+      expect(result!.position).toBe(2);
+      expect(dateComponents.milliseconds).toBe(500);
     });
 
-    it("returns null for invalid format", () => {
+    it("should parse with 'SSS' pattern (thousandths, 3 digits)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseMillisecond("1", 0, "SS", undefined, dateComponents)).toBeNull(); // Not 2 digits
-      expect(parseMillisecond("a1", 0, "SS", undefined, dateComponents)).toBeNull(); // Not digits
-    });
-  });
+      // Act
+      const result = parseMillisecond("500", 0, "SSS", undefined, dateComponents);
 
-  describe("SSS pattern (three-digit millisecond)", () => {
-    it.each([
-      ["123", 0, 123], // 123 -> 123ms
-      ["500", 0, 500], // 500 -> 500ms
-      ["999", 0, 999], // 999 -> 999ms
-      ["000", 0, 0],   // 000 -> 0ms
-      ["001", 0, 1],   // 001 -> 1ms
-    ])("parses %s as %d milliseconds", (input, position, expectedMs) => {
-      const dateComponents = createDateComponents();
-      const result = parseMillisecond(input, position, "SSS", undefined, dateComponents);
-
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + 3);
-      expect(dateComponents.milliseconds).toBe(expectedMs);
+      expect(result!.position).toBe(3);
+      expect(dateComponents.milliseconds).toBe(500);
     });
 
-    it("returns null for invalid format", () => {
+    it("should parse '0' with 'S' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseMillisecond("12", 0, "SSS", undefined, dateComponents)).toBeNull(); // Not 3 digits
-      expect(parseMillisecond("a12", 0, "SSS", undefined, dateComponents)).toBeNull(); // Not digits
-    });
-  });
+      // Act
+      const result = parseMillisecond("0", 0, "S", undefined, dateComponents);
 
-  describe("position handling", () => {
-    it("parses at different positions", () => {
-      const dateComponents = createDateComponents();
-      const result = parseMillisecond("abc123def", 3, "SSS", undefined, dateComponents);
-
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(6);
-      expect(dateComponents.milliseconds).toBe(123);
+      expect(result!.position).toBe(1);
+      expect(dateComponents.milliseconds).toBe(0);
     });
 
-    it("handles end of string", () => {
+    it("should parse '12' with 'SS' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("12", 0, "SS", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.milliseconds).toBe(120);
+    });
+
+    it("should parse '123' with 'SSS' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
       const result = parseMillisecond("123", 0, "SSS", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(3);
       expect(dateComponents.milliseconds).toBe(123);
     });
 
-    it("handles position at end of string", () => {
+    it("should parse at different position in string", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseMillisecond("123", 3, "S", undefined, dateComponents);
 
-      expect(result).toBeNull(); // No characters left to parse
+      // Act
+      const result = parseMillisecond("abc123def", 3, "SSS", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(6);
+      expect(dateComponents.milliseconds).toBe(123);
     });
   });
 
   describe("edge cases", () => {
-    it("correctly scales different token lengths", () => {
+    it("should correctly scale different token lengths for same value", () => {
+      // Arrange
       const components1 = createDateComponents();
       const components2 = createDateComponents();
       const components3 = createDateComponents();
 
-      // Same input "5" should scale differently based on token
+      // Act
       parseMillisecond("5", 0, "S", undefined, components1);
-      expect(components1.milliseconds).toBe(500); // 5 * 100
-
       parseMillisecond("50", 0, "SS", undefined, components2);
-      expect(components2.milliseconds).toBe(500); // 50 * 10
-
       parseMillisecond("500", 0, "SSS", undefined, components3);
+
+      // Assert
+      expect(components1.milliseconds).toBe(500); // 5 * 100
+      expect(components2.milliseconds).toBe(500); // 50 * 10
       expect(components3.milliseconds).toBe(500); // 500 * 1
     });
 
-    it("handles zero values correctly", () => {
+    it("should handle zero values correctly for all patterns", () => {
+      // Arrange
       const components1 = createDateComponents();
       const components2 = createDateComponents();
       const components3 = createDateComponents();
 
+      // Act
       parseMillisecond("0", 0, "S", undefined, components1);
-      expect(components1.milliseconds).toBe(0);
-
       parseMillisecond("00", 0, "SS", undefined, components2);
-      expect(components2.milliseconds).toBe(0);
-
       parseMillisecond("000", 0, "SSS", undefined, components3);
+
+      // Assert
+      expect(components1.milliseconds).toBe(0);
+      expect(components2.milliseconds).toBe(0);
       expect(components3.milliseconds).toBe(0);
     });
 
-    it("handles maximum values correctly", () => {
+    it("should handle maximum values correctly for all patterns", () => {
+      // Arrange
       const components1 = createDateComponents();
       const components2 = createDateComponents();
       const components3 = createDateComponents();
 
+      // Act
       parseMillisecond("9", 0, "S", undefined, components1);
-      expect(components1.milliseconds).toBe(900);
-
       parseMillisecond("99", 0, "SS", undefined, components2);
-      expect(components2.milliseconds).toBe(990);
-
       parseMillisecond("999", 0, "SSS", undefined, components3);
+
+      // Assert
+      expect(components1.milliseconds).toBe(900);
+      expect(components2.milliseconds).toBe(990);
       expect(components3.milliseconds).toBe(999);
     });
 
-    it("returns null for partial match (break case)", () => {
+    it("should handle single-digit zero-padded values", () => {
+      // Arrange
       const components = createDateComponents();
-      const result = parseMillisecond("5a", 0, "SS", undefined, components);
+
+      // Act
+      const result = parseMillisecond("01", 0, "SS", undefined, components);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(components.milliseconds).toBe(10);
+    });
+
+    it("should handle double-digit zero-padded values", () => {
+      // Arrange
+      const components = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("001", 0, "SSS", undefined, components);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(components.milliseconds).toBe(1);
+    });
+
+    it("should handle end of string correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("123", 0, "SSS", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+      expect(dateComponents.milliseconds).toBe(123);
+    });
+
+    it("should return null when position is at end of string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("123", 3, "S", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return null for non-digit input with 'S' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("a", 0, "S", undefined, dateComponents);
+
+      // Assert
       expect(result).toBeNull();
     });
 
-    it("returns null for unknown token (default case)", () => {
+    it("should return null for empty string with 'S' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("", 0, "S", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'SS' pattern with single digit", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("1", 0, "SS", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'SS' pattern with non-digits", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("a1", 0, "SS", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'SSS' pattern with two digits", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("12", 0, "SSS", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'SSS' pattern with non-digits", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("a12", 0, "SSS", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for partial match", () => {
+      // Arrange
       const components = createDateComponents();
+
+      // Act
+      const result = parseMillisecond("5a", 0, "SS", undefined, components);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for unknown token", () => {
+      // Arrange
+      const components = createDateComponents();
+
+      // Act
       const result = parseMillisecond("5000", 0, "SSSS", undefined, components);
+
+      // Assert
       expect(result).toBeNull();
     });
   });

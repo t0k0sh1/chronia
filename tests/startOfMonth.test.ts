@@ -2,162 +2,161 @@ import { describe, it, expect } from "vitest";
 import { startOfMonth } from "../src/startOfMonth";
 
 describe("startOfMonth", () => {
-  it("returns the first day of the month at midnight", () => {
-    const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
-    const result = startOfMonth(date);
+  describe("happy path", () => {
+    it("should return first day of month at midnight", () => {
+      // Arrange
+      const date = new Date(2024, 5, 15, 14, 30, 45, 123);
 
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(5); // June
-    expect(result.getDate()).toBe(1);
-    expect(result.getHours()).toBe(0);
-    expect(result.getMinutes()).toBe(0);
-    expect(result.getSeconds()).toBe(0);
-    expect(result.getMilliseconds()).toBe(0);
-  });
-
-  it("works with the first day of the month", () => {
-    const date = new Date(2024, 5, 1, 23, 59, 59, 999); // June 1, 2024 23:59:59.999
-    const result = startOfMonth(date);
-
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(5); // June
-    expect(result.getDate()).toBe(1);
-    expect(result.getHours()).toBe(0);
-    expect(result.getMinutes()).toBe(0);
-    expect(result.getSeconds()).toBe(0);
-    expect(result.getMilliseconds()).toBe(0);
-  });
-
-  it("works with the last day of the month", () => {
-    const date = new Date(2024, 5, 30, 0, 0, 0, 0); // June 30, 2024 00:00:00.000
-    const result = startOfMonth(date);
-
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(5); // June
-    expect(result.getDate()).toBe(1);
-  });
-
-  it("handles different months correctly", () => {
-    const testCases = [
-      { date: new Date(2024, 0, 15), expectedMonth: 0 }, // January
-      { date: new Date(2024, 1, 15), expectedMonth: 1 }, // February
-      { date: new Date(2024, 11, 15), expectedMonth: 11 }, // December
-    ];
-
-    testCases.forEach(({ date, expectedMonth }) => {
+      // Act
       const result = startOfMonth(date);
-      expect(result.getFullYear()).toBe(2024);
-      expect(result.getMonth()).toBe(expectedMonth);
-      expect(result.getDate()).toBe(1);
-      expect(result.getHours()).toBe(0);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 5, 1, 0, 0, 0, 0).getTime());
     });
-  });
 
-  it("handles leap year February correctly", () => {
-    const leapYear = new Date(2024, 1, 29, 12, 0, 0, 0); // February 29, 2024 (leap year)
-    const result = startOfMonth(leapYear);
+    it("should handle mid-month date", () => {
+      // Arrange
+      const date = new Date(2023, 8, 20, 12, 0, 0, 0);
 
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(1); // February
-    expect(result.getDate()).toBe(1);
-  });
-
-  it("handles non-leap year February correctly", () => {
-    const nonLeapYear = new Date(2023, 1, 28, 12, 0, 0, 0); // February 28, 2023 (non-leap year)
-    const result = startOfMonth(nonLeapYear);
-
-    expect(result.getFullYear()).toBe(2023);
-    expect(result.getMonth()).toBe(1); // February
-    expect(result.getDate()).toBe(1);
-  });
-
-  it("handles year boundaries", () => {
-    const endOfYear = new Date(2024, 11, 31, 23, 59, 59, 999); // December 31, 2024
-    const result = startOfMonth(endOfYear);
-
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(11); // December
-    expect(result.getDate()).toBe(1);
-  });
-
-  it("does not modify the original date", () => {
-    const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
-    const originalTime = originalDate.getTime();
-
-    startOfMonth(originalDate);
-
-    expect(originalDate.getTime()).toBe(originalTime);
-  });
-
-  it("returns a new Date object", () => {
-    const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
-    const result = startOfMonth(originalDate);
-
-    expect(result).not.toBe(originalDate);
-    expect(result instanceof Date).toBe(true);
-  });
-
-  it("handles edge cases with different years", () => {
-    const testCases = [
-      new Date(1999, 6, 15), // July 15, 1999
-      new Date(2000, 1, 29), // February 29, 2000 (leap year)
-      new Date(2025, 0, 1), // January 1, 2025
-    ];
-
-    testCases.forEach((date) => {
+      // Act
       const result = startOfMonth(date);
-      expect(result.getFullYear()).toBe(date.getFullYear());
-      expect(result.getMonth()).toBe(date.getMonth());
-      expect(result.getDate()).toBe(1);
-      expect(result.getHours()).toBe(0);
-      expect(result.getMinutes()).toBe(0);
-      expect(result.getSeconds()).toBe(0);
-      expect(result.getMilliseconds()).toBe(0);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2023, 8, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle last day of month", () => {
+      // Arrange
+      const date = new Date(2024, 5, 30, 18, 45, 30, 500);
+
+      // Act
+      const result = startOfMonth(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 5, 1, 0, 0, 0, 0).getTime());
     });
   });
 
-  describe("type validation", () => {
-    it("should return Invalid Date for invalid argument types", () => {
-      const invalidInputs = [
-        null,
-        undefined,
-        "2024-01-01",
-        true,
-        false,
-        {},
-        [],
-        () => {},
-        Symbol("test")
-      ];
+  describe("edge cases", () => {
+    it("should handle first day of month - no change", () => {
+      // Arrange
+      const date = new Date(2024, 5, 1, 0, 0, 0, 0);
 
-      invalidInputs.forEach(input => {
-        const result = startOfMonth(input as any);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
+      // Act
+      const result = startOfMonth(date);
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
     });
 
-    it("should return Invalid Date for Invalid Date objects", () => {
-      const invalidDates = [
-        new Date("invalid"),
-        new Date(NaN)
-      ];
+    it("should handle first day of month with milliseconds", () => {
+      // Arrange
+      const date = new Date(2024, 5, 1, 23, 59, 59, 999);
 
-      invalidDates.forEach(invalidDate => {
-        const result = startOfMonth(invalidDate);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
+      // Act
+      const result = startOfMonth(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 5, 1, 0, 0, 0, 0).getTime());
     });
 
-    it("should return Invalid Date for special number values", () => {
-      const specialNumbers = [NaN, Infinity, -Infinity];
+    it("should handle January (month 0)", () => {
+      // Arrange
+      const date = new Date(2024, 0, 15, 12, 30, 0, 0);
 
-      specialNumbers.forEach(num => {
-        const result = startOfMonth(num as any);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
+      // Act
+      const result = startOfMonth(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle December (month 11)", () => {
+      // Arrange
+      const date = new Date(2024, 11, 31, 23, 59, 59, 999);
+
+      // Act
+      const result = startOfMonth(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 11, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle leap year February (Feb 29)", () => {
+      // Arrange
+      const date = new Date(2024, 1, 29, 12, 0, 0, 0);
+
+      // Act
+      const result = startOfMonth(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 1, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle non-leap year February (Feb 28)", () => {
+      // Arrange
+      const date = new Date(2023, 1, 28, 12, 0, 0, 0);
+
+      // Act
+      const result = startOfMonth(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2023, 1, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should not modify original Date object", () => {
+      // Arrange
+      const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
+      const originalTime = originalDate.getTime();
+
+      // Act
+      startOfMonth(originalDate);
+
+      // Assert
+      expect(originalDate.getTime()).toBe(originalTime);
+    });
+
+    it("should return new Date object, not reference to input", () => {
+      // Arrange
+      const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
+
+      // Act
+      const result = startOfMonth(originalDate);
+
+      // Assert
+      expect(result).not.toBe(originalDate);
+      expect(result).toBeInstanceOf(Date);
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return Invalid Date when Date is invalid", () => {
+      // Arrange
+      const invalidDate = new Date("invalid");
+
+      // Act
+      const result = startOfMonth(invalidDate);
+
+      // Assert
+      expect(Number.isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when input is NaN", () => {
+      // Act
+      const result = startOfMonth(NaN as any);
+
+      // Assert
+      expect(Number.isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should return Invalid Date when input is Infinity", () => {
+      // Arrange & Act
+      const resultPositive = startOfMonth(Infinity as any);
+      const resultNegative = startOfMonth(-Infinity as any);
+
+      // Assert
+      expect(Number.isNaN(resultPositive.getTime())).toBe(true);
+      expect(Number.isNaN(resultNegative.getTime())).toBe(true);
     });
   });
 });

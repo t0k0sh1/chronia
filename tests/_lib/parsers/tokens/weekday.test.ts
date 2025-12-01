@@ -38,232 +38,422 @@ describe("parseWeekday", () => {
     },
   };
 
-  describe("with localization", () => {
-    describe("E/EE/EEE patterns (abbreviated)", () => {
-      it.each([
-        ["Sun", "E"],
-        ["Mon", "EE"],
-        ["Tue", "EEE"],
-        ["Wed", "E"],
-        ["Thu", "EE"],
-        ["Fri", "EEE"],
-        ["Sat", "E"],
-      ])("parses localized %s with pattern %s", (input, token) => {
-        const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, token, mockLocale, dateComponents);
-
-        expect(result).not.toBeNull();
-        expect(result!.position).toBe(input.length);
-        // Note: weekday parsing doesn't modify dateComponents, it's mainly for validation
-      });
-    });
-
-    describe("EEEE pattern (wide)", () => {
-      it.each([
-        ["Sunday"],
-        ["Monday"],
-        ["Tuesday"],
-        ["Wednesday"],
-        ["Thursday"],
-        ["Friday"],
-        ["Saturday"],
-      ])("parses localized %s", (input) => {
-        const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, "EEEE", mockLocale, dateComponents);
-
-        expect(result).not.toBeNull();
-        expect(result!.position).toBe(input.length);
-      });
-    });
-
-    describe("EEEEE pattern (narrow)", () => {
-      it.each([
-        ["S"],
-        ["M"],
-        ["T"],
-        ["W"],
-        ["F"],
-      ])("parses localized narrow %s", (input) => {
-        const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, "EEEEE", mockLocale, dateComponents);
-
-        expect(result).not.toBeNull();
-        expect(result!.position).toBe(1);
-      });
-
-      it("handles ambiguous narrow weekdays", () => {
-        // Both Tuesday and Thursday are "T" in narrow format
-        const dateComponents1 = createDateComponents();
-        const dateComponents2 = createDateComponents();
-
-        const result1 = parseWeekday("T", 0, "EEEEE", mockLocale, dateComponents1);
-        expect(result1).not.toBeNull();
-        expect(result1!.position).toBe(1);
-
-        // Should match the first occurrence (Tuesday = index 2)
-        const result2 = parseWeekday("T", 0, "EEEEE", mockLocale, dateComponents2);
-        expect(result2).not.toBeNull();
-        expect(result2!.position).toBe(1);
-      });
-    });
-  });
-
-  describe("without localization (English fallback)", () => {
-    describe("E/EE/EEE patterns (abbreviated)", () => {
-      it.each([
-        ["Sun"],
-        ["Mon"],
-        ["Tue"],
-        ["Wed"],
-        ["Thu"],
-        ["Fri"],
-        ["Sat"],
-      ])("parses English abbreviated %s", (input) => {
-        const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, "EEE", undefined, dateComponents);
-
-        expect(result).not.toBeNull();
-        expect(result!.position).toBe(input.length);
-      });
-    });
-
-    describe("EEEE pattern (wide)", () => {
-      it.each([
-        ["Sunday"],
-        ["Monday"],
-        ["Tuesday"],
-        ["Wednesday"],
-        ["Thursday"],
-        ["Friday"],
-        ["Saturday"],
-      ])("parses English wide %s", (input) => {
-        const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, "EEEE", undefined, dateComponents);
-
-        expect(result).not.toBeNull();
-        expect(result!.position).toBe(input.length);
-      });
-    });
-
-    describe("EEEEE pattern (narrow)", () => {
-      it.each([
-        ["S"],
-        ["M"],
-        ["T"],
-        ["W"],
-        ["F"],
-      ])("parses English narrow %s", (input) => {
-        const dateComponents = createDateComponents();
-        const result = parseWeekday(input, 0, "EEEEE", undefined, dateComponents);
-
-        expect(result).not.toBeNull();
-        expect(result!.position).toBe(1);
-      });
-    });
-  });
-
-  describe("position handling", () => {
-    it("parses at different positions", () => {
+  describe("happy path", () => {
+    it("should parse English abbreviated 'Sun' with 'E' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseWeekday("abcMondef", 3, "EEE", undefined, dateComponents);
 
+      // Act
+      const result = parseWeekday("Sun", 0, "E", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse English abbreviated 'Mon' with 'EE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Mon", 0, "EE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse English abbreviated 'Tue' with 'EEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Tue", 0, "EEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse English abbreviated 'Wed' with 'E' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Wed", 0, "E", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse English abbreviated 'Thu' with 'EE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Thu", 0, "EE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse English abbreviated 'Fri' with 'EEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Fri", 0, "EEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse English abbreviated 'Sat' with 'E' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Sat", 0, "E", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse English wide 'Sunday' with 'EEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Sunday", 0, "EEEE", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(6);
     });
 
-    it("handles end of string", () => {
+    it("should parse English wide 'Monday' with 'EEEE' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Monday", 0, "EEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(6);
+    });
+
+    it("should parse English wide 'Tuesday' with 'EEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Tuesday", 0, "EEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(7);
+    });
+
+    it("should parse English wide 'Wednesday' with 'EEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Wednesday", 0, "EEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(9);
+    });
+
+    it("should parse English wide 'Thursday' with 'EEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Thursday", 0, "EEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(8);
+    });
+
+    it("should parse English wide 'Friday' with 'EEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
       const result = parseWeekday("Friday", 0, "EEEE", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(6);
     });
 
-    it("handles position at end of string", () => {
-      const dateComponents = createDateComponents();
-      const result = parseWeekday("Mon", 3, "EEE", undefined, dateComponents);
-
-      expect(result).toBeNull(); // No characters left to parse
-    });
-  });
-
-  describe("invalid input", () => {
-    it("returns null for unrecognized weekdays", () => {
+    it("should parse English wide 'Saturday' with 'EEEE' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseWeekday("Xyz", 0, "EEE", undefined, dateComponents)).toBeNull();
-      expect(parseWeekday("123", 0, "EEE", undefined, dateComponents)).toBeNull();
-      expect(parseWeekday("", 0, "EEE", undefined, dateComponents)).toBeNull();
+      // Act
+      const result = parseWeekday("Saturday", 0, "EEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(8);
     });
 
-    it("returns null when no match found with localization", () => {
+    it("should parse English narrow 'S' for Sunday with 'EEEEE' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseWeekday("InvalidDay", 0, "EEEE", mockLocale, dateComponents);
 
-      expect(result).toBeNull();
+      // Act
+      const result = parseWeekday("S", 0, "EEEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
     });
 
-    it("returns null for unsupported token patterns", () => {
+    it("should parse English narrow 'M' for Monday with 'EEEEE' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseWeekday("Mon", 0, "EEEEEE", undefined, dateComponents);
 
-      expect(result).toBeNull();
+      // Act
+      const result = parseWeekday("M", 0, "EEEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+    });
+
+    it("should parse English narrow 'T' for Tuesday with 'EEEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("T", 0, "EEEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+    });
+
+    it("should parse English narrow 'W' for Wednesday with 'EEEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("W", 0, "EEEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+    });
+
+    it("should parse English narrow 'F' for Friday with 'EEEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("F", 0, "EEEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+    });
+
+    it("should parse localized abbreviated 'Sun' with 'E' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Sun", 0, "E", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse localized abbreviated 'Mon' with 'EE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Mon", 0, "EE", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse localized abbreviated 'Tue' with 'EEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Tue", 0, "EEE", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+    });
+
+    it("should parse localized wide 'Sunday' with 'EEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Sunday", 0, "EEEE", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(6);
+    });
+
+    it("should parse localized wide 'Monday' with 'EEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Monday", 0, "EEEE", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(6);
+    });
+
+    it("should parse localized narrow 'S' for Sunday with 'EEEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("S", 0, "EEEEE", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+    });
+
+    it("should parse localized narrow 'M' for Monday with 'EEEEE' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("M", 0, "EEEEE", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+    });
+
+    it("should parse at different position in string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("abcMondef", 3, "EEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(6);
     });
   });
 
   describe("edge cases", () => {
-    it("prefers longer matches when possible", () => {
-      // "Sunday" should match completely rather than just "S"
+    it("should handle ambiguous narrow weekdays (Tuesday and Thursday both 'T')", () => {
+      // Arrange
+      const dateComponents1 = createDateComponents();
+      const dateComponents2 = createDateComponents();
+
+      // Act
+      const result1 = parseWeekday("T", 0, "EEEEE", mockLocale, dateComponents1);
+      const result2 = parseWeekday("T", 0, "EEEEE", mockLocale, dateComponents2);
+
+      // Assert
+      expect(result1).not.toBeNull();
+      expect(result1!.position).toBe(1);
+      expect(result2).not.toBeNull();
+      expect(result2!.position).toBe(1);
+    });
+
+    it("should prefer longer matches (full weekday name over narrow)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act - "Sunday" should match completely rather than just "S"
       const result = parseWeekday("Sunday", 0, "EEEE", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(6); // Should consume entire word
     });
 
-    it("handles case sensitivity correctly", () => {
-      const dateComponents = createDateComponents();
+    it("should handle different token lengths correctly", () => {
+      // Arrange
+      const dateComponents1 = createDateComponents();
+      const dateComponents2 = createDateComponents();
+      const dateComponents3 = createDateComponents();
 
-      // Should not match different case without localization handling it
-      const result = parseWeekday("monday", 0, "EEEE", undefined, dateComponents);
-      expect(result).toBeNull();
+      // Act - All should parse Monday but use appropriate format
+      const result1 = parseWeekday("Mon", 0, "E", undefined, dateComponents1);
+      const result2 = parseWeekday("Monday", 0, "EEEE", undefined, dateComponents2);
+      const result3 = parseWeekday("M", 0, "EEEEE", undefined, dateComponents3);
+
+      // Assert
+      expect(result1).not.toBeNull();
+      expect(result1!.position).toBe(3);
+      expect(result2).not.toBeNull();
+      expect(result2!.position).toBe(6);
+      expect(result3).not.toBeNull();
+      expect(result3!.position).toBe(1);
     });
 
-    it("does not modify date components", () => {
+    it("should not modify date components", () => {
+      // Arrange
       const dateComponents = createDateComponents();
       const originalYear = dateComponents.year;
       const originalMonth = dateComponents.month;
       const originalDay = dateComponents.day;
 
+      // Act - Weekday parsing should not change the actual date
       parseWeekday("Monday", 0, "EEEE", undefined, dateComponents);
 
-      // Weekday parsing should not change the actual date
+      // Assert
       expect(dateComponents.year).toBe(originalYear);
       expect(dateComponents.month).toBe(originalMonth);
       expect(dateComponents.day).toBe(originalDay);
     });
 
-    it("handles different token lengths correctly", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
-      const dateComponents3 = createDateComponents();
+    it("should handle end of string correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
 
-      // All should parse the same weekday but use appropriate format
-      const result1 = parseWeekday("Mon", 0, "E", undefined, dateComponents1);
-      const result2 = parseWeekday("Monday", 0, "EEEE", undefined, dateComponents2);
-      const result3 = parseWeekday("M", 0, "EEEEE", undefined, dateComponents3);
+      // Act
+      const result = parseWeekday("Friday", 0, "EEEE", undefined, dateComponents);
 
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(3);
-
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(6);
-
-      expect(result3).not.toBeNull();
-      expect(result3!.position).toBe(1);
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(6);
     });
 
-    it("handles unknown token with locale (default case)", () => {
+    it("should return null when position is at end of string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Mon", 3, "EEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull(); // No characters left to parse
+    });
+
+    it("should handle Japanese locale with non-standard pattern", () => {
+      // Arrange
       const jaLocale: Locale = {
         era: {
           narrow: ["紀", "西"],
@@ -287,9 +477,81 @@ describe("parseWeekday", () => {
         },
       };
       const dateComponents = createDateComponents();
+
+      // Act - Using unknown pattern EEEEEE with Japanese locale
       const result = parseWeekday("月", 0, "EEEEEE", jaLocale, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(1);
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return null for unrecognized weekday 'Xyz'", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Xyz", 0, "EEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for numeric input '123'", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("123", 0, "EEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for empty string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("", 0, "EEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null when no match found with localization", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("InvalidDay", 0, "EEEE", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for unsupported token patterns", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseWeekday("Mon", 0, "EEEEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for lowercase weekday (case-sensitive)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act - Should not match different case without localization handling it
+      const result = parseWeekday("monday", 0, "EEEE", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
     });
   });
 });

@@ -15,169 +15,326 @@ describe("parseHour12", () => {
     hours12: null,
   });
 
-  describe("h pattern (single digit 12-hour)", () => {
-    it.each([
-      ["1", 0, 1, 1],
-      ["9", 0, 1, 9],
-      ["12", 0, 2, 12],
-      ["1x", 0, 1, 1], // Should stop at non-digit
-      ["12abc", 0, 2, 12], // Should stop at non-digit
-    ])("parses %s at position %d, consumes %d chars, hour12=%d", (input, position, expectedLength, expectedHour12) => {
+  describe("happy path", () => {
+    it("should parse single-digit hour with 'h' pattern (12-hour)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseHour12(input, position, "h", undefined, dateComponents);
 
+      // Act
+      const result = parseHour12("9", 0, "h", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + expectedLength);
-      expect(dateComponents.hours12).toBe(expectedHour12);
+      expect(result!.position).toBe(1);
+      expect(dateComponents.hours12).toBe(9);
     });
 
-    it("returns null for invalid hour values", () => {
+    it("should parse double-digit hour with 'h' pattern (12-hour)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseHour12("0", 0, "h", undefined, dateComponents)).toBeNull();
-      expect(parseHour12("13", 0, "h", undefined, dateComponents)).toBeNull();
-      expect(parseHour12("24", 0, "h", undefined, dateComponents)).toBeNull();
-      expect(parseHour12("99", 0, "h", undefined, dateComponents)).toBeNull();
-    });
+      // Act
+      const result = parseHour12("12", 0, "h", undefined, dateComponents);
 
-    it("returns null for no digits", () => {
-      const dateComponents = createDateComponents();
-      const result = parseHour12("abc", 0, "h", undefined, dateComponents);
-      expect(result).toBeNull();
-    });
-  });
-
-  describe("hh pattern (two-digit 12-hour)", () => {
-    it.each([
-      ["01", 0, 1],
-      ["09", 0, 9],
-      ["12", 0, 12],
-    ])("parses %s as hour12 %d", (input, position, expectedHour12) => {
-      const dateComponents = createDateComponents();
-      const result = parseHour12(input, position, "hh", undefined, dateComponents);
-
-      expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + 2);
-      expect(dateComponents.hours12).toBe(expectedHour12);
-    });
-
-    it("returns null for invalid formats or values", () => {
-      const dateComponents = createDateComponents();
-
-      expect(parseHour12("1", 0, "hh", undefined, dateComponents)).toBeNull(); // Not 2 digits
-      expect(parseHour12("00", 0, "hh", undefined, dateComponents)).toBeNull(); // Invalid hour (0 not allowed in 12-hour)
-      expect(parseHour12("13", 0, "hh", undefined, dateComponents)).toBeNull(); // Invalid hour
-      expect(parseHour12("a1", 0, "hh", undefined, dateComponents)).toBeNull(); // Not digits
-    });
-  });
-
-  describe("boundary values", () => {
-    it("accepts valid 12-hour range (1-12)", () => {
-      const dateComponents = createDateComponents();
-
-      // Test boundary values
-      expect(parseHour12("1", 0, "h", undefined, dateComponents)).not.toBeNull();
-      expect(parseHour12("12", 0, "h", undefined, dateComponents)).not.toBeNull();
-
-      // Test common values
-      expect(parseHour12("6", 0, "h", undefined, dateComponents)).not.toBeNull();
-      expect(parseHour12("11", 0, "h", undefined, dateComponents)).not.toBeNull();
-    });
-
-    it("rejects invalid hour values", () => {
-      const dateComponents = createDateComponents();
-
-      expect(parseHour12("0", 0, "h", undefined, dateComponents)).toBeNull(); // 0 not valid in 12-hour format
-      expect(parseHour12("13", 0, "h", undefined, dateComponents)).toBeNull();
-      expect(parseHour12("24", 0, "h", undefined, dateComponents)).toBeNull();
-      expect(parseHour12("99", 0, "h", undefined, dateComponents)).toBeNull();
-    });
-  });
-
-  describe("position handling", () => {
-    it("parses at different positions", () => {
-      const dateComponents = createDateComponents();
-      const result = parseHour12("abc11def", 3, "hh", undefined, dateComponents);
-
-      expect(result).not.toBeNull();
-      expect(result!.position).toBe(5);
-      expect(dateComponents.hours12).toBe(11);
-    });
-
-    it("handles end of string", () => {
-      const dateComponents = createDateComponents();
-      const result = parseHour12("12", 0, "hh", undefined, dateComponents);
-
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2);
       expect(dateComponents.hours12).toBe(12);
     });
 
-    it("handles position at end of string", () => {
+    it("should parse hour with 'hh' pattern (zero-padded 12-hour)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseHour12("12", 2, "h", undefined, dateComponents);
 
-      expect(result).toBeNull(); // No characters left to parse
+      // Act
+      const result = parseHour12("09", 0, "hh", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.hours12).toBe(9);
+    });
+
+    it("should parse hour with 'hh' pattern (two-digit 12-hour)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("12", 0, "hh", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.hours12).toBe(12);
+    });
+
+    it("should stop at non-digit for 'h' pattern", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("12abc", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.hours12).toBe(12);
+    });
+
+    it("should parse at different position in string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("abc11def", 3, "hh", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(5);
+      expect(dateComponents.hours12).toBe(11);
     });
   });
 
   describe("edge cases", () => {
-    it("handles single vs double digit parsing correctly", () => {
+    it("should handle first hour (1)", () => {
+      // Arrange
       const dateComponents1 = createDateComponents();
       const dateComponents2 = createDateComponents();
 
-      // Single digit pattern should read variable length
+      // Act
+      const result1 = parseHour12("1", 0, "h", undefined, dateComponents1);
+      const result2 = parseHour12("01", 0, "hh", undefined, dateComponents2);
+
+      // Assert
+      expect(result1).not.toBeNull();
+      expect(dateComponents1.hours12).toBe(1);
+      expect(result2).not.toBeNull();
+      expect(dateComponents2.hours12).toBe(1);
+    });
+
+    it("should handle noon (hour 12)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("12", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.hours12).toBe(12);
+    });
+
+    it("should handle common hours (6, 11)", () => {
+      // Arrange
+      const dateComponents1 = createDateComponents();
+      const dateComponents2 = createDateComponents();
+
+      // Act
+      const result1 = parseHour12("6", 0, "h", undefined, dateComponents1);
+      const result2 = parseHour12("11", 0, "h", undefined, dateComponents2);
+
+      // Assert
+      expect(result1).not.toBeNull();
+      expect(dateComponents1.hours12).toBe(6);
+      expect(result2).not.toBeNull();
+      expect(dateComponents2.hours12).toBe(11);
+    });
+
+    it("should handle single vs double digit parsing correctly", () => {
+      // Arrange
+      const dateComponents1 = createDateComponents();
+      const dateComponents2 = createDateComponents();
+
+      // Act - Single digit pattern should read variable length
       const result1 = parseHour12("5", 0, "h", undefined, dateComponents1);
+
+      // Assert
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(1);
       expect(dateComponents1.hours12).toBe(5);
 
-      // Double digit pattern should require exactly 2 digits
+      // Act - Double digit pattern should require exactly 2 digits
       const result2 = parseHour12("5", 0, "hh", undefined, dateComponents2);
+
+      // Assert
       expect(result2).toBeNull();
     });
 
-    it("stops parsing at first non-digit for variable length", () => {
+    it("should stop parsing at first non-digit for variable length", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
       const result = parseHour12("11x34", 0, "h", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2);
       expect(dateComponents.hours12).toBe(11);
     });
 
-    it("validates hour range regardless of pattern", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
+    it("should handle end of string correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
 
-      // Both patterns should reject invalid values
-      expect(parseHour12("0", 0, "h", undefined, dateComponents1)).toBeNull();
-      expect(parseHour12("00", 0, "hh", undefined, dateComponents2)).toBeNull();
+      // Act
+      const result = parseHour12("12", 0, "hh", undefined, dateComponents);
 
-      expect(parseHour12("13", 0, "h", undefined, dateComponents1)).toBeNull();
-      expect(parseHour12("13", 0, "hh", undefined, dateComponents2)).toBeNull();
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.hours12).toBe(12);
     });
 
-    it("sets hours12 property correctly", () => {
+    it("should return null when position is at end of string", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("12", 2, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should set hours12 property without modifying hours", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
       const result = parseHour12("3", 0, "h", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(dateComponents.hours12).toBe(3);
       expect(dateComponents.hours).toBe(0); // Should not modify 24-hour field
     });
+  });
 
-    it("accepts noon (hour 12)", () => {
+  describe("invalid inputs", () => {
+    it("should return null for hour 0 (invalid in 12-hour format)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("0", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for hour 13 (out of range)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("13", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for hour 24 (out of range)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("24", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for hour 99 (out of range)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("99", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for non-digit input", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("abc", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'hh' pattern with single digit", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("1", 0, "hh", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'hh' pattern with invalid hour (00)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("00", 0, "hh", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'hh' pattern with invalid hour (13)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("13", 0, "hh", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'hh' pattern with non-digits", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("a1", 0, "hh", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should validate hour range regardless of pattern", () => {
+      // Arrange
       const dateComponents1 = createDateComponents();
       const dateComponents2 = createDateComponents();
 
-      const result1 = parseHour12("12", 0, "h", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(dateComponents1.hours12).toBe(12);
+      // Act
+      const result1 = parseHour12("0", 0, "h", undefined, dateComponents1);
+      const result2 = parseHour12("00", 0, "hh", undefined, dateComponents2);
 
-      const result2 = parseHour12("12", 0, "hh", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(dateComponents2.hours12).toBe(12);
+      // Assert
+      expect(result1).toBeNull();
+      expect(result2).toBeNull();
+    });
+
+    it("should return null for empty string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseHour12("", 0, "h", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
     });
   });
 });

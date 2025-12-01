@@ -15,149 +15,303 @@ describe("parseDay", () => {
     hours12: null,
   });
 
-  describe("d pattern (single digit day)", () => {
-    it.each([
-      ["1", 0, 1, 1],
-      ["9", 0, 1, 9],
-      ["15", 0, 2, 15],
-      ["31", 0, 2, 31],
-      ["1x", 0, 1, 1], // Should stop at non-digit
-      ["15abc", 0, 2, 15], // Should stop at non-digit
-    ])("parses %s at position %d, consumes %d chars, day=%d", (input, position, expectedLength, expectedDay) => {
+  describe("happy path", () => {
+    it("should parse single-digit day with 'd' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseDay(input, position, "d", undefined, dateComponents);
 
+      // Act
+      const result = parseDay("9", 0, "d", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + expectedLength);
-      expect(dateComponents.day).toBe(expectedDay);
+      expect(result!.position).toBe(1);
+      expect(dateComponents.day).toBe(9);
     });
 
-    it("returns null for invalid day values", () => {
+    it("should parse double-digit day with 'd' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseDay("0", 0, "d", undefined, dateComponents)).toBeNull();
-      expect(parseDay("32", 0, "d", undefined, dateComponents)).toBeNull();
-      expect(parseDay("99", 0, "d", undefined, dateComponents)).toBeNull();
-    });
+      // Act
+      const result = parseDay("15", 0, "d", undefined, dateComponents);
 
-    it("returns null for no digits", () => {
-      const dateComponents = createDateComponents();
-      const result = parseDay("abc", 0, "d", undefined, dateComponents);
-      expect(result).toBeNull();
-    });
-  });
-
-  describe("dd pattern (two-digit day)", () => {
-    it.each([
-      ["01", 0, 1],
-      ["09", 0, 9],
-      ["15", 0, 15],
-      ["31", 0, 31],
-    ])("parses %s as day %d", (input, position, expectedDay) => {
-      const dateComponents = createDateComponents();
-      const result = parseDay(input, position, "dd", undefined, dateComponents);
-
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + 2);
-      expect(dateComponents.day).toBe(expectedDay);
+      expect(result!.position).toBe(2);
+      expect(dateComponents.day).toBe(15);
     });
 
-    it("returns null for invalid formats or values", () => {
+    it("should parse day with 'dd' pattern (zero-padded)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseDay("1", 0, "dd", undefined, dateComponents)).toBeNull(); // Not 2 digits
-      expect(parseDay("00", 0, "dd", undefined, dateComponents)).toBeNull(); // Invalid day
-      expect(parseDay("32", 0, "dd", undefined, dateComponents)).toBeNull(); // Invalid day
-      expect(parseDay("a1", 0, "dd", undefined, dateComponents)).toBeNull(); // Not digits
-    });
-  });
+      // Act
+      const result = parseDay("09", 0, "dd", undefined, dateComponents);
 
-  describe("boundary values", () => {
-    it("accepts valid day range (1-31)", () => {
-      const dateComponents = createDateComponents();
-
-      // Test boundary values
-      expect(parseDay("1", 0, "d", undefined, dateComponents)).not.toBeNull();
-      expect(parseDay("31", 0, "d", undefined, dateComponents)).not.toBeNull();
-
-      // Test common values
-      expect(parseDay("15", 0, "d", undefined, dateComponents)).not.toBeNull();
-      expect(parseDay("28", 0, "d", undefined, dateComponents)).not.toBeNull();
-      expect(parseDay("29", 0, "d", undefined, dateComponents)).not.toBeNull();
-      expect(parseDay("30", 0, "d", undefined, dateComponents)).not.toBeNull();
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.day).toBe(9);
     });
 
-    it("rejects invalid day values", () => {
+    it("should parse day with 'dd' pattern (two digits)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseDay("0", 0, "d", undefined, dateComponents)).toBeNull();
-      expect(parseDay("32", 0, "d", undefined, dateComponents)).toBeNull();
-      expect(parseDay("99", 0, "d", undefined, dateComponents)).toBeNull();
+      // Act
+      const result = parseDay("15", 0, "dd", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.day).toBe(15);
     });
-  });
 
-  describe("position handling", () => {
-    it("parses at different positions", () => {
+    it("should stop at non-digit for 'd' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("15abc", 0, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.day).toBe(15);
+    });
+
+    it("should parse at different position in string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
       const result = parseDay("abc15def", 3, "dd", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(5);
       expect(dateComponents.day).toBe(15);
     });
+  });
 
-    it("handles end of string", () => {
+  describe("edge cases", () => {
+    it("should handle first day of month (1)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseDay("31", 0, "dd", undefined, dateComponents);
 
+      // Act
+      const result = parseDay("1", 0, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.day).toBe(1);
+    });
+
+    it("should handle last day of month (31)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("31", 0, "d", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2);
       expect(dateComponents.day).toBe(31);
     });
 
-    it("handles position at end of string", () => {
-      const dateComponents = createDateComponents();
-      const result = parseDay("15", 2, "d", undefined, dateComponents);
+    it("should handle common days (28, 29, 30)", () => {
+      // Arrange
+      const dateComponents1 = createDateComponents();
+      const dateComponents2 = createDateComponents();
+      const dateComponents3 = createDateComponents();
 
-      expect(result).toBeNull(); // No characters left to parse
+      // Act
+      const result1 = parseDay("28", 0, "d", undefined, dateComponents1);
+      const result2 = parseDay("29", 0, "d", undefined, dateComponents2);
+      const result3 = parseDay("30", 0, "d", undefined, dateComponents3);
+
+      // Assert
+      expect(result1).not.toBeNull();
+      expect(dateComponents1.day).toBe(28);
+      expect(result2).not.toBeNull();
+      expect(dateComponents2.day).toBe(29);
+      expect(result3).not.toBeNull();
+      expect(dateComponents3.day).toBe(30);
     });
-  });
 
-  describe("edge cases", () => {
-    it("handles single vs double digit parsing correctly", () => {
+    it("should handle single vs double digit parsing correctly", () => {
+      // Arrange
       const dateComponents1 = createDateComponents();
       const dateComponents2 = createDateComponents();
 
-      // Single digit pattern should read variable length
+      // Act - Single digit pattern should read variable length
       const result1 = parseDay("5", 0, "d", undefined, dateComponents1);
+
+      // Assert
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(1);
       expect(dateComponents1.day).toBe(5);
 
-      // Double digit pattern should require exactly 2 digits
+      // Act - Double digit pattern should require exactly 2 digits
       const result2 = parseDay("5", 0, "dd", undefined, dateComponents2);
+
+      // Assert
       expect(result2).toBeNull();
     });
 
-    it("stops parsing at first non-digit for variable length", () => {
+    it("should stop parsing at first non-digit for variable length", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
       const result = parseDay("12x34", 0, "d", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2);
       expect(dateComponents.day).toBe(12);
     });
 
-    it("validates day range regardless of pattern", () => {
+    it("should handle end of string correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("31", 0, "dd", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.day).toBe(31);
+    });
+
+    it("should return null when position is at end of string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("15", 2, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return null for day 0 (invalid)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("0", 0, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for day 32 (out of range)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("32", 0, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for day 99 (out of range)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("99", 0, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for non-digit input", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("abc", 0, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'dd' pattern with single digit", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("1", 0, "dd", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'dd' pattern with invalid day (00)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("00", 0, "dd", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'dd' pattern with invalid day (32)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("32", 0, "dd", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'dd' pattern with non-digits", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("a1", 0, "dd", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should validate day range regardless of pattern", () => {
+      // Arrange
       const dateComponents1 = createDateComponents();
       const dateComponents2 = createDateComponents();
 
-      // Both patterns should reject invalid values
-      expect(parseDay("00", 0, "d", undefined, dateComponents1)).toBeNull();
-      expect(parseDay("00", 0, "dd", undefined, dateComponents2)).toBeNull();
+      // Act
+      const result1 = parseDay("00", 0, "d", undefined, dateComponents1);
+      const result2 = parseDay("00", 0, "dd", undefined, dateComponents2);
 
-      expect(parseDay("32", 0, "d", undefined, dateComponents1)).toBeNull();
-      expect(parseDay("32", 0, "dd", undefined, dateComponents2)).toBeNull();
+      // Assert
+      expect(result1).toBeNull();
+      expect(result2).toBeNull();
+    });
+
+    it("should return null for empty string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDay("", 0, "d", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
     });
   });
 });

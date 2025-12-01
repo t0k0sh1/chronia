@@ -38,233 +38,419 @@ describe("parseEra", () => {
     },
   };
 
-  describe("with localization", () => {
-    it("parses AD/CE variants", () => {
-      const dateComponents1 = createDateComponents(100);
-      const dateComponents2 = createDateComponents(100);
-      const dateComponents3 = createDateComponents(100);
-
-      // Narrow
-      const result1 = parseEra("A", 0, "G", mockLocale, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(1);
-      expect(dateComponents1.year).toBe(100); // No change for AD
-
-      // Abbreviated
-      const result2 = parseEra("AD", 0, "G", mockLocale, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(2);
-      expect(dateComponents2.year).toBe(100); // No change for AD
-
-      // Wide
-      const result3 = parseEra("Anno Domini", 0, "G", mockLocale, dateComponents3);
-      expect(result3).not.toBeNull();
-      expect(result3!.position).toBe(11);
-      expect(dateComponents3.year).toBe(100); // No change for AD
-    });
-
-    it("parses BC/BCE variants and converts year", () => {
-      const dateComponents1 = createDateComponents(100);
-      const dateComponents2 = createDateComponents(100);
-      const dateComponents3 = createDateComponents(100);
-
-      // Narrow
-      const result1 = parseEra("B", 0, "G", mockLocale, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(1);
-      expect(dateComponents1.year).toBe(-99); // 100 BC = year -99
-
-      // Abbreviated
-      const result2 = parseEra("BC", 0, "G", mockLocale, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(2);
-      expect(dateComponents2.year).toBe(-99); // 100 BC = year -99
-
-      // Wide
-      const result3 = parseEra("Before Christ", 0, "G", mockLocale, dateComponents3);
-      expect(result3).not.toBeNull();
-      expect(result3!.position).toBe(13);
-      expect(dateComponents3.year).toBe(-99); // 100 BC = year -99
-    });
-  });
-
-  describe("without localization (English fallback)", () => {
-    it("parses AD/CE", () => {
-      const dateComponents1 = createDateComponents(100);
-      const dateComponents2 = createDateComponents(100);
-
-      const result1 = parseEra("AD", 0, "G", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(2);
-      expect(dateComponents1.year).toBe(100); // No change for AD
-
-      const result2 = parseEra("CE", 0, "G", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(2);
-      expect(dateComponents2.year).toBe(100); // No change for CE
-    });
-
-    it("parses BC/BCE and converts year", () => {
-      const dateComponents1 = createDateComponents(100);
-      const dateComponents2 = createDateComponents(1);
-
-      const result1 = parseEra("BC", 0, "G", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(2);
-      expect(dateComponents1.year).toBe(-99); // 100 BC = year -99
-
-      const result2 = parseEra("BCE", 0, "G", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(3);
-      expect(dateComponents2.year).toBe(0); // 1 BC = year 0
-    });
-
-    it("parses case-insensitive", () => {
-      const dateComponents1 = createDateComponents(100);
-      const dateComponents2 = createDateComponents(100);
-      const dateComponents3 = createDateComponents(100);
-      const dateComponents4 = createDateComponents(100);
-
-      const result1 = parseEra("ad", 0, "G", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(dateComponents1.year).toBe(100);
-
-      const result2 = parseEra("bc", 0, "G", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(dateComponents2.year).toBe(-99);
-
-      const result3 = parseEra("Ad", 0, "G", undefined, dateComponents3);
-      expect(result3).not.toBeNull();
-      expect(dateComponents3.year).toBe(100);
-
-      const result4 = parseEra("Bc", 0, "G", undefined, dateComponents4);
-      expect(result4).not.toBeNull();
-      expect(dateComponents4.year).toBe(-99);
-    });
-
-    it("parses single letter A/B", () => {
-      const dateComponents1 = createDateComponents(100);
-      const dateComponents2 = createDateComponents(100);
-
-      const result1 = parseEra("A", 0, "G", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(1);
-      expect(dateComponents1.year).toBe(100); // No change for A (AD)
-
-      const result2 = parseEra("B", 0, "G", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(1);
-      expect(dateComponents2.year).toBe(-99); // 100 BC = year -99
-    });
-  });
-
-  describe("year conversion logic", () => {
-    it("converts positive years to negative for BC", () => {
-      const testCases = [
-        [1, 0],     // 1 BC = year 0
-        [10, -9],   // 10 BC = year -9
-        [100, -99], // 100 BC = year -99
-        [2024, -2023], // 2024 BC = year -2023
-      ];
-
-      testCases.forEach(([inputYear, expectedYear]) => {
-        const dateComponents = createDateComponents(inputYear);
-        const result = parseEra("BC", 0, "G", undefined, dateComponents);
-        expect(result).not.toBeNull();
-        expect(dateComponents.year).toBe(expectedYear);
-      });
-    });
-
-    it("does not convert negative years for BC", () => {
-      const dateComponents = createDateComponents(-50);
-      const result = parseEra("BC", 0, "G", undefined, dateComponents);
-      expect(result).not.toBeNull();
-      expect(dateComponents.year).toBe(-50); // Already negative, no change
-    });
-
-    it("does not convert years for AD/CE", () => {
-      const testCases = [1, 10, 100, 2024, -50];
-
-      testCases.forEach((year) => {
-        const dateComponents = createDateComponents(year);
-        const result = parseEra("AD", 0, "G", undefined, dateComponents);
-        expect(result).not.toBeNull();
-        expect(dateComponents.year).toBe(year); // No change for AD
-      });
-    });
-  });
-
-  describe("position handling", () => {
-    it("parses at different positions", () => {
+  describe("happy path", () => {
+    it("should parse AD (standard uppercase)", () => {
+      // Arrange
       const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("AD", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(100); // No change for AD
+    });
+
+    it("should parse CE (Common Era)", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("CE", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(100); // No change for CE
+    });
+
+    it("should parse BC (standard uppercase)", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("BC", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(-99); // 100 BC = year -99
+    });
+
+    it("should parse BCE (Before Common Era)", () => {
+      // Arrange
+      const dateComponents = createDateComponents(1);
+
+      // Act
+      const result = parseEra("BCE", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(3);
+      expect(dateComponents.year).toBe(0); // 1 BC = year 0
+    });
+
+    it("should parse localized narrow 'A' for AD", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("A", 0, "G", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.year).toBe(100); // No change for AD
+    });
+
+    it("should parse localized narrow 'B' for BC", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("B", 0, "G", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.year).toBe(-99); // 100 BC = year -99
+    });
+
+    it("should parse localized abbreviated 'AD'", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("AD", 0, "G", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(100); // No change for AD
+    });
+
+    it("should parse localized abbreviated 'BC'", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("BC", 0, "G", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(-99); // 100 BC = year -99
+    });
+
+    it("should parse localized wide 'Anno Domini' for AD", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("Anno Domini", 0, "G", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(11);
+      expect(dateComponents.year).toBe(100); // No change for AD
+    });
+
+    it("should parse localized wide 'Before Christ' for BC", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("Before Christ", 0, "G", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(13);
+      expect(dateComponents.year).toBe(-99); // 100 BC = year -99
+    });
+
+    it("should parse at different position in string", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
       const result = parseEra("abcADdef", 3, "G", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(5);
       expect(dateComponents.year).toBe(100);
     });
+  });
 
-    it("handles end of string", () => {
+  describe("edge cases", () => {
+    it("should parse case-insensitive 'ad' (lowercase)", () => {
+      // Arrange
       const dateComponents = createDateComponents(100);
-      const result = parseEra("BC", 0, "G", undefined, dateComponents);
 
+      // Act
+      const result = parseEra("ad", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(100);
+    });
+
+    it("should parse case-insensitive 'bc' (lowercase)", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("bc", 0, "G", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2);
       expect(dateComponents.year).toBe(-99);
     });
 
-    it("handles position at end of string", () => {
-      const dateComponents = createDateComponents(100);
-      const result = parseEra("AD", 2, "G", undefined, dateComponents);
-
-      expect(result).toBeNull(); // No characters left to parse
-    });
-  });
-
-  describe("invalid input", () => {
-    it("returns null for unrecognized input", () => {
+    it("should parse case-insensitive 'Ad' (mixed case)", () => {
+      // Arrange
       const dateComponents = createDateComponents(100);
 
-      expect(parseEra("XD", 0, "G", undefined, dateComponents)).toBeNull();
-      expect(parseEra("123", 0, "G", undefined, dateComponents)).toBeNull();
-      expect(parseEra("", 0, "G", undefined, dateComponents)).toBeNull();
-      expect(parseEra("Z", 0, "G", undefined, dateComponents)).toBeNull();
+      // Act
+      const result = parseEra("Ad", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(100);
     });
 
-    it("returns null when no match found with localization", () => {
+    it("should parse case-insensitive 'Bc' (mixed case)", () => {
+      // Arrange
       const dateComponents = createDateComponents(100);
-      const result = parseEra("XYZ", 0, "G", mockLocale, dateComponents);
 
-      expect(result).toBeNull();
+      // Act
+      const result = parseEra("Bc", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(-99);
     });
-  });
 
-  describe("edge cases", () => {
-    it("prefers longer matches", () => {
-      // When both "BC" and "B" could match, should prefer "BC"
+    it("should parse single letter 'A' for AD", () => {
+      // Arrange
       const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("A", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.year).toBe(100); // No change for A (AD)
+    });
+
+    it("should parse single letter 'B' for BC", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("B", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.year).toBe(-99); // 100 BC = year -99
+    });
+
+    it("should convert year 1 BC to year 0", () => {
+      // Arrange
+      const dateComponents = createDateComponents(1);
+
+      // Act
       const result = parseEra("BC", 0, "G", undefined, dateComponents);
 
+      // Assert
+      expect(result).not.toBeNull();
+      expect(dateComponents.year).toBe(0); // 1 BC = year 0
+    });
+
+    it("should convert year 10 BC to year -9", () => {
+      // Arrange
+      const dateComponents = createDateComponents(10);
+
+      // Act
+      const result = parseEra("BC", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(dateComponents.year).toBe(-9); // 10 BC = year -9
+    });
+
+    it("should convert year 2024 BC to year -2023", () => {
+      // Arrange
+      const dateComponents = createDateComponents(2024);
+
+      // Act
+      const result = parseEra("BC", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(dateComponents.year).toBe(-2023); // 2024 BC = year -2023
+    });
+
+    it("should not convert negative years for BC", () => {
+      // Arrange
+      const dateComponents = createDateComponents(-50);
+
+      // Act
+      const result = parseEra("BC", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(dateComponents.year).toBe(-50); // Already negative, no change
+    });
+
+    it("should not convert years for AD", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("AD", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(dateComponents.year).toBe(100); // No change for AD
+    });
+
+    it("should not convert negative years for AD", () => {
+      // Arrange
+      const dateComponents = createDateComponents(-50);
+
+      // Act
+      const result = parseEra("AD", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(dateComponents.year).toBe(-50); // No change for AD
+    });
+
+    it("should handle year 0 correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents(0);
+
+      // Act
+      const result = parseEra("BC", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(dateComponents.year).toBe(0); // 0 stays 0
+    });
+
+    it("should prefer longer matches (BC over B)", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act - When both "BC" and "B" could match, should prefer "BC"
+      const result = parseEra("BC", 0, "G", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2); // Should consume both characters
       expect(dateComponents.year).toBe(-99);
     });
 
-    it("prefers BCE over BC", () => {
+    it("should prefer longer matches (BCE over BC)", () => {
+      // Arrange
       const dateComponents = createDateComponents(100);
+
+      // Act
       const result = parseEra("BCE", 0, "G", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(3); // Should consume all three characters
       expect(dateComponents.year).toBe(-99);
     });
 
-    it("handles year 0 correctly", () => {
-      const dateComponents = createDateComponents(0);
+    it("should handle end of string correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
       const result = parseEra("BC", 0, "G", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
-      expect(dateComponents.year).toBe(0); // 0 stays 0
+      expect(result!.position).toBe(2);
+      expect(dateComponents.year).toBe(-99);
+    });
+
+    it("should return null when position is at end of string", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("AD", 2, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull(); // No characters left to parse
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return null for unrecognized input 'XD'", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("XD", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for numeric input '123'", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("123", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for empty string", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for invalid letter 'Z'", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("Z", 0, "G", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null when no match found with localization", () => {
+      // Arrange
+      const dateComponents = createDateComponents(100);
+
+      // Act
+      const result = parseEra("XYZ", 0, "G", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
     });
   });
 });
