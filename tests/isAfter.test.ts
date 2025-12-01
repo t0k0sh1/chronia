@@ -430,6 +430,21 @@ describe("isAfter", () => {
   });
 
   describe("Boundary Value Analysis: Edge Cases", () => {
+    it("should not mutate input dates", () => {
+      // Arrange
+      const dateLeft = new Date(2024, 0, 1, 12, 0, 0, 1);
+      const dateRight = new Date(2024, 0, 1, 12, 0, 0, 0);
+      const originalLeftTime = dateLeft.getTime();
+      const originalRightTime = dateRight.getTime();
+
+      // Act
+      isAfter(dateLeft, dateRight);
+
+      // Assert
+      expect(dateLeft.getTime()).toBe(originalLeftTime);
+      expect(dateRight.getTime()).toBe(originalRightTime);
+    });
+
     it("should handle leap year boundaries", () => {
       // Arrange
       const dateLeft = new Date(2024, 2, 1); // Mar 1, 2024
@@ -621,6 +636,88 @@ describe("isAfter", () => {
     it("should return false when both dates are Infinity/-Infinity", () => {
       // Arrange & Act
       const result = isAfter(Infinity, -Infinity);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+  });
+
+  describe("Unit-based comparison with invalid inputs", () => {
+    it("should return false when first date is invalid with year-based comparison", () => {
+      // Arrange
+      const invalidDate = new Date(NaN);
+      const validDate = new Date(2024, 0, 1);
+
+      // Act
+      const result = isAfter(invalidDate, validDate, { unit: "year" });
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false when second date is invalid with month-based comparison", () => {
+      // Arrange
+      const validDate = new Date(2024, 0, 1);
+      const invalidDate = new Date(NaN);
+
+      // Act
+      const result = isAfter(validDate, invalidDate, { unit: "month" });
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false when first date is NaN timestamp with day-based comparison", () => {
+      // Arrange
+      const validDate = new Date(2024, 0, 1);
+
+      // Act
+      const result = isAfter(NaN, validDate, { unit: "day" });
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false when second date is NaN timestamp with hour-based comparison", () => {
+      // Arrange
+      const validDate = new Date(2024, 0, 1);
+
+      // Act
+      const result = isAfter(validDate, NaN, { unit: "hour" });
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false when first date is Infinity with minute-based comparison", () => {
+      // Arrange
+      const validDate = new Date(2024, 0, 1);
+
+      // Act
+      const result = isAfter(Infinity, validDate, { unit: "minute" });
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false when second date is -Infinity with second-based comparison", () => {
+      // Arrange
+      const validDate = new Date(2024, 0, 1);
+
+      // Act
+      const result = isAfter(validDate, -Infinity, { unit: "second" });
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false when both dates are invalid with unit-based comparison", () => {
+      // Arrange
+      const invalidDate1 = new Date(NaN);
+      const invalidDate2 = new Date(NaN);
+
+      // Act
+      const result = isAfter(invalidDate1, invalidDate2, { unit: "day" });
 
       // Assert
       expect(result).toBe(false);

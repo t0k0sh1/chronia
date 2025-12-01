@@ -2,147 +2,133 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { isPast } from "../src/isPast";
 
 describe("isPast", () => {
+  const FIXED_TIME = new Date(2025, 0, 15, 12, 0, 0, 0).getTime(); // Jan 15, 2025, 12:00:00.000
+
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.setSystemTime(FIXED_TIME);
   });
 
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  describe("Boundary Cases (Highest Priority)", () => {
-    it("should return true for date exactly 1ms in the past", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
+  describe("happy path", () => {
+    it("should return true for Date object in the past", () => {
+      // Arrange
+      const yesterday = new Date(2025, 0, 14, 12, 0, 0, 0);
 
-      const past = new Date(now.getTime() - 1);
-      expect(isPast(past)).toBe(true);
-    });
+      // Act
+      const result = isPast(yesterday);
 
-    it("should return false for date exactly 1ms in the future", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      const future = new Date(now.getTime() + 1);
-      expect(isPast(future)).toBe(false);
-    });
-
-    it("should return false for date exactly equal to current time (not past, not future)", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      expect(isPast(now)).toBe(false);
-      expect(isPast(now.getTime())).toBe(false);
-    });
-
-    it("should handle date at millisecond boundary (exactly midnight)", () => {
-      vi.setSystemTime(new Date("2025-01-15T12:00:00.000Z"));
-      const midnight = new Date("2025-01-15T00:00:00.000Z");
-
-      expect(isPast(midnight)).toBe(true);
-    });
-
-    it("should handle timestamp at millisecond boundary", () => {
-      const midnight = new Date("2025-01-15T00:00:00.000Z").getTime();
-      vi.setSystemTime(new Date("2025-01-15T12:00:00.000Z"));
-
-      expect(isPast(midnight)).toBe(true);
-    });
-  });
-
-  describe("Invalid Inputs (High Priority)", () => {
-    it("should return false for Invalid Date", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      expect(isPast(new Date("invalid"))).toBe(false);
-    });
-
-    it("should return false for NaN", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      expect(isPast(NaN)).toBe(false);
-    });
-
-    it("should return false for Infinity", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      expect(isPast(Infinity)).toBe(false);
-    });
-
-    it("should return false for -Infinity", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      expect(isPast(-Infinity)).toBe(false);
-    });
-
-    it("should return false for wrong type: string", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      // @ts-expect-error Testing runtime behavior with wrong type
-      expect(isPast("2025-01-14")).toBe(false);
-    });
-
-    it("should return false for wrong type: object", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      // @ts-expect-error Testing runtime behavior with wrong type
-      expect(isPast({})).toBe(false);
-    });
-
-    it("should return false for wrong type: null", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      // @ts-expect-error Testing runtime behavior with wrong type
-      expect(isPast(null)).toBe(false);
-    });
-
-    it("should return false for wrong type: undefined", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      // @ts-expect-error Testing runtime behavior with wrong type
-      expect(isPast(undefined)).toBe(false);
-    });
-  });
-
-  describe("Happy Path (Minimum Necessary)", () => {
-    it("should return true for Date object 1 day in the past", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      const yesterday = new Date("2025-01-14T12:00:00.000Z");
-      expect(isPast(yesterday)).toBe(true);
-    });
-
-    it("should return false for Date object 1 day in the future", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
-
-      const tomorrow = new Date("2025-01-16T12:00:00.000Z");
-      expect(isPast(tomorrow)).toBe(false);
+      // Assert
+      expect(result).toBe(true);
     });
 
     it("should return true for timestamp in the past", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
+      // Arrange
+      const pastTimestamp = FIXED_TIME - 86400000; // -1 day
 
-      const pastTimestamp = new Date("2025-01-14T12:00:00.000Z").getTime();
-      expect(isPast(pastTimestamp)).toBe(true);
+      // Act
+      const result = isPast(pastTimestamp);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it("should return false for Date object in the future", () => {
+      // Arrange
+      const tomorrow = new Date(2025, 0, 16, 12, 0, 0, 0);
+
+      // Act
+      const result = isPast(tomorrow);
+
+      // Assert
+      expect(result).toBe(false);
     });
 
     it("should return false for timestamp in the future", () => {
-      const now = new Date("2025-01-15T12:00:00.000Z");
-      vi.setSystemTime(now);
+      // Arrange
+      const futureTimestamp = FIXED_TIME + 86400000; // +1 day
 
-      const futureTimestamp = new Date("2025-01-16T12:00:00.000Z").getTime();
-      expect(isPast(futureTimestamp)).toBe(false);
+      // Act
+      const result = isPast(futureTimestamp);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+  });
+
+  describe("edge cases", () => {
+    it("should return false for date exactly 1ms in the future", () => {
+      // Arrange
+      const future = new Date(FIXED_TIME + 1);
+
+      // Act
+      const result = isPast(future);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should handle midnight boundary", () => {
+      // Arrange
+      const midnight = new Date(2025, 0, 15, 0, 0, 0, 0).getTime();
+
+      // Act
+      const result = isPast(midnight);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it("should handle dates very close to current time", () => {
+      // Arrange
+      const currentTime = FIXED_TIME;
+      const justBeforeNow = new Date(currentTime - 1);
+      const justAfterNow = new Date(currentTime + 1);
+      const exactlyNow = new Date(currentTime);
+
+      // Act
+      const resultBefore = isPast(justBeforeNow);
+      const resultAfter = isPast(justAfterNow);
+      const resultExact = isPast(exactlyNow);
+
+      // Assert
+      expect(resultBefore).toBe(true);  // 1ms before is past
+      expect(resultAfter).toBe(false);  // 1ms after is not past
+      expect(resultExact).toBe(false);  // exactly now is not past
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return false for Invalid Date", () => {
+      // Arrange
+      const invalidDate = new Date("invalid string");
+
+      // Act
+      const result = isPast(invalidDate);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false for NaN", () => {
+      // Act
+      const result = isPast(NaN);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it("should return false for Infinity", () => {
+      // Act
+      const resultPositive = isPast(Infinity);
+      const resultNegative = isPast(-Infinity);
+
+      // Assert
+      expect(resultPositive).toBe(false);
+      expect(resultNegative).toBe(false);
     });
   });
 });

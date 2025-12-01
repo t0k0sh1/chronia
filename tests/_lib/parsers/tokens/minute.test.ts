@@ -15,100 +15,215 @@ describe("parseMinute", () => {
     hours12: null,
   });
 
-  describe("m pattern (single digit minute)", () => {
-    it.each([
-      ["0", 0, 1, 0],
-      ["9", 0, 1, 9],
-      ["30", 0, 2, 30],
-      ["59", 0, 2, 59],
-      ["5x", 0, 1, 5], // Should stop at non-digit
-      ["30abc", 0, 2, 30], // Should stop at non-digit
-    ])("parses %s at position %d, consumes %d chars, minute=%d", (input, position, expectedLength, expectedMinute) => {
+  describe("happy path", () => {
+    it("should parse single-digit minute with 'm' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseMinute(input, position, "m", undefined, dateComponents);
 
+      // Act
+      const result = parseMinute("9", 0, "m", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + expectedLength);
-      expect(dateComponents.minutes).toBe(expectedMinute);
+      expect(result!.position).toBe(1);
+      expect(dateComponents.minutes).toBe(9);
     });
 
-    it("returns null for invalid minute values", () => {
+    it("should parse double-digit minute with 'm' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseMinute("60", 0, "m", undefined, dateComponents)).toBeNull();
-      expect(parseMinute("99", 0, "m", undefined, dateComponents)).toBeNull();
-    });
+      // Act
+      const result = parseMinute("30", 0, "m", undefined, dateComponents);
 
-    it("returns null for no digits", () => {
-      const dateComponents = createDateComponents();
-      const result = parseMinute("abc", 0, "m", undefined, dateComponents);
-      expect(result).toBeNull();
-    });
-  });
-
-  describe("mm pattern (two-digit minute)", () => {
-    it.each([
-      ["00", 0, 0],
-      ["09", 0, 9],
-      ["30", 0, 30],
-      ["59", 0, 59],
-    ])("parses %s as minute %d", (input, position, expectedMinute) => {
-      const dateComponents = createDateComponents();
-      const result = parseMinute(input, position, "mm", undefined, dateComponents);
-
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(position + 2);
-      expect(dateComponents.minutes).toBe(expectedMinute);
+      expect(result!.position).toBe(2);
+      expect(dateComponents.minutes).toBe(30);
     });
 
-    it("returns null for invalid formats or values", () => {
+    it("should parse minute with 'mm' pattern (zero-padded)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseMinute("5", 0, "mm", undefined, dateComponents)).toBeNull(); // Not 2 digits
-      expect(parseMinute("60", 0, "mm", undefined, dateComponents)).toBeNull(); // Invalid minute
-      expect(parseMinute("a1", 0, "mm", undefined, dateComponents)).toBeNull(); // Not digits
-    });
-  });
+      // Act
+      const result = parseMinute("09", 0, "mm", undefined, dateComponents);
 
-  describe("boundary values", () => {
-    it("accepts valid minute range (0-59)", () => {
-      const dateComponents = createDateComponents();
-
-      expect(parseMinute("0", 0, "m", undefined, dateComponents)).not.toBeNull();
-      expect(parseMinute("59", 0, "m", undefined, dateComponents)).not.toBeNull();
-      expect(parseMinute("30", 0, "m", undefined, dateComponents)).not.toBeNull();
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.minutes).toBe(9);
     });
 
-    it("rejects invalid minute values", () => {
+    it("should parse minute with 'mm' pattern (two digits)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseMinute("60", 0, "m", undefined, dateComponents)).toBeNull();
-      expect(parseMinute("99", 0, "m", undefined, dateComponents)).toBeNull();
+      // Act
+      const result = parseMinute("30", 0, "mm", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.minutes).toBe(30);
     });
-  });
 
-  describe("position handling", () => {
-    it("parses at different positions", () => {
+    it("should stop at non-digit for 'm' pattern", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("30abc", 0, "m", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.minutes).toBe(30);
+    });
+
+    it("should parse at different position in string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
       const result = parseMinute("abc45def", 3, "mm", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(5);
       expect(dateComponents.minutes).toBe(45);
     });
+  });
 
-    it("handles end of string", () => {
+  describe("edge cases", () => {
+    it("should handle first minute of hour (0)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseMinute("59", 0, "mm", undefined, dateComponents);
 
+      // Act
+      const result = parseMinute("0", 0, "m", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.minutes).toBe(0);
+    });
+
+    it("should handle last minute of hour (59)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("59", 0, "m", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2);
       expect(dateComponents.minutes).toBe(59);
     });
 
-    it("returns null for empty string", () => {
+    it("should handle mid-range minute (30)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("30", 0, "m", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.minutes).toBe(30);
+    });
+
+    it("should handle end of string correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("59", 0, "mm", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.minutes).toBe(59);
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return null for minute 60 (out of range)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("60", 0, "m", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for minute 99 (out of range)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("99", 0, "m", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for non-digit input", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
       const result = parseMinute("abc", 0, "m", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'mm' pattern with single digit", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("5", 0, "mm", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'mm' pattern with invalid minute (60)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("60", 0, "mm", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for 'mm' pattern with non-digits", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("a1", 0, "mm", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for empty string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseMinute("", 0, "m", undefined, dateComponents);
+
+      // Assert
       expect(result).toBeNull();
     });
   });

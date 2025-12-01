@@ -10,13 +10,47 @@ const mockLocale: Locale = {
   },
   month: {
     narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
-    abbr: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    wide: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    abbr: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ],
+    wide: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
   },
   weekday: {
     narrow: ["S", "M", "T", "W", "T", "F", "S"],
     abbr: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    wide: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    wide: [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ],
   },
   dayPeriod: {
     narrow: ["a", "p"],
@@ -26,72 +60,126 @@ const mockLocale: Locale = {
 };
 
 describe("formatWeekday", () => {
-  it.each([
-    // --- fallback abbreviated ---
-    {
-      date: new Date(2025, 0, 5),
-      token: "E",
-      locale: undefined,
-      expected: "Sun",
-    }, // 2025-01-05 = Sunday
-    {
-      date: new Date(2025, 0, 6),
-      token: "EEE",
-      locale: undefined,
-      expected: "Mon",
-    }, // Monday
+  describe("happy path", () => {
+    it("should format weekday with 'E' token (abbreviated, no locale)", () => {
+      // Arrange
+      const sunday = new Date(2025, 0, 5); // 2025-01-05 = Sunday
 
-    // --- fallback wide ---
-    {
-      date: new Date(2025, 0, 7),
-      token: "EEEE",
-      locale: undefined,
-      expected: "Tuesday",
-    },
+      // Act
+      const result = formatWeekday(sunday, "E");
 
-    // --- fallback narrow ---
-    {
-      date: new Date(2025, 0, 8),
-      token: "EEEEE",
-      locale: undefined,
-      expected: "W",
-    },
+      // Assert
+      expect(result).toBe("Sun");
+    });
 
-    // --- localize abbreviated ---
-    {
-      date: new Date(2025, 0, 9),
-      token: "E",
-      locale: mockLocale,
-      expected: "Thu",
-    },
+    it("should format weekday with 'EEE' token (abbreviated, no locale)", () => {
+      // Arrange
+      const monday = new Date(2025, 0, 6); // Monday
 
-    // --- localize wide ---
-    {
-      date: new Date(2025, 0, 10),
-      token: "EEEE",
-      locale: mockLocale,
-      expected: "Friday",
-    },
+      // Act
+      const result = formatWeekday(monday, "EEE");
 
-    // --- localize narrow ---
-    {
-      date: new Date(2025, 0, 11),
-      token: "EEEEE",
-      locale: mockLocale,
-      expected: "S",
-    }, // Saturday
+      // Assert
+      expect(result).toBe("Mon");
+    });
 
-    // --- default case with locale (unknown token) ---
-    {
-      date: new Date(2025, 0, 5),
-      token: "EEEEEE",
-      locale: mockLocale,
-      expected: "Sun",
-    },
-  ])(
-    "date=$date token=$token locale? => $expected",
-    ({ date, token, locale, expected }) => {
-      expect(formatWeekday(date, token, locale)).toBe(expected);
-    },
-  );
+    it("should format weekday with 'EEEE' token (wide, no locale)", () => {
+      // Arrange
+      const tuesday = new Date(2025, 0, 7); // Tuesday
+
+      // Act
+      const result = formatWeekday(tuesday, "EEEE");
+
+      // Assert
+      expect(result).toBe("Tuesday");
+    });
+
+    it("should format weekday with 'EEEEE' token (narrow, no locale)", () => {
+      // Arrange
+      const wednesday = new Date(2025, 0, 8); // Wednesday
+
+      // Act
+      const result = formatWeekday(wednesday, "EEEEE");
+
+      // Assert
+      expect(result).toBe("W");
+    });
+
+    it("should format weekday with locale (abbreviated)", () => {
+      // Arrange
+      const thursday = new Date(2025, 0, 9); // Thursday
+
+      // Act
+      const result = formatWeekday(thursday, "E", mockLocale);
+
+      // Assert
+      expect(result).toBe("Thu");
+    });
+
+    it("should format weekday with locale (wide)", () => {
+      // Arrange
+      const friday = new Date(2025, 0, 10); // Friday
+
+      // Act
+      const result = formatWeekday(friday, "EEEE", mockLocale);
+
+      // Assert
+      expect(result).toBe("Friday");
+    });
+
+    it("should format weekday with locale (narrow)", () => {
+      // Arrange
+      const saturday = new Date(2025, 0, 11); // Saturday
+
+      // Act
+      const result = formatWeekday(saturday, "EEEEE", mockLocale);
+
+      // Assert
+      expect(result).toBe("S");
+    });
+  });
+
+  describe("edge cases", () => {
+    it("should handle Sunday (first day of week)", () => {
+      // Arrange
+      const sunday = new Date(2025, 0, 5); // Sunday
+
+      // Act
+      const resultAbbr = formatWeekday(sunday, "E");
+      const resultWide = formatWeekday(sunday, "EEEE");
+      const resultNarrow = formatWeekday(sunday, "EEEEE");
+
+      // Assert
+      expect(resultAbbr).toBe("Sun");
+      expect(resultWide).toBe("Sunday");
+      expect(resultNarrow).toBe("S");
+    });
+
+    it("should handle Saturday (last day of week)", () => {
+      // Arrange
+      const saturday = new Date(2025, 0, 11); // Saturday
+
+      // Act
+      const resultAbbr = formatWeekday(saturday, "E");
+      const resultWide = formatWeekday(saturday, "EEEE");
+      const resultNarrow = formatWeekday(saturday, "EEEEE");
+
+      // Assert
+      expect(resultAbbr).toBe("Sat");
+      expect(resultWide).toBe("Saturday");
+      expect(resultNarrow).toBe("S");
+    });
+
+    it("should use default format for unknown token", () => {
+      // Arrange
+      const sunday = new Date(2025, 0, 5);
+
+      // Act
+      const result = formatWeekday(sunday, "EEEEEE", mockLocale);
+
+      // Assert
+      expect(result).toBe("Sun");
+    });
+  });
+
 });

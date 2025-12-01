@@ -322,7 +322,7 @@ describe("Input validation", () => {
       expect(getMonthName(enUS, 999, "wide")).toBe("January");
     });
 
-    it("should work correctly with valid boundary values", () => {
+    it("should return correct month names for boundary values (0 and 11)", () => {
       expect(getMonthName(enUS, 0)).toBe("Jan"); // January (minimum)
       expect(getMonthName(enUS, 11)).toBe("Dec"); // December (maximum)
     });
@@ -345,7 +345,7 @@ describe("Input validation", () => {
       expect(getWeekdayName(enUS, 999, "wide")).toBe("Sunday");
     });
 
-    it("should work correctly with valid boundary values", () => {
+    it("should return correct weekday names for boundary values (0 and 6)", () => {
       expect(getWeekdayName(enUS, 0)).toBe("Sun"); // Sunday (minimum)
       expect(getWeekdayName(enUS, 6)).toBe("Sat"); // Saturday (maximum)
     });

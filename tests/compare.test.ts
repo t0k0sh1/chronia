@@ -401,51 +401,7 @@ describe("compare", () => {
     });
   });
 
-  // T008: Performance comparison tests vs native Date comparison
-  describe.skip("Performance tests", () => {
-    it("should perform comparably to direct Date comparison", () => {
-      const dates1 = Array.from(
-        { length: 1000 },
-        () => new Date(Math.random() * 1000000000000),
-      );
-      const dates2 = [...dates1];
-
-      // Native comparison performance
-      const startNative = performance.now();
-      dates1.sort((a, b) => a.getTime() - b.getTime());
-      const nativeTime = performance.now() - startNative;
-
-      // Compare function performance
-      const startCompare = performance.now();
-      dates2.sort(compare);
-      const compareTime = performance.now() - startCompare;
-
-      // Implementation should be within reasonable factor of native performance
-      expect(compareTime).toBeLessThan(nativeTime * 10);
-    });
-
-    it("should handle rapid successive comparisons efficiently", () => {
-      const date1 = new Date("2024-01-01");
-      const date2 = new Date("2024-01-02");
-
-      const startTime = performance.now();
-
-      // Perform many rapid comparisons
-      for (let i = 0; i < 10000; i++) {
-        compare(date1, date2);
-        compare(date2, date1);
-        compare(date1, date1);
-      }
-
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-
-      // Should complete within reasonable time (1 second for 30k operations)
-      expect(duration).toBeLessThan(1000);
-    });
-  });
-
-  // T009: Compatibility tests verifying correct -1/0/1 return values for Array.sort()
+  // T008: Compatibility tests verifying correct -1/0/1 return values for Array.sort()
   describe("Array.sort() compatibility", () => {
     it("should return only -1, 0, or 1", () => {
       const testCases = [
@@ -495,7 +451,7 @@ describe("compare", () => {
       expect(compare(date, date)).toBe(0);
     });
 
-    it("should work correctly with Array.sort() for various scenarios", () => {
+    it("should correctly sort array with duplicate dates using Array.sort()", () => {
       // Test with duplicate dates
       const dates = [
         new Date("2024-01-03"),
@@ -532,7 +488,7 @@ describe("compare", () => {
       expect(compare(timestamp, timestamp)).toBe(0); // same timestamp
     });
 
-    it("should work correctly in Array.sort() with mixed types", () => {
+    it("should correctly sort array containing both Date objects and timestamps", () => {
       const mixed = [
         new Date("2024-01-03"),
         new Date("2024-01-01").getTime(),
@@ -785,118 +741,6 @@ describe("compare", () => {
         expect(typeof result3).toBe("number");
 
         expect([result1, result2, result3]).toEqual([-1, 1, 0]);
-      });
-    });
-  });
-
-  // Additional performance tests (skipped by default for CI stability)
-  describe.skip("Enhanced Performance Tests", () => {
-    describe("Performance Benchmarks", () => {
-      it("should sort 10,000 Date objects under 120ms", () => {
-        const dates = Array.from(
-          { length: 10000 },
-          () =>
-            new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
-        );
-
-        const start = performance.now();
-        dates.sort(compare);
-        const end = performance.now();
-
-        expect(end - start).toBeLessThan(120);
-      });
-
-      it("should sort 10,000 timestamps under 120ms", () => {
-        const timestamps = Array.from(
-          { length: 10000 },
-          () => Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
-        );
-
-        const start = performance.now();
-        timestamps.sort((a, b) => compare(a, b));
-        const end = performance.now();
-
-        expect(end - start).toBeLessThan(120);
-      });
-
-      it("should sort 10,000 mixed Date/number inputs under 120ms", () => {
-        const mixed = Array.from({ length: 10000 }, (_, i) =>
-          i % 2 === 0
-            ? new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000)
-            : Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
-        );
-
-        const start = performance.now();
-        mixed.sort((a, b) => compare(a, b));
-        const end = performance.now();
-
-        expect(end - start).toBeLessThan(120);
-      });
-
-      it("should have minimal overhead for individual comparisons", () => {
-        const date1 = new Date("2024-01-01");
-        const timestamp2 = new Date("2024-01-02").getTime();
-
-        const start = performance.now();
-        for (let i = 0; i < 10000; i++) {
-          compare(date1, timestamp2);
-        }
-        const end = performance.now();
-
-        // 10,000 individual comparisons should complete in well under 100ms
-        expect(end - start).toBeLessThan(120);
-      });
-
-      it("should maintain performance with runtime case-insensitive order parameters", () => {
-        const dates = Array.from(
-          { length: 1000 },
-          () =>
-            new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
-        );
-
-        // Test with runtime lowercase order parameter (TypeScript will error but runtime works)
-        const start = performance.now();
-        // @ts-expect-error Testing runtime behavior with lowercase order
-        dates.sort((a, b) => compare(a, b, { order: "desc" }));
-        const end = performance.now();
-
-        expect(end - start).toBeLessThan(120); // Should be very fast for 1k items, allow for slower CI
-      });
-    });
-
-    describe("Memory Efficiency", () => {
-      it("should not cause memory leaks with large datasets", () => {
-        // Create large arrays multiple times to test memory usage
-        for (let round = 0; round < 5; round++) {
-          const large = Array.from({ length: 5000 }, (_, i) =>
-            i % 2 === 0
-              ? new Date(
-                  Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
-                )
-              : Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000,
-          );
-
-          expect(() => large.sort((a, b) => compare(a, b))).not.toThrow();
-          expect(large).toHaveLength(5000);
-        }
-      });
-
-      it("should handle extreme values efficiently", () => {
-        const extremes = [
-          new Date(8640000000000000), // Max safe date
-          new Date(-8640000000000000), // Min safe date
-          Date.now(),
-          0, // Unix epoch
-          new Date("2024-01-01").getTime(),
-        ];
-
-        const start = performance.now();
-        for (let i = 0; i < 1000; i++) {
-          extremes.sort((a, b) => compare(a, b));
-        }
-        const end = performance.now();
-
-        expect(end - start).toBeLessThan(120); // Allow for slower CI environments
       });
     });
   });

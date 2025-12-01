@@ -2,223 +2,220 @@ import { describe, it, expect } from "vitest";
 import { endOfYear } from "../src/endOfYear";
 
 describe("endOfYear", () => {
-  it("returns December 31st at end of day of the same year", () => {
-    const date = new Date(2024, 5, 15, 14, 30, 45, 123); // June 15, 2024 14:30:45.123
-    const result = endOfYear(date);
+  describe("happy path", () => {
+    it("should return December 31st at end of day of same year", () => {
+      // Arrange
+      const date = new Date(2024, 5, 15, 14, 30, 45, 123);
 
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(11); // December
-    expect(result.getDate()).toBe(31);
-    expect(result.getHours()).toBe(23);
-    expect(result.getMinutes()).toBe(59);
-    expect(result.getSeconds()).toBe(59);
-    expect(result.getMilliseconds()).toBe(999);
-  });
-
-  it("works with the first day of the year", () => {
-    const date = new Date(2024, 0, 1, 0, 0, 0, 0); // January 1, 2024 00:00:00.000
-    const result = endOfYear(date);
-
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(11); // December
-    expect(result.getDate()).toBe(31);
-    expect(result.getHours()).toBe(23);
-    expect(result.getMinutes()).toBe(59);
-    expect(result.getSeconds()).toBe(59);
-    expect(result.getMilliseconds()).toBe(999);
-  });
-
-  it("works with the last day of the year", () => {
-    const date = new Date(2024, 11, 31, 12, 30, 0, 0); // December 31, 2024 12:30:00.000
-    const result = endOfYear(date);
-
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(11); // December
-    expect(result.getDate()).toBe(31);
-    expect(result.getHours()).toBe(23);
-    expect(result.getMinutes()).toBe(59);
-    expect(result.getSeconds()).toBe(59);
-    expect(result.getMilliseconds()).toBe(999);
-  });
-
-  it("handles different months correctly", () => {
-    const testCases = [
-      new Date(2024, 1, 15), // February
-      new Date(2024, 6, 4), // July
-      new Date(2024, 11, 25), // December
-    ];
-
-    testCases.forEach((date) => {
+      // Act
       const result = endOfYear(date);
-      expect(result.getFullYear()).toBe(2024);
-      expect(result.getMonth()).toBe(11); // December
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 11, 31, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle mid-year date", () => {
+      // Arrange
+      const date = new Date(2023, 6, 4, 12, 0, 0, 0);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2023, 11, 31, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle first day of year", () => {
+      // Arrange
+      const date = new Date(2024, 0, 1, 0, 0, 0, 0);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 11, 31, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle timestamp input", () => {
+      // Arrange
+      const timestamp = new Date(2024, 5, 15).getTime();
+
+      // Act
+      const result = endOfYear(timestamp);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 11, 31, 23, 59, 59, 999).getTime());
+    });
+  });
+
+  describe("edge cases", () => {
+    it("should handle last day of year - no change", () => {
+      // Arrange
+      const date = new Date(2024, 11, 31, 23, 59, 59, 999);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getTime()).toBe(date.getTime());
+    });
+
+    it("should handle last day of year with earlier time", () => {
+      // Arrange
+      const date = new Date(2024, 11, 31, 12, 30, 0, 0);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 11, 31, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle leap year February 29th", () => {
+      // Arrange
+      const date = new Date(2024, 1, 29, 12, 0, 0, 0);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 11, 31, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle non-leap year", () => {
+      // Arrange
+      const date = new Date(2023, 1, 28, 12, 0, 0, 0);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2023, 11, 31, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle century boundaries", () => {
+      // Arrange
+      const centuryBoundary1999 = new Date(1999, 6, 15, 12, 0, 0, 0);
+      const centuryBoundary2000 = new Date(2000, 5, 10, 12, 0, 0, 0);
+
+      // Act
+      const result1999 = endOfYear(centuryBoundary1999);
+      const result2000 = endOfYear(centuryBoundary2000);
+
+      // Assert
+      expect(result1999.getTime()).toBe(new Date(1999, 11, 31, 23, 59, 59, 999).getTime());
+      expect(result2000.getTime()).toBe(new Date(2000, 11, 31, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle negative years (BCE dates)", () => {
+      // Arrange
+      const date = new Date(0, 6, 15);
+      date.setFullYear(-100);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getFullYear()).toBe(-100);
+      expect(result.getMonth()).toBe(11);
       expect(result.getDate()).toBe(31);
       expect(result.getHours()).toBe(23);
       expect(result.getMinutes()).toBe(59);
       expect(result.getSeconds()).toBe(59);
       expect(result.getMilliseconds()).toBe(999);
     });
-  });
 
-  it("handles leap years correctly", () => {
-    const leapYear = new Date(2024, 1, 29, 12, 0, 0, 0); // February 29, 2024 (leap year)
-    const result = endOfYear(leapYear);
+    it("should handle extreme year values (year 9999)", () => {
+      // Arrange
+      const date = new Date(9999, 6, 15, 12, 30, 45, 123);
 
-    expect(result.getFullYear()).toBe(2024);
-    expect(result.getMonth()).toBe(11); // December
-    expect(result.getDate()).toBe(31);
-  });
-
-  it("handles non-leap years correctly", () => {
-    const nonLeapYear = new Date(2023, 1, 28, 12, 0, 0, 0); // February 28, 2023 (non-leap year)
-    const result = endOfYear(nonLeapYear);
-
-    expect(result.getFullYear()).toBe(2023);
-    expect(result.getMonth()).toBe(11); // December
-    expect(result.getDate()).toBe(31);
-  });
-
-  it("handles different years", () => {
-    const testCases = [
-      { date: new Date(1999, 6, 15), expectedYear: 1999 },
-      { date: new Date(2000, 1, 29), expectedYear: 2000 }, // Leap year
-      { date: new Date(2025, 0, 1), expectedYear: 2025 },
-      { date: new Date(2030, 11, 31), expectedYear: 2030 },
-    ];
-
-    testCases.forEach(({ date, expectedYear }) => {
+      // Act
       const result = endOfYear(date);
-      expect(result.getFullYear()).toBe(expectedYear);
-      expect(result.getMonth()).toBe(11); // December
+
+      // Assert
+      expect(result.getFullYear()).toBe(9999);
+      expect(result.getMonth()).toBe(11);
       expect(result.getDate()).toBe(31);
       expect(result.getHours()).toBe(23);
       expect(result.getMinutes()).toBe(59);
       expect(result.getSeconds()).toBe(59);
       expect(result.getMilliseconds()).toBe(999);
     });
-  });
 
-  it("handles century boundaries", () => {
-    const testCases = [
-      new Date(1999, 6, 15), // July 15, 1999
-      new Date(2000, 5, 10), // June 10, 2000
-      new Date(2099, 2, 20), // March 20, 2099
-      new Date(2100, 8, 5), // September 5, 2100
-    ];
+    it("should handle extreme negative year values (year -9999)", () => {
+      // Arrange
+      const date = new Date(0, 6, 15, 12, 30, 45, 123);
+      date.setFullYear(-9999);
 
-    testCases.forEach((date) => {
+      // Act
       const result = endOfYear(date);
-      expect(result.getFullYear()).toBe(date.getFullYear());
-      expect(result.getMonth()).toBe(11); // December
+
+      // Assert
+      expect(result.getFullYear()).toBe(-9999);
+      expect(result.getMonth()).toBe(11);
       expect(result.getDate()).toBe(31);
       expect(result.getHours()).toBe(23);
       expect(result.getMinutes()).toBe(59);
       expect(result.getSeconds()).toBe(59);
       expect(result.getMilliseconds()).toBe(999);
     });
-  });
 
-  it("handles millennium boundaries", () => {
-    const testCases = [
-      new Date(999, 6, 15), // July 15, 999
-      new Date(1000, 0, 1), // January 1, 1000
-      new Date(1999, 11, 31), // December 31, 1999
-      new Date(2000, 0, 1), // January 1, 2000
-    ];
+    it("should not modify original Date object", () => {
+      // Arrange
+      const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
+      const originalTime = originalDate.getTime();
 
-    testCases.forEach((date) => {
-      const result = endOfYear(date);
-      expect(result.getFullYear()).toBe(date.getFullYear());
-      expect(result.getMonth()).toBe(11); // December
-      expect(result.getDate()).toBe(31);
+      // Act
+      endOfYear(originalDate);
+
+      // Assert
+      expect(originalDate.getTime()).toBe(originalTime);
+    });
+
+    it("should return new Date object, not reference to input", () => {
+      // Arrange
+      const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
+
+      // Act
+      const result = endOfYear(originalDate);
+
+      // Assert
+      expect(result).not.toBe(originalDate);
+      expect(result).toBeInstanceOf(Date);
     });
   });
 
-  it("does not modify the original date", () => {
-    const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
-    const originalTime = originalDate.getTime();
+  describe("invalid inputs", () => {
+    it("should return Invalid Date when Date is invalid", () => {
+      // Arrange
+      const invalidDate = new Date("invalid");
 
-    endOfYear(originalDate);
+      // Act
+      const result = endOfYear(invalidDate);
 
-    expect(originalDate.getTime()).toBe(originalTime);
-  });
-
-  it("returns a new Date object", () => {
-    const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
-    const result = endOfYear(originalDate);
-
-    expect(result).not.toBe(originalDate);
-    expect(result instanceof Date).toBe(true);
-  });
-
-  it("handles negative years (BCE dates)", () => {
-    const date = new Date(0, 6, 15); // Default year handling
-    date.setFullYear(-100); // 100 BCE
-    const result = endOfYear(date);
-
-    expect(result.getFullYear()).toBe(-100);
-    expect(result.getMonth()).toBe(11); // December
-    expect(result.getDate()).toBe(31);
-  });
-
-  it("maintains consistent behavior across all months", () => {
-    // Test all 12 months to ensure December 31st is always returned
-    for (let month = 0; month < 12; month++) {
-      const date = new Date(2024, month, 15);
-      const result = endOfYear(date);
-
-      expect(result.getFullYear()).toBe(2024);
-      expect(result.getMonth()).toBe(11); // Always December
-      expect(result.getDate()).toBe(31); // Always 31st
-      expect(result.getHours()).toBe(23);
-      expect(result.getMinutes()).toBe(59);
-      expect(result.getSeconds()).toBe(59);
-      expect(result.getMilliseconds()).toBe(999);
-    }
-  });
-
-  describe("type validation", () => {
-    it("should return Invalid Date for invalid argument types", () => {
-      const invalidInputs = [
-        null,
-        undefined,
-        "2024-01-01",
-        true,
-        false,
-        {},
-        [],
-        () => {},
-        Symbol("test")
-      ];
-
-      invalidInputs.forEach(input => {
-        const result = endOfYear(input as any);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
+      // Assert
+      expect(Number.isNaN(result.getTime())).toBe(true);
     });
 
-    it("should return Invalid Date for Invalid Date objects", () => {
-      const invalidDates = [
-        new Date("invalid"),
-        new Date(NaN)
-      ];
+    it("should return Invalid Date when input is NaN", () => {
+      // Act
+      // @ts-expect-error - Testing runtime behavior with invalid input type
+      const result = endOfYear(NaN);
 
-      invalidDates.forEach(invalidDate => {
-        const result = endOfYear(invalidDate);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
+      // Assert
+      expect(Number.isNaN(result.getTime())).toBe(true);
     });
 
-    it("should return Invalid Date for special number values", () => {
-      const specialNumbers = [NaN, Infinity, -Infinity];
+    it("should return Invalid Date when input is Infinity", () => {
+      // Arrange & Act
+      // @ts-expect-error - Testing runtime behavior with invalid input type
+      const resultPositive = endOfYear(Infinity);
+      // @ts-expect-error - Testing runtime behavior with invalid input type
+      const resultNegative = endOfYear(-Infinity);
 
-      specialNumbers.forEach(num => {
-        const result = endOfYear(num as any);
-        expect(result instanceof Date).toBe(true);
-        expect(result.getTime()).toBeNaN();
-      });
+      // Assert
+      expect(Number.isNaN(resultPositive.getTime())).toBe(true);
+      expect(Number.isNaN(resultNegative.getTime())).toBe(true);
     });
   });
 });

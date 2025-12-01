@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { getMinutes } from "../src";
 
+const MILLISECONDS_IN_DAY = 86400000;
+
 /**
  * Test Design for getMinutes
  *
@@ -81,24 +83,24 @@ describe("getMinutes", () => {
 
     it("should accept negative timestamp (before Unix epoch)", () => {
       // Arrange: Day before Unix epoch
-      const timestamp = -86400000; // Dec 31, 1969
+      const timestamp = -MILLISECONDS_IN_DAY; // Dec 31, 1969
 
       // Act
       const result = getMinutes(timestamp);
 
       // Assert
-      expect(result).toBe(new Date(-86400000).getMinutes()); // Local minutes
+      expect(result).toBe(new Date(-MILLISECONDS_IN_DAY).getMinutes()); // Local minutes
     });
 
     it("should accept positive timestamp", () => {
       // Arrange: Day after Unix epoch start
-      const timestamp = 86400000; // Jan 2, 1970
+      const timestamp = MILLISECONDS_IN_DAY; // Jan 2, 1970
 
       // Act
       const result = getMinutes(timestamp);
 
       // Assert
-      expect(result).toBe(new Date(86400000).getMinutes()); // Local minutes
+      expect(result).toBe(new Date(MILLISECONDS_IN_DAY).getMinutes()); // Local minutes
     });
   });
 

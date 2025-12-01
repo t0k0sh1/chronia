@@ -38,183 +38,245 @@ describe("parseDayPeriod", () => {
     },
   };
 
-  describe("with localization", () => {
-    it("parses AM variants", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
-      const dateComponents3 = createDateComponents();
-
-      // Narrow
-      const result1 = parseDayPeriod("a", 0, "a", mockLocale, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(1);
-      expect(dateComponents1.isPM).toBe(false);
-
-      // Abbreviated
-      const result2 = parseDayPeriod("AM", 0, "a", mockLocale, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(2);
-      expect(dateComponents2.isPM).toBe(false);
-
-      // Wide
-      const result3 = parseDayPeriod("Morning", 0, "a", mockLocale, dateComponents3);
-      expect(result3).not.toBeNull();
-      expect(result3!.position).toBe(7);
-      expect(dateComponents3.isPM).toBe(false);
-    });
-
-    it("parses PM variants", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
-      const dateComponents3 = createDateComponents();
-
-      // Narrow
-      const result1 = parseDayPeriod("p", 0, "a", mockLocale, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(1);
-      expect(dateComponents1.isPM).toBe(true);
-
-      // Abbreviated
-      const result2 = parseDayPeriod("PM", 0, "a", mockLocale, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(2);
-      expect(dateComponents2.isPM).toBe(true);
-
-      // Wide
-      const result3 = parseDayPeriod("Evening", 0, "a", mockLocale, dateComponents3);
-      expect(result3).not.toBeNull();
-      expect(result3!.position).toBe(7);
-      expect(dateComponents3.isPM).toBe(true);
-    });
-  });
-
-  describe("without localization (English fallback)", () => {
-    it("parses standard AM/PM", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
-
-      const result1 = parseDayPeriod("AM", 0, "a", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(2);
-      expect(dateComponents1.isPM).toBe(false);
-
-      const result2 = parseDayPeriod("PM", 0, "a", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(2);
-      expect(dateComponents2.isPM).toBe(true);
-    });
-
-    it("parses case-insensitive AM/PM", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
-      const dateComponents3 = createDateComponents();
-      const dateComponents4 = createDateComponents();
-
-      const result1 = parseDayPeriod("am", 0, "a", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(dateComponents1.isPM).toBe(false);
-
-      const result2 = parseDayPeriod("pm", 0, "a", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(dateComponents2.isPM).toBe(true);
-
-      const result3 = parseDayPeriod("Am", 0, "a", undefined, dateComponents3);
-      expect(result3).not.toBeNull();
-      expect(dateComponents3.isPM).toBe(false);
-
-      const result4 = parseDayPeriod("Pm", 0, "a", undefined, dateComponents4);
-      expect(result4).not.toBeNull();
-      expect(dateComponents4.isPM).toBe(true);
-    });
-
-    it("parses single letter A/P", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
-
-      const result1 = parseDayPeriod("A", 0, "a", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(1);
-      expect(dateComponents1.isPM).toBe(false);
-
-      const result2 = parseDayPeriod("P", 0, "a", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(1);
-      expect(dateComponents2.isPM).toBe(true);
-    });
-
-    it("parses lowercase single letter a/p", () => {
-      const dateComponents1 = createDateComponents();
-      const dateComponents2 = createDateComponents();
-
-      const result1 = parseDayPeriod("a", 0, "a", undefined, dateComponents1);
-      expect(result1).not.toBeNull();
-      expect(result1!.position).toBe(1);
-      expect(dateComponents1.isPM).toBe(false);
-
-      const result2 = parseDayPeriod("p", 0, "a", undefined, dateComponents2);
-      expect(result2).not.toBeNull();
-      expect(result2!.position).toBe(1);
-      expect(dateComponents2.isPM).toBe(true);
-    });
-  });
-
-  describe("position handling", () => {
-    it("parses at different positions", () => {
+  describe("happy path", () => {
+    it("should parse AM (standard uppercase)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseDayPeriod("abcAMdef", 3, "a", undefined, dateComponents);
 
+      // Act
+      const result = parseDayPeriod("AM", 0, "a", undefined, dateComponents);
+
+      // Assert
       expect(result).not.toBeNull();
-      expect(result!.position).toBe(5);
+      expect(result!.position).toBe(2);
       expect(dateComponents.isPM).toBe(false);
     });
 
-    it("handles end of string", () => {
+    it("should parse PM (standard uppercase)", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
       const result = parseDayPeriod("PM", 0, "a", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2);
       expect(dateComponents.isPM).toBe(true);
     });
 
-    it("handles position at end of string", () => {
-      const dateComponents = createDateComponents();
-      const result = parseDayPeriod("AM", 2, "a", undefined, dateComponents);
-
-      expect(result).toBeNull(); // No characters left to parse
-    });
-  });
-
-  describe("invalid input", () => {
-    it("returns null for unrecognized input", () => {
+    it("should parse localized narrow 'a' for AM", () => {
+      // Arrange
       const dateComponents = createDateComponents();
 
-      expect(parseDayPeriod("XM", 0, "a", undefined, dateComponents)).toBeNull();
-      expect(parseDayPeriod("123", 0, "a", undefined, dateComponents)).toBeNull();
-      expect(parseDayPeriod("", 0, "a", undefined, dateComponents)).toBeNull();
-      expect(parseDayPeriod("Z", 0, "a", undefined, dateComponents)).toBeNull();
+      // Act
+      const result = parseDayPeriod("a", 0, "a", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.isPM).toBe(false);
     });
 
-    it("returns null when no match found with localization", () => {
+    it("should parse localized narrow 'p' for PM", () => {
+      // Arrange
       const dateComponents = createDateComponents();
-      const result = parseDayPeriod("XYZ", 0, "a", mockLocale, dateComponents);
 
-      expect(result).toBeNull();
+      // Act
+      const result = parseDayPeriod("p", 0, "a", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should parse localized abbreviated 'AM'", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("AM", 0, "a", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.isPM).toBe(false);
+    });
+
+    it("should parse localized abbreviated 'PM'", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("PM", 0, "a", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should parse localized wide 'Morning' for AM", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("Morning", 0, "a", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(7);
+      expect(dateComponents.isPM).toBe(false);
+    });
+
+    it("should parse localized wide 'Evening' for PM", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("Evening", 0, "a", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(7);
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should parse at different position in string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("abcAMdef", 3, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(5);
+      expect(dateComponents.isPM).toBe(false);
     });
   });
 
   describe("edge cases", () => {
-    it("prefers longer matches", () => {
-      // When both "AM" and "A" could match, should prefer "AM"
+    it("should parse case-insensitive 'am' (lowercase) as narrow format", () => {
+      // Arrange
       const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("am", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1); // Matches narrow format "a" first
+      expect(dateComponents.isPM).toBe(false);
+    });
+
+    it("should parse case-insensitive 'pm' (lowercase) as narrow format", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("pm", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1); // Matches narrow format "p" first
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should parse case-insensitive 'Am' (mixed case)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("Am", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.isPM).toBe(false);
+    });
+
+    it("should parse case-insensitive 'Pm' (mixed case)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("Pm", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should parse single letter 'A' for AM", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("A", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.isPM).toBe(false);
+    });
+
+    it("should parse single letter 'P' for PM", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("P", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should parse lowercase single letter 'a' for AM", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("a", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.isPM).toBe(false);
+    });
+
+    it("should parse lowercase single letter 'p' for PM", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("p", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(1);
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should prefer longer matches (AM over A)", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act - When both "AM" and "A" could match, should prefer "AM"
       const result = parseDayPeriod("AM", 0, "a", undefined, dateComponents);
 
+      // Assert
       expect(result).not.toBeNull();
       expect(result!.position).toBe(2); // Should consume both characters
       expect(dateComponents.isPM).toBe(false);
     });
 
-    it("handles localized strings that might conflict", () => {
+    it("should handle custom localized strings", () => {
+      // Arrange
       const conflictLocale: Locale = {
         era: {
           narrow: ["B", "A"],
@@ -237,19 +299,102 @@ describe("parseDayPeriod", () => {
           wide: ["ANTE", "POST"],
         },
       };
-
       const dateComponents1 = createDateComponents();
       const dateComponents2 = createDateComponents();
 
+      // Act
       const result1 = parseDayPeriod("ANTE", 0, "a", conflictLocale, dateComponents1);
+      const result2 = parseDayPeriod("POST", 0, "a", conflictLocale, dateComponents2);
+
+      // Assert
       expect(result1).not.toBeNull();
       expect(result1!.position).toBe(4);
       expect(dateComponents1.isPM).toBe(false);
 
-      const result2 = parseDayPeriod("POST", 0, "a", conflictLocale, dateComponents2);
       expect(result2).not.toBeNull();
       expect(result2!.position).toBe(4);
       expect(dateComponents2.isPM).toBe(true);
+    });
+
+    it("should handle end of string correctly", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("PM", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).not.toBeNull();
+      expect(result!.position).toBe(2);
+      expect(dateComponents.isPM).toBe(true);
+    });
+
+    it("should return null when position is at end of string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("AM", 2, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull(); // No characters left to parse
+    });
+  });
+
+  describe("invalid inputs", () => {
+    it("should return null for unrecognized input 'XM'", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("XM", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for numeric input '123'", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("123", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for empty string", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null for invalid letter 'Z'", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("Z", 0, "a", undefined, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it("should return null when no match found with localization", () => {
+      // Arrange
+      const dateComponents = createDateComponents();
+
+      // Act
+      const result = parseDayPeriod("XYZ", 0, "a", mockLocale, dateComponents);
+
+      // Assert
+      expect(result).toBeNull();
     });
   });
 });
