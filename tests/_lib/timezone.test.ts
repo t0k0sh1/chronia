@@ -72,9 +72,10 @@ describe("timezone", () => {
       });
 
       it("should handle whitespace correctly", () => {
-        // Note: Intl API may or may not trim whitespace
-        // This test documents the behavior
-        expect(isValidTimeZone(" Asia/Tokyo ")).toBe(false);
+        // Whitespace is trimmed for better UX
+        expect(isValidTimeZone(" Asia/Tokyo ")).toBe(true);
+        expect(isValidTimeZone("  America/New_York  ")).toBe(true);
+        expect(isValidTimeZone("\tEurope/London\n")).toBe(true);
       });
     });
   });
@@ -182,6 +183,67 @@ describe("timezone", () => {
       it("should accept timestamp number", () => {
         const timestamp = new Date(2025, 0, 1).getTime();
         expect(getTimeZoneOffset(JST, timestamp)).toBe(540);
+      });
+    });
+
+    describe("leap year edge cases", () => {
+      it("should handle leap year dates correctly", () => {
+        const leapYearDate = new Date(2024, 1, 29); // Feb 29, 2024
+        expect(getTimeZoneOffset(JST, leapYearDate)).toBe(540);
+        expect(getTimeZoneOffset(EST, leapYearDate)).toBe(-300); // Winter (EST)
+        expect(getTimeZoneOffset(UTC, leapYearDate)).toBe(0);
+      });
+
+      it("should handle non-leap year Feb 28 correctly", () => {
+        const nonLeapYearDate = new Date(2023, 1, 28); // Feb 28, 2023
+        expect(getTimeZoneOffset(JST, nonLeapYearDate)).toBe(540);
+        expect(getTimeZoneOffset(PST, nonLeapYearDate)).toBe(-480); // Winter (PST)
+      });
+    });
+
+    describe("DST transition boundaries", () => {
+      it("should handle EST/EDT transitions throughout the year", () => {
+        // Winter (January - EST)
+        const winter = new Date(Date.UTC(2024, 0, 15)); // Mid-January
+        expect(getTimeZoneOffset(EST, winter)).toBe(-300); // EST (UTC-5)
+
+        // Spring - before DST (early March - EST)
+        const earlyMarch = new Date(Date.UTC(2024, 2, 5)); // March 5
+        expect(getTimeZoneOffset(EST, earlyMarch)).toBe(-300); // EST (UTC-5)
+
+        // Spring - after DST transition (mid-March - EDT)
+        const midMarch = new Date(Date.UTC(2024, 2, 15)); // March 15
+        expect(getTimeZoneOffset(EST, midMarch)).toBe(-240); // EDT (UTC-4)
+
+        // Summer (July - EDT)
+        const summer = new Date(Date.UTC(2024, 6, 15)); // Mid-July
+        expect(getTimeZoneOffset(EST, summer)).toBe(-240); // EDT (UTC-4)
+
+        // Fall - before DST end (early November - EDT)
+        const earlyNov = new Date(Date.UTC(2024, 10, 1)); // November 1
+        expect(getTimeZoneOffset(EST, earlyNov)).toBe(-240); // EDT (UTC-4)
+
+        // Fall - after DST end (mid-November - EST)
+        const midNov = new Date(Date.UTC(2024, 10, 10)); // November 10
+        expect(getTimeZoneOffset(EST, midNov)).toBe(-300); // EST (UTC-5)
+      });
+
+      it("should handle PST/PDT transitions throughout the year", () => {
+        // Winter (January - PST)
+        const winter = new Date(Date.UTC(2024, 0, 15));
+        expect(getTimeZoneOffset(PST, winter)).toBe(-480); // PST (UTC-8)
+
+        // Summer (July - PDT)
+        const summer = new Date(Date.UTC(2024, 6, 15));
+        expect(getTimeZoneOffset(PST, summer)).toBe(-420); // PDT (UTC-7)
+      });
+
+      it("should handle timezones without DST (JST)", () => {
+        // Japan doesn't observe DST - offset should be constant
+        const winter = new Date(Date.UTC(2024, 0, 15)); // January
+        const summer = new Date(Date.UTC(2024, 6, 15)); // July
+        expect(getTimeZoneOffset(JST, winter)).toBe(540); // UTC+9
+        expect(getTimeZoneOffset(JST, summer)).toBe(540); // UTC+9
       });
     });
 

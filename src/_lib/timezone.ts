@@ -38,10 +38,18 @@ import { isValidDateOrNumber } from "./validators";
  */
 export function isValidTimeZone(tz: TZ | string | unknown): boolean {
   // Extract IANA name from TZ object or use string directly
-  const ianaName = typeof tz === "string" ? tz : (tz as TZ)?.ianaName;
+  let ianaName = typeof tz === "string" ? tz : (tz as TZ)?.ianaName;
 
   // Validate ianaName is a non-empty string
   if (!ianaName || typeof ianaName !== "string") {
+    return false;
+  }
+
+  // Trim whitespace for better UX
+  ianaName = ianaName.trim();
+
+  // Empty string after trim is invalid
+  if (ianaName === "") {
     return false;
   }
 
@@ -86,8 +94,9 @@ export function normalizeTimeZone(tz: TZ | string): string | null {
     return null;
   }
 
-  // Extract IANA name
-  const ianaName = typeof tz === "string" ? tz : tz.ianaName;
+  // Extract IANA name and trim whitespace
+  let ianaName = typeof tz === "string" ? tz : tz.ianaName;
+  ianaName = ianaName.trim();
 
   // Get canonical form using Intl API
   try {
@@ -163,15 +172,62 @@ export function getTimeZoneOffset(
   const date = typeof referenceDate === "number" ? new Date(referenceDate) : referenceDate;
 
   try {
-    // Get timezone offset using Intl API
-    // The offset is calculated by comparing the local time in the target timezone
-    // with UTC time at the same moment
-    const utcDate = new Date(date.toLocaleString("en-US", { timeZone: "UTC" }));
-    const tzDate = new Date(date.toLocaleString("en-US", { timeZone: ianaName }));
+    // Use a more reliable method to calculate timezone offset
+    // Create formatters for both UTC and target timezone
+    const utcFormatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: "UTC",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+
+    const tzFormatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: ianaName,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+
+    // Get formatted parts to extract individual components
+    const utcParts = utcFormatter.formatToParts(date);
+    const tzParts = tzFormatter.formatToParts(date);
+
+    // Helper to extract numeric value from parts
+    const getValue = (parts: Intl.DateTimeFormatPart[], type: string): number => {
+      const part = parts.find((p) => p.type === type);
+      return part ? parseInt(part.value, 10) : 0;
+    };
+
+    // Reconstruct timestamps from parts
+    const utcTimestamp = Date.UTC(
+      getValue(utcParts, "year"),
+      getValue(utcParts, "month") - 1, // month is 0-indexed
+      getValue(utcParts, "day"),
+      getValue(utcParts, "hour"),
+      getValue(utcParts, "minute"),
+      getValue(utcParts, "second")
+    );
+
+    const tzTimestamp = Date.UTC(
+      getValue(tzParts, "year"),
+      getValue(tzParts, "month") - 1, // month is 0-indexed
+      getValue(tzParts, "day"),
+      getValue(tzParts, "hour"),
+      getValue(tzParts, "minute"),
+      getValue(tzParts, "second")
+    );
 
     // Calculate offset in minutes
     // Positive for east of UTC, negative for west of UTC
-    const offsetMs = tzDate.getTime() - utcDate.getTime();
+    const offsetMs = tzTimestamp - utcTimestamp;
     return offsetMs / 60000;
   } catch {
     return null;
