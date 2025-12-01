@@ -130,6 +130,34 @@ describe("max", () => {
       expect(result.getTime()).toBe(timestamp3);
     });
 
+    it("should handle timestamps near MAX_SAFE_INTEGER", () => {
+      // Arrange
+      const timestamp1 = Number.MAX_SAFE_INTEGER - 1000;
+      const timestamp2 = Number.MAX_SAFE_INTEGER - 2000;
+      const timestamp3 = Number.MAX_SAFE_INTEGER - 500; // Latest (but beyond valid Date range)
+
+      // Act
+      const result = max(timestamp1, timestamp2, timestamp3);
+
+      // Assert
+      // MAX_SAFE_INTEGER is beyond valid Date range (8640000000000000), so result should be Invalid Date
+      expect(Number.isNaN(result.getTime())).toBe(true);
+    });
+
+    it("should handle timestamps near MIN_SAFE_INTEGER", () => {
+      // Arrange
+      const timestamp1 = Number.MIN_SAFE_INTEGER + 1000;
+      const timestamp2 = Number.MIN_SAFE_INTEGER + 2000; // Latest (but beyond valid Date range)
+      const timestamp3 = Number.MIN_SAFE_INTEGER + 500;
+
+      // Act
+      const result = max(timestamp1, timestamp2, timestamp3);
+
+      // Assert
+      // MIN_SAFE_INTEGER is beyond valid Date range (-8640000000000000), so result should be Invalid Date
+      expect(Number.isNaN(result.getTime())).toBe(true);
+    });
+
     it("should handle large number of dates (100+ arguments)", () => {
       // Arrange
       const dates: Date[] = [];

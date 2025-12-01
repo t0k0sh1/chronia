@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { compareDateTimes } from "../../src/_lib/compareDates";
 
+const MILLISECONDS_IN_DAY = 86400000;
+
 describe("compareDateTimes", () => {
   describe("happy path", () => {
     it("should return 1 when first Date is after second Date", () => {
@@ -111,6 +113,86 @@ describe("compareDateTimes", () => {
     });
   });
 
+  describe("mutation prevention", () => {
+    it("should not mutate first input Date", () => {
+      // Arrange
+      const date1 = new Date(2025, 0, 1, 12, 30, 45, 123);
+      const date2 = new Date(2025, 0, 2);
+      const originalTime = date1.getTime();
+
+      // Act
+      compareDateTimes(date1, date2);
+
+      // Assert
+      expect(date1.getTime()).toBe(originalTime);
+    });
+
+    it("should not mutate second input Date", () => {
+      // Arrange
+      const date1 = new Date(2025, 0, 1);
+      const date2 = new Date(2025, 0, 2, 12, 30, 45, 123);
+      const originalTime = date2.getTime();
+
+      // Act
+      compareDateTimes(date1, date2);
+
+      // Assert
+      expect(date2.getTime()).toBe(originalTime);
+    });
+  });
+
+  describe("leap year edge cases", () => {
+    it("should correctly compare leap year February 29 dates", () => {
+      // Arrange
+      const leapYearDate = new Date(2024, 1, 29); // Feb 29, 2024
+      const nonLeapYearDate = new Date(2023, 1, 28); // Feb 28, 2023
+
+      // Act
+      const result = compareDateTimes(leapYearDate, nonLeapYearDate);
+
+      // Assert
+      expect(result).toBe(1);
+    });
+
+    it("should correctly compare leap year vs non-leap year February dates", () => {
+      // Arrange
+      const leapYearFeb28 = new Date(2024, 1, 28); // Feb 28, 2024 (leap year)
+      const nonLeapYearFeb28 = new Date(2023, 1, 28); // Feb 28, 2023 (non-leap year)
+
+      // Act
+      const result = compareDateTimes(leapYearFeb28, nonLeapYearFeb28);
+
+      // Assert
+      expect(result).toBe(1);
+    });
+  });
+
+  describe("month-end edge cases", () => {
+    it("should handle month boundary correctly", () => {
+      // Arrange
+      const janEnd = new Date(2025, 0, 31); // Jan 31
+      const febStart = new Date(2025, 1, 1); // Feb 1
+
+      // Act
+      const result = compareDateTimes(janEnd, febStart);
+
+      // Assert
+      expect(result).toBe(-1);
+    });
+
+    it("should correctly compare different month-end dates", () => {
+      // Arrange
+      const feb28 = new Date(2025, 1, 28); // Feb 28 (non-leap year)
+      const mar31 = new Date(2025, 2, 31); // Mar 31
+
+      // Act
+      const result = compareDateTimes(feb28, mar31);
+
+      // Assert
+      expect(result).toBe(-1);
+    });
+  });
+
   describe("edge cases", () => {
     it("should correctly identify larger date when differing by 1 millisecond", () => {
       // Arrange
@@ -173,8 +255,8 @@ describe("compareDateTimes", () => {
 
     it("should handle negative timestamp (before epoch)", () => {
       // Arrange
-      const beforeEpoch = -86400000; // 1 day before epoch
-      const afterEpoch = 86400000; // 1 day after epoch
+      const beforeEpoch = -MILLISECONDS_IN_DAY; // 1 day before epoch
+      const afterEpoch = MILLISECONDS_IN_DAY; // 1 day after epoch
 
       // Act
       const result = compareDateTimes(beforeEpoch, afterEpoch);

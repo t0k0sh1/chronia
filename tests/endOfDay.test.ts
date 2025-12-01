@@ -116,6 +116,24 @@ describe("endOfDay", () => {
       expect(result).not.toBe(originalDate);
       expect(result).toBeInstanceOf(Date);
     });
+
+    it("should handle DST transition dates correctly", () => {
+      // Arrange - US DST "fall back" transition (first Sunday in November 2024)
+      // November 3, 2024 at 2:00 AM clocks moved back to 1:00 AM
+      const dstTransitionDate = new Date(2024, 10, 3, 14, 30, 45, 123);
+
+      // Act
+      const result = endOfDay(dstTransitionDate);
+
+      // Assert - Should return end of day (23:59:59.999) in local time
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(10); // November
+      expect(result.getDate()).toBe(3);
+      expect(result.getHours()).toBe(23);
+      expect(result.getMinutes()).toBe(59);
+      expect(result.getSeconds()).toBe(59);
+      expect(result.getMilliseconds()).toBe(999);
+    });
   });
 
   describe("invalid inputs", () => {

@@ -35,6 +35,17 @@ describe("endOfYear", () => {
       // Assert
       expect(result.getTime()).toBe(new Date(2024, 11, 31, 23, 59, 59, 999).getTime());
     });
+
+    it("should handle timestamp input", () => {
+      // Arrange
+      const timestamp = new Date(2024, 5, 15).getTime();
+
+      // Act
+      const result = endOfYear(timestamp);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 11, 31, 23, 59, 59, 999).getTime());
+    });
   });
 
   describe("edge cases", () => {
@@ -114,6 +125,41 @@ describe("endOfYear", () => {
       expect(result.getMilliseconds()).toBe(999);
     });
 
+    it("should handle extreme year values (year 9999)", () => {
+      // Arrange
+      const date = new Date(9999, 6, 15, 12, 30, 45, 123);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getFullYear()).toBe(9999);
+      expect(result.getMonth()).toBe(11);
+      expect(result.getDate()).toBe(31);
+      expect(result.getHours()).toBe(23);
+      expect(result.getMinutes()).toBe(59);
+      expect(result.getSeconds()).toBe(59);
+      expect(result.getMilliseconds()).toBe(999);
+    });
+
+    it("should handle extreme negative year values (year -9999)", () => {
+      // Arrange
+      const date = new Date(0, 6, 15, 12, 30, 45, 123);
+      date.setFullYear(-9999);
+
+      // Act
+      const result = endOfYear(date);
+
+      // Assert
+      expect(result.getFullYear()).toBe(-9999);
+      expect(result.getMonth()).toBe(11);
+      expect(result.getDate()).toBe(31);
+      expect(result.getHours()).toBe(23);
+      expect(result.getMinutes()).toBe(59);
+      expect(result.getSeconds()).toBe(59);
+      expect(result.getMilliseconds()).toBe(999);
+    });
+
     it("should not modify original Date object", () => {
       // Arrange
       const originalDate = new Date(2024, 5, 15, 14, 30, 45, 123);
@@ -153,7 +199,8 @@ describe("endOfYear", () => {
 
     it("should return Invalid Date when input is NaN", () => {
       // Act
-      const result = endOfYear(NaN as any);
+      // @ts-expect-error - Testing runtime behavior with invalid input type
+      const result = endOfYear(NaN);
 
       // Assert
       expect(Number.isNaN(result.getTime())).toBe(true);
@@ -161,8 +208,10 @@ describe("endOfYear", () => {
 
     it("should return Invalid Date when input is Infinity", () => {
       // Arrange & Act
-      const resultPositive = endOfYear(Infinity as any);
-      const resultNegative = endOfYear(-Infinity as any);
+      // @ts-expect-error - Testing runtime behavior with invalid input type
+      const resultPositive = endOfYear(Infinity);
+      // @ts-expect-error - Testing runtime behavior with invalid input type
+      const resultNegative = endOfYear(-Infinity);
 
       // Assert
       expect(Number.isNaN(resultPositive.getTime())).toBe(true);

@@ -35,6 +35,17 @@ describe("startOfMonth", () => {
       // Assert
       expect(result.getTime()).toBe(new Date(2024, 5, 1, 0, 0, 0, 0).getTime());
     });
+
+    it("should handle timestamp input", () => {
+      // Arrange
+      const timestamp = new Date(2024, 5, 15, 14, 30, 45).getTime();
+
+      // Act
+      const result = startOfMonth(timestamp);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 5, 1, 0, 0, 0, 0).getTime());
+    });
   });
 
   describe("edge cases", () => {
@@ -102,6 +113,26 @@ describe("startOfMonth", () => {
 
       // Assert
       expect(result.getTime()).toBe(new Date(2023, 1, 1, 0, 0, 0, 0).getTime());
+    });
+
+    it("should handle month-end boundaries correctly", () => {
+      // Arrange - Test all month-end variations (28, 29, 30, 31 days)
+      const jan31 = new Date(2024, 0, 31, 23, 59, 59, 999); // 31 days
+      const feb28 = new Date(2023, 1, 28, 23, 59, 59, 999); // 28 days (non-leap)
+      const feb29 = new Date(2024, 1, 29, 23, 59, 59, 999); // 29 days (leap year)
+      const apr30 = new Date(2024, 3, 30, 23, 59, 59, 999); // 30 days
+
+      // Act
+      const resultJan = startOfMonth(jan31);
+      const resultFeb28 = startOfMonth(feb28);
+      const resultFeb29 = startOfMonth(feb29);
+      const resultApr = startOfMonth(apr30);
+
+      // Assert - All should return first day of respective month
+      expect(resultJan.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
+      expect(resultFeb28.getTime()).toBe(new Date(2023, 1, 1, 0, 0, 0, 0).getTime());
+      expect(resultFeb29.getTime()).toBe(new Date(2024, 1, 1, 0, 0, 0, 0).getTime());
+      expect(resultApr.getTime()).toBe(new Date(2024, 3, 1, 0, 0, 0, 0).getTime());
     });
 
     it("should not modify original Date object", () => {

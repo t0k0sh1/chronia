@@ -430,6 +430,21 @@ describe("isAfter", () => {
   });
 
   describe("Boundary Value Analysis: Edge Cases", () => {
+    it("should not mutate input dates", () => {
+      // Arrange
+      const dateLeft = new Date(2024, 0, 1, 12, 0, 0, 1);
+      const dateRight = new Date(2024, 0, 1, 12, 0, 0, 0);
+      const originalLeftTime = dateLeft.getTime();
+      const originalRightTime = dateRight.getTime();
+
+      // Act
+      isAfter(dateLeft, dateRight);
+
+      // Assert
+      expect(dateLeft.getTime()).toBe(originalLeftTime);
+      expect(dateRight.getTime()).toBe(originalRightTime);
+    });
+
     it("should handle leap year boundaries", () => {
       // Arrange
       const dateLeft = new Date(2024, 2, 1); // Mar 1, 2024

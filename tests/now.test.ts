@@ -35,6 +35,46 @@ describe("now", () => {
       expect(result.getTime()).toBeGreaterThanOrEqual(beforeCall.getTime());
       expect(result.getTime()).toBeLessThanOrEqual(afterCall.getTime());
     });
+
+    it("should return date with millisecond precision", () => {
+      // Act
+      const result = now();
+
+      // Assert
+      const milliseconds = result.getMilliseconds();
+      expect(milliseconds).toBeGreaterThanOrEqual(0);
+      expect(milliseconds).toBeLessThanOrEqual(999);
+      expect(Number.isInteger(milliseconds)).toBe(true);
+    });
+
+    it("should return monotonically increasing timestamps when called sequentially", () => {
+      // Arrange
+      const callCount = 5;
+      const timestamps: number[] = [];
+
+      // Act
+      for (let i = 0; i < callCount; i++) {
+        timestamps.push(now().getTime());
+      }
+
+      // Assert
+      for (let i = 1; i < timestamps.length; i++) {
+        expect(timestamps[i]).toBeGreaterThanOrEqual(timestamps[i - 1]);
+      }
+    });
+
+    it("should return timestamp very close to Date.now()", () => {
+      // Arrange
+      const maxDeltaMs = 10;
+
+      // Act
+      const result = now();
+      const systemNow = Date.now();
+
+      // Assert
+      const delta = Math.abs(result.getTime() - systemNow);
+      expect(delta).toBeLessThanOrEqual(maxDeltaMs);
+    });
   });
 
   describe("edge cases", () => {
@@ -75,7 +115,7 @@ describe("now", () => {
   });
 
   describe("integration tests", () => {
-    it("should work correctly with addDays function", () => {
+    it("should return date that can be used with addDays function", () => {
       // Arrange
       const ONE_DAY_MS = 24 * 60 * 60 * 1000;
       const DST_TOLERANCE_MS = 60 * 60 * 1000; // 1 hour tolerance for DST
@@ -91,7 +131,7 @@ describe("now", () => {
       expect(tomorrow.getTime()).toBeGreaterThan(currentTime.getTime());
     });
 
-    it("should work correctly with subHours function", () => {
+    it("should return date that can be used with subHours function", () => {
       // Arrange
       const ONE_HOUR_MS = 60 * 60 * 1000;
 
@@ -106,7 +146,7 @@ describe("now", () => {
       expect(timeDiff).toBeLessThanOrEqual(2 * ONE_HOUR_MS);
     });
 
-    it("should work correctly with format function", () => {
+    it("should return date that can be formatted using format function", () => {
       // Act
       const currentTime = now();
       const formatted = format(currentTime, "yyyy-MM-dd");

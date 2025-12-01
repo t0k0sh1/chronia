@@ -35,6 +35,17 @@ describe("endOfMonth", () => {
       // Assert
       expect(result.getTime()).toBe(new Date(2024, 5, 30, 23, 59, 59, 999).getTime());
     });
+
+    it("should handle timestamp input", () => {
+      // Arrange
+      const timestamp = new Date(2024, 5, 15, 14, 30, 45, 123).getTime();
+
+      // Act
+      const result = endOfMonth(timestamp);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 5, 30, 23, 59, 59, 999).getTime());
+    });
   });
 
   describe("edge cases", () => {
@@ -113,6 +124,20 @@ describe("endOfMonth", () => {
 
       // Assert
       expect(result.getTime()).toBe(new Date(2000, 1, 29, 23, 59, 59, 999).getTime());
+    });
+
+    it("should handle non-leap century years correctly", () => {
+      // Arrange - Years divisible by 100 but not by 400 are NOT leap years
+      const date1900 = new Date(1900, 1, 15, 12, 0, 0, 0); // Feb 1900
+      const date2100 = new Date(2100, 1, 15, 12, 0, 0, 0); // Feb 2100
+
+      // Act
+      const result1900 = endOfMonth(date1900);
+      const result2100 = endOfMonth(date2100);
+
+      // Assert - February should have 28 days, not 29
+      expect(result1900.getTime()).toBe(new Date(1900, 1, 28, 23, 59, 59, 999).getTime());
+      expect(result2100.getTime()).toBe(new Date(2100, 1, 28, 23, 59, 59, 999).getTime());
     });
 
     it("should not modify original Date object", () => {

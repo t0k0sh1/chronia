@@ -35,6 +35,17 @@ describe("startOfYear", () => {
       // Assert
       expect(result.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
     });
+
+    it("should handle timestamp input", () => {
+      // Arrange
+      const timestamp = new Date(2024, 5, 15).getTime();
+
+      // Act
+      const result = startOfYear(timestamp);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 0, 1, 0, 0, 0, 0).getTime());
+    });
   });
 
   describe("edge cases", () => {
@@ -117,6 +128,41 @@ describe("startOfYear", () => {
 
       // Assert
       expect(result.getFullYear()).toBe(-100);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(1);
+      expect(result.getHours()).toBe(0);
+      expect(result.getMinutes()).toBe(0);
+      expect(result.getSeconds()).toBe(0);
+      expect(result.getMilliseconds()).toBe(0);
+    });
+
+    it("should handle extreme year values (year 9999)", () => {
+      // Arrange
+      const date = new Date(9999, 6, 15, 12, 30, 45, 123);
+
+      // Act
+      const result = startOfYear(date);
+
+      // Assert
+      expect(result.getFullYear()).toBe(9999);
+      expect(result.getMonth()).toBe(0);
+      expect(result.getDate()).toBe(1);
+      expect(result.getHours()).toBe(0);
+      expect(result.getMinutes()).toBe(0);
+      expect(result.getSeconds()).toBe(0);
+      expect(result.getMilliseconds()).toBe(0);
+    });
+
+    it("should handle extreme negative year values (year -9999)", () => {
+      // Arrange
+      const date = new Date(0, 6, 15, 12, 30, 45, 123);
+      date.setFullYear(-9999);
+
+      // Act
+      const result = startOfYear(date);
+
+      // Assert
+      expect(result.getFullYear()).toBe(-9999);
       expect(result.getMonth()).toBe(0);
       expect(result.getDate()).toBe(1);
       expect(result.getHours()).toBe(0);

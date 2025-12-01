@@ -60,42 +60,12 @@ describe("isFuture", () => {
   });
 
   describe("edge cases", () => {
-    it("should return true for date exactly 1ms in the future", () => {
-      // Arrange
-      const future = new Date(FIXED_TIME + 1);
-
-      // Act
-      const result = isFuture(future);
-
-      // Assert
-      expect(result).toBe(true);
-    });
-
     it("should return false for date exactly 1ms in the past", () => {
       // Arrange
       const past = new Date(FIXED_TIME - 1);
 
       // Act
       const result = isFuture(past);
-
-      // Assert
-      expect(result).toBe(false);
-    });
-
-    it("should return false for date exactly equal to current time", () => {
-      // Arrange
-      const now = new Date(FIXED_TIME);
-
-      // Act
-      const result = isFuture(now);
-
-      // Assert
-      expect(result).toBe(false);
-    });
-
-    it("should return false for timestamp exactly equal to Date.now()", () => {
-      // Arrange & Act
-      const result = isFuture(FIXED_TIME);
 
       // Assert
       expect(result).toBe(false);
@@ -112,6 +82,24 @@ describe("isFuture", () => {
 
       // Assert
       expect(result).toBe(true);
+    });
+
+    it("should handle dates very close to current time", () => {
+      // Arrange
+      const currentTime = FIXED_TIME;
+      const justBeforeNow = new Date(currentTime - 1);
+      const justAfterNow = new Date(currentTime + 1);
+      const exactlyNow = new Date(currentTime);
+
+      // Act
+      const resultBefore = isFuture(justBeforeNow);
+      const resultAfter = isFuture(justAfterNow);
+      const resultExact = isFuture(exactlyNow);
+
+      // Assert
+      expect(resultBefore).toBe(false); // 1ms before is past
+      expect(resultAfter).toBe(true);   // 1ms after is future
+      expect(resultExact).toBe(false);  // exactly now is not future
     });
   });
 

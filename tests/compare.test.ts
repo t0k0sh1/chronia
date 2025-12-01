@@ -451,7 +451,7 @@ describe("compare", () => {
       expect(compare(date, date)).toBe(0);
     });
 
-    it("should work correctly with Array.sort() for various scenarios", () => {
+    it("should correctly sort array with duplicate dates using Array.sort()", () => {
       // Test with duplicate dates
       const dates = [
         new Date("2024-01-03"),
@@ -488,7 +488,7 @@ describe("compare", () => {
       expect(compare(timestamp, timestamp)).toBe(0); // same timestamp
     });
 
-    it("should work correctly in Array.sort() with mixed types", () => {
+    it("should correctly sort array containing both Date objects and timestamps", () => {
       const mixed = [
         new Date("2024-01-03"),
         new Date("2024-01-01").getTime(),

@@ -35,6 +35,17 @@ describe("startOfDay", () => {
       // Assert
       expect(result.getTime()).toBe(new Date(2024, 5, 15, 0, 0, 0, 0).getTime());
     });
+
+    it("should handle timestamp input", () => {
+      // Arrange
+      const timestamp = new Date(2024, 5, 15, 14, 30, 45, 123).getTime();
+
+      // Act
+      const result = startOfDay(timestamp);
+
+      // Assert
+      expect(result.getTime()).toBe(new Date(2024, 5, 15, 0, 0, 0, 0).getTime());
+    });
   });
 
   describe("edge cases", () => {
@@ -115,6 +126,24 @@ describe("startOfDay", () => {
       // Assert
       expect(result).not.toBe(originalDate);
       expect(result).toBeInstanceOf(Date);
+    });
+
+    it("should handle DST transition dates correctly", () => {
+      // Arrange - US DST "spring forward" transition (second Sunday in March 2024)
+      // March 10, 2024 at 2:00 AM clocks moved forward to 3:00 AM
+      const dstTransitionDate = new Date(2024, 2, 10, 14, 30, 45, 123);
+
+      // Act
+      const result = startOfDay(dstTransitionDate);
+
+      // Assert - Should return midnight (00:00:00.000) in local time
+      expect(result.getFullYear()).toBe(2024);
+      expect(result.getMonth()).toBe(2); // March
+      expect(result.getDate()).toBe(10);
+      expect(result.getHours()).toBe(0);
+      expect(result.getMinutes()).toBe(0);
+      expect(result.getSeconds()).toBe(0);
+      expect(result.getMilliseconds()).toBe(0);
     });
   });
 
