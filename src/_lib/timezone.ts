@@ -226,7 +226,13 @@ export function getTimeZoneOffset(
     );
 
     // Calculate offset in minutes
-    // Positive for east of UTC, negative for west of UTC
+    // When same instant is formatted in TZ vs UTC:
+    // - If TZ is ahead (east), TZ time is later, so utcTimestamp - tzTimestamp is negative
+    // - But we want positive offset for east, so we use tzTimestamp - utcTimestamp
+    // Example: 2025-01-01 00:00 UTC = 2025-01-01 09:00 JST
+    //   utcTimestamp = UTC(2025,0,1,0,0,0)
+    //   tzTimestamp = UTC(2025,0,1,9,0,0)
+    //   offset = (tzTimestamp - utcTimestamp) / 60000 = 540 (UTC+9)
     const offsetMs = tzTimestamp - utcTimestamp;
     return offsetMs / 60000;
   } catch {
