@@ -132,42 +132,42 @@ describe("timezone", () => {
   describe("getTimeZoneOffset", () => {
     describe("TZ object offsets", () => {
       it("should return correct offset for JST", () => {
-        const winterDate = new Date(2025, 0, 1); // Jan 1, 2025
-        const summerDate = new Date(2025, 6, 1); // Jul 1, 2025
+        const winterDate = new Date(Date.UTC(2025, 0, 1)); // Jan 1, 2025 UTC
+        const summerDate = new Date(Date.UTC(2025, 6, 1)); // Jul 1, 2025 UTC
         expect(getTimeZoneOffset(JST, winterDate)).toBe(540); // UTC+9
         expect(getTimeZoneOffset(JST, summerDate)).toBe(540); // No DST in Japan
       });
 
       it("should return correct offset for EST with DST", () => {
-        const winterDate = new Date(2025, 0, 1); // Jan 1, 2025 (EST)
-        const summerDate = new Date(2025, 6, 1); // Jul 1, 2025 (EDT)
+        const winterDate = new Date(Date.UTC(2025, 0, 1)); // Jan 1, 2025 UTC (EST)
+        const summerDate = new Date(Date.UTC(2025, 6, 1)); // Jul 1, 2025 UTC (EDT)
         expect(getTimeZoneOffset(EST, winterDate)).toBe(-300); // UTC-5 (EST)
         expect(getTimeZoneOffset(EST, summerDate)).toBe(-240); // UTC-4 (EDT)
       });
 
       it("should return correct offset for PST with DST", () => {
-        const winterDate = new Date(2025, 0, 1); // Jan 1, 2025 (PST)
-        const summerDate = new Date(2025, 6, 1); // Jul 1, 2025 (PDT)
+        const winterDate = new Date(Date.UTC(2025, 0, 1)); // Jan 1, 2025 UTC (PST)
+        const summerDate = new Date(Date.UTC(2025, 6, 1)); // Jul 1, 2025 UTC (PDT)
         expect(getTimeZoneOffset(PST, winterDate)).toBe(-480); // UTC-8 (PST)
         expect(getTimeZoneOffset(PST, summerDate)).toBe(-420); // UTC-7 (PDT)
       });
 
       it("should return correct offset for GMT with DST", () => {
-        const winterDate = new Date(2025, 0, 1); // Jan 1, 2025 (GMT)
-        const summerDate = new Date(2025, 6, 1); // Jul 1, 2025 (BST)
+        const winterDate = new Date(Date.UTC(2025, 0, 1)); // Jan 1, 2025 UTC (GMT)
+        const summerDate = new Date(Date.UTC(2025, 6, 1)); // Jul 1, 2025 UTC (BST)
         expect(getTimeZoneOffset(GMT, winterDate)).toBe(0); // UTC+0 (GMT)
         expect(getTimeZoneOffset(GMT, summerDate)).toBe(60); // UTC+1 (BST)
       });
 
       it("should return zero offset for UTC", () => {
-        const anyDate = new Date(2025, 0, 1);
+        const anyDate = new Date(Date.UTC(2025, 0, 1));
         expect(getTimeZoneOffset(UTC, anyDate)).toBe(0);
       });
     });
 
     describe("string timezone offsets", () => {
       it("should return correct offset for string IANA names", () => {
-        const winterDate = new Date(2025, 0, 1);
+        const winterDate = new Date(Date.UTC(2025, 0, 1));
         expect(getTimeZoneOffset("Asia/Tokyo", winterDate)).toBe(540);
         expect(getTimeZoneOffset("America/New_York", winterDate)).toBe(-300);
         expect(getTimeZoneOffset("Etc/UTC", winterDate)).toBe(0);
@@ -181,21 +181,21 @@ describe("timezone", () => {
       });
 
       it("should accept timestamp number", () => {
-        const timestamp = new Date(2025, 0, 1).getTime();
+        const timestamp = Date.UTC(2025, 0, 1);
         expect(getTimeZoneOffset(JST, timestamp)).toBe(540);
       });
     });
 
     describe("leap year edge cases", () => {
       it("should handle leap year dates correctly", () => {
-        const leapYearDate = new Date(2024, 1, 29); // Feb 29, 2024
+        const leapYearDate = new Date(Date.UTC(2024, 1, 29)); // Feb 29, 2024 UTC
         expect(getTimeZoneOffset(JST, leapYearDate)).toBe(540);
         expect(getTimeZoneOffset(EST, leapYearDate)).toBe(-300); // Winter (EST)
         expect(getTimeZoneOffset(UTC, leapYearDate)).toBe(0);
       });
 
       it("should handle non-leap year Feb 28 correctly", () => {
-        const nonLeapYearDate = new Date(2023, 1, 28); // Feb 28, 2023
+        const nonLeapYearDate = new Date(Date.UTC(2023, 1, 28)); // Feb 28, 2023 UTC
         expect(getTimeZoneOffset(JST, nonLeapYearDate)).toBe(540);
         expect(getTimeZoneOffset(PST, nonLeapYearDate)).toBe(-480); // Winter (PST)
       });
