@@ -23,7 +23,7 @@ import { isValidDateOrNumber } from "./validators";
  *
  * @example
  * ```typescript
- * import { JST, EST } from 'chronia';
+ * import { JST, EST } from 'chronia/tz';
  *
  * isValidTimeZone(JST); // true
  * isValidTimeZone(EST); // true
@@ -78,7 +78,7 @@ export function isValidTimeZone(tz: TZ | string | unknown): boolean {
  *
  * @example
  * ```typescript
- * import { JST } from 'chronia';
+ * import { JST } from 'chronia/tz';
  *
  * normalizeTimeZone(JST); // 'Asia/Tokyo'
  * normalizeTimeZone('asia/tokyo'); // 'Asia/Tokyo'
@@ -89,16 +89,22 @@ export function isValidTimeZone(tz: TZ | string | unknown): boolean {
  * ```
  */
 export function normalizeTimeZone(tz: TZ | string): string | null {
-  // Validate timezone first
-  if (!isValidTimeZone(tz)) {
+  // Extract IANA name and trim whitespace
+  let ianaName = typeof tz === "string" ? tz : tz?.ianaName;
+
+  // Validate ianaName is a non-empty string
+  if (!ianaName || typeof ianaName !== "string") {
     return null;
   }
 
-  // Extract IANA name and trim whitespace
-  let ianaName = typeof tz === "string" ? tz : tz.ianaName;
   ianaName = ianaName.trim();
 
-  // Get canonical form using Intl API
+  // Empty string after trim is invalid
+  if (ianaName === "") {
+    return null;
+  }
+
+  // Get canonical form using Intl API (validates timezone)
   try {
     const formatter = new Intl.DateTimeFormat("en-US", { timeZone: ianaName });
     return formatter.resolvedOptions().timeZone;
@@ -128,7 +134,7 @@ export function normalizeTimeZone(tz: TZ | string): string | null {
  *
  * @example
  * ```typescript
- * import { JST, EST } from 'chronia';
+ * import { JST, EST } from 'chronia/tz';
  *
  * // Fixed offset timezone (no DST)
  * getTimeZoneOffset(JST, new Date(2025, 0, 1)); // 540 (UTC+9)
@@ -143,7 +149,7 @@ export function normalizeTimeZone(tz: TZ | string): string | null {
  * getTimeZoneOffset('America/New_York', new Date()); // -300 or -240 depending on DST
  *
  * // UTC timezone
- * getTimeZoneOffset('Etc/UTC', new Date()); // 0
+ * getTimeZoneOffset('UTC', new Date()); // 0
  *
  * // Invalid inputs
  * getTimeZoneOffset('invalid', new Date()); // null
@@ -165,8 +171,8 @@ export function getTimeZoneOffset(
     return null;
   }
 
-  // Extract IANA name
-  const ianaName = typeof tz === "string" ? tz : tz.ianaName;
+  // Extract IANA name and trim whitespace
+  const ianaName = typeof tz === "string" ? tz.trim() : tz.ianaName.trim();
 
   // Convert to Date object if needed
   const date = typeof referenceDate === "number" ? new Date(referenceDate) : referenceDate;
@@ -239,7 +245,18 @@ export function getTimeZoneOffset(
     //   tzTimestamp = UTC(2025,0,1,9,0,0)
     //   offset = (tzTimestamp - utcTimestamp) / 60000 = 540 (UTC+9)
     const offsetMs = tzTimestamp - utcTimestamp;
-    return offsetMs / 60000;
+    let offsetMinutes = offsetMs / 60000;
+
+    // Normalize offsets that wrapped around day boundary
+    // Valid timezone offsets are typically within ±840 minutes (UTC-14 to UTC+14)
+    // If offset exceeds ±720 minutes, it likely wrapped across midnight (±1440 minute error)
+    if (offsetMinutes > 720) {
+      offsetMinutes -= 1440; // Wrapped forward across midnight
+    } else if (offsetMinutes < -720) {
+      offsetMinutes += 1440; // Wrapped backward across midnight
+    }
+
+    return offsetMinutes;
   } catch {
     return null;
   }

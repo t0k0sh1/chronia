@@ -35,7 +35,7 @@ describe("timezone", () => {
         expect(isValidTimeZone("America/New_York")).toBe(true);
         expect(isValidTimeZone("Asia/Tokyo")).toBe(true);
         expect(isValidTimeZone("Europe/London")).toBe(true);
-        expect(isValidTimeZone("Etc/UTC")).toBe(true);
+        expect(isValidTimeZone("UTC")).toBe(true);
         expect(isValidTimeZone("America/Los_Angeles")).toBe(true);
       });
 
@@ -170,7 +170,7 @@ describe("timezone", () => {
         const winterDate = new Date(Date.UTC(2025, 0, 1));
         expect(getTimeZoneOffset("Asia/Tokyo", winterDate)).toBe(540);
         expect(getTimeZoneOffset("America/New_York", winterDate)).toBe(-300);
-        expect(getTimeZoneOffset("Etc/UTC", winterDate)).toBe(0);
+        expect(getTimeZoneOffset("UTC", winterDate)).toBe(0);
       });
     });
 
@@ -244,6 +244,73 @@ describe("timezone", () => {
         const summer = new Date(Date.UTC(2024, 6, 15)); // July
         expect(getTimeZoneOffset(JST, winter)).toBe(540); // UTC+9
         expect(getTimeZoneOffset(JST, summer)).toBe(540); // UTC+9
+      });
+    });
+
+    describe("month-end boundary cases", () => {
+      it("should handle 31-day month ends correctly", () => {
+        // Test dates at the end of 31-day months
+        const jan31 = new Date(Date.UTC(2025, 0, 31)); // January 31
+        const mar31 = new Date(Date.UTC(2025, 2, 31)); // March 31
+        const dec31 = new Date(Date.UTC(2025, 11, 31)); // December 31
+
+        expect(getTimeZoneOffset(JST, jan31)).toBe(540);
+        expect(getTimeZoneOffset(EST, jan31)).toBe(-300); // Winter (EST)
+        expect(getTimeZoneOffset(PST, jan31)).toBe(-480); // Winter (PST)
+
+        expect(getTimeZoneOffset(JST, mar31)).toBe(540);
+        expect(getTimeZoneOffset(EST, mar31)).toBe(-240); // Summer (EDT)
+        expect(getTimeZoneOffset(PST, mar31)).toBe(-420); // Summer (PDT)
+
+        expect(getTimeZoneOffset(JST, dec31)).toBe(540);
+        expect(getTimeZoneOffset(EST, dec31)).toBe(-300); // Winter (EST)
+        expect(getTimeZoneOffset(PST, dec31)).toBe(-480); // Winter (PST)
+      });
+
+      it("should handle 30-day month ends correctly", () => {
+        // Test dates at the end of 30-day months
+        const apr30 = new Date(Date.UTC(2025, 3, 30)); // April 30
+        const jun30 = new Date(Date.UTC(2025, 5, 30)); // June 30
+        const sep30 = new Date(Date.UTC(2025, 8, 30)); // September 30
+        const nov30 = new Date(Date.UTC(2025, 10, 30)); // November 30
+
+        expect(getTimeZoneOffset(JST, apr30)).toBe(540);
+        expect(getTimeZoneOffset(EST, apr30)).toBe(-240); // Summer (EDT)
+
+        expect(getTimeZoneOffset(JST, jun30)).toBe(540);
+        expect(getTimeZoneOffset(PST, jun30)).toBe(-420); // Summer (PDT)
+
+        expect(getTimeZoneOffset(JST, sep30)).toBe(540);
+        expect(getTimeZoneOffset(EST, sep30)).toBe(-240); // Summer (EDT)
+
+        expect(getTimeZoneOffset(JST, nov30)).toBe(540);
+        expect(getTimeZoneOffset(EST, nov30)).toBe(-300); // Winter (EST)
+      });
+
+      it("should handle February 28/29 correctly", () => {
+        // Non-leap year February
+        const feb28_2025 = new Date(Date.UTC(2025, 1, 28)); // Feb 28, 2025
+        expect(getTimeZoneOffset(JST, feb28_2025)).toBe(540);
+        expect(getTimeZoneOffset(EST, feb28_2025)).toBe(-300); // Winter (EST)
+        expect(getTimeZoneOffset(PST, feb28_2025)).toBe(-480); // Winter (PST)
+
+        // Leap year February
+        const feb29_2024 = new Date(Date.UTC(2024, 1, 29)); // Feb 29, 2024
+        expect(getTimeZoneOffset(JST, feb29_2024)).toBe(540);
+        expect(getTimeZoneOffset(EST, feb29_2024)).toBe(-300); // Winter (EST)
+        expect(getTimeZoneOffset(PST, feb29_2024)).toBe(-480); // Winter (PST)
+      });
+
+      it("should handle midnight at month-end boundaries", () => {
+        // Test midnight transitions at month ends
+        const jan31_midnight = new Date(Date.UTC(2025, 0, 31, 23, 59, 59));
+        const feb1_midnight = new Date(Date.UTC(2025, 1, 1, 0, 0, 0));
+
+        expect(getTimeZoneOffset(JST, jan31_midnight)).toBe(540);
+        expect(getTimeZoneOffset(JST, feb1_midnight)).toBe(540);
+
+        expect(getTimeZoneOffset(EST, jan31_midnight)).toBe(-300);
+        expect(getTimeZoneOffset(EST, feb1_midnight)).toBe(-300);
       });
     });
 

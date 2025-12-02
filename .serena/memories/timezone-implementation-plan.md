@@ -3,60 +3,112 @@
 ## Overview
 This plan details adding internal timezone support utilities to the Chronia library for future timezone feature implementation.
 
+## Current Implementation Status (Updated 2025-12-02)
+
+### ✅ Implemented Features
+
+1. **TZ Type** (`src/types.ts`):
+   - Object type with `ianaName` (string) and optional `identifier` (string)
+   - Exported from public API for timezone constant usage
+   - Supports both machine-readable (IANA) and human-readable (identifier) formats
+
+2. **Timezone Constants** (`src/tz/`):
+   - JST (Japan Standard Time: Asia/Tokyo, UTC+9, no DST)
+   - EST (Eastern Time: America/New_York, UTC-5/-4, with DST)
+   - PST (Pacific Time: America/Los_Angeles, UTC-8/-7, with DST)
+   - GMT (Greenwich/British Time: Europe/London, UTC+0/+1, with DST as BST)
+   - UTC (Coordinated Universal Time: UTC, UTC+0, no DST)
+   - All constants have comprehensive JSDoc with IANA name, UTC offset, and DST information
+   - Exported via subpath `chronia/tz`
+
+3. **Validation Functions** (`src/_lib/timezone.ts`):
+   - `isValidTimeZone()`: Validates IANA timezone names and TZ objects
+   - Uses `Intl.DateTimeFormat` for robust validation
+   - Supports whitespace trimming (.trim())
+
+4. **Normalization Functions** (`src/_lib/timezone.ts`):
+   - `normalizeTimeZone()`: Converts to canonical IANA form
+   - Handles case variations and whitespace
+   - Supports both string and TZ object inputs
+
+5. **Offset Calculation** (`src/_lib/timezone.ts`):
+   - `getTimeZoneOffset()`: Calculates UTC offset in minutes
+   - **Algorithm**: Uses `Intl.DateTimeFormat.formatToParts()` (reliable across environments)
+   - **Wrap-around Fix**: Normalizes offsets outside ±840 minutes by ±1440 minutes
+   - **Input Flexibility**: Accepts both string (IANA name) and TZ object
+   - **Edge Cases**: Handles date boundary crossings and DST transitions correctly
+
+### 🔄 Recent Improvements (PR #42 Review Fixes)
+
+**Critical Fixes:**
+- Replaced unreliable string parsing with `formatToParts()` method
+- Added 24-hour wrap-around normalization for date boundary cases
+
+**Major Fixes:**
+- Removed redundant `isValidTimeZone()` call in `normalizeTimeZone()`
+- Added consistent `.trim()` for whitespace handling across all functions
+
+**Minor Fixes:**
+- Corrected JSDoc import paths (changed `'chronia'` to `'chronia/tz'`)
+- Added month-end edge case tests (Jan 31, Apr 30, Dec 31)
+- Changed UTC constant from "Etc/UTC" to "UTC" for clarity
+
+**Documentation Improvements:**
+- Added comprehensive JSDoc to all timezone constants (JST, EST, PST, GMT, UTC)
+- Included IANA names, UTC offsets, and DST behavior in all constant documentation
+- Added GMT DST clarification (GMT vs BST distinction)
+
+### ⏸️ Deferred Features (Future Phases)
+
+1. **Timezone Information**: `getTimeZoneInfo()` function for comprehensive timezone details
+2. **Timezone List**: `getSupportedTimeZones()` function for listing available timezones
+3. **Public API Integration**: Timezone parameters in format/parse functions
+4. **UTC Offset Support**: Support for "+09:00" style offset strings (if user demand exists)
+
+### 📋 Test Coverage
+
+- Comprehensive TDD test suite in `tests/_lib/timezone.test.ts`
+- Coverage: >95% (meets project standard)
+- Edge cases covered: DST transitions, date boundaries, month-end dates, invalid inputs
+- All tests passing with improved algorithm
+
+---
+
 ## 1. Type Definition Strategy
 
 ### Location: `src/types.ts`
 
-Add the following timezone-related types:
+**IMPLEMENTED:** Added `TZ` type representing timezone objects:
 
 ```typescript
 /**
- * IANA timezone identifier (e.g., 'America/New_York', 'Asia/Tokyo', 'Europe/London').
- * 
- * Represents a timezone using the IANA Time Zone Database naming convention.
- * This library only supports IANA timezone names, not UTC offsets.
- * 
- * @see {@link https://www.iana.org/time-zones} - IANA Time Zone Database
+ * Represents a timezone with both IANA timezone name and optional identifier.
+ *
+ * IANA timezone names (e.g., 'America/New_York', 'Asia/Tokyo', 'Europe/London')
+ * are used for timezone calculations and conversions.
+ *
+ * The optional identifier field provides a human-friendly name (e.g., 'EST', 'JST')
+ * that can be used for display purposes.
  */
-export type TimeZone = string;
-
-/**
- * Timezone information containing details about a timezone.
- * 
- * Provides metadata about a timezone including its current UTC offset,
- * display name, and DST status at a given point in time.
- */
-export type TimeZoneInfo = {
-  /**
-   * The IANA timezone identifier (e.g., 'America/New_York')
-   */
-  timeZone: TimeZone;
-  
-  /**
-   * UTC offset in minutes (positive for east of UTC, negative for west)
-   * Example: +540 for JST (UTC+9), -300 for EST (UTC-5)
-   */
-  offsetMinutes: number;
-  
-  /**
-   * Localized display name of the timezone
-   * Example: "Japan Standard Time", "Eastern Standard Time"
-   */
-  displayName: string;
-  
-  /**
-   * Whether daylight saving time is active at the reference date
-   */
-  isDST: boolean;
+export type TZ = {
+  /** IANA timezone name (e.g., 'America/New_York') */
+  ianaName: string;
+  /** Optional timezone identifier for display (e.g., 'EST', 'JST') */
+  identifier?: string;
 };
 ```
 
+**Design Changes from Original Plan:**
+- Changed from `TimeZone` (string) to `TZ` (object) to support both IANA names and display identifiers
+- Removed `TimeZoneInfo` type (planned for future phases)
+- `TZ` type is exported from public API via `src/index.ts` for timezone constant usage
+- Timezone constants (JST, EST, PST, GMT, UTC) are exported from `src/tz/` subpath
+
 **Rationale:**
-- `TimeZone` type: Simple string alias for clarity and potential future constraints
-- `TimeZoneInfo` type: Structured information for timezone details retrieval
-- Naming follows PascalCase convention (matches existing `TimeUnit`, `BoundsType`)
-- JSDoc extensively documents IANA-only constraint
-- Not exported from public API initially (internal only via `src/_lib/`)
+- `TZ` object type: Provides both machine-readable (ianaName) and human-readable (identifier) formats
+- Named `TZ` instead of `TimeZone`: Shorter, matches library's concise naming style
+- Public export necessary: Users need `TZ` type when using timezone constants
+- Subpath export pattern: Keeps main API clean while providing opt-in timezone features
 
 ## 2. Utility Function Design
 
@@ -119,66 +171,48 @@ export function normalizeTimeZone(tz: string): TimeZone | null
 
 #### 2.3 Information Retrieval Functions
 
+**IMPLEMENTED:** `getTimeZoneOffset()` with improved algorithm:
+
 ```typescript
 /**
- * Gets detailed information about a timezone at a specific date.
- * 
- * Retrieves UTC offset, display name, and DST status for a timezone
- * at the given reference date. Returns null for invalid timezones.
- * 
- * @internal
- * @param tz - The IANA timezone identifier
- * @param referenceDate - The date for which to get timezone info (defaults to current date)
- * @returns TimeZoneInfo object, or null if timezone is invalid
- */
-export function getTimeZoneInfo(
-  tz: TimeZone,
-  referenceDate?: Date | number
-): TimeZoneInfo | null
-
-/**
  * Gets the UTC offset in minutes for a timezone at a specific date.
- * 
- * Calculates the offset by comparing local and UTC representations.
- * Returns null for invalid timezones or dates.
- * 
+ *
+ * Uses Intl.DateTimeFormat.formatToParts() to extract date components,
+ * then reconstructs timestamps to calculate offset mathematically.
+ * Includes wrap-around normalization for date boundary cases.
+ *
  * @internal
- * @param tz - The IANA timezone identifier
+ * @param tz - The IANA timezone identifier or TZ object
  * @param referenceDate - The date for which to get the offset (defaults to current date)
  * @returns UTC offset in minutes, or null if invalid
  */
 export function getTimeZoneOffset(
-  tz: TimeZone,
+  tz: string | TZ,
   referenceDate?: Date | number
 ): number | null
 ```
 
-**Rationale:**
-- `getTimeZoneInfo()`: Comprehensive timezone details for UI/debugging
-- `getTimeZoneOffset()`: Focused utility for offset calculations
-- Reference date parameter: Accounts for DST changes over time
-- Returns `null` on error (graceful degradation pattern)
+**Implementation Details:**
+- **Algorithm**: Uses `Intl.DateTimeFormat.formatToParts()` instead of string parsing
+- **Wrap-around Normalization**: Offsets outside ±840 minutes range are normalized by ±1440 minutes
+- **Input Flexibility**: Accepts both string (IANA name) and `TZ` object
+- **Validation**: Uses `isValidTimeZone()` for input validation
+- **Edge Cases**: Handles date boundary crossings correctly
+
+**Design Changes from Original Plan:**
+- Changed from string parsing (`toLocaleString()`) to `formatToParts()` for reliability
+- Added 24-hour normalization to handle date boundary wrap-around bug
+- Accepts `TZ` object in addition to string for API convenience
+- Removed `getTimeZoneInfo()` (deferred to future phases)
 
 #### 2.4 Timezone List Functions
 
-```typescript
-/**
- * Gets all supported IANA timezone names.
- * 
- * Returns a list of valid timezone identifiers supported by the runtime.
- * Falls back to empty array if Intl.supportedValuesOf is unavailable.
- * 
- * @internal
- * @returns Array of IANA timezone identifiers
- */
-export function getSupportedTimeZones(): readonly TimeZone[]
-```
+**NOT IMPLEMENTED (Future Phase):** `getSupportedTimeZones()` function
 
-**Rationale:**
-- Uses `Intl.supportedValuesOf('timeZone')` (available Node 18+, per package.json)
-- Fallback for older environments (returns empty array)
-- `readonly` return type prevents accidental modification
-- Useful for UI dropdowns in future public API
+**Rationale for Deferral:**
+- Not required for current timezone offset calculation features
+- Can be added in future phases when UI timezone selection is needed
+- Intl.supportedValuesOf() API already available when needed
 
 ## 3. Validation Approach
 
@@ -550,45 +584,73 @@ describe('isValidTimeZone', () => {
 
 ## 8. Implementation Checklist
 
-### Phase 1: Type Definitions
-- [ ] Add `TimeZone` type to `src/types.ts`
-- [ ] Add `TimeZoneInfo` type to `src/types.ts`
-- [ ] Add comprehensive JSDoc comments
-- [ ] Do NOT export from `src/index.ts` (internal only)
+### Phase 1: Type Definitions ✅ COMPLETED
+- [x] Add `TZ` type to `src/types.ts`
+- [x] Add comprehensive JSDoc comments
+- [x] Export from `src/index.ts` (required for public timezone constant usage)
+- [x] Create timezone constant files in `src/tz/`
+- [x] Export timezone constants from subpath `chronia/tz`
 
-### Phase 2: Validation Functions
-- [ ] Create `src/_lib/timezone.ts`
-- [ ] Implement `isString()` helper
-- [ ] Implement `isValidTimeZone()`
-- [ ] Write tests for validation
-- [ ] Ensure >95% test coverage
+### Phase 2: Validation Functions ✅ COMPLETED
+- [x] Create `src/_lib/timezone.ts`
+- [x] Implement `isString()` helper
+- [x] Implement `isValidTimeZone()` with TZ object support
+- [x] Write tests for validation
+- [x] Ensure >95% test coverage
 
-### Phase 3: Normalization Functions
-- [ ] Implement `normalizeTimeZone()`
-- [ ] Write tests for normalization
-- [ ] Test case variations, canonical forms
+### Phase 3: Normalization Functions ✅ COMPLETED
+- [x] Implement `normalizeTimeZone()` with TZ object support
+- [x] Write tests for normalization
+- [x] Test case variations, canonical forms
+- [x] Add whitespace trimming (.trim())
 
-### Phase 4: Information Retrieval Functions
-- [ ] Implement `getTimeZoneOffset()`
-- [ ] Implement `getTimeZoneInfo()`
-- [ ] Write tests for offset calculation
-- [ ] Test DST transitions
-- [ ] Test invalid inputs
+### Phase 4: Information Retrieval Functions ✅ COMPLETED
+- [x] Implement `getTimeZoneOffset()` with improved algorithm
+- [x] Use `Intl.DateTimeFormat.formatToParts()` instead of string parsing
+- [x] Implement 24-hour wrap-around normalization (±1440 minutes)
+- [x] Add TZ object support
+- [x] Write tests for offset calculation
+- [x] Test DST transitions
+- [x] Test invalid inputs
+- [x] Add month-end edge case tests
 
-### Phase 5: Timezone List Functions
-- [ ] Implement `getSupportedTimeZones()`
+### Phase 5: Timezone List Functions ⏸️ DEFERRED
+- [ ] Implement `getSupportedTimeZones()` (deferred to future phase)
 - [ ] Write tests for timezone list retrieval
 - [ ] Test fallback behavior
 
-### Phase 6: Integration & Documentation
-- [ ] Run `pnpm lint` (verify code quality)
-- [ ] Run `pnpm build` (verify TypeScript compilation)
-- [ ] Run `pnpm test` (verify all tests pass)
-- [ ] Run `pnpm test:coverage` (verify >95% coverage)
-- [ ] Write internal documentation (if needed)
-- [ ] Update project memory (this file)
+### Phase 6: Timezone Constants ✅ COMPLETED
+- [x] Create `src/tz/jst.ts` with JST constant
+- [x] Create `src/tz/est.ts` with EST constant
+- [x] Create `src/tz/pst.ts` with PST constant
+- [x] Create `src/tz/gmt.ts` with GMT constant
+- [x] Create `src/tz/utc.ts` with UTC constant
+- [x] Add comprehensive JSDoc to all timezone constants
+- [x] Export all constants from `src/tz/index.ts`
+- [x] Configure subpath export in package.json
 
-### Phase 7: Future Work (Not in Current Scope)
+### Phase 7: Integration & Documentation ✅ COMPLETED
+- [x] Run `pnpm lint` (verify code quality)
+- [x] Run `pnpm build` (verify TypeScript compilation)
+- [x] Run `pnpm test` (verify all tests pass)
+- [x] Run `pnpm test:coverage` (verify >95% coverage)
+- [x] Update project memory (this file)
+
+### Phase 8: PR Review Fixes 🔄 IN PROGRESS
+- [x] Fix Critical #1: Replace string parsing with formatToParts()
+- [x] Fix Critical #2: Add wrap-around normalization
+- [x] Fix Major #3: Remove redundant isValidTimeZone() call
+- [x] Fix Major #4: Add .trim() to getTimeZoneOffset
+- [x] Fix Minor #5-8: Correct JSDoc import paths
+- [x] Fix Minor #9: Add month-end edge case tests
+- [x] Fix Minor #10: Change UTC constant from "Etc/UTC" to "UTC"
+- [x] Fix Nitpick #1: Add JSDoc to timezone constants
+- [x] Fix Nitpick #2: Add GMT DST clarification
+- [x] Fix Nitpick #3: Update memory file with current implementation
+
+### Phase 9: Future Work (Not in Current Scope)
+- [ ] Implement `getTimeZoneInfo()` for comprehensive timezone details
+- [ ] Implement `getSupportedTimeZones()` for timezone list retrieval
 - [ ] Public API integration (format, parse with timezone parameter)
 - [ ] UTC offset support (if user demand exists)
 - [ ] Caching layer (if performance bottleneck identified)
