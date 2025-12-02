@@ -33,8 +33,19 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./i18n": {
+      "types": "./dist/i18n/index.d.ts",
+      "import": "./dist/i18n/index.js",
+      "require": "./dist/i18n/index.cjs"
+    },
+    "./tz": {
+      "types": "./dist/tz/index.d.ts",
+      "import": "./dist/tz/index.js",
+      "require": "./dist/tz/index.cjs"
     }
   },
   "sideEffects": false,
