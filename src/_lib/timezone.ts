@@ -203,7 +203,12 @@ export function getTimeZoneOffset(
     // Helper to extract numeric value from parts
     const getValue = (parts: Intl.DateTimeFormatPart[], type: string): number => {
       const part = parts.find((p) => p.type === type);
-      return part ? parseInt(part.value, 10) : 0;
+      if (!part) return 0;
+      const value = parseInt(part.value, 10);
+      // Normalize hour=24 (midnight formatted as end of previous day) to hour=0
+      // This is a known Node.js Intl API issue in versions 18.x, 20.x, 24.x
+      if (type === "hour" && value === 24) return 0;
+      return value;
     };
 
     // Reconstruct timestamps from parts
@@ -224,20 +229,6 @@ export function getTimeZoneOffset(
       getValue(tzParts, "minute"),
       getValue(tzParts, "second")
     );
-
-    // DEBUG: Log values for debugging CI issue
-    if (ianaName === "Asia/Tokyo") {
-      console.log("DEBUG getTimeZoneOffset:", {
-        ianaName,
-        inputDate: date.toISOString(),
-        utcFormatted: utcFormatter.format(date),
-        tzFormatted: tzFormatter.format(date),
-        utcTimestamp,
-        tzTimestamp,
-        diff: tzTimestamp - utcTimestamp,
-        offsetMinutes: (tzTimestamp - utcTimestamp) / 60000,
-      });
-    }
 
     // Calculate offset in minutes
     // When same instant is formatted in TZ vs UTC:
