@@ -225,6 +225,20 @@ export function getTimeZoneOffset(
       getValue(tzParts, "second")
     );
 
+    // DEBUG: Log values for debugging CI issue
+    if (ianaName === "Asia/Tokyo") {
+      console.log("DEBUG getTimeZoneOffset:", {
+        ianaName,
+        inputDate: date.toISOString(),
+        utcFormatted: utcFormatter.format(date),
+        tzFormatted: tzFormatter.format(date),
+        utcTimestamp,
+        tzTimestamp,
+        diff: tzTimestamp - utcTimestamp,
+        offsetMinutes: (tzTimestamp - utcTimestamp) / 60000,
+      });
+    }
+
     // Calculate offset in minutes
     // When same instant is formatted in TZ vs UTC:
     // - If TZ is ahead (east), TZ time is later, so utcTimestamp - tzTimestamp is negative
