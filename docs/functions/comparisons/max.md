@@ -7,19 +7,19 @@ The `max` function returns the latest (maximum) date from a given set of dates o
 ## Signature
 
 ```typescript
-function max(...dates: (Date | number)[]): Date
+function max(...dates: (Date | number)[]): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter  | Type                 | Description                                               |
+| ---------- | -------------------- | --------------------------------------------------------- |
 | `...dates` | `(Date \| number)[]` | One or more Date objects or numeric timestamps to compare |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                               |
+| ------ | ------------------------------------------------------------------------------------------------------------------------- |
 | `Date` | Returns the latest date from the provided inputs, or an Invalid Date if any input is invalid or no arguments are provided |
 
 ## Description
@@ -29,11 +29,13 @@ The `max` function determines which of the provided dates or timestamps is the m
 ### Specification
 
 #### Returns a valid `Date` when:
+
 - One or more valid Date objects or timestamps are provided
 - All inputs are valid dates or finite numeric timestamps
 - The returned Date represents the chronologically latest point in time among the inputs
 
 #### Returns an Invalid Date when:
+
 - No arguments are provided (empty input)
 - Any of the provided dates is an Invalid Date
 - Any of the provided timestamps produces an Invalid Date (e.g., `NaN`, `Infinity`)
@@ -60,97 +62,95 @@ The `max` function determines which of the provided dates or timestamps is the m
 ### Date Range Calculation
 
 ```typescript
-import { max } from 'chronia';
+import { max } from "chronia";
 
 // Find the latest date to establish a range end
 const startDates = [
-  new Date(2024, 0, 1),   // January 1, 2024
-  new Date(2024, 5, 15),  // June 15, 2024
-  new Date(2024, 3, 10)   // April 10, 2024
+  new Date(2024, 0, 1), // January 1, 2024
+  new Date(2024, 5, 15), // June 15, 2024
+  new Date(2024, 3, 10), // April 10, 2024
 ];
 
-const rangeEnd = max(...startDates);  // Returns: June 15, 2024
+const rangeEnd = max(...startDates); // Returns: June 15, 2024
 
 // With a single date
-const singleDate = max(new Date(2024, 11, 31));  // Returns: December 31, 2024
+const singleDate = max(new Date(2024, 11, 31)); // Returns: December 31, 2024
 ```
 
 ### Latest Record Selection
 
 ```typescript
-import { max } from 'chronia';
+import { max } from "chronia";
 
 // Find the most recent update timestamp
 const userUpdates = {
-  profile: Date.now() - 86400000,  // 1 day ago
-  settings: Date.now() - 3600000,  // 1 hour ago
-  password: Date.now() - 604800000 // 1 week ago
+  profile: Date.now() - 86400000, // 1 day ago
+  settings: Date.now() - 3600000, // 1 hour ago
+  password: Date.now() - 604800000, // 1 week ago
 };
 
 const lastActivity = max(
   userUpdates.profile,
   userUpdates.settings,
-  userUpdates.password
-);  // Returns: most recent timestamp (settings)
+  userUpdates.password,
+); // Returns: most recent timestamp (settings)
 
 // Mixed Date objects and timestamps
 const lastModified = max(
   new Date(2024, 5, 1),
   1718409600000,
-  new Date(2024, 5, 30)
-);  // Returns: the latest among these dates
+  new Date(2024, 5, 30),
+); // Returns: the latest among these dates
 ```
 
 ### Validation and Bounds Checking
 
 ```typescript
-import { max } from 'chronia';
+import { max } from "chronia";
 
 // Determine maximum allowed date
 const systemConstraints = [
-  new Date(2024, 11, 31),  // End of year
-  new Date(2025, 2, 1),    // Fiscal year end
-  new Date(2024, 6, 1)     // Mid-year checkpoint
+  new Date(2024, 11, 31), // End of year
+  new Date(2025, 2, 1), // Fiscal year end
+  new Date(2024, 6, 1), // Mid-year checkpoint
 ];
 
-const maxAllowedDate = max(...systemConstraints);  // Returns: March 1, 2025
+const maxAllowedDate = max(...systemConstraints); // Returns: March 1, 2025
 
 // Invalid date handling
 const invalidInput = max(
   new Date(2024, 5, 15),
-  new Date('invalid'),
-  new Date(2024, 5, 20)
-);  // Returns: Invalid Date
+  new Date("invalid"),
+  new Date(2024, 5, 20),
+); // Returns: Invalid Date
 
 // Empty input handling
-const noInput = max();  // Returns: Invalid Date
+const noInput = max(); // Returns: Invalid Date
 ```
 
 ### Time Series Analysis
 
 ```typescript
-import { max } from 'chronia';
+import { max } from "chronia";
 
 // Find the latest data point in a time series
 const dataPoints = [
   { value: 100, timestamp: new Date(2024, 0, 1) },
   { value: 150, timestamp: new Date(2024, 3, 1) },
-  { value: 120, timestamp: new Date(2024, 6, 1) }
+  { value: 120, timestamp: new Date(2024, 6, 1) },
 ];
 
-const latestDataPoint = max(
-  ...dataPoints.map(dp => dp.timestamp)
-);  // Returns: July 1, 2024
+const latestDataPoint = max(...dataPoints.map((dp) => dp.timestamp)); // Returns: July 1, 2024
 
 // Working with numeric timestamps
 const timestamps = [1704067200000, 1712016000000, 1719792000000];
-const peakDate = max(...timestamps);  // Returns: latest timestamp as Date
+const peakDate = max(...timestamps); // Returns: latest timestamp as Date
 ```
 
 ### Merge Operations
 
 ```typescript
-import { max } from 'chronia';
+import { max } from "chronia";
 
 // Conflict resolution: choose the most recent version
 interface Document {
@@ -162,23 +162,21 @@ interface Document {
 function resolveConflict(local: Document, remote: Document): Document {
   const newerDate = max(local.lastModified, remote.lastModified);
 
-  return newerDate.getTime() === local.lastModified.getTime()
-    ? local
-    : remote;
+  return newerDate.getTime() === local.lastModified.getTime() ? local : remote;
 }
 
 // Synchronization scenario
 const localDoc = {
-  id: '123',
+  id: "123",
   lastModified: new Date(2024, 5, 15, 10, 30),
-  content: 'Local changes'
+  content: "Local changes",
 };
 
 const remoteDoc = {
-  id: '123',
+  id: "123",
   lastModified: new Date(2024, 5, 15, 14, 45),
-  content: 'Remote changes'
+  content: "Remote changes",
 };
 
-const winner = resolveConflict(localDoc, remoteDoc);  // Returns: remoteDoc
+const winner = resolveConflict(localDoc, remoteDoc); // Returns: remoteDoc
 ```

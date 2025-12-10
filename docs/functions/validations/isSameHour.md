@@ -7,20 +7,20 @@ The `isSameHour` function checks if two dates fall within the same hour, ignorin
 ## Signature
 
 ```typescript
-function isSameHour(dateLeft: Date | number, dateRight: Date | number): boolean
+function isSameHour(dateLeft: Date | number, dateRight: Date | number): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                                          |
+| --------- | -------------------------------------------------------------------- |
 | `boolean` | Returns `true` if both dates are in the same hour, `false` otherwise |
 
 ## Description
@@ -30,11 +30,13 @@ The `isSameHour` function determines whether two dates occur within the same hou
 ### Specification
 
 #### Returns `true` when:
+
 - Both dates are valid
 - Both dates have the same year, month, day, and hour
 - The minute, second, and millisecond components may differ
 
 #### Returns `false` when:
+
 - Either date is invalid (Invalid Date, `NaN`, `Infinity`, `-Infinity`)
 - The dates have different years
 - The dates have different months (within the same year)
@@ -62,7 +64,7 @@ The `isSameHour` function determines whether two dates occur within the same hou
 ### Time-based Grouping
 
 ```typescript
-import { isSameHour } from 'chronia';
+import { isSameHour } from "chronia";
 
 // Group events by hour
 interface Event {
@@ -92,22 +94,16 @@ function groupEventsByHour(events: Event[]): Map<string, Event[]> {
 }
 
 // Same hour, different minutes
-isSameHour(
-  new Date(2024, 5, 15, 14, 0, 0),
-  new Date(2024, 5, 15, 14, 59, 59)
-);  // Returns: true
+isSameHour(new Date(2024, 5, 15, 14, 0, 0), new Date(2024, 5, 15, 14, 59, 59)); // Returns: true
 
 // Different hours
-isSameHour(
-  new Date(2024, 5, 15, 14, 59, 59),
-  new Date(2024, 5, 15, 15, 0, 0)
-);  // Returns: false
+isSameHour(new Date(2024, 5, 15, 14, 59, 59), new Date(2024, 5, 15, 15, 0, 0)); // Returns: false
 ```
 
 ### Temporal Deduplication
 
 ```typescript
-import { isSameHour } from 'chronia';
+import { isSameHour } from "chronia";
 
 interface Submission {
   userId: string;
@@ -117,33 +113,33 @@ interface Submission {
 
 function isDuplicateSubmission(
   newSubmission: Submission,
-  recentSubmissions: Submission[]
+  recentSubmissions: Submission[],
 ): boolean {
   return recentSubmissions.some(
     (existing) =>
       existing.userId === newSubmission.userId &&
-      isSameHour(existing.timestamp, newSubmission.timestamp)
+      isSameHour(existing.timestamp, newSubmission.timestamp),
   );
 }
 
 // Check for duplicate submissions
 const recent: Submission[] = [
-  { userId: 'user123', timestamp: new Date(2024, 5, 15, 14, 30), data: {} }
+  { userId: "user123", timestamp: new Date(2024, 5, 15, 14, 30), data: {} },
 ];
 
 const newSub: Submission = {
-  userId: 'user123',
+  userId: "user123",
   timestamp: new Date(2024, 5, 15, 14, 45),
-  data: {}
+  data: {},
 };
 
-isDuplicateSubmission(newSub, recent);  // Returns: true (same hour)
+isDuplicateSubmission(newSub, recent); // Returns: true (same hour)
 ```
 
 ### Scheduling Validation
 
 ```typescript
-import { isSameHour } from 'chronia';
+import { isSameHour } from "chronia";
 
 interface Appointment {
   id: string;
@@ -153,31 +149,31 @@ interface Appointment {
 
 function hasHourConflict(
   newAppointment: Appointment,
-  existingAppointments: Appointment[]
+  existingAppointments: Appointment[],
 ): boolean {
   return existingAppointments.some((existing) =>
-    isSameHour(existing.startTime, newAppointment.startTime)
+    isSameHour(existing.startTime, newAppointment.startTime),
   );
 }
 
 // Check for scheduling conflicts
 const existing: Appointment[] = [
-  { id: 'A1', startTime: new Date(2024, 5, 15, 14, 0), duration: 60 }
+  { id: "A1", startTime: new Date(2024, 5, 15, 14, 0), duration: 60 },
 ];
 
 const newAppt: Appointment = {
-  id: 'A2',
+  id: "A2",
   startTime: new Date(2024, 5, 15, 14, 30),
-  duration: 30
+  duration: 30,
 };
 
-hasHourConflict(newAppt, existing);  // Returns: true (same hour)
+hasHourConflict(newAppt, existing); // Returns: true (same hour)
 ```
 
 ### Activity Tracking
 
 ```typescript
-import { isSameHour } from 'chronia';
+import { isSameHour } from "chronia";
 
 interface Activity {
   action: string;
@@ -186,29 +182,29 @@ interface Activity {
 
 function countActionsInSameHour(
   activities: Activity[],
-  referenceTime: Date
+  referenceTime: Date,
 ): number {
   return activities.filter((activity) =>
-    isSameHour(activity.timestamp, referenceTime)
+    isSameHour(activity.timestamp, referenceTime),
   ).length;
 }
 
 // Track actions in the same hour
 const activities: Activity[] = [
-  { action: 'login', timestamp: new Date(2024, 5, 15, 14, 10) },
-  { action: 'view', timestamp: new Date(2024, 5, 15, 14, 25) },
-  { action: 'purchase', timestamp: new Date(2024, 5, 15, 15, 5) }
+  { action: "login", timestamp: new Date(2024, 5, 15, 14, 10) },
+  { action: "view", timestamp: new Date(2024, 5, 15, 14, 25) },
+  { action: "purchase", timestamp: new Date(2024, 5, 15, 15, 5) },
 ];
 
 const reference = new Date(2024, 5, 15, 14, 30);
-countActionsInSameHour(activities, reference);  // Returns: 2
+countActionsInSameHour(activities, reference); // Returns: 2
 
 // Invalid dates return false
-isSameHour(new Date('invalid'), new Date(2024, 5, 15, 14, 0));  // Returns: false
+isSameHour(new Date("invalid"), new Date(2024, 5, 15, 14, 0)); // Returns: false
 
 // Works with timestamps
 isSameHour(
   new Date(2024, 5, 15, 14, 30).getTime(),
-  new Date(2024, 5, 15, 14, 15).getTime()
-);  // Returns: true
+  new Date(2024, 5, 15, 14, 15).getTime(),
+); // Returns: true
 ```

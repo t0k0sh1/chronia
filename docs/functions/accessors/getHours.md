@@ -7,19 +7,19 @@ The `getHours` function extracts the hour component from a given Date object or 
 ## Signature
 
 ```typescript
-function getHours(date: Date | number): number
+function getHours(date: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp from which to extract the hours |
+| Parameter | Type             | Description                                                        |
+| --------- | ---------------- | ------------------------------------------------------------------ |
+| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the hours |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                  |
+| -------- | ---------------------------------------------------------------------------- |
 | `number` | Returns the hours (0-23) in 24-hour format, or `NaN` if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `getHours` function determines the hour component of the provided Date objec
 ### Specification
 
 #### Returns a number (0-23) when:
+
 - The argument is a valid `Date` object containing a valid date/time
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `getHours` function determines the hour component of the provided Date objec
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns `NaN` when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -64,29 +66,29 @@ The `getHours` function determines the hour component of the provided Date objec
 ### Time Display
 
 ```typescript
-import { getHours } from 'chronia';
+import { getHours } from "chronia";
 
 // Get hours from Date object
 const afternoon = new Date(2025, 0, 15, 14, 30);
-getHours(afternoon);  // Returns: 14
+getHours(afternoon); // Returns: 14
 
 // Get hours from timestamp (note: uses local timezone)
 const timestamp = 1704110400000; // 2024-01-01T12:00:00.000Z in UTC
-getHours(timestamp);  // Returns: 12 (in UTC+0) or varies by timezone
+getHours(timestamp); // Returns: 12 (in UTC+0) or varies by timezone
 
 // Midnight (start of day)
 const midnight = new Date(2024, 0, 1, 0, 0, 0);
-getHours(midnight);  // Returns: 0
+getHours(midnight); // Returns: 0
 
 // End of day
 const lateNight = new Date(2024, 0, 1, 23, 59, 59);
-getHours(lateNight);  // Returns: 23
+getHours(lateNight); // Returns: 23
 ```
 
 ### Time-Based Logic
 
 ```typescript
-import { getHours } from 'chronia';
+import { getHours } from "chronia";
 
 // Check if a date falls within business hours
 function isBusinessHours(date: Date | number): boolean {
@@ -97,16 +99,16 @@ function isBusinessHours(date: Date | number): boolean {
 }
 
 // Business hours check
-isBusinessHours(new Date(2025, 0, 15, 14, 30));  // Returns: true (2:30 PM)
-isBusinessHours(new Date(2025, 0, 15, 8, 30));   // Returns: false (8:30 AM)
-isBusinessHours(new Date(2025, 0, 15, 18, 0));   // Returns: false (6:00 PM)
+isBusinessHours(new Date(2025, 0, 15, 14, 30)); // Returns: true (2:30 PM)
+isBusinessHours(new Date(2025, 0, 15, 8, 30)); // Returns: false (8:30 AM)
+isBusinessHours(new Date(2025, 0, 15, 18, 0)); // Returns: false (6:00 PM)
 
 // Apply time-based pricing
 function getPricing(orderDate: Date): number {
   const hour = getHours(orderDate);
 
   if (isNaN(hour)) {
-    throw new Error('Invalid order date');
+    throw new Error("Invalid order date");
   }
 
   // Happy hour pricing (5 PM - 7 PM)
@@ -121,7 +123,7 @@ function getPricing(orderDate: Date): number {
 ### Time Comparison
 
 ```typescript
-import { getHours } from 'chronia';
+import { getHours } from "chronia";
 
 // Filter events by hour
 interface Event {
@@ -130,14 +132,17 @@ interface Event {
 }
 
 function filterEventsByHour(events: Event[], targetHour: number): Event[] {
-  return events.filter(event => getHours(event.timestamp) === targetHour);
+  return events.filter((event) => getHours(event.timestamp) === targetHour);
 }
 
 const events: Event[] = [
-  { name: 'Morning Meeting', timestamp: new Date(2025, 0, 15, 9, 0).getTime() },
-  { name: 'Lunch Break', timestamp: new Date(2025, 0, 15, 12, 0).getTime() },
-  { name: 'Afternoon Review', timestamp: new Date(2025, 0, 15, 14, 0).getTime() },
-  { name: 'Evening Call', timestamp: new Date(2025, 0, 15, 18, 0).getTime() },
+  { name: "Morning Meeting", timestamp: new Date(2025, 0, 15, 9, 0).getTime() },
+  { name: "Lunch Break", timestamp: new Date(2025, 0, 15, 12, 0).getTime() },
+  {
+    name: "Afternoon Review",
+    timestamp: new Date(2025, 0, 15, 14, 0).getTime(),
+  },
+  { name: "Evening Call", timestamp: new Date(2025, 0, 15, 18, 0).getTime() },
 ];
 
 // Get all events at 2 PM (14:00)
@@ -148,7 +153,7 @@ const afternoonEvents = filterEventsByHour(events, 14);
 ### Alarm and Scheduling
 
 ```typescript
-import { getHours } from 'chronia';
+import { getHours } from "chronia";
 
 // Check if current time matches alarm time
 function shouldTriggerAlarm(alarmHour: number): boolean {
@@ -161,7 +166,7 @@ function shouldTriggerAlarm(alarmHour: number): boolean {
 // Schedule a task to run at specific hours
 function scheduleHourlyTask(
   task: () => void,
-  targetHours: number[]
+  targetHours: number[],
 ): NodeJS.Timeout {
   return setInterval(() => {
     const currentHour = getHours(new Date());
@@ -174,14 +179,14 @@ function scheduleHourlyTask(
 
 // Run cleanup task at midnight and noon
 scheduleHourlyTask(() => {
-  console.log('Running scheduled cleanup');
+  console.log("Running scheduled cleanup");
 }, [0, 12]);
 ```
 
 ### Data Extraction
 
 ```typescript
-import { getHours } from 'chronia';
+import { getHours } from "chronia";
 
 // Extract hour data for analytics
 interface LogEntry {
@@ -205,8 +210,8 @@ function analyzeLogsByHour(logs: LogEntry[]): Map<number, number> {
 }
 
 // Invalid date handling
-const invalidDate = new Date('invalid');
-getHours(invalidDate);  // Returns: NaN
+const invalidDate = new Date("invalid");
+getHours(invalidDate); // Returns: NaN
 
 // Handle edge cases safely
 function safeGetHours(date: Date | number, defaultValue: number = 0): number {
@@ -214,6 +219,6 @@ function safeGetHours(date: Date | number, defaultValue: number = 0): number {
   return isNaN(hour) ? defaultValue : hour;
 }
 
-safeGetHours(new Date(2025, 0, 15, 14, 30));  // Returns: 14
-safeGetHours(new Date('invalid'), -1);         // Returns: -1 (default)
+safeGetHours(new Date(2025, 0, 15, 14, 30)); // Returns: 14
+safeGetHours(new Date("invalid"), -1); // Returns: -1 (default)
 ```

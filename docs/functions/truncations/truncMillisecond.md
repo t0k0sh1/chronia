@@ -7,19 +7,19 @@ The `truncMillisecond` function truncates a date to the millisecond unit. Since 
 ## Signature
 
 ```typescript
-function truncMillisecond(date: Date | number): Date
+function truncMillisecond(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to truncate |
+| Parameter | Type             | Description                                    |
+| --------- | ---------------- | ---------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                             |
+| ------ | ------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the same millisecond value as the input, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `truncMillisecond` function creates a new Date object with the same value as
 ### Specification
 
 #### Returns a new Date object with the same value when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `truncMillisecond` function creates a new Date object with the same value as
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -62,30 +64,30 @@ The `truncMillisecond` function creates a new Date object with the same value as
 ### API Consistency
 
 ```typescript
-import { truncMillisecond, truncSecond, truncMinute } from 'chronia';
+import { truncMillisecond, truncSecond, truncMinute } from "chronia";
 
 // Programmatically select truncation unit
-type TruncUnit = 'millisecond' | 'second' | 'minute';
+type TruncUnit = "millisecond" | "second" | "minute";
 
 function truncateToUnit(date: Date, unit: TruncUnit): Date {
   switch (unit) {
-    case 'millisecond':
+    case "millisecond":
       return truncMillisecond(date);
-    case 'second':
+    case "second":
       return truncSecond(date);
-    case 'minute':
+    case "minute":
       return truncMinute(date);
   }
 }
 
 const date = new Date(2024, 5, 15, 14, 30, 45, 123);
-truncateToUnit(date, 'millisecond');  // Returns: June 15, 2024 14:30:45.123
+truncateToUnit(date, "millisecond"); // Returns: June 15, 2024 14:30:45.123
 ```
 
 ### Date Copying
 
 ```typescript
-import { truncMillisecond } from 'chronia';
+import { truncMillisecond } from "chronia";
 
 // Create a new Date instance with validation
 const original = new Date(2024, 11, 31, 23, 59, 59, 999);
@@ -93,14 +95,14 @@ const copy = truncMillisecond(original);
 
 // Mutating copy does not affect original
 copy.setFullYear(2025);
-console.log(original.getFullYear());  // Returns: 2024
-console.log(copy.getFullYear());      // Returns: 2025
+console.log(original.getFullYear()); // Returns: 2024
+console.log(copy.getFullYear()); // Returns: 2025
 ```
 
 ### Input Validation with Copy
 
 ```typescript
-import { truncMillisecond } from 'chronia';
+import { truncMillisecond } from "chronia";
 
 // Validate and create Date instance from timestamp
 function createValidDate(input: Date | number): Date | null {
@@ -109,28 +111,28 @@ function createValidDate(input: Date | number): Date | null {
 }
 
 // Valid timestamp
-createValidDate(1704067200000);  // Returns: Date object for Jan 1, 2024
-createValidDate(0);              // Returns: Date object for Jan 1, 1970
+createValidDate(1704067200000); // Returns: Date object for Jan 1, 2024
+createValidDate(0); // Returns: Date object for Jan 1, 1970
 
 // Invalid inputs
-createValidDate(NaN);            // Returns: null
-createValidDate(Infinity);       // Returns: null
-createValidDate(new Date('invalid'));  // Returns: null
+createValidDate(NaN); // Returns: null
+createValidDate(Infinity); // Returns: null
+createValidDate(new Date("invalid")); // Returns: null
 ```
 
 ### Preserving Full Precision
 
 ```typescript
-import { truncMillisecond } from 'chronia';
+import { truncMillisecond } from "chronia";
 
 // No truncation occurs - millisecond precision preserved
 const precise = new Date(2024, 5, 15, 14, 30, 45, 123);
 const result = truncMillisecond(precise);
 
-console.log(result.getMilliseconds());  // Returns: 123 (unchanged)
+console.log(result.getMilliseconds()); // Returns: 123 (unchanged)
 
 // Works with timestamps
-const timestamp = Date.now();  // e.g., 1704067200123
+const timestamp = Date.now(); // e.g., 1704067200123
 const fromTimestamp = truncMillisecond(timestamp);
-console.log(fromTimestamp.getTime());  // Returns: 1704067200123 (same value)
+console.log(fromTimestamp.getTime()); // Returns: 1704067200123 (same value)
 ```

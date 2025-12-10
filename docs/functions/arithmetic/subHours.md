@@ -7,20 +7,20 @@ The `subHours` function subtracts a specified number of hours from a given date 
 ## Signature
 
 ```typescript
-function subHours(date: Date | number, amount: number): Date
+function subHours(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract hours |
-| `amount` | `number` | The number of hours to subtract (can be negative to effectively add hours) |
+| Parameter | Type             | Description                                                                      |
+| --------- | ---------------- | -------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract hours |
+| `amount`  | `number`         | The number of hours to subtract (can be negative to effectively add hours)       |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                              |
+| ------ | -------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of hours subtracted, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `subHours` function validates both the date and amount parameters before pro
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid `Date` object or finite numeric timestamp
 - The `amount` argument is a finite number (including zero)
 - Fractional `amount` values are truncated toward zero (e.g., `1.9` → `1`, `-1.9` → `-1`)
@@ -37,6 +38,7 @@ The `subHours` function validates both the date and amount parameters before pro
 - The operation may cross day, month, or year boundaries naturally
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -64,7 +66,7 @@ The `subHours` function validates both the date and amount parameters before pro
 ### Time Calculations
 
 ```typescript
-import { subHours } from 'chronia';
+import { subHours } from "chronia";
 
 // Calculate 5 hours ago
 const now = new Date(2025, 0, 15, 18, 0, 0);
@@ -84,7 +86,7 @@ const result = subHours(precise, 2);
 ### Scheduling and Appointments
 
 ```typescript
-import { subHours } from 'chronia';
+import { subHours } from "chronia";
 
 // Move appointment 2 hours earlier
 const appointmentTime = new Date(2025, 0, 20, 15, 0, 0);
@@ -104,7 +106,7 @@ const reminder = setReminder(eventTime, 2);
 ### Day Boundary Crossing
 
 ```typescript
-import { subHours } from 'chronia';
+import { subHours } from "chronia";
 
 // Crosses day boundary
 const morning = new Date(2025, 0, 15, 2, 0, 0);
@@ -120,7 +122,7 @@ const previousMonth = subHours(firstDayOfMonth, 3);
 ### Edge Cases and Validation
 
 ```typescript
-import { subHours } from 'chronia';
+import { subHours } from "chronia";
 
 // Negative amount adds hours instead
 const base = new Date(2025, 0, 15, 10, 30, 0);
@@ -133,7 +135,7 @@ const truncated = subHours(date, 1.9);
 // Returns: 2025-01-15 14:00:00 (1.9 truncated to 1)
 
 // Invalid date returns Invalid Date
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const result1 = subHours(invalidDate, 3);
 // Returns: Invalid Date
 
@@ -151,13 +153,15 @@ const copy = subHours(original, 0);
 ### Time Zone Adjustments
 
 ```typescript
-import { subHours } from 'chronia';
+import { subHours } from "chronia";
 
 // Manually adjust for time zone offset
 // (Note: For production use, consider proper time zone libraries)
 function adjustToTimezone(date: Date, hoursOffset: number): Date {
   // If target timezone is earlier, subtract hours
-  return hoursOffset < 0 ? subHours(date, Math.abs(hoursOffset)) : subHours(date, -hoursOffset);
+  return hoursOffset < 0
+    ? subHours(date, Math.abs(hoursOffset))
+    : subHours(date, -hoursOffset);
 }
 
 // Convert UTC to PST (UTC-8)

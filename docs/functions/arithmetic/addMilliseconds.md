@@ -7,20 +7,20 @@ The `addMilliseconds` function adds a specified number of milliseconds to a give
 ## Signature
 
 ```typescript
-function addMilliseconds(date: Date | number, amount: number): Date
+function addMilliseconds(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `amount` | `number` | The number of milliseconds to add (can be negative to subtract) |
+| Parameter | Type             | Description                                                     |
+| --------- | ---------------- | --------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp             |
+| `amount`  | `number`         | The number of milliseconds to add (can be negative to subtract) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                      |
+| ------ | ------------------------------------------------------------------------------------------------ |
 | `Date` | A new Date object with the specified milliseconds added, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `addMilliseconds` function performs precise millisecond-level arithmetic on 
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid `Date` object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -42,6 +43,7 @@ The `addMilliseconds` function performs precise millisecond-level arithmetic on 
   - Fractional values (truncated toward zero: `1.9 → 1`, `-1.9 → -1`)
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`
 - The `date` argument is `Infinity` or `-Infinity`
@@ -70,7 +72,7 @@ The `addMilliseconds` function performs precise millisecond-level arithmetic on 
 ### Precise Timing
 
 ```typescript
-import { addMilliseconds } from 'chronia';
+import { addMilliseconds } from "chronia";
 
 // Add positive milliseconds
 const baseDate = new Date(2020, 0, 1, 12, 0, 0, 0);
@@ -93,7 +95,7 @@ const negativeFractional = addMilliseconds(new Date(2020, 0, 1), -1.9);
 ### Time Offset Adjustments
 
 ```typescript
-import { addMilliseconds } from 'chronia';
+import { addMilliseconds } from "chronia";
 
 // Apply network latency compensation
 function compensateForLatency(timestamp: number, latencyMs: number): Date {
@@ -113,7 +115,7 @@ const synchronized = addMilliseconds(receivedTimestamp, -50);
 ### Animation Frames
 
 ```typescript
-import { addMilliseconds } from 'chronia';
+import { addMilliseconds } from "chronia";
 
 // Calculate frame timestamps for 60fps animation
 function calculateFrameTimestamps(startDate: Date, frameCount: number): Date[] {
@@ -135,7 +137,7 @@ const frameTimestamps = calculateFrameTimestamps(animationStart, 10);
 ### Boundary Crossing
 
 ```typescript
-import { addMilliseconds } from 'chronia';
+import { addMilliseconds } from "chronia";
 
 // Crossing second boundary
 const nearBoundary = new Date(2020, 0, 1, 12, 0, 0, 999);
@@ -151,10 +153,10 @@ const crossedMinute = addMilliseconds(nearMinute, 1);
 ### Invalid Input Handling
 
 ```typescript
-import { addMilliseconds } from 'chronia';
+import { addMilliseconds } from "chronia";
 
 // Invalid Date input
-const invalidDate = addMilliseconds(new Date('invalid'), 500);
+const invalidDate = addMilliseconds(new Date("invalid"), 500);
 // Returns: Invalid Date
 
 // NaN amount

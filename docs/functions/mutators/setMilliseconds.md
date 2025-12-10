@@ -7,20 +7,20 @@ The `setMilliseconds` function creates a new Date object with the milliseconds c
 ## Signature
 
 ```typescript
-function setMilliseconds(date: Date | number, milliseconds: number): Date
+function setMilliseconds(date: Date | number, milliseconds: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `milliseconds` | `number` | The milliseconds value to set (fractions are truncated toward zero) |
+| Parameter      | Type             | Description                                                         |
+| -------------- | ---------------- | ------------------------------------------------------------------- |
+| `date`         | `Date \| number` | The base date as a Date object or numeric timestamp                 |
+| `milliseconds` | `number`         | The milliseconds value to set (fractions are truncated toward zero) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                 |
+| ------ | ----------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the milliseconds set to the specified value, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `setMilliseconds` function sets the milliseconds component of a date to a sp
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp (including positive, zero, or negative values)
 - The `milliseconds` argument is a finite number
@@ -39,6 +40,7 @@ The `setMilliseconds` function sets the milliseconds component of a date to a sp
   - Negative values roll backward to the previous second
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `milliseconds` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -66,7 +68,7 @@ The `setMilliseconds` function sets the milliseconds component of a date to a sp
 ### Precise Timestamp Control
 
 ```typescript
-import { setMilliseconds } from 'chronia';
+import { setMilliseconds } from "chronia";
 
 // Set milliseconds to a specific value
 const baseDate = new Date(2025, 0, 15, 12, 30, 45, 123);
@@ -79,14 +81,14 @@ const normalized = setMilliseconds(timestamp, 250);
 // Returns: New Date with milliseconds set to 250
 
 // Original date is not modified
-console.log(baseDate.getMilliseconds());  // Returns: 123
-console.log(result.getMilliseconds());    // Returns: 500
+console.log(baseDate.getMilliseconds()); // Returns: 123
+console.log(result.getMilliseconds()); // Returns: 500
 ```
 
 ### Time Normalization
 
 ```typescript
-import { setMilliseconds } from 'chronia';
+import { setMilliseconds } from "chronia";
 
 // Normalize to zero milliseconds for second-level comparisons
 function normalizeToSecond(date: Date | number): Date {
@@ -96,21 +98,21 @@ function normalizeToSecond(date: Date | number): Date {
 const date1 = new Date(2025, 0, 15, 12, 30, 45, 123);
 const date2 = new Date(2025, 0, 15, 12, 30, 45, 987);
 
-const normalized1 = normalizeToSecond(date1);  // Returns: 2025-01-15T12:30:45.000Z
-const normalized2 = normalizeToSecond(date2);  // Returns: 2025-01-15T12:30:45.000Z
+const normalized1 = normalizeToSecond(date1); // Returns: 2025-01-15T12:30:45.000Z
+const normalized2 = normalizeToSecond(date2); // Returns: 2025-01-15T12:30:45.000Z
 
 // Now dates can be compared at second precision
-console.log(normalized1.getTime() === normalized2.getTime());  // Returns: true
+console.log(normalized1.getTime() === normalized2.getTime()); // Returns: true
 ```
 
 ### Animation and Timing
 
 ```typescript
-import { setMilliseconds } from 'chronia';
+import { setMilliseconds } from "chronia";
 
 // Synchronize to specific millisecond marks within a second
 function snapToFrame(date: Date, frameRate: number = 60): Date {
-  const msPerFrame = 1000 / frameRate;  // ~16.67ms for 60fps
+  const msPerFrame = 1000 / frameRate; // ~16.67ms for 60fps
   const currentMs = date.getMilliseconds();
   const snappedMs = Math.floor(currentMs / msPerFrame) * msPerFrame;
   return setMilliseconds(date, snappedMs);
@@ -124,7 +126,7 @@ const frameAligned = snapToFrame(timestamp);
 ### Testing and Mocking
 
 ```typescript
-import { setMilliseconds } from 'chronia';
+import { setMilliseconds } from "chronia";
 
 // Create deterministic dates for testing
 function createTestDate(milliseconds: number): Date {
@@ -133,31 +135,32 @@ function createTestDate(milliseconds: number): Date {
 }
 
 // Test with controlled millisecond values
-const testDate1 = createTestDate(0);    // Returns: 2025-01-01T00:00:00.000Z
-const testDate2 = createTestDate(500);  // Returns: 2025-01-01T00:00:00.500Z
-const testDate3 = createTestDate(999);  // Returns: 2025-01-01T00:00:00.999Z
+const testDate1 = createTestDate(0); // Returns: 2025-01-01T00:00:00.000Z
+const testDate2 = createTestDate(500); // Returns: 2025-01-01T00:00:00.500Z
+const testDate3 = createTestDate(999); // Returns: 2025-01-01T00:00:00.999Z
 ```
 
 ### Edge Cases and Validation
 
 ```typescript
-import { setMilliseconds } from 'chronia';
+import { setMilliseconds } from "chronia";
 
 // Fractional milliseconds are truncated
 const date = new Date(2025, 0, 15, 12, 30, 45, 123);
-const result1 = setMilliseconds(date, 500.9);  // Returns: ...45.500Z (not 501)
+const result1 = setMilliseconds(date, 500.9); // Returns: ...45.500Z (not 501)
 const result2 = setMilliseconds(date, -500.9); // Returns: ...44.500Z (rollback with truncation)
 
 // Rollover to next second with value >= 1000
-const result3 = setMilliseconds(date, 1000);  // Returns: 2025-01-15T12:30:46.000Z
-const result4 = setMilliseconds(date, 1250);  // Returns: 2025-01-15T12:30:46.250Z
+const result3 = setMilliseconds(date, 1000); // Returns: 2025-01-15T12:30:46.000Z
+const result4 = setMilliseconds(date, 1250); // Returns: 2025-01-15T12:30:46.250Z
 
 // Rollback to previous second with negative values
-const result5 = setMilliseconds(date, -1);    // Returns: 2025-01-15T12:30:44.999Z
-const result6 = setMilliseconds(date, -500);  // Returns: 2025-01-15T12:30:44.500Z
+const result5 = setMilliseconds(date, -1); // Returns: 2025-01-15T12:30:44.999Z
+const result6 = setMilliseconds(date, -500); // Returns: 2025-01-15T12:30:44.500Z
 
 // Invalid inputs return Invalid Date
-const invalid1 = setMilliseconds(new Date('invalid'), 500);  // Returns: Invalid Date
+const invalid1 = setMilliseconds(new Date("invalid"), 500); // Returns: Invalid Date
 const invalid2 = setMilliseconds(new Date(2025, 0, 1), NaN); // Returns: Invalid Date
-const invalid3 = setMilliseconds(NaN, 500);                   // Returns: Invalid Date
-const invalid4 = setMilliseconds(Infinity, 500);              // Returns: Invalid Date
+const invalid3 = setMilliseconds(NaN, 500); // Returns: Invalid Date
+const invalid4 = setMilliseconds(Infinity, 500); // Returns: Invalid Date
+```

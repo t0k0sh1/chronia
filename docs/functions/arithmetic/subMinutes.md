@@ -7,20 +7,20 @@ The `subMinutes` function subtracts a specified number of minutes from a given d
 ## Signature
 
 ```typescript
-function subMinutes(date: Date | number, amount: number): Date
+function subMinutes(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp from which minutes will be subtracted |
-| `amount` | `number` | The number of minutes to subtract (can be negative to effectively add minutes) |
+| Parameter | Type             | Description                                                                               |
+| --------- | ---------------- | ----------------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which minutes will be subtracted |
+| `amount`  | `number`         | The number of minutes to subtract (can be negative to effectively add minutes)            |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of minutes subtracted, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `subMinutes` function performs minute-based date arithmetic by subtracting t
 ### Specification
 
 #### Returns a valid `Date` when:
+
 - The `date` argument is a valid Date object or finite numeric timestamp
 - The `amount` argument is a finite number (including zero and negative values)
 - Positive `amount` values subtract minutes from the date
@@ -46,6 +47,7 @@ The `subMinutes` function performs minute-based date arithmetic by subtracting t
   - Year boundaries (e.g., January 1st 00:15 minus 30 minutes becomes previous year December 31st 23:45)
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`
 - The `amount` argument is `NaN`
@@ -74,7 +76,7 @@ The `subMinutes` function performs minute-based date arithmetic by subtracting t
 ### Time Calculations
 
 ```typescript
-import { subMinutes } from 'chronia';
+import { subMinutes } from "chronia";
 
 // Subtract 15 minutes from noon
 const result = subMinutes(new Date(2025, 0, 15, 12, 0, 0), 15);
@@ -93,7 +95,7 @@ const later = subMinutes(new Date(2025, 0, 15, 12, 30, 0), -15);
 ### Meeting Scheduling
 
 ```typescript
-import { subMinutes } from 'chronia';
+import { subMinutes } from "chronia";
 
 // Calculate meeting start time from end time
 function calculateMeetingStart(endTime: Date, durationMinutes: number): Date {
@@ -114,7 +116,7 @@ const prepStart = subMinutes(eventTime, 30);
 ### Boundary Crossings
 
 ```typescript
-import { subMinutes } from 'chronia';
+import { subMinutes } from "chronia";
 
 // Cross hour boundary
 const crossHour = subMinutes(new Date(2025, 0, 15, 13, 15, 0), 30);
@@ -140,7 +142,7 @@ const preserved = subMinutes(new Date(2025, 0, 15, 12, 45, 30, 500), 15);
 ### Fractional Amounts and Edge Cases
 
 ```typescript
-import { subMinutes } from 'chronia';
+import { subMinutes } from "chronia";
 
 // Fractional amounts are truncated toward zero
 const fractional1 = subMinutes(new Date(2025, 0, 15, 12, 30, 0), 1.9);
@@ -161,10 +163,10 @@ const largeValue = subMinutes(new Date(2025, 0, 15, 12, 0, 0), 10000);
 ### Input Validation
 
 ```typescript
-import { subMinutes } from 'chronia';
+import { subMinutes } from "chronia";
 
 // Invalid date returns Invalid Date
-const invalidDate = subMinutes(new Date('invalid'), 30);
+const invalidDate = subMinutes(new Date("invalid"), 30);
 // Returns: Invalid Date
 
 // NaN amount returns Invalid Date
@@ -184,6 +186,6 @@ function safeSubMinutes(date: Date | number, minutes: number): Date | null {
 const safe = safeSubMinutes(new Date(2025, 0, 15, 12, 0, 0), 30);
 // Returns: valid Date object
 
-const unsafe = safeSubMinutes(new Date('invalid'), 30);
+const unsafe = safeSubMinutes(new Date("invalid"), 30);
 // Returns: null
 ```

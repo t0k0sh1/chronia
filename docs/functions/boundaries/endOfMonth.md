@@ -7,19 +7,19 @@ The `endOfMonth` function returns a new Date object set to the last day of the m
 ## Signature
 
 ```typescript
-function endOfMonth(date: Date | number): Date
+function endOfMonth(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
+| Parameter | Type             | Description                                         |
+| --------- | ---------------- | --------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                             |
+| ------ | ------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to the last day of the month at 23:59:59.999, or Invalid Date if input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `endOfMonth` function calculates the last moment of the month for the provid
 ### Specification
 
 #### Returns a valid Date when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,11 +37,13 @@ The `endOfMonth` function calculates the last moment of the month for the provid
   - Negative timestamps (dates before Unix epoch)
 
 The returned Date will have:
+
 - The same year and month as the input date
 - Day set to the last day of that month (28, 29, 30, or 31)
 - Time set to 23:59:59.999 (the last millisecond of the day)
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -72,7 +75,7 @@ The returned Date will have:
 ### Month Boundary Calculations
 
 ```typescript
-import { endOfMonth } from 'chronia';
+import { endOfMonth } from "chronia";
 
 // Get end of month from mid-month date
 const midMonth = new Date(2024, 5, 15, 14, 30, 45);
@@ -93,7 +96,7 @@ const decemberEnd = endOfMonth(lastDay);
 ### Handling Different Month Lengths
 
 ```typescript
-import { endOfMonth } from 'chronia';
+import { endOfMonth } from "chronia";
 
 // 31-day month (January)
 endOfMonth(new Date(2024, 0, 10));
@@ -115,7 +118,7 @@ endOfMonth(new Date(2024, 1, 10));
 ### Date Range Generation
 
 ```typescript
-import { endOfMonth } from 'chronia';
+import { endOfMonth } from "chronia";
 
 // Create a month range for queries
 function getMonthRange(date: Date) {
@@ -131,16 +134,21 @@ const range = getMonthRange(new Date(2024, 5, 15));
 // }
 
 // Use for database queries or filtering
-function getMonthlyData(date: Date, data: Array<{ timestamp: Date, value: number }>) {
+function getMonthlyData(
+  date: Date,
+  data: Array<{ timestamp: Date; value: number }>,
+) {
   const { start, end } = getMonthRange(date);
-  return data.filter(item => item.timestamp >= start && item.timestamp <= end);
+  return data.filter(
+    (item) => item.timestamp >= start && item.timestamp <= end,
+  );
 }
 ```
 
 ### Working with Timestamps
 
 ```typescript
-import { endOfMonth } from 'chronia';
+import { endOfMonth } from "chronia";
 
 // Works with numeric timestamps
 const timestamp = Date.now();
@@ -159,7 +167,7 @@ const historicalEnd = endOfMonth(new Date(1969, 11, 15).getTime());
 ### Deadline Setting and Validation
 
 ```typescript
-import { endOfMonth } from 'chronia';
+import { endOfMonth } from "chronia";
 
 // Set deadline to end of current month
 function setMonthEndDeadline(): Date {
@@ -174,20 +182,20 @@ function isInCurrentMonth(date: Date): boolean {
   return date >= monthStart && date <= monthEnd;
 }
 
-isInCurrentMonth(new Date(2024, 5, 15));  // Returns: true (if current month is June 2024)
-isInCurrentMonth(new Date(2024, 6, 1));   // Returns: false (if current month is June 2024)
+isInCurrentMonth(new Date(2024, 5, 15)); // Returns: true (if current month is June 2024)
+isInCurrentMonth(new Date(2024, 6, 1)); // Returns: false (if current month is June 2024)
 ```
 
 ### Error Handling
 
 ```typescript
-import { endOfMonth } from 'chronia';
+import { endOfMonth } from "chronia";
 
 // Invalid inputs return Invalid Date
-endOfMonth(new Date('invalid'));  // Returns: Invalid Date
-endOfMonth(NaN);                   // Returns: Invalid Date
-endOfMonth(Infinity);              // Returns: Invalid Date
-endOfMonth(-Infinity);             // Returns: Invalid Date
+endOfMonth(new Date("invalid")); // Returns: Invalid Date
+endOfMonth(NaN); // Returns: Invalid Date
+endOfMonth(Infinity); // Returns: Invalid Date
+endOfMonth(-Infinity); // Returns: Invalid Date
 
 // Validate result before using
 function safeEndOfMonth(date: Date | number): Date | null {
@@ -195,6 +203,6 @@ function safeEndOfMonth(date: Date | number): Date | null {
   return isNaN(result.getTime()) ? null : result;
 }
 
-safeEndOfMonth(new Date(2024, 5, 15));  // Returns: June 30, 2024 23:59:59.999
-safeEndOfMonth(new Date('invalid'));    // Returns: null
+safeEndOfMonth(new Date(2024, 5, 15)); // Returns: June 30, 2024 23:59:59.999
+safeEndOfMonth(new Date("invalid")); // Returns: null
 ```

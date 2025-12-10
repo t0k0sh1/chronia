@@ -7,19 +7,19 @@ The `endOfYear` function returns a new Date object representing the last moment 
 ## Signature
 
 ```typescript
-function endOfYear(date: Date | number): Date
+function endOfYear(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp representing the base date |
+| Parameter | Type             | Description                                                   |
+| --------- | ---------------- | ------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp representing the base date |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                      |
+| ------ | ---------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to December 31st at 23:59:59.999 of the same year, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `endOfYear` function calculates the final moment of the year for the provide
 ### Specification
 
 #### Returns a Date set to December 31st, 23:59:59.999 when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -40,6 +41,7 @@ The `endOfYear` function calculates the final moment of the year for the provide
 - Hours set to 23, minutes to 59, seconds to 59, milliseconds to 999
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -67,7 +69,7 @@ The `endOfYear` function calculates the final moment of the year for the provide
 ### Year Range Queries
 
 ```typescript
-import { endOfYear, startOfYear } from 'chronia';
+import { endOfYear, startOfYear } from "chronia";
 
 // Get full year range for 2024
 const yearStart = startOfYear(new Date(2024, 5, 15));
@@ -84,14 +86,14 @@ function isInYear(date: Date, year: number): boolean {
   return time >= start.getTime() && time <= end.getTime();
 }
 
-isInYear(new Date(2024, 11, 31, 23, 59, 59), 2024);  // Returns: true
-isInYear(new Date(2025, 0, 1, 0, 0, 0), 2024);       // Returns: false
+isInYear(new Date(2024, 11, 31, 23, 59, 59), 2024); // Returns: true
+isInYear(new Date(2025, 0, 1, 0, 0, 0), 2024); // Returns: false
 ```
 
 ### Year-based Reporting
 
 ```typescript
-import { endOfYear } from 'chronia';
+import { endOfYear } from "chronia";
 
 // Calculate financial year end
 function getFiscalYearEnd(date: Date): Date {
@@ -110,7 +112,7 @@ const yearEnd = endOfYear(timestamp);
 ### Time Period Calculations
 
 ```typescript
-import { endOfYear } from 'chronia';
+import { endOfYear } from "chronia";
 
 // Filter events that occur in a specific year
 interface Event {
@@ -122,9 +124,9 @@ function getEventsInYear(events: Event[], year: number): Event[] {
   const yearEndDate = endOfYear(new Date(year, 0, 1));
   const yearEndTime = yearEndDate.getTime();
 
-  return events.filter(event =>
-    event.date.getFullYear() === year &&
-    event.date.getTime() <= yearEndTime
+  return events.filter(
+    (event) =>
+      event.date.getFullYear() === year && event.date.getTime() <= yearEndTime,
   );
 }
 
@@ -139,7 +141,7 @@ const normalYearEnd = endOfYear(new Date(2023, 5, 15));
 ### Data Validation
 
 ```typescript
-import { endOfYear, isValid } from 'chronia';
+import { endOfYear, isValid } from "chronia";
 
 // Safe year-end calculation with validation
 function safeEndOfYear(date: Date | number): Date | null {
@@ -148,10 +150,10 @@ function safeEndOfYear(date: Date | number): Date | null {
 }
 
 // Valid date
-safeEndOfYear(new Date(2024, 5, 15));  // Returns: December 31, 2024 23:59:59.999
+safeEndOfYear(new Date(2024, 5, 15)); // Returns: December 31, 2024 23:59:59.999
 
 // Invalid date
-safeEndOfYear(new Date('invalid'));    // Returns: null
+safeEndOfYear(new Date("invalid")); // Returns: null
 
 // Calculate remaining days in year
 function daysRemainingInYear(date: Date): number {
@@ -163,6 +165,6 @@ function daysRemainingInYear(date: Date): number {
   return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 }
 
-daysRemainingInYear(new Date(2024, 0, 1));   // Returns: 365 (leap year)
-daysRemainingInYear(new Date(2023, 0, 1));   // Returns: 364
+daysRemainingInYear(new Date(2024, 0, 1)); // Returns: 365 (leap year)
+daysRemainingInYear(new Date(2023, 0, 1)); // Returns: 364
 ```

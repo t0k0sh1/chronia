@@ -7,19 +7,19 @@ The `truncMinute` function truncates a given Date object or timestamp to the sta
 ## Signature
 
 ```typescript
-function truncMinute(date: Date | number): Date
+function truncMinute(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the minute |
+| Parameter | Type             | Description                                                               |
+| --------- | ---------------- | ------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the minute |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                                     |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object truncated to the start of the minute (seconds and milliseconds set to 0), or Invalid Date if input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `truncMinute` function sets the seconds and milliseconds components to 0 whi
 ### Specification
 
 #### Returns a valid Date when:
+
 - The argument is a valid `Date` object, with seconds and milliseconds set to 0
 - The argument is a finite numeric timestamp, converted to a Date with seconds and milliseconds set to 0
 - This includes:
@@ -40,6 +41,7 @@ The `truncMinute` function sets the seconds and milliseconds components to 0 whi
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -68,7 +70,7 @@ The `truncMinute` function sets the seconds and milliseconds components to 0 whi
 ### Time Normalization
 
 ```typescript
-import { truncMinute } from 'chronia';
+import { truncMinute } from "chronia";
 
 // Truncate to start of minute
 const date = new Date(2024, 5, 15, 14, 30, 45, 123);
@@ -89,7 +91,7 @@ const result3 = truncMinute(endOfMinute);
 ### Timestamp Comparison
 
 ```typescript
-import { truncMinute } from 'chronia';
+import { truncMinute } from "chronia";
 
 // Check if two dates are in the same minute
 function isSameMinute(date1: Date, date2: Date): boolean {
@@ -100,16 +102,16 @@ function isSameMinute(date1: Date, date2: Date): boolean {
 
 const event1 = new Date(2024, 5, 15, 14, 30, 15, 500);
 const event2 = new Date(2024, 5, 15, 14, 30, 45, 200);
-isSameMinute(event1, event2);  // Returns: true
+isSameMinute(event1, event2); // Returns: true
 
 const event3 = new Date(2024, 5, 15, 14, 31, 0, 0);
-isSameMinute(event1, event3);  // Returns: false
+isSameMinute(event1, event3); // Returns: false
 ```
 
 ### Data Bucketing
 
 ```typescript
-import { truncMinute } from 'chronia';
+import { truncMinute } from "chronia";
 
 interface LogEntry {
   timestamp: Date;
@@ -132,9 +134,9 @@ function groupLogsByMinute(logs: LogEntry[]): Map<number, LogEntry[]> {
 }
 
 const logs: LogEntry[] = [
-  { timestamp: new Date(2024, 5, 15, 14, 30, 10), message: 'Event A' },
-  { timestamp: new Date(2024, 5, 15, 14, 30, 45), message: 'Event B' },
-  { timestamp: new Date(2024, 5, 15, 14, 31, 5), message: 'Event C' },
+  { timestamp: new Date(2024, 5, 15, 14, 30, 10), message: "Event A" },
+  { timestamp: new Date(2024, 5, 15, 14, 30, 45), message: "Event B" },
+  { timestamp: new Date(2024, 5, 15, 14, 31, 5), message: "Event C" },
 ];
 
 const grouped = groupLogsByMinute(logs);
@@ -144,7 +146,7 @@ const grouped = groupLogsByMinute(logs);
 ### Works with Timestamps
 
 ```typescript
-import { truncMinute } from 'chronia';
+import { truncMinute } from "chronia";
 
 // Works with numeric timestamps
 const timestamp = Date.now();
@@ -160,10 +162,10 @@ const truncated = truncMinute(specificTimestamp);
 ### Invalid Input Handling
 
 ```typescript
-import { truncMinute } from 'chronia';
+import { truncMinute } from "chronia";
 
 // Invalid Date returns Invalid Date
-const invalid = truncMinute(new Date('invalid'));
+const invalid = truncMinute(new Date("invalid"));
 // Returns: Invalid Date
 
 // NaN returns Invalid Date

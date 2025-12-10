@@ -7,20 +7,20 @@ The `diffSeconds` function calculates the difference in complete seconds between
 ## Signature
 
 ```typescript
-function diffSeconds(dateLeft: Date | number, dateRight: Date | number): number
+function diffSeconds(dateLeft: Date | number, dateRight: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                                                                                                |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `number` | The difference in complete seconds. Returns a positive number if `dateLeft` is after `dateRight`, negative if before, and `NaN` if either input is invalid |
 
 ## Description
@@ -30,20 +30,24 @@ The `diffSeconds` function determines the number of complete seconds between two
 ### Specification
 
 #### Returns a positive number when:
+
 - `dateLeft` represents a later time than `dateRight`
 - Both inputs are valid Date objects or finite numeric timestamps
 - The difference is calculated in complete seconds (milliseconds ignored)
 
 #### Returns a negative number when:
+
 - `dateLeft` represents an earlier time than `dateRight`
 - Both inputs are valid Date objects or finite numeric timestamps
 
 #### Returns zero (`0`) when:
+
 - Both dates fall within the same second
 - The dates are identical at the second precision level
 - Millisecond differences exist but are ignored
 
 #### Returns `NaN` when:
+
 - Either argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - Either argument is `NaN`
 - Either argument is `Infinity`
@@ -72,12 +76,12 @@ The `diffSeconds` function determines the number of complete seconds between two
 ### Time Tracking
 
 ```typescript
-import { diffSeconds } from 'chronia';
+import { diffSeconds } from "chronia";
 
 // Calculate elapsed time
 const startTime = new Date(2024, 5, 15, 14, 30, 40);
 const endTime = new Date(2024, 5, 15, 14, 30, 45);
-const elapsed = diffSeconds(endTime, startTime);  // Returns: 5
+const elapsed = diffSeconds(endTime, startTime); // Returns: 5
 
 // Track operation duration
 const operationStart = Date.now();
@@ -88,13 +92,13 @@ const duration = diffSeconds(operationEnd, operationStart);
 // Milliseconds are ignored (same second)
 const time1 = new Date(2024, 5, 15, 14, 30, 45, 999);
 const time2 = new Date(2024, 5, 15, 14, 30, 45, 0);
-const diff = diffSeconds(time1, time2);  // Returns: 0
+const diff = diffSeconds(time1, time2); // Returns: 0
 ```
 
 ### Duration Measurement
 
 ```typescript
-import { diffSeconds } from 'chronia';
+import { diffSeconds } from "chronia";
 
 // Measure session length
 function getSessionDuration(loginTime: Date, logoutTime: Date): number {
@@ -103,7 +107,7 @@ function getSessionDuration(loginTime: Date, logoutTime: Date): number {
 
 const login = new Date(2024, 5, 15, 9, 0, 0);
 const logout = new Date(2024, 5, 15, 17, 30, 0);
-const sessionSeconds = getSessionDuration(login, logout);  // Returns: 30600 (8.5 hours)
+const sessionSeconds = getSessionDuration(login, logout); // Returns: 30600 (8.5 hours)
 
 // Calculate countdown
 const now = new Date();
@@ -114,20 +118,26 @@ const remainingSeconds = diffSeconds(deadline, now);
 ### Timeout Calculations
 
 ```typescript
-import { diffSeconds } from 'chronia';
+import { diffSeconds } from "chronia";
 
 // Check session timeout
-function isSessionExpired(lastActivityTime: Date, timeoutSeconds: number): boolean {
+function isSessionExpired(
+  lastActivityTime: Date,
+  timeoutSeconds: number,
+): boolean {
   const now = new Date();
   const secondsSinceActivity = diffSeconds(now, lastActivityTime);
   return secondsSinceActivity > timeoutSeconds;
 }
 
 const lastActivity = new Date(2024, 5, 15, 14, 25, 0);
-const expired = isSessionExpired(lastActivity, 300);  // 5-minute timeout
+const expired = isSessionExpired(lastActivity, 300); // 5-minute timeout
 
 // Rate limiting check
-function canMakeRequest(lastRequestTime: number, cooldownSeconds: number): boolean {
+function canMakeRequest(
+  lastRequestTime: number,
+  cooldownSeconds: number,
+): boolean {
   const secondsSinceRequest = diffSeconds(Date.now(), lastRequestTime);
   return secondsSinceRequest >= cooldownSeconds;
 }
@@ -136,7 +146,7 @@ function canMakeRequest(lastRequestTime: number, cooldownSeconds: number): boole
 ### Scheduling and Delays
 
 ```typescript
-import { diffSeconds } from 'chronia';
+import { diffSeconds } from "chronia";
 
 // Calculate time until event
 function getSecondsUntilEvent(eventTime: Date): number {
@@ -149,13 +159,13 @@ const secondsRemaining = getSecondsUntilEvent(nextEvent);
 // Negative result when first date is earlier
 const past = new Date(2024, 5, 15, 14, 30, 40);
 const future = new Date(2024, 5, 15, 14, 30, 45);
-const diff = diffSeconds(past, future);  // Returns: -5
+const diff = diffSeconds(past, future); // Returns: -5
 ```
 
 ### Data Analysis
 
 ```typescript
-import { diffSeconds } from 'chronia';
+import { diffSeconds } from "chronia";
 
 // Analyze log entries
 interface LogEntry {
@@ -174,11 +184,11 @@ function analyzeLogGaps(logs: LogEntry[]): number[] {
 
 // Invalid input handling
 const validDate = new Date(2024, 5, 15, 14, 30, 45);
-const invalidDate = new Date('invalid');
-const result = diffSeconds(validDate, invalidDate);  // Returns: NaN
+const invalidDate = new Date("invalid");
+const result = diffSeconds(validDate, invalidDate); // Returns: NaN
 
 // Check for invalid result
 if (isNaN(result)) {
-  console.log('Invalid date provided');
+  console.log("Invalid date provided");
 }
 ```

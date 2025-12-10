@@ -7,20 +7,20 @@ The `setHours` function creates a new Date object with the hours component set t
 ## Signature
 
 ```typescript
-function setHours(date: Date | number, hours: number): Date
+function setHours(date: Date | number, hours: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `hours` | `number` | The hours to set (typically 0-23, though out-of-range values will cause date rollover) |
+| Parameter | Type             | Description                                                                            |
+| --------- | ---------------- | -------------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                    |
+| `hours`   | `number`         | The hours to set (typically 0-23, though out-of-range values will cause date rollover) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                          |
+| ------ | ---------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the hours set to the specified value, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,12 +30,14 @@ The `setHours` function provides a functional approach to modifying the hours co
 ### Specification
 
 #### Returns a valid `Date` when:
+
 - The `date` argument is a valid `Date` object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp
 - The `hours` argument is a finite number
 - The resulting date calculation produces a valid date
 
 #### Returns `Invalid Date` when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `hours` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -65,7 +67,7 @@ The `setHours` function provides a functional approach to modifying the hours co
 ### Time Normalization
 
 ```typescript
-import { setHours } from 'chronia';
+import { setHours } from "chronia";
 
 // Set hours to a specific time
 const morning = setHours(new Date(2025, 0, 15, 12, 30, 45), 9);
@@ -83,7 +85,7 @@ const endOfDay = setHours(new Date(2025, 0, 15, 12, 30, 45), 17);
 ### Deadline Setting
 
 ```typescript
-import { setHours } from 'chronia';
+import { setHours } from "chronia";
 
 // Create a 5 PM deadline for today
 const today = new Date();
@@ -101,7 +103,7 @@ const submissionDeadline = setHours(new Date(2025, 2, 31), 0);
 ### Hours Rollover Behavior
 
 ```typescript
-import { setHours } from 'chronia';
+import { setHours } from "chronia";
 
 // Hours beyond 23 roll to the next day
 const nextDay = setHours(new Date(2025, 0, 15, 12, 30, 45), 24);
@@ -118,7 +120,7 @@ const previousDay = setHours(new Date(2025, 0, 15, 12, 30, 45), -1);
 ### Fractional Hours Handling
 
 ```typescript
-import { setHours } from 'chronia';
+import { setHours } from "chronia";
 
 // Fractional hours are truncated toward zero
 const truncatedPositive = setHours(new Date(2025, 0, 15, 12, 30, 45), 14.9);
@@ -135,10 +137,10 @@ const rounded = setHours(new Date(2025, 0, 15, 12, 30, 45), Math.ceil(14.1));
 ### Error Handling
 
 ```typescript
-import { setHours } from 'chronia';
+import { setHours } from "chronia";
 
 // Invalid date input returns Invalid Date
-const invalidDate = setHours(new Date('invalid'), 12);
+const invalidDate = setHours(new Date("invalid"), 12);
 // Returns: Invalid Date
 
 // Invalid hours input returns Invalid Date
@@ -158,16 +160,16 @@ function safeSetHours(date: Date | number, hours: number): Date | null {
 ### Data Transformation
 
 ```typescript
-import { setHours } from 'chronia';
+import { setHours } from "chronia";
 
 // Normalize all dates in an array to the same hour
 const timestamps = [
   new Date(2025, 0, 15, 8, 30),
   new Date(2025, 0, 16, 14, 45),
-  new Date(2025, 0, 17, 20, 15)
+  new Date(2025, 0, 17, 20, 15),
 ];
 
-const normalized = timestamps.map(date => setHours(date, 12));
+const normalized = timestamps.map((date) => setHours(date, 12));
 // All dates now have hours set to 12, preserving their original dates and minutes
 
 // Using with numeric timestamps

@@ -7,20 +7,23 @@ The `isSameMonth` function checks whether two dates fall within the same calenda
 ## Signature
 
 ```typescript
-function isSameMonth(dateLeft: Date | number, dateRight: Date | number): boolean
+function isSameMonth(
+  dateLeft: Date | number,
+  dateRight: Date | number,
+): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                                                                                 |
+| --------- | ----------------------------------------------------------------------------------------------------------- |
 | `boolean` | Returns `true` if both dates are in the same month and year, `false` otherwise or if either date is invalid |
 
 ## Description
@@ -30,12 +33,14 @@ The `isSameMonth` function determines whether two provided dates occur within th
 ### Specification
 
 #### Returns `true` when:
+
 - Both dates are in the same calendar month AND year
 - The dates can have different days (e.g., June 1st and June 30th, 2024)
 - The dates can have different time components (hours, minutes, seconds, milliseconds)
 - Both inputs are valid dates (Date objects or finite numeric timestamps)
 
 #### Returns `false` when:
+
 - The dates are in different months (even if same year)
 - The dates are in the same month but different years (e.g., June 2024 vs June 2023)
 - Either input is an Invalid Date object (e.g., `new Date('invalid')`)
@@ -65,7 +70,7 @@ The `isSameMonth` function determines whether two provided dates occur within th
 ### Event Grouping
 
 ```typescript
-import { isSameMonth } from 'chronia';
+import { isSameMonth } from "chronia";
 
 interface Event {
   name: string;
@@ -74,32 +79,35 @@ interface Event {
 
 // Group events by month
 function groupEventsByMonth(events: Event[], referenceDate: Date): Event[] {
-  return events.filter(event => isSameMonth(event.date, referenceDate));
+  return events.filter((event) => isSameMonth(event.date, referenceDate));
 }
 
 const events: Event[] = [
-  { name: 'Meeting', date: new Date(2024, 5, 5) },
-  { name: 'Conference', date: new Date(2024, 5, 20) },
-  { name: 'Workshop', date: new Date(2024, 6, 10) }
+  { name: "Meeting", date: new Date(2024, 5, 5) },
+  { name: "Conference", date: new Date(2024, 5, 20) },
+  { name: "Workshop", date: new Date(2024, 6, 10) },
 ];
 
 const juneEvents = groupEventsByMonth(events, new Date(2024, 5, 1));
 // Returns: [{ name: 'Meeting', date: ... }, { name: 'Conference', date: ... }]
 
 // Same month, different days
-isSameMonth(new Date(2024, 5, 1), new Date(2024, 5, 30));  // Returns: true
+isSameMonth(new Date(2024, 5, 1), new Date(2024, 5, 30)); // Returns: true
 
 // Different months
-isSameMonth(new Date(2024, 5, 30), new Date(2024, 6, 1));  // Returns: false
+isSameMonth(new Date(2024, 5, 30), new Date(2024, 6, 1)); // Returns: false
 ```
 
 ### Date Range Validation
 
 ```typescript
-import { isSameMonth } from 'chronia';
+import { isSameMonth } from "chronia";
 
 // Validate billing period
-function isInSameBillingMonth(transactionDate: Date, billingDate: Date): boolean {
+function isInSameBillingMonth(
+  transactionDate: Date,
+  billingDate: Date,
+): boolean {
   return isSameMonth(transactionDate, billingDate);
 }
 
@@ -107,41 +115,38 @@ const billingDate = new Date(2024, 5, 1);
 const transaction1 = new Date(2024, 5, 15, 14, 30);
 const transaction2 = new Date(2024, 6, 5);
 
-isInSameBillingMonth(transaction1, billingDate);  // Returns: true
-isInSameBillingMonth(transaction2, billingDate);  // Returns: false
+isInSameBillingMonth(transaction1, billingDate); // Returns: true
+isInSameBillingMonth(transaction2, billingDate); // Returns: false
 
 // Same month and year, different times (time is ignored)
-isSameMonth(
-  new Date(2024, 5, 15, 14, 30),
-  new Date(2024, 5, 20, 9, 45)
-);  // Returns: true
+isSameMonth(new Date(2024, 5, 15, 14, 30), new Date(2024, 5, 20, 9, 45)); // Returns: true
 ```
 
 ### Calendar Navigation
 
 ```typescript
-import { isSameMonth } from 'chronia';
+import { isSameMonth } from "chronia";
 
 // Check if a date is in the currently displayed month
 function isInCurrentView(date: Date, viewDate: Date): boolean {
   return isSameMonth(date, viewDate);
 }
 
-const currentView = new Date(2024, 5, 1);  // June 2024
+const currentView = new Date(2024, 5, 1); // June 2024
 const selectedDate1 = new Date(2024, 5, 15);
 const selectedDate2 = new Date(2024, 4, 15);
 
-isInCurrentView(selectedDate1, currentView);  // Returns: true
-isInCurrentView(selectedDate2, currentView);  // Returns: false
+isInCurrentView(selectedDate1, currentView); // Returns: true
+isInCurrentView(selectedDate2, currentView); // Returns: false
 
 // Same month, different years (year matters)
-isSameMonth(new Date(2024, 5, 15), new Date(2023, 5, 15));  // Returns: false
+isSameMonth(new Date(2024, 5, 15), new Date(2023, 5, 15)); // Returns: false
 ```
 
 ### Data Filtering
 
 ```typescript
-import { isSameMonth } from 'chronia';
+import { isSameMonth } from "chronia";
 
 interface LogEntry {
   message: string;
@@ -150,29 +155,26 @@ interface LogEntry {
 
 // Filter logs from the same month
 function getLogsForMonth(logs: LogEntry[], referenceDate: Date): LogEntry[] {
-  return logs.filter(log => isSameMonth(log.timestamp, referenceDate));
+  return logs.filter((log) => isSameMonth(log.timestamp, referenceDate));
 }
 
 const logs: LogEntry[] = [
-  { message: 'Error', timestamp: new Date(2024, 5, 10).getTime() },
-  { message: 'Warning', timestamp: new Date(2024, 5, 25).getTime() },
-  { message: 'Info', timestamp: new Date(2024, 6, 5).getTime() }
+  { message: "Error", timestamp: new Date(2024, 5, 10).getTime() },
+  { message: "Warning", timestamp: new Date(2024, 5, 25).getTime() },
+  { message: "Info", timestamp: new Date(2024, 6, 5).getTime() },
 ];
 
 const juneLogs = getLogsForMonth(logs, new Date(2024, 5, 1));
 // Returns: [{ message: 'Error', ... }, { message: 'Warning', ... }]
 
 // Works with numeric timestamps
-isSameMonth(
-  new Date(2024, 5, 15).getTime(),
-  new Date(2024, 5, 20).getTime()
-);  // Returns: true
+isSameMonth(new Date(2024, 5, 15).getTime(), new Date(2024, 5, 20).getTime()); // Returns: true
 ```
 
 ### Comparison Logic
 
 ```typescript
-import { isSameMonth } from 'chronia';
+import { isSameMonth } from "chronia";
 
 // Check if subscription renewal is in the same month
 function needsRenewalNotice(lastRenewal: Date, checkDate: Date): boolean {
@@ -182,10 +184,10 @@ function needsRenewalNotice(lastRenewal: Date, checkDate: Date): boolean {
 const lastRenewal = new Date(2024, 5, 1);
 const today = new Date(2024, 6, 1);
 
-needsRenewalNotice(lastRenewal, today);  // Returns: true (different months)
+needsRenewalNotice(lastRenewal, today); // Returns: true (different months)
 
 // Invalid dates return false
-isSameMonth(new Date('invalid'), new Date(2024, 5, 1));  // Returns: false
-isSameMonth(NaN, new Date(2024, 5, 1));  // Returns: false
-isSameMonth(Infinity, new Date(2024, 5, 1));  // Returns: false
+isSameMonth(new Date("invalid"), new Date(2024, 5, 1)); // Returns: false
+isSameMonth(NaN, new Date(2024, 5, 1)); // Returns: false
+isSameMonth(Infinity, new Date(2024, 5, 1)); // Returns: false
 ```

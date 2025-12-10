@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm build:*)",
+      "Write(src/**)",
+      "Write(docs/**)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm lint:fix"
+          }
+        ]
+      }
+    ]
+  }
+}

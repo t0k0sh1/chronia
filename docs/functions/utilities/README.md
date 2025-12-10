@@ -8,8 +8,8 @@ Chronia provides essential utility functions for common date and time operations
 
 ### Time Utilities
 
-| Function | Description |
-|----------|-------------|
+| Function          | Description                                        |
+| ----------------- | -------------------------------------------------- |
 | [`now`](./now.md) | Returns the current date and time as a Date object |
 
 ## Common Features
@@ -21,9 +21,9 @@ All utility functions in this category share the following characteristics:
 All functions provide full TypeScript type safety with clear return types:
 
 ```typescript
-import { now } from 'chronia';
+import { now } from "chronia";
 
-const currentTime: Date = now();  // Type-safe Date return
+const currentTime: Date = now(); // Type-safe Date return
 ```
 
 ### Consistency
@@ -31,7 +31,7 @@ const currentTime: Date = now();  // Type-safe Date return
 Utility functions integrate seamlessly with other Chronia functions:
 
 ```typescript
-import { now, addDays, isBefore } from 'chronia';
+import { now, addDays, isBefore } from "chronia";
 
 // now() returns Date objects compatible with all Chronia functions
 const tomorrow = addDays(now(), 1);
@@ -43,7 +43,7 @@ const isPast = isBefore(someDate, now());
 All utility functions are pure functions (or as pure as time-based operations can be) with no side effects:
 
 ```typescript
-import { now } from 'chronia';
+import { now } from "chronia";
 
 // Each call creates a new Date object
 const time1 = now();
@@ -56,28 +56,29 @@ const time2 = now();
 ### Current Time Reference
 
 **`now()` function**:
+
 - Use to get the current date and time
 - Returns a fresh Date object with each call
 - Ideal for: timestamps, current time reference, relative calculations
 
 ### Use Case Guide
 
-| Scenario | Recommended Function | Reason |
-|----------|---------------------|--------|
-| Create timestamp for logging | `now()` | Captures exact current moment |
-| Calculate future dates | `addDays(now(), n)` | Current time as baseline |
-| Check if date is in past | `isBefore(date, now())` | Compare against current time |
-| Provide default date value | `scheduledFor ?? now()` | Current time as sensible default |
-| Measure operation duration | `now()` at start and end | Mark time boundaries |
-| Create "last updated" timestamp | `now()` | Record modification time |
-| Generate unique time-based IDs | `now().getTime()` | Timestamp as ID component |
+| Scenario                        | Recommended Function     | Reason                           |
+| ------------------------------- | ------------------------ | -------------------------------- |
+| Create timestamp for logging    | `now()`                  | Captures exact current moment    |
+| Calculate future dates          | `addDays(now(), n)`      | Current time as baseline         |
+| Check if date is in past        | `isBefore(date, now())`  | Compare against current time     |
+| Provide default date value      | `scheduledFor ?? now()`  | Current time as sensible default |
+| Measure operation duration      | `now()` at start and end | Mark time boundaries             |
+| Create "last updated" timestamp | `now()`                  | Record modification time         |
+| Generate unique time-based IDs  | `now().getTime()`        | Timestamp as ID component        |
 
 ## Common Patterns
 
 ### Timestamping Records
 
 ```typescript
-import { now } from 'chronia';
+import { now } from "chronia";
 
 interface Record {
   id: string;
@@ -92,7 +93,7 @@ function createRecord(id: string, data: unknown): Record {
     id,
     data,
     createdAt: timestamp,
-    updatedAt: timestamp
+    updatedAt: timestamp,
   };
 }
 
@@ -100,7 +101,7 @@ function updateRecord(record: Record, data: unknown): Record {
   return {
     ...record,
     data,
-    updatedAt: now()  // Update timestamp
+    updatedAt: now(), // Update timestamp
   };
 }
 ```
@@ -108,7 +109,7 @@ function updateRecord(record: Record, data: unknown): Record {
 ### Relative Time Calculations
 
 ```typescript
-import { now, addDays, addMonths, subHours } from 'chronia';
+import { now, addDays, addMonths, subHours } from "chronia";
 
 // Calculate dates relative to now
 const tomorrow = addDays(now(), 1);
@@ -121,7 +122,7 @@ function createTaskWithDeadline(task: string, daysUntilDue: number) {
   return {
     task,
     createdAt: now(),
-    dueDate: addDays(now(), daysUntilDue)
+    dueDate: addDays(now(), daysUntilDue),
   };
 }
 ```
@@ -129,7 +130,7 @@ function createTaskWithDeadline(task: string, daysUntilDue: number) {
 ### Time-Based Comparisons
 
 ```typescript
-import { now, isBefore, isAfter, isBetween } from 'chronia';
+import { now, isBefore, isAfter, isBetween } from "chronia";
 
 // Check if date is in the past
 function isExpired(expirationDate: Date): boolean {
@@ -156,9 +157,10 @@ interface Campaign {
 
 function getActiveCampaigns(campaigns: Campaign[]): Campaign[] {
   const current = now();
-  return campaigns.filter(campaign =>
-    isAfter(current, campaign.startDate) &&
-    isBefore(current, campaign.endDate)
+  return campaigns.filter(
+    (campaign) =>
+      isAfter(current, campaign.startDate) &&
+      isBefore(current, campaign.endDate),
   );
 }
 ```
@@ -166,24 +168,24 @@ function getActiveCampaigns(campaigns: Campaign[]): Campaign[] {
 ### Default Values and Fallbacks
 
 ```typescript
-import { now } from 'chronia';
+import { now } from "chronia";
 
 // Provide current date as default
 function scheduleTask(
   task: string,
-  scheduledFor?: Date
+  scheduledFor?: Date,
 ): { task: string; scheduledFor: Date } {
   return {
     task,
-    scheduledFor: scheduledFor ?? now()
+    scheduledFor: scheduledFor ?? now(),
   };
 }
 
 // API request with optional date parameters
 async function fetchData(options?: { since?: Date; until?: Date }) {
   const params = {
-    since: options?.since ?? addDays(now(), -30),  // Default: 30 days ago
-    until: options?.until ?? now()  // Default: now
+    since: options?.since ?? addDays(now(), -30), // Default: 30 days ago
+    until: options?.until ?? now(), // Default: now
   };
 
   // Fetch data...
@@ -193,7 +195,7 @@ async function fetchData(options?: { since?: Date; until?: Date }) {
 ### Performance Measurement
 
 ```typescript
-import { now, differenceInMilliseconds, differenceInSeconds } from 'chronia';
+import { now, differenceInMilliseconds, differenceInSeconds } from "chronia";
 
 // Simple performance timer
 function measureSync<T>(fn: () => T): { result: T; durationMs: number } {
@@ -203,13 +205,13 @@ function measureSync<T>(fn: () => T): { result: T; durationMs: number } {
 
   return {
     result,
-    durationMs: differenceInMilliseconds(end, start)
+    durationMs: differenceInMilliseconds(end, start),
   };
 }
 
 // Async performance timer
 async function measureAsync<T>(
-  fn: () => Promise<T>
+  fn: () => Promise<T>,
 ): Promise<{ result: T; durationMs: number }> {
   const start = now();
   const result = await fn();
@@ -217,7 +219,7 @@ async function measureAsync<T>(
 
   return {
     result,
-    durationMs: differenceInMilliseconds(end, start)
+    durationMs: differenceInMilliseconds(end, start),
   };
 }
 
@@ -233,7 +235,7 @@ console.log(`Operation took ${durationMs}ms`);
 ### Time-Based Caching
 
 ```typescript
-import { now, isAfter, addMinutes } from 'chronia';
+import { now, isAfter, addMinutes } from "chronia";
 
 interface CacheEntry<T> {
   value: T;
@@ -246,7 +248,7 @@ class TimeBasedCache<T> {
   set(key: string, value: T, ttlMinutes: number): void {
     this.cache.set(key, {
       value,
-      expiresAt: addMinutes(now(), ttlMinutes)
+      expiresAt: addMinutes(now(), ttlMinutes),
     });
   }
 
@@ -278,22 +280,22 @@ class TimeBasedCache<T> {
 
 // Usage
 const cache = new TimeBasedCache<string>();
-cache.set('user:123', 'John Doe', 5);  // Cache for 5 minutes
+cache.set("user:123", "John Doe", 5); // Cache for 5 minutes
 
 // Later...
-const user = cache.get('user:123');  // Returns value if not expired
+const user = cache.get("user:123"); // Returns value if not expired
 ```
 
 ### Time-Based Logging
 
 ```typescript
-import { now, format, differenceInSeconds } from 'chronia';
+import { now, format, differenceInSeconds } from "chronia";
 
 class Logger {
   private startTime = now();
 
   log(message: string): void {
-    const timestamp = format(now(), 'yyyy-MM-dd HH:mm:ss.SSS');
+    const timestamp = format(now(), "yyyy-MM-dd HH:mm:ss.SSS");
     const elapsed = differenceInSeconds(now(), this.startTime);
     console.log(`[${timestamp}] +${elapsed}s: ${message}`);
   }
@@ -309,18 +311,18 @@ class Logger {
 
 // Usage
 const logger = new Logger();
-logger.info('Application started');
+logger.info("Application started");
 // Output: [2025-01-22 10:30:45.123] +0s: [INFO] Application started
 
 // Later...
-logger.info('Processing complete');
+logger.info("Processing complete");
 // Output: [2025-01-22 10:30:48.456] +3s: [INFO] Processing complete
 ```
 
 ### Rate Limiting
 
 ```typescript
-import { now, differenceInMilliseconds, addMilliseconds } from 'chronia';
+import { now, differenceInMilliseconds, addMilliseconds } from "chronia";
 
 class RateLimiter {
   private lastCallTime: Date | null = null;
@@ -338,7 +340,7 @@ class RateLimiter {
 
     const timeSinceLastCall = differenceInMilliseconds(
       now(),
-      this.lastCallTime
+      this.lastCallTime,
     );
 
     if (timeSinceLastCall >= this.minIntervalMs) {
@@ -356,18 +358,15 @@ class RateLimiter {
 
     const nextAllowedTime = addMilliseconds(
       this.lastCallTime,
-      this.minIntervalMs
+      this.minIntervalMs,
     );
 
-    return Math.max(
-      0,
-      differenceInMilliseconds(nextAllowedTime, now())
-    );
+    return Math.max(0, differenceInMilliseconds(nextAllowedTime, now()));
   }
 }
 
 // Usage
-const limiter = new RateLimiter(1000);  // 1 second between calls
+const limiter = new RateLimiter(1000); // 1 second between calls
 
 if (limiter.canProceed()) {
   makeApiCall();
@@ -381,6 +380,7 @@ if (limiter.canProceed()) {
 
 - **`now()` is lightweight**: Creates a Date object with minimal overhead
 - **Cache current time**: If you need the same timestamp multiple times in a function, call `now()` once and reuse:
+
   ```typescript
   // Good: Single call
   const current = now();
@@ -389,13 +389,17 @@ if (limiter.canProceed()) {
 
   // Less optimal: Multiple calls
   const isPast = isBefore(date1, now());
-  const isFuture = isAfter(date2, now());  // Slightly different time
+  const isFuture = isAfter(date2, now()); // Slightly different time
   ```
+
 - **Time precision**: `now()` returns millisecond precision; for most use cases this is more than sufficient
 - **Consider testability**: For unit tests, inject time dependencies rather than calling `now()` directly:
   ```typescript
   // Better for testing
-  function processExpiration(expirationDate: Date, currentTime: Date = now()): boolean {
+  function processExpiration(
+    expirationDate: Date,
+    currentTime: Date = now(),
+  ): boolean {
     return isBefore(expirationDate, currentTime);
   }
   ```
@@ -403,7 +407,7 @@ if (limiter.canProceed()) {
 ## Type Definitions
 
 ```typescript
-function now(): Date
+function now(): Date;
 ```
 
 ## Best Practices
@@ -413,13 +417,10 @@ function now(): Date
 When writing testable code, make `now()` injectable:
 
 ```typescript
-import { now } from 'chronia';
+import { now } from "chronia";
 
 // Good: Time is injectable for testing
-function isExpired(
-  expirationDate: Date,
-  currentTime: Date = now()
-): boolean {
+function isExpired(expirationDate: Date, currentTime: Date = now()): boolean {
   return isBefore(expirationDate, currentTime);
 }
 
@@ -428,7 +429,7 @@ const testTime = new Date(2025, 0, 1);
 expect(isExpired(new Date(2024, 11, 31), testTime)).toBe(true);
 
 // In production:
-expect(isExpired(new Date(2024, 11, 31))).toBe(true);  // Uses now()
+expect(isExpired(new Date(2024, 11, 31))).toBe(true); // Uses now()
 ```
 
 ### Consistent Timestamps
@@ -436,17 +437,17 @@ expect(isExpired(new Date(2024, 11, 31))).toBe(true);  // Uses now()
 For operations requiring a consistent timestamp across multiple operations, capture `now()` once:
 
 ```typescript
-import { now } from 'chronia';
+import { now } from "chronia";
 
 function processBatch(items: Item[]): ProcessedBatch {
-  const processedAt = now();  // Single timestamp for entire batch
+  const processedAt = now(); // Single timestamp for entire batch
 
   return {
-    items: items.map(item => ({
+    items: items.map((item) => ({
       ...item,
-      processedAt  // Same timestamp for all items
+      processedAt, // Same timestamp for all items
     })),
-    completedAt: processedAt
+    completedAt: processedAt,
   };
 }
 ```
@@ -456,14 +457,14 @@ function processBatch(items: Item[]): ProcessedBatch {
 ```typescript
 // Avoid: Multiple calls when one timestamp is needed
 function logEvent(event: string) {
-  console.log(`${format(now(), 'HH:mm:ss')}: ${event}`);
-  saveToDatabase({ event, timestamp: now() });  // Different timestamp!
+  console.log(`${format(now(), "HH:mm:ss")}: ${event}`);
+  saveToDatabase({ event, timestamp: now() }); // Different timestamp!
 }
 
 // Better: Single call
 function logEvent(event: string) {
   const timestamp = now();
-  console.log(`${format(timestamp, 'HH:mm:ss')}: ${event}`);
+  console.log(`${format(timestamp, "HH:mm:ss")}: ${event}`);
   saveToDatabase({ event, timestamp });
 }
 ```
@@ -482,8 +483,8 @@ import {
   format,
   startOfDay,
   endOfDay,
-  differenceInDays
-} from 'chronia';
+  differenceInDays,
+} from "chronia";
 
 // Manipulation
 const tomorrow = addDays(now(), 1);
@@ -494,7 +495,7 @@ const isPastDate = isBefore(someDate, now());
 const isFutureDate = isAfter(someDate, now());
 
 // Formatting
-const currentTime = format(now(), 'yyyy-MM-dd HH:mm:ss');
+const currentTime = format(now(), "yyyy-MM-dd HH:mm:ss");
 
 // Boundaries
 const todayStart = startOfDay(now());

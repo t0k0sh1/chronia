@@ -7,20 +7,20 @@ The `setMonth` function sets the month of a given date and returns a new Date in
 ## Signature
 
 ```typescript
-function setMonth(date: Date | number, month: number): Date
+function setMonth(date: Date | number, month: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `month` | `number` | The month to set (0-indexed: 0 = January, 11 = December) |
+| Parameter | Type             | Description                                              |
+| --------- | ---------------- | -------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp      |
+| `month`   | `number`         | The month to set (0-indexed: 0 = January, 11 = December) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                             |
+| ------ | --------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified month set, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `setMonth` function creates a new Date instance with the month component mod
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -39,6 +40,7 @@ The `setMonth` function creates a new Date instance with the month component mod
 - Fractional month values are accepted and truncated toward zero using `Math.trunc`
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `month` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -68,7 +70,7 @@ The `setMonth` function creates a new Date instance with the month component mod
 ### Date Normalization
 
 ```typescript
-import { setMonth } from 'chronia';
+import { setMonth } from "chronia";
 
 // Set month to June (month index 5)
 const result = setMonth(new Date(2025, 0, 15), 5);
@@ -86,7 +88,7 @@ const result3 = setMonth(1704067200000, 5); // Jan 1, 2024
 ### Recurring Events
 
 ```typescript
-import { setMonth } from 'chronia';
+import { setMonth } from "chronia";
 
 // Generate last day of each month for the year
 const baseDate = new Date(2025, 0, 31); // January 31, 2025
@@ -109,7 +111,7 @@ const februaryLeap = setMonth(leapYear, 1);
 ### Date Calculations
 
 ```typescript
-import { setMonth } from 'chronia';
+import { setMonth } from "chronia";
 
 // Move forward by N months
 function addMonths(date: Date, monthsToAdd: number): Date {
@@ -129,7 +131,7 @@ const threeMonthsEarlier = addMonths(startDate, -3);
 ### Input Sanitization
 
 ```typescript
-import { setMonth } from 'chronia';
+import { setMonth } from "chronia";
 
 // Handle fractional values
 const result = setMonth(new Date(2025, 0, 15), 5.9);
@@ -139,7 +141,7 @@ const result2 = setMonth(new Date(2025, 0, 15), -1.2);
 // Returns: 2024-12-15 (-1.2 truncated to -1, which is December of previous year)
 
 // Handle invalid inputs
-const invalid1 = setMonth(new Date('invalid'), 5);
+const invalid1 = setMonth(new Date("invalid"), 5);
 // Returns: Invalid Date
 
 const invalid2 = setMonth(new Date(2025, 0, 15), NaN);
@@ -152,12 +154,12 @@ const invalid3 = setMonth(new Date(2025, 0, 15), Infinity);
 ### Calendar Operations
 
 ```typescript
-import { setMonth } from 'chronia';
+import { setMonth } from "chronia";
 
 // Calendar navigation with day preservation
-function navigateMonth(currentDate: Date, direction: 'prev' | 'next'): Date {
+function navigateMonth(currentDate: Date, direction: "prev" | "next"): Date {
   const currentMonth = currentDate.getMonth();
-  const newMonth = direction === 'next' ? currentMonth + 1 : currentMonth - 1;
+  const newMonth = direction === "next" ? currentMonth + 1 : currentMonth - 1;
   return setMonth(currentDate, newMonth);
 }
 
@@ -165,11 +167,11 @@ function navigateMonth(currentDate: Date, direction: 'prev' | 'next'): Date {
 const current = new Date(2025, 0, 31);
 
 // Navigate to next month
-const nextMonth = navigateMonth(current, 'next');
+const nextMonth = navigateMonth(current, "next");
 // Returns: 2025-02-28 (gracefully handles day overflow)
 
 // Navigate to previous month
-const prevMonth = navigateMonth(current, 'prev');
+const prevMonth = navigateMonth(current, "prev");
 // Returns: 2024-12-31 (previous year, December has 31 days)
 
 // Preserves time components

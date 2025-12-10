@@ -8,8 +8,8 @@ Chronia provides a powerful and flexible date parsing system that converts date 
 
 ### String to Date Parsing
 
-| Function | Description |
-|----------|-------------|
+| Function              | Description                                                                     |
+| --------------------- | ------------------------------------------------------------------------------- |
 | [`parse`](./parse.md) | Parses a date string into a Date object according to a specified format pattern |
 
 ## Common Features
@@ -21,7 +21,7 @@ All parsing functions in this category share the following characteristics:
 The `parse` function uses the same Unicode format tokens as the `format` function, ensuring consistency and predictable round-trip conversions between Date objects and strings:
 
 ```typescript
-import { parse, format } from 'chronia';
+import { parse, format } from "chronia";
 
 const pattern = "yyyy-MM-dd HH:mm:ss";
 const original = new Date(2024, 0, 15, 14, 30, 45);
@@ -35,10 +35,11 @@ const parsed = parse(formatted, pattern);
 // Returns: Date(2024, 0, 15, 14, 30, 45)
 
 // Verify round-trip equality
-original.getTime() === parsed.getTime();  // true
+original.getTime() === parsed.getTime(); // true
 ```
 
 **Supported Token Categories:**
+
 - **Year**: `y`, `yy`, `yyy`, `yyyy`
 - **Month**: `M`, `MM`, `MMM`, `MMMM`, `MMMMM`
 - **Day**: `d`, `dd`
@@ -56,19 +57,19 @@ original.getTime() === parsed.getTime();  // true
 Patterns must exactly match the input string structure, including delimiters, spacing, and literal text:
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // Exact match required
-parse("2024-01-15", "yyyy-MM-dd");           // ✓ Valid
-parse("2024-01-15", "yyyy/MM/dd");           // ✗ Invalid (delimiter mismatch)
-parse("2024-01-15extra", "yyyy-MM-dd");      // ✗ Invalid (extra characters)
+parse("2024-01-15", "yyyy-MM-dd"); // ✓ Valid
+parse("2024-01-15", "yyyy/MM/dd"); // ✗ Invalid (delimiter mismatch)
+parse("2024-01-15extra", "yyyy-MM-dd"); // ✗ Invalid (extra characters)
 
 // Literal text in patterns (enclosed in single quotes)
-parse("Year 2024, Month 01", "'Year' yyyy', Month' MM");  // ✓ Valid
-parse("2024-01-15T14:30:00", "yyyy-MM-dd'T'HH:mm:ss");    // ✓ Valid
+parse("Year 2024, Month 01", "'Year' yyyy', Month' MM"); // ✓ Valid
+parse("2024-01-15T14:30:00", "yyyy-MM-dd'T'HH:mm:ss"); // ✓ Valid
 
 // Escaped single quote (two single quotes)
-parse("It's 2024", "'It''s' yyyy");          // ✓ Valid
+parse("It's 2024", "'It''s' yyyy"); // ✓ Valid
 ```
 
 ### Flexible Input Formats
@@ -76,7 +77,7 @@ parse("It's 2024", "'It''s' yyyy");          // ✓ Valid
 The parser supports various date string formats commonly found in different regional conventions and data sources:
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // ISO 8601 format
 parse("2024-01-15", "yyyy-MM-dd");
@@ -100,9 +101,9 @@ parse("01/15/2024 2:30 PM", "MM/dd/yyyy h:mm a");
 Parse date strings containing localized month names, weekday names, and day periods:
 
 ```typescript
-import { parse } from 'chronia';
-import { enUS } from 'chronia/locale/en-US';
-import { ja } from 'chronia/locale/ja';
+import { parse } from "chronia";
+import { enUS } from "chronia/locale/en-US";
+import { ja } from "chronia/locale/ja";
 
 // English month names
 parse("January 15, 2024", "MMMM dd, yyyy", { locale: enUS });
@@ -119,14 +120,14 @@ parse("2:30 PM", "h:mm a", { locale: enUS });
 When the pattern doesn't specify certain date components, the parser uses values from a reference date (defaults to current date):
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // Time only - uses current date
 const time = parse("14:30", "HH:mm");
 // Returns: Date with today's date, time set to 14:30:00
 
 // Specific reference date
-const refDate = new Date(2023, 5, 10);  // June 10, 2023
+const refDate = new Date(2023, 5, 10); // June 10, 2023
 const partial = parse("14:30", "HH:mm", { referenceDate: refDate });
 // Returns: Date(2023, 5, 10, 14, 30, 0, 0)
 
@@ -136,6 +137,7 @@ parse("01-15", "MM-dd", { referenceDate: refDate });
 ```
 
 **Default Values for Missing Components:**
+
 - **Year, Month, Day**: Taken from `referenceDate` (or current date if not specified)
 - **Hour, Minute, Second, Millisecond**: Default to `00:00:00.000`
 
@@ -144,7 +146,7 @@ parse("01-15", "MM-dd", { referenceDate: refDate });
 The parser never throws exceptions. Instead, it returns an Invalid Date object when parsing fails, allowing developers to validate results using `isValid()`:
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 // Invalid input returns Invalid Date
 const invalid = parse("not-a-date", "yyyy-MM-dd");
@@ -165,6 +167,7 @@ if (result) {
 ```
 
 **Parsing Fails When:**
+
 - Input string doesn't match pattern structure
 - Parsed values are out of valid ranges (e.g., month 13, day 32)
 - Literal text in pattern doesn't match input
@@ -177,13 +180,13 @@ if (result) {
 The parser automatically validates parsed values to ensure they represent valid dates:
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 // Out of range values return Invalid Date
-parse("2024-13-01", "yyyy-MM-dd");   // Invalid (month 13)
-parse("2024-01-32", "yyyy-MM-dd");   // Invalid (day 32)
-parse("2024-02-30", "yyyy-MM-dd");   // Invalid (Feb 30)
-parse("2024-01-01 25:00", "yyyy-MM-dd HH:mm");  // Invalid (hour 25)
+parse("2024-13-01", "yyyy-MM-dd"); // Invalid (month 13)
+parse("2024-01-32", "yyyy-MM-dd"); // Invalid (day 32)
+parse("2024-02-30", "yyyy-MM-dd"); // Invalid (Feb 30)
+parse("2024-01-01 25:00", "yyyy-MM-dd HH:mm"); // Invalid (hour 25)
 
 // Always validate after parsing
 const date = parse("2024-02-30", "yyyy-MM-dd");
@@ -196,61 +199,65 @@ if (!isValid(date)) {
 
 ### Common Format Patterns
 
-| Pattern | Example Input | Description |
-|---------|---------------|-------------|
-| `"yyyy-MM-dd"` | `"2024-01-15"` | ISO 8601 date (recommended for APIs) |
-| `"MM/dd/yyyy"` | `"01/15/2024"` | US date format |
-| `"dd/MM/yyyy"` | `"15/01/2024"` | European date format |
-| `"yyyy-MM-dd HH:mm:ss"` | `"2024-01-15 14:30:45"` | ISO 8601 datetime |
-| `"dd/MM/yyyy HH:mm"` | `"15/01/2024 14:30"` | European datetime |
-| `"MM/dd/yyyy h:mm a"` | `"01/15/2024 2:30 PM"` | US datetime with AM/PM |
-| `"MMMM dd, yyyy"` | `"January 15, 2024"` | Long date format (English) |
-| `"yyyy-MM-dd'T'HH:mm:ss.SSS"` | `"2024-01-15T14:30:45.123"` | ISO 8601 with milliseconds |
-| `"HH:mm:ss"` | `"14:30:45"` | Time only |
-| `"yyyy-DDD"` | `"2024-032"` | Year and day of year |
+| Pattern                       | Example Input               | Description                          |
+| ----------------------------- | --------------------------- | ------------------------------------ |
+| `"yyyy-MM-dd"`                | `"2024-01-15"`              | ISO 8601 date (recommended for APIs) |
+| `"MM/dd/yyyy"`                | `"01/15/2024"`              | US date format                       |
+| `"dd/MM/yyyy"`                | `"15/01/2024"`              | European date format                 |
+| `"yyyy-MM-dd HH:mm:ss"`       | `"2024-01-15 14:30:45"`     | ISO 8601 datetime                    |
+| `"dd/MM/yyyy HH:mm"`          | `"15/01/2024 14:30"`        | European datetime                    |
+| `"MM/dd/yyyy h:mm a"`         | `"01/15/2024 2:30 PM"`      | US datetime with AM/PM               |
+| `"MMMM dd, yyyy"`             | `"January 15, 2024"`        | Long date format (English)           |
+| `"yyyy-MM-dd'T'HH:mm:ss.SSS"` | `"2024-01-15T14:30:45.123"` | ISO 8601 with milliseconds           |
+| `"HH:mm:ss"`                  | `"14:30:45"`                | Time only                            |
+| `"yyyy-DDD"`                  | `"2024-032"`                | Year and day of year                 |
 
 ### Pattern Selection Guidelines
 
 **For API Responses:**
+
 - Use ISO 8601 formats: `"yyyy-MM-dd"` or `"yyyy-MM-dd'T'HH:mm:ss"`
 - Predictable, unambiguous, internationally recognized
 - Easy round-trip with `format()` function
 
 **For User Input:**
+
 - Match regional conventions (US: `MM/dd/yyyy`, Europe: `dd/MM/yyyy`)
 - Consider flexible patterns (e.g., `M/d/yyyy` accepts both `1/5/2024` and `01/05/2024`)
 - Validate with `isValid()` after parsing
 
 **For File Imports:**
+
 - Match the exact format in the source files
 - Use literal text for fixed delimiters: `"yyyy'-'MM'-'dd"`
 - Handle both padded and unpadded values when possible
 
 **For Legacy Systems:**
+
 - Match legacy format exactly
 - Use reference dates when components are missing
 - Test edge cases thoroughly
 
 ## Use Case Guide
 
-| Scenario | Pattern Example | Notes |
-|----------|----------------|-------|
-| Parse ISO 8601 dates | `"yyyy-MM-dd"` | Standard API format |
-| Parse US form input | `"MM/dd/yyyy"` | Common in US applications |
-| Parse European dates | `"dd.MM.yyyy"` or `"dd/MM/yyyy"` | Common in European applications |
-| Parse log timestamps | `"yyyy-MM-dd HH:mm:ss"` | Common in server logs |
-| Parse user-friendly dates | `"MMMM dd, yyyy"` | Requires locale for month names |
-| Parse 12-hour time | `"h:mm a"` | Must include day period token |
-| Parse time only | `"HH:mm:ss"` | Uses current date or reference date |
-| Parse day of year | `"yyyy-DDD"` | Useful for scientific data |
-| Parse with timezone (T separator) | `"yyyy-MM-dd'T'HH:mm:ss"` | ISO 8601 format |
+| Scenario                          | Pattern Example                  | Notes                               |
+| --------------------------------- | -------------------------------- | ----------------------------------- |
+| Parse ISO 8601 dates              | `"yyyy-MM-dd"`                   | Standard API format                 |
+| Parse US form input               | `"MM/dd/yyyy"`                   | Common in US applications           |
+| Parse European dates              | `"dd.MM.yyyy"` or `"dd/MM/yyyy"` | Common in European applications     |
+| Parse log timestamps              | `"yyyy-MM-dd HH:mm:ss"`          | Common in server logs               |
+| Parse user-friendly dates         | `"MMMM dd, yyyy"`                | Requires locale for month names     |
+| Parse 12-hour time                | `"h:mm a"`                       | Must include day period token       |
+| Parse time only                   | `"HH:mm:ss"`                     | Uses current date or reference date |
+| Parse day of year                 | `"yyyy-DDD"`                     | Useful for scientific data          |
+| Parse with timezone (T separator) | `"yyyy-MM-dd'T'HH:mm:ss"`        | ISO 8601 format                     |
 
 ## Common Patterns
 
 ### Input Validation and Error Handling
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 function parseAndValidate(input: string, pattern: string): Date {
   const parsed = parse(input, pattern);
@@ -274,7 +281,7 @@ try {
 ### Multi-Format Parsing
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 function parseFlexibleDate(input: string): Date | null {
   const patterns = [
@@ -292,20 +299,20 @@ function parseFlexibleDate(input: string): Date | null {
     }
   }
 
-  return null;  // No format matched
+  return null; // No format matched
 }
 
 // Accepts various formats
-parseFlexibleDate("2024-01-15");        // ISO format
-parseFlexibleDate("01/15/2024");        // US format
-parseFlexibleDate("15.01.2024");        // European format
-parseFlexibleDate("January 15, 2024");  // Long format
+parseFlexibleDate("2024-01-15"); // ISO format
+parseFlexibleDate("01/15/2024"); // US format
+parseFlexibleDate("15.01.2024"); // European format
+parseFlexibleDate("January 15, 2024"); // Long format
 ```
 
 ### Form Input Normalization
 
 ```typescript
-import { parse, isValid, format } from 'chronia';
+import { parse, isValid, format } from "chronia";
 
 function normalizeUserDate(input: string, inputFormat: string): string | null {
   const parsed = parse(input, inputFormat);
@@ -332,11 +339,11 @@ normalizeUserDate("invalid", "yyyy-MM-dd");
 ### API Response Processing
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 interface ApiRecord {
   id: string;
-  createdAt: string;  // Format: "dd/MM/yyyy HH:mm:ss"
+  createdAt: string; // Format: "dd/MM/yyyy HH:mm:ss"
   updatedAt: string;
 }
 
@@ -360,11 +367,11 @@ function parseApiRecord(record: ApiRecord) {
 ### CSV Import with Date Columns
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 interface CsvRow {
   name: string;
-  date: string;  // Format: "MM/dd/yyyy"
+  date: string; // Format: "MM/dd/yyyy"
   amount: number;
 }
 
@@ -395,18 +402,15 @@ const parsed = csvData.map(parseCsvRow).filter(Boolean);
 ### Time-Only Parsing with Context
 
 ```typescript
-import { parse, format } from 'chronia';
+import { parse, format } from "chronia";
 
-function parseAppointmentTime(
-  timeStr: string,
-  appointmentDate: Date
-): Date {
+function parseAppointmentTime(timeStr: string, appointmentDate: Date): Date {
   // Parse time using appointment date as reference
   return parse(timeStr, "HH:mm", { referenceDate: appointmentDate });
 }
 
 // Usage
-const appointmentDate = new Date(2024, 0, 15);  // Jan 15, 2024
+const appointmentDate = new Date(2024, 0, 15); // Jan 15, 2024
 const appointment = parseAppointmentTime("14:30", appointmentDate);
 // Returns: Date(2024, 0, 15, 14, 30, 0, 0)
 
@@ -417,15 +421,15 @@ console.log(format(appointment, "yyyy-MM-dd HH:mm"));
 ### Localized Date Parsing
 
 ```typescript
-import { parse, isValid } from 'chronia';
-import { enUS } from 'chronia/locale/en-US';
-import { ja } from 'chronia/locale/ja';
-import { de } from 'chronia/locale/de';
+import { parse, isValid } from "chronia";
+import { enUS } from "chronia/locale/en-US";
+import { ja } from "chronia/locale/ja";
+import { de } from "chronia/locale/de";
 
 function parseLocalizedDate(
   dateStr: string,
   pattern: string,
-  locale: Locale
+  locale: Locale,
 ): Date | null {
   const parsed = parse(dateStr, pattern, { locale });
   return isValid(parsed) ? parsed : null;
@@ -444,11 +448,11 @@ parseLocalizedDate("15. Januar 2024", "dd. MMMM yyyy", de);
 ### Batch Date Parsing
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 function parseBatchDates(
   dateStrings: string[],
-  pattern: string
+  pattern: string,
 ): { valid: Date[]; invalid: string[] } {
   const valid: Date[] = [];
   const invalid: string[] = [];
@@ -476,7 +480,7 @@ console.log(`Valid: ${result.valid.length}, Invalid: ${result.invalid.length}`);
 ### Round-Trip Conversion Testing
 
 ```typescript
-import { parse, format } from 'chronia';
+import { parse, format } from "chronia";
 
 function testRoundTrip(date: Date, pattern: string): boolean {
   const formatted = format(date, pattern);
@@ -487,9 +491,9 @@ function testRoundTrip(date: Date, pattern: string): boolean {
 // Verify pattern preserves date information
 const date = new Date(2024, 0, 15, 14, 30, 45, 123);
 
-testRoundTrip(date, "yyyy-MM-dd HH:mm:ss.SSS");  // true
-testRoundTrip(date, "yyyy-MM-dd HH:mm:ss");      // false (loses milliseconds)
-testRoundTrip(date, "yyyy-MM-dd");               // false (loses time)
+testRoundTrip(date, "yyyy-MM-dd HH:mm:ss.SSS"); // true
+testRoundTrip(date, "yyyy-MM-dd HH:mm:ss"); // false (loses milliseconds)
+testRoundTrip(date, "yyyy-MM-dd"); // false (loses time)
 ```
 
 ## Performance Considerations
@@ -507,18 +511,18 @@ testRoundTrip(date, "yyyy-MM-dd");               // false (loses time)
 The `yy` token implements a sliding window for two-digit years:
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // 50-99 map to 1950-1999
-parse("99-12-31", "yy-MM-dd");  // Date(1999, 11, 31)
-parse("75-06-15", "yy-MM-dd");  // Date(1975, 5, 15)
+parse("99-12-31", "yy-MM-dd"); // Date(1999, 11, 31)
+parse("75-06-15", "yy-MM-dd"); // Date(1975, 5, 15)
 
 // 00-49 map to 2000-2049
-parse("00-01-01", "yy-MM-dd");  // Date(2000, 0, 1)
-parse("25-06-15", "yy-MM-dd");  // Date(2025, 5, 15)
+parse("00-01-01", "yy-MM-dd"); // Date(2000, 0, 1)
+parse("25-06-15", "yy-MM-dd"); // Date(2025, 5, 15)
 
 // Use yyyy for unambiguous years
-parse("2099-12-31", "yyyy-MM-dd");  // Date(2099, 11, 31)
+parse("2099-12-31", "yyyy-MM-dd"); // Date(2099, 11, 31)
 ```
 
 ### 12-Hour Format Parsing
@@ -526,19 +530,19 @@ parse("2099-12-31", "yyyy-MM-dd");  // Date(2099, 11, 31)
 12-hour format requires both hour (`h`/`hh`) and day period (`a`) tokens:
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // Valid 12-hour format
-parse("2:30 PM", "h:mm a");      // 14:30 (2:30 PM)
-parse("12:00 AM", "hh:mm a");    // 00:00 (midnight)
-parse("12:00 PM", "hh:mm a");    // 12:00 (noon)
+parse("2:30 PM", "h:mm a"); // 14:30 (2:30 PM)
+parse("12:00 AM", "hh:mm a"); // 00:00 (midnight)
+parse("12:00 PM", "hh:mm a"); // 12:00 (noon)
 
 // Day period is case-insensitive
-parse("2:30 pm", "h:mm a");      // 14:30
-parse("2:30 PM", "h:mm a");      // 14:30
+parse("2:30 pm", "h:mm a"); // 14:30
+parse("2:30 PM", "h:mm a"); // 14:30
 
 // Missing day period returns Invalid Date
-parse("2:30", "h:mm");           // Invalid (no day period for 12-hour)
+parse("2:30", "h:mm"); // Invalid (no day period for 12-hour)
 ```
 
 ### Day of Year Parsing
@@ -546,18 +550,18 @@ parse("2:30", "h:mm");           // Invalid (no day period for 12-hour)
 Parse dates using day-of-year notation:
 
 ```typescript
-import { parse, format } from 'chronia';
+import { parse, format } from "chronia";
 
 // Day 32 = February 1st
 const date1 = parse("2024-032", "yyyy-DDD");
-format(date1, "yyyy-MM-dd");  // "2024-02-01"
+format(date1, "yyyy-MM-dd"); // "2024-02-01"
 
 // Day 366 in leap year
 const date2 = parse("2024-366", "yyyy-DDD");
-format(date2, "yyyy-MM-dd");  // "2024-12-31"
+format(date2, "yyyy-MM-dd"); // "2024-12-31"
 
 // Day 366 in non-leap year (invalid)
-parse("2023-366", "yyyy-DDD");  // Invalid Date
+parse("2023-366", "yyyy-DDD"); // Invalid Date
 ```
 
 ### Era (BC/AD) Parsing
@@ -565,13 +569,13 @@ parse("2023-366", "yyyy-DDD");  // Invalid Date
 Parse dates with BC/AD era indicators:
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // AD years
-parse("2024 AD", "yyyy G");  // Date(2024, 0, 1)
+parse("2024 AD", "yyyy G"); // Date(2024, 0, 1)
 
 // BC years (negative year numbers)
-parse("100 BC", "yyyy G");   // Date(-99, 0, 1) - Year 100 BC
+parse("100 BC", "yyyy G"); // Date(-99, 0, 1) - Year 100 BC
 ```
 
 ## Error Handling
@@ -579,23 +583,23 @@ parse("100 BC", "yyyy G");   // Date(-99, 0, 1) - Year 100 BC
 All parsing operations return Invalid Date objects instead of throwing exceptions:
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 // Pattern mismatch
 const invalid1 = parse("2024-01-15", "MM/dd/yyyy");
-isValid(invalid1);  // false
+isValid(invalid1); // false
 
 // Out of range values
 const invalid2 = parse("2024-13-01", "yyyy-MM-dd");
-isValid(invalid2);  // false
+isValid(invalid2); // false
 
 // Extra characters
 const invalid3 = parse("2024-01-15extra", "yyyy-MM-dd");
-isValid(invalid3);  // false
+isValid(invalid3); // false
 
 // Invalid input
 const invalid4 = parse("not-a-date", "yyyy-MM-dd");
-isValid(invalid4);  // false
+isValid(invalid4); // false
 
 // Safe validation pattern
 function safeParse(input: string, pattern: string): Date | null {

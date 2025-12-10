@@ -7,20 +7,20 @@ The `addDays` function adds a specified number of days to a given date and retur
 ## Signature
 
 ```typescript
-function addDays(date: Date | number, amount: number): Date
+function addDays(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `amount` | `number` | The number of days to add (can be negative to subtract) |
+| Parameter | Type             | Description                                             |
+| --------- | ---------------- | ------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp     |
+| `amount`  | `number`         | The number of days to add (can be negative to subtract) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                        |
+| ------ | -------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of days added, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `addDays` function performs day-based date arithmetic by adding (or subtract
 ### Specification
 
 #### Returns a valid `Date` when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -42,6 +43,7 @@ The `addDays` function performs day-based date arithmetic by adding (or subtract
   - `0.5` becomes `0`
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -69,10 +71,10 @@ The `addDays` function performs day-based date arithmetic by adding (or subtract
 ### Future Date Calculation
 
 ```typescript
-import { addDays } from 'chronia';
+import { addDays } from "chronia";
 
 // Schedule an event 7 days from today
-const today = new Date(2025, 0, 15);  // January 15, 2025
+const today = new Date(2025, 0, 15); // January 15, 2025
 const eventDate = addDays(today, 7);
 // Returns: Date object for January 22, 2025
 
@@ -82,7 +84,7 @@ const futureDate = addDays(timestamp, 30);
 // Returns: Date object for January 31, 2025
 
 // Handles month overflow automatically
-const endOfMonth = new Date(2025, 0, 28);  // January 28
+const endOfMonth = new Date(2025, 0, 28); // January 28
 const nextMonth = addDays(endOfMonth, 5);
 // Returns: Date object for February 2, 2025
 ```
@@ -90,15 +92,15 @@ const nextMonth = addDays(endOfMonth, 5);
 ### Past Date Calculation
 
 ```typescript
-import { addDays } from 'chronia';
+import { addDays } from "chronia";
 
 // Calculate a date 10 days ago
-const today = new Date(2025, 0, 15);  // January 15, 2025
+const today = new Date(2025, 0, 15); // January 15, 2025
 const pastDate = addDays(today, -10);
 // Returns: Date object for January 5, 2025
 
 // Look back across month boundary
-const monthStart = new Date(2025, 1, 3);  // February 3, 2025
+const monthStart = new Date(2025, 1, 3); // February 3, 2025
 const previousMonth = addDays(monthStart, -5);
 // Returns: Date object for January 29, 2025
 ```
@@ -106,7 +108,7 @@ const previousMonth = addDays(monthStart, -5);
 ### Date Range Generation
 
 ```typescript
-import { addDays } from 'chronia';
+import { addDays } from "chronia";
 
 // Generate a 7-day range
 function generateWeekRange(startDate: Date): Date[] {
@@ -125,7 +127,7 @@ const week = generateWeekRange(weekStart);
 ### Fractional Day Handling
 
 ```typescript
-import { addDays } from 'chronia';
+import { addDays } from "chronia";
 
 // Fractional amounts are truncated toward zero
 const baseDate = new Date(2025, 0, 1);
@@ -143,10 +145,10 @@ const result3 = addDays(baseDate, 0.5);
 ### Input Validation
 
 ```typescript
-import { addDays } from 'chronia';
+import { addDays } from "chronia";
 
 // Invalid date input
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const result1 = addDays(invalidDate, 5);
 // Returns: Invalid Date
 

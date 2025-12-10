@@ -7,20 +7,20 @@ The `subYears` function subtracts a specified number of years from a given date,
 ## Signature
 
 ```typescript
-function subYears(date: Date | number, amount: number): Date
+function subYears(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract years |
-| `amount` | `number` | The number of years to subtract (can be negative to add years instead) |
+| Parameter | Type             | Description                                                                      |
+| --------- | ---------------- | -------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract years |
+| `amount`  | `number`         | The number of years to subtract (can be negative to add years instead)           |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                              |
+| ------ | -------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of years subtracted, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `subYears` function calculates a new date by subtracting the specified numbe
 ### Specification
 
 #### Returns a valid `Date` when:
+
 - The `date` argument is a valid Date object or finite numeric timestamp
 - The `amount` argument is a finite number
 - Fractional `amount` values are automatically truncated toward zero using `Math.trunc`
@@ -41,6 +42,7 @@ The `subYears` function calculates a new date by subtracting the specified numbe
 - Leap year preservation: February 29 remains February 29 when the target year is also a leap year
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -68,7 +70,7 @@ The `subYears` function calculates a new date by subtracting the specified numbe
 ### Historical Date Calculations
 
 ```typescript
-import { subYears } from 'chronia';
+import { subYears } from "chronia";
 
 // Calculate a date 5 years in the past
 const fiveYearsAgo = subYears(new Date(2025, 0, 15), 5);
@@ -88,7 +90,7 @@ const oneYearAgo = subYears(now, 1);
 ### Age-Based Operations
 
 ```typescript
-import { subYears } from 'chronia';
+import { subYears } from "chronia";
 
 // Calculate birth year from current age
 function estimateBirthDate(currentDate: Date, age: number): Date {
@@ -110,7 +112,7 @@ const mustBeBornBefore = getEligibilityDate(18);
 ### Leap Year Handling
 
 ```typescript
-import { subYears } from 'chronia';
+import { subYears } from "chronia";
 
 // Leap year to non-leap year (Feb 29 → Feb 28)
 const leapDate = new Date(2024, 1, 29); // Feb 29, 2024
@@ -130,7 +132,7 @@ const result3 = subYears(regularDate, 2);
 ### Negative Amounts (Adding Years)
 
 ```typescript
-import { subYears } from 'chronia';
+import { subYears } from "chronia";
 
 // Negative amount adds years instead
 const baseDate = new Date(2020, 5, 15);
@@ -138,7 +140,7 @@ const futureDate = subYears(baseDate, -3);
 // Returns: Date object representing 2023-06-15
 
 // Equivalent to addYears
-import { addYears } from 'chronia';
+import { addYears } from "chronia";
 const result1 = subYears(baseDate, -3);
 const result2 = addYears(baseDate, 3);
 // result1 and result2 are equivalent
@@ -147,7 +149,7 @@ const result2 = addYears(baseDate, 3);
 ### Fractional Years and Edge Cases
 
 ```typescript
-import { subYears } from 'chronia';
+import { subYears } from "chronia";
 
 // Fractional amounts are truncated toward zero
 const date = new Date(2025, 0, 1);
@@ -158,7 +160,7 @@ const result2 = subYears(date, -1.9);
 // Returns: Date object representing 2024-01-01 (-1.9 truncated to -1)
 
 // Invalid inputs return Invalid Date
-const invalidResult = subYears(new Date('invalid'), 3);
+const invalidResult = subYears(new Date("invalid"), 3);
 // Returns: Invalid Date
 
 const nanResult = subYears(new Date(), NaN);
@@ -171,7 +173,7 @@ const infinityResult = subYears(new Date(), Infinity);
 ### Time Preservation
 
 ```typescript
-import { subYears } from 'chronia';
+import { subYears } from "chronia";
 
 // Time components are preserved
 const dateTime = new Date(2025, 5, 15, 14, 30, 45, 500);

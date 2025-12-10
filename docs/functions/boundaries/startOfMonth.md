@@ -7,19 +7,19 @@ The `startOfMonth` function returns a new Date object set to the first day of th
 ## Signature
 
 ```typescript
-function startOfMonth(date: Date | number): Date
+function startOfMonth(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
+| Parameter | Type             | Description                                         |
+| --------- | ---------------- | --------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                  |
+| ------ | ------------------------------------------------------------------------------------------------------------ |
 | `Date` | A new Date object set to the first day of the month at 00:00:00.000, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `startOfMonth` function calculates the start of the month for a given date b
 ### Specification
 
 #### Returns a valid Date set to the first day of the month when:
+
 - The argument is a valid `Date` object representing any day within a month
 - The argument is a finite numeric timestamp representing any valid date
 - The input date can be at any time of day (all time components are reset)
@@ -36,6 +37,7 @@ The `startOfMonth` function calculates the start of the month for a given date b
 - Works correctly with all months, including February in leap years
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -64,7 +66,7 @@ The `startOfMonth` function calculates the start of the month for a given date b
 ### Month Boundary Calculations
 
 ```typescript
-import { startOfMonth } from 'chronia';
+import { startOfMonth } from "chronia";
 
 // Get start of month from mid-month date
 const midMonth = new Date(2024, 5, 15, 14, 30, 45, 123);
@@ -85,7 +87,7 @@ const monthStart3 = startOfMonth(timestamp);
 ### Date Range Generation
 
 ```typescript
-import { startOfMonth } from 'chronia';
+import { startOfMonth } from "chronia";
 
 // Generate month range for queries
 function getMonthRange(referenceDate: Date): { start: Date; end: Date } {
@@ -107,7 +109,7 @@ const range = getMonthRange(new Date(2024, 5, 15));
 ### Data Aggregation
 
 ```typescript
-import { startOfMonth } from 'chronia';
+import { startOfMonth } from "chronia";
 
 // Group transactions by month
 interface Transaction {
@@ -130,7 +132,7 @@ function groupByMonth(transactions: Transaction[]): Map<string, number> {
 const transactions = [
   { date: new Date(2024, 5, 5), amount: 100 },
   { date: new Date(2024, 5, 15), amount: 200 },
-  { date: new Date(2024, 6, 3), amount: 150 }
+  { date: new Date(2024, 6, 3), amount: 150 },
 ];
 
 const totals = groupByMonth(transactions);
@@ -143,11 +145,11 @@ const totals = groupByMonth(transactions);
 ### Calendar Navigation
 
 ```typescript
-import { startOfMonth } from 'chronia';
+import { startOfMonth } from "chronia";
 
 // Navigate to previous/next month
-function navigateMonth(currentDate: Date, direction: 'prev' | 'next'): Date {
-  const offset = direction === 'next' ? 1 : -1;
+function navigateMonth(currentDate: Date, direction: "prev" | "next"): Date {
+  const offset = direction === "next" ? 1 : -1;
   const targetDate = new Date(currentDate);
   targetDate.setMonth(targetDate.getMonth() + offset);
 
@@ -155,17 +157,17 @@ function navigateMonth(currentDate: Date, direction: 'prev' | 'next'): Date {
 }
 
 const current = new Date(2024, 5, 15); // June 15, 2024
-const nextMonth = navigateMonth(current, 'next');
+const nextMonth = navigateMonth(current, "next");
 // Returns: July 1, 2024 00:00:00.000
 
-const prevMonth = navigateMonth(current, 'prev');
+const prevMonth = navigateMonth(current, "prev");
 // Returns: May 1, 2024 00:00:00.000
 ```
 
 ### Billing and Subscription Systems
 
 ```typescript
-import { startOfMonth } from 'chronia';
+import { startOfMonth } from "chronia";
 
 // Calculate next billing date
 function getNextBillingDate(subscriptionStart: Date): Date {

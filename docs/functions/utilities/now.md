@@ -7,7 +7,7 @@ The `now` function returns the current date and time as a Date object. It provid
 ## Signature
 
 ```typescript
-function now(): Date
+function now(): Date;
 ```
 
 ## Parameters
@@ -16,8 +16,8 @@ This function takes no parameters.
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                              |
+| ------ | -------------------------------------------------------- |
 | `Date` | A new Date object representing the current date and time |
 
 ## Description
@@ -53,7 +53,7 @@ The `now` function creates and returns a new Date object initialized to the curr
 ### Timestamping
 
 ```typescript
-import { now } from 'chronia';
+import { now } from "chronia";
 
 // Create a timestamp for a new record
 interface LogEntry {
@@ -64,18 +64,18 @@ interface LogEntry {
 function createLogEntry(message: string): LogEntry {
   return {
     message,
-    timestamp: now()
+    timestamp: now(),
   };
 }
 
-const entry = createLogEntry('User logged in');
+const entry = createLogEntry("User logged in");
 // entry.timestamp contains the current date/time
 ```
 
 ### Relative Time Calculations
 
 ```typescript
-import { now, addDays, subHours, addMonths } from 'chronia';
+import { now, addDays, subHours, addMonths } from "chronia";
 
 // Calculate future dates relative to now
 const tomorrow = addDays(now(), 1);
@@ -93,7 +93,7 @@ const deadline = addDays(now(), 30); // 30 days from now
 ### Time-Based Comparisons
 
 ```typescript
-import { now, isBefore, isAfter, differenceInDays } from 'chronia';
+import { now, isBefore, isAfter, differenceInDays } from "chronia";
 
 // Check if a date is in the past or future
 function isExpired(expirationDate: Date): boolean {
@@ -115,7 +115,7 @@ function isCurrentlyActive(startDate: Date, endDate: Date): boolean {
 ### Default Values and Formatting
 
 ```typescript
-import { now, format } from 'chronia';
+import { now, format } from "chronia";
 
 // Provide current date as default
 function scheduleTask(task: string, scheduledFor?: Date): void {
@@ -124,12 +124,12 @@ function scheduleTask(task: string, scheduledFor?: Date): void {
 }
 
 // Format current time for display
-const currentTime = format(now(), 'yyyy-MM-dd HH:mm:ss');
+const currentTime = format(now(), "yyyy-MM-dd HH:mm:ss");
 console.log(`Current time: ${currentTime}`);
 // Output: "Current time: 2025-01-22 10:30:45"
 
 // Create human-readable timestamps
-const timestamp = format(now(), 'MMM dd, yyyy at hh:mm a');
+const timestamp = format(now(), "MMM dd, yyyy at hh:mm a");
 console.log(timestamp);
 // Output: "Jan 22, 2025 at 10:30 AM"
 ```
@@ -137,11 +137,11 @@ console.log(timestamp);
 ### Interval Measurements
 
 ```typescript
-import { now, differenceInMilliseconds, differenceInSeconds } from 'chronia';
+import { now, differenceInMilliseconds, differenceInSeconds } from "chronia";
 
 // Measure operation duration
 async function measurePerformance<T>(
-  operation: () => Promise<T>
+  operation: () => Promise<T>,
 ): Promise<{ result: T; duration: number }> {
   const startTime = now();
   const result = await operation();
@@ -155,7 +155,7 @@ async function measurePerformance<T>(
 // Usage
 const { result, duration } = await measurePerformance(async () => {
   // Some async operation
-  return fetch('https://api.example.com/data');
+  return fetch("https://api.example.com/data");
 });
 
 console.log(`Operation completed in ${duration}ms`);

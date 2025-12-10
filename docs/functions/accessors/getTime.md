@@ -7,19 +7,19 @@ The `getTime` function returns the timestamp (milliseconds since Unix epoch) of 
 ## Signature
 
 ```typescript
-function getTime(date: Date | number): number
+function getTime(date: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to convert to a timestamp |
+| Parameter | Type             | Description                                                  |
+| --------- | ---------------- | ------------------------------------------------------------ |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to convert to a timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                                                 |
+| -------- | ----------------------------------------------------------------------------------------------------------- |
 | `number` | The timestamp in milliseconds since Unix epoch (1970-01-01T00:00:00.000Z), or `NaN` if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `getTime` function extracts the timestamp value from a Date object or valida
 ### Specification
 
 #### Returns a valid timestamp when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `getTime` function extracts the timestamp value from a Date object or valida
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns `NaN` when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -62,7 +64,7 @@ The `getTime` function extracts the timestamp value from a Date object or valida
 ### Timestamp Extraction
 
 ```typescript
-import { getTime } from 'chronia';
+import { getTime } from "chronia";
 
 // Extract timestamp from Date object
 const timestamp = getTime(new Date("2024-01-01T00:00:00.000Z"));
@@ -84,7 +86,7 @@ const invalid = getTime(new Date("invalid"));
 ### Time Calculations
 
 ```typescript
-import { getTime } from 'chronia';
+import { getTime } from "chronia";
 
 // Calculate time difference between two dates
 function getDifferenceInMilliseconds(date1: Date, date2: Date): number {
@@ -101,7 +103,7 @@ function getDifferenceInMilliseconds(date1: Date, date2: Date): number {
 
 const diff = getDifferenceInMilliseconds(
   new Date("2024-01-02"),
-  new Date("2024-01-01")
+  new Date("2024-01-01"),
 );
 // Returns: 86400000 (24 hours in milliseconds)
 ```
@@ -109,7 +111,7 @@ const diff = getDifferenceInMilliseconds(
 ### Input Normalization
 
 ```typescript
-import { getTime } from 'chronia';
+import { getTime } from "chronia";
 
 // Handle mixed input types
 function normalizeToTimestamp(date: Date | number): number {
@@ -132,7 +134,7 @@ normalizeToTimestamp(NaN);
 ### Validation with Conversion
 
 ```typescript
-import { getTime } from 'chronia';
+import { getTime } from "chronia";
 
 // Safe timestamp conversion with validation
 function formatTimestamp(date: Date | number): string {

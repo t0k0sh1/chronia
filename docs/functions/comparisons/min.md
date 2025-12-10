@@ -7,19 +7,19 @@ The `min` function returns the earliest (minimum) date from a given set of dates
 ## Signature
 
 ```typescript
-function min(...dates: (Date | number)[]): Date
+function min(...dates: (Date | number)[]): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
+| Parameter  | Type                 | Description                                                                                            |
+| ---------- | -------------------- | ------------------------------------------------------------------------------------------------------ |
 | `...dates` | `(Date \| number)[]` | One or more Date objects or numeric timestamps to compare. Accepts any number of arguments (variadic). |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                                                                                |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Date` | Returns a new Date object representing the earliest date among the inputs. Returns Invalid Date (`new Date(NaN)`) if any input is invalid or if no arguments are provided. |
 
 ## Description
@@ -29,12 +29,14 @@ The `min` function determines which date among the provided arguments represents
 ### Specification
 
 #### Returns a valid Date representing the earliest date when:
+
 - One or more valid Date objects are provided
 - One or more finite numeric timestamps are provided (positive, zero, or negative)
 - A mix of valid Date objects and numeric timestamps are provided
 - All inputs represent valid dates/times
 
 #### Returns Invalid Date (`new Date(NaN)`) when:
+
 - No arguments are provided (empty call: `min()`)
 - Any of the input dates is an Invalid Date object (e.g., `new Date('invalid')`)
 - Any of the input timestamps is `NaN`
@@ -63,7 +65,7 @@ The `min` function determines which date among the provided arguments represents
 ### Finding Earliest Events
 
 ```typescript
-import { min } from 'chronia';
+import { min } from "chronia";
 
 // Compare multiple event dates
 const event1 = new Date(2024, 5, 15); // June 15, 2024
@@ -82,12 +84,12 @@ const earliest = min(eventDate, eventTimestamp, Date.now());
 ### Date Range Validation
 
 ```typescript
-import { min } from 'chronia';
+import { min } from "chronia";
 
 // Find the earliest start date for a merged range
 function mergeRanges(range1: { start: Date }, range2: { start: Date }) {
   return {
-    start: min(range1.start, range2.start)
+    start: min(range1.start, range2.start),
   };
 }
 
@@ -100,7 +102,7 @@ const merged = mergeRanges(range1, range2);
 ### Historical Data Analysis
 
 ```typescript
-import { min } from 'chronia';
+import { min } from "chronia";
 
 // Find the oldest record in a dataset
 interface Record {
@@ -111,14 +113,14 @@ interface Record {
 function findOldestRecord(records: Record[]): Date | null {
   if (records.length === 0) return null;
 
-  const dates = records.map(r => r.createdAt);
+  const dates = records.map((r) => r.createdAt);
   return min(...dates);
 }
 
 const records = [
-  { id: '1', createdAt: new Date(2024, 0, 15) },
-  { id: '2', createdAt: new Date(2024, 0, 5) },
-  { id: '3', createdAt: new Date(2024, 0, 10) }
+  { id: "1", createdAt: new Date(2024, 0, 15) },
+  { id: "2", createdAt: new Date(2024, 0, 5) },
+  { id: "3", createdAt: new Date(2024, 0, 10) },
 ];
 const oldest = findOldestRecord(records);
 // Returns: Date object for Jan 5, 2024
@@ -127,7 +129,7 @@ const oldest = findOldestRecord(records);
 ### Deadline Management
 
 ```typescript
-import { min } from 'chronia';
+import { min } from "chronia";
 
 // Find the most urgent deadline
 interface Task {
@@ -138,14 +140,14 @@ interface Task {
 function getNextDeadline(tasks: Task[]): Date | null {
   if (tasks.length === 0) return null;
 
-  const dueDates = tasks.map(t => t.dueDate);
+  const dueDates = tasks.map((t) => t.dueDate);
   return min(...dueDates);
 }
 
 const tasks = [
-  { name: 'Project A', dueDate: new Date(2024, 6, 1) },
-  { name: 'Project B', dueDate: new Date(2024, 5, 25) },
-  { name: 'Project C', dueDate: new Date(2024, 6, 15) }
+  { name: "Project A", dueDate: new Date(2024, 6, 1) },
+  { name: "Project B", dueDate: new Date(2024, 5, 25) },
+  { name: "Project C", dueDate: new Date(2024, 6, 15) },
 ];
 const nextDeadline = getNextDeadline(tasks);
 // Returns: Date object for June 25, 2024
@@ -154,22 +156,22 @@ const nextDeadline = getNextDeadline(tasks);
 ### Data Aggregation
 
 ```typescript
-import { min } from 'chronia';
+import { min } from "chronia";
 
 // Aggregate minimum dates from multiple sources
 const serverLogs = [
   { timestamp: 1718409600000 },
   { timestamp: 1718496000000 },
-  { timestamp: 1718323200000 }
+  { timestamp: 1718323200000 },
 ];
 
-const timestamps = serverLogs.map(log => log.timestamp);
+const timestamps = serverLogs.map((log) => log.timestamp);
 const earliestLog = min(...timestamps);
 // Returns: Date object for the earliest timestamp
 
 // Handle invalid dates gracefully
 const validDate = new Date(2024, 5, 15);
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const result = min(validDate, invalidDate);
 // Returns: Invalid Date (new Date(NaN))
 

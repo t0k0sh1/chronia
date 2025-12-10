@@ -7,19 +7,19 @@ The `getMinutes` function extracts the minutes component (0-59) from a given Dat
 ## Signature
 
 ```typescript
-function getMinutes(date: Date | number): number
+function getMinutes(date: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp from which to extract the minutes |
+| Parameter | Type             | Description                                                          |
+| --------- | ---------------- | -------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the minutes |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                      |
+| -------- | -------------------------------------------------------------------------------- |
 | `number` | Returns the minutes component (0-59) for valid dates, or `NaN` for invalid input |
 
 ## Description
@@ -29,6 +29,7 @@ The `getMinutes` function extracts the minutes component from the provided Date 
 ### Specification
 
 #### Returns a number between `0` and `59` when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `getMinutes` function extracts the minutes component from the provided Date 
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns `NaN` when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -63,14 +65,14 @@ The `getMinutes` function extracts the minutes component from the provided Date 
 ### Time Component Extraction
 
 ```typescript
-import { getMinutes } from 'chronia';
+import { getMinutes } from "chronia";
 
 // Extract minutes from Date object
 const date = new Date(2025, 0, 15, 14, 30, 45);
-getMinutes(date);  // Returns: 30
+getMinutes(date); // Returns: 30
 
 // Extract minutes from timestamp
-getMinutes(1704067200000);  // 2024-01-01 00:00:00
+getMinutes(1704067200000); // 2024-01-01 00:00:00
 // Returns: 0
 
 // Minutes at the end of an hour
@@ -85,7 +87,7 @@ getMinutes(new Date(2024, 5, 15, 8, 0, 0));
 ### Time-Based Filtering
 
 ```typescript
-import { getMinutes } from 'chronia';
+import { getMinutes } from "chronia";
 
 // Filter events occurring in first 15 minutes of any hour
 const events = [
@@ -95,14 +97,14 @@ const events = [
   new Date(2025, 0, 15, 15, 45, 0),
 ];
 
-const firstQuarter = events.filter(event => getMinutes(event) < 15);
+const firstQuarter = events.filter((event) => getMinutes(event) < 15);
 // Returns: [Date(14:05:00), Date(15:10:00)]
 ```
 
 ### Schedule Validation
 
 ```typescript
-import { getMinutes } from 'chronia';
+import { getMinutes } from "chronia";
 
 // Validate that appointment is on a 15-minute interval
 function isValidAppointmentTime(date: Date): boolean {
@@ -123,18 +125,19 @@ isValidAppointmentTime(new Date(2025, 0, 15, 14, 37, 0));
 ### Time Formatting
 
 ```typescript
-import { getMinutes } from 'chronia';
+import { getMinutes } from "chronia";
 
 // Build custom time format with zero-padding
 function formatTime(date: Date | number): string {
   const minutes = getMinutes(date);
 
   if (isNaN(minutes)) {
-    return 'Invalid time';
+    return "Invalid time";
   }
 
-  const hours = typeof date === 'number' ? new Date(date).getHours() : date.getHours();
-  const paddedMinutes = String(minutes).padStart(2, '0');
+  const hours =
+    typeof date === "number" ? new Date(date).getHours() : date.getHours();
+  const paddedMinutes = String(minutes).padStart(2, "0");
 
   return `${hours}:${paddedMinutes}`;
 }
@@ -145,14 +148,14 @@ formatTime(new Date(2025, 0, 15, 9, 5, 0));
 formatTime(new Date(2025, 0, 15, 14, 30, 0));
 // Returns: '14:30'
 
-formatTime(new Date('invalid'));
+formatTime(new Date("invalid"));
 // Returns: 'Invalid time'
 ```
 
 ### Time Calculations
 
 ```typescript
-import { getMinutes } from 'chronia';
+import { getMinutes } from "chronia";
 
 // Calculate minutes until next hour
 function minutesUntilNextHour(date: Date): number {

@@ -7,19 +7,19 @@ The `truncDay` function truncates a date to the start of the day by setting the 
 ## Signature
 
 ```typescript
-function truncDay(date: Date | number): Date
+function truncDay(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the day |
+| Parameter | Type             | Description                                                            |
+| --------- | ---------------- | ---------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the day |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                    |
+| ------ | ---------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to 00:00:00.000 of the same day, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `truncDay` function removes all time components (hours, minutes, seconds, an
 ### Specification
 
 #### Returns a valid Date when:
+
 - The input is a valid `Date` object (not Invalid Date)
 - The input is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `truncDay` function removes all time components (hours, minutes, seconds, an
   - Negative timestamps (dates before Unix epoch)
 
 The returned Date will have:
+
 - Same year, month, and day as the input
 - Hours set to `0`
 - Minutes set to `0`
@@ -43,6 +45,7 @@ The returned Date will have:
 - Milliseconds set to `0`
 
 #### Returns Invalid Date when:
+
 - The input is an Invalid Date object (e.g., `new Date('invalid')`)
 - The input is `NaN`
 - The input is `Infinity`
@@ -70,7 +73,7 @@ The returned Date will have:
 ### Date Comparison
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 // Compare if two dates are on the same day
 function isSameDay(date1: Date, date2: Date): boolean {
@@ -83,14 +86,14 @@ const morning = new Date(2024, 5, 15, 8, 30, 0);
 const evening = new Date(2024, 5, 15, 18, 45, 0);
 const nextDay = new Date(2024, 5, 16, 8, 30, 0);
 
-isSameDay(morning, evening);  // Returns: true
-isSameDay(morning, nextDay);  // Returns: false
+isSameDay(morning, evening); // Returns: true
+isSameDay(morning, nextDay); // Returns: false
 ```
 
 ### Date Grouping
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 interface Event {
   timestamp: Date;
@@ -113,9 +116,9 @@ function groupEventsByDay(events: Event[]): Map<string, Event[]> {
 }
 
 const events = [
-  { timestamp: new Date(2024, 5, 15, 9, 0), description: 'Morning meeting' },
-  { timestamp: new Date(2024, 5, 15, 14, 30), description: 'Afternoon call' },
-  { timestamp: new Date(2024, 5, 16, 10, 0), description: 'Next day event' }
+  { timestamp: new Date(2024, 5, 15, 9, 0), description: "Morning meeting" },
+  { timestamp: new Date(2024, 5, 15, 14, 30), description: "Afternoon call" },
+  { timestamp: new Date(2024, 5, 16, 10, 0), description: "Next day event" },
 ];
 
 const grouped = groupEventsByDay(events);
@@ -125,18 +128,18 @@ const grouped = groupEventsByDay(events);
 ### Range Queries
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 // Create a date range filter with precise day boundaries
 function filterByDateRange(
   items: Array<{ date: Date }>,
   startDate: Date,
-  endDate: Date
+  endDate: Date,
 ): Array<{ date: Date }> {
   const start = truncDay(startDate);
   const end = truncDay(endDate);
 
-  return items.filter(item => {
+  return items.filter((item) => {
     const itemDay = truncDay(item.date);
     return itemDay >= start && itemDay <= end;
   });
@@ -144,16 +147,16 @@ function filterByDateRange(
 
 // Usage
 const items = [
-  { date: new Date(2024, 5, 14, 23, 59) },  // June 14 late night
-  { date: new Date(2024, 5, 15, 0, 1) },    // June 15 just after midnight
-  { date: new Date(2024, 5, 16, 12, 0) },   // June 16 noon
-  { date: new Date(2024, 5, 17, 0, 0) }     // June 17 midnight
+  { date: new Date(2024, 5, 14, 23, 59) }, // June 14 late night
+  { date: new Date(2024, 5, 15, 0, 1) }, // June 15 just after midnight
+  { date: new Date(2024, 5, 16, 12, 0) }, // June 16 noon
+  { date: new Date(2024, 5, 17, 0, 0) }, // June 17 midnight
 ];
 
 const filtered = filterByDateRange(
   items,
-  new Date(2024, 5, 15, 10, 0),  // Start: June 15 10:00
-  new Date(2024, 5, 16, 14, 0)   // End: June 16 14:00
+  new Date(2024, 5, 15, 10, 0), // Start: June 15 10:00
+  new Date(2024, 5, 16, 14, 0), // End: June 16 14:00
 );
 // Returns: 2 items (June 15 and June 16)
 ```
@@ -161,7 +164,7 @@ const filtered = filterByDateRange(
 ### Calendar Operations
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 // Calculate number of days between two dates
 function daysBetween(date1: Date, date2: Date): number {
@@ -182,28 +185,28 @@ function isToday(date: Date): boolean {
 const start = new Date(2024, 5, 15, 14, 30);
 const end = new Date(2024, 5, 20, 9, 15);
 
-daysBetween(start, end);  // Returns: 5
+daysBetween(start, end); // Returns: 5
 
 const now = new Date();
-isToday(now);  // Returns: true
-isToday(new Date(2024, 5, 15, 23, 59, 59));  // Returns: false (unless today is June 15, 2024)
+isToday(now); // Returns: true
+isToday(new Date(2024, 5, 15, 23, 59, 59)); // Returns: false (unless today is June 15, 2024)
 ```
 
 ### Data Normalization
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 // Normalize timestamps from different sources
 function normalizeTimestamps(dates: Array<Date | number>): Date[] {
-  return dates.map(date => truncDay(date));
+  return dates.map((date) => truncDay(date));
 }
 
 // Works with both Date objects and timestamps
 const mixed = [
-  new Date(2024, 5, 15, 14, 30, 45, 123),  // Date with full time
-  1718467200000,  // Timestamp (milliseconds)
-  new Date(2024, 5, 17, 23, 59, 59, 999)   // End of day
+  new Date(2024, 5, 15, 14, 30, 45, 123), // Date with full time
+  1718467200000, // Timestamp (milliseconds)
+  new Date(2024, 5, 17, 23, 59, 59, 999), // End of day
 ];
 
 const normalized = normalizeTimestamps(mixed);
@@ -215,7 +218,7 @@ const normalized = normalizeTimestamps(mixed);
 // ]
 
 // Invalid inputs are handled gracefully
-truncDay(new Date('invalid'));  // Returns: Invalid Date
-truncDay(NaN);                  // Returns: Invalid Date
-truncDay(Infinity);             // Returns: Invalid Date
+truncDay(new Date("invalid")); // Returns: Invalid Date
+truncDay(NaN); // Returns: Invalid Date
+truncDay(Infinity); // Returns: Invalid Date
 ```

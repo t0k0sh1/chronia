@@ -7,19 +7,19 @@ The `isFuture` function checks if a given date is in the future relative to the 
 ## Signature
 
 ```typescript
-function isFuture(date: Date | number): boolean
+function isFuture(date: Date | number): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to check |
+| Parameter | Type             | Description                                 |
+| --------- | ---------------- | ------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to check |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                                             |
+| --------- | ----------------------------------------------------------------------- |
 | `boolean` | Returns `true` if the date is strictly in the future, `false` otherwise |
 
 ## Description
@@ -64,7 +64,7 @@ The `isFuture` function determines whether the provided date or timestamp occurs
 ### Future Date Validation
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 // Check if appointment is in the future
 function isAppointmentValid(appointmentDate: Date): boolean {
@@ -72,29 +72,29 @@ function isAppointmentValid(appointmentDate: Date): boolean {
 }
 
 // Future date
-isFuture(new Date(2026, 0, 1));  // Returns: true
+isFuture(new Date(2026, 0, 1)); // Returns: true
 
 // Past date
-isFuture(new Date(2024, 0, 1));  // Returns: false
+isFuture(new Date(2024, 0, 1)); // Returns: false
 
 // Current time (exactly now)
-isFuture(Date.now());  // Returns: false (present, not future)
+isFuture(Date.now()); // Returns: false (present, not future)
 
 // Future timestamp (1 second from now)
-isFuture(Date.now() + 1000);  // Returns: true
+isFuture(Date.now() + 1000); // Returns: true
 ```
 
 ### Conditional Logic
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 // Show different messages based on deadline status
 function getDeadlineMessage(deadline: Date): string {
   if (isFuture(deadline)) {
-    return 'Deadline is still upcoming';
+    return "Deadline is still upcoming";
   }
-  return 'Deadline has passed';
+  return "Deadline has passed";
 }
 
 // Check feature availability
@@ -103,20 +103,23 @@ function isFeatureAvailable(activationDate: Date): boolean {
 }
 
 const feature = new Date(2025, 5, 1);
-isFeatureAvailable(feature);  // Returns: true if current date >= June 1, 2025
+isFeatureAvailable(feature); // Returns: true if current date >= June 1, 2025
 ```
 
 ### User Input Validation
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 // Validate booking date is in the future
-function validateBooking(bookingDate: Date): { valid: boolean; error?: string } {
+function validateBooking(bookingDate: Date): {
+  valid: boolean;
+  error?: string;
+} {
   if (!isFuture(bookingDate)) {
     return {
       valid: false,
-      error: 'Booking date must be in the future'
+      error: "Booking date must be in the future",
     };
   }
   return { valid: true };
@@ -125,7 +128,7 @@ function validateBooking(bookingDate: Date): { valid: boolean; error?: string } 
 // Create reminder only for future dates
 function createReminder(reminderDate: Date, message: string): boolean {
   if (!isFuture(reminderDate)) {
-    console.error('Cannot create reminder for past or current time');
+    console.error("Cannot create reminder for past or current time");
     return false;
   }
   // Create reminder logic here
@@ -136,7 +139,7 @@ function createReminder(reminderDate: Date, message: string): boolean {
 ### Cache Expiration
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 interface CacheEntry {
   data: unknown;
@@ -158,17 +161,17 @@ function getCachedData(cache: CacheEntry): unknown | null {
 }
 
 const cache = {
-  data: { user: 'John' },
-  expiresAt: Date.now() + 3600000  // Expires in 1 hour
+  data: { user: "John" },
+  expiresAt: Date.now() + 3600000, // Expires in 1 hour
 };
 
-isCacheValid(cache);  // Returns: true
+isCacheValid(cache); // Returns: true
 ```
 
 ### Time-Based Filtering
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 interface Event {
   id: string;
@@ -178,46 +181,46 @@ interface Event {
 
 // Filter to get only upcoming events
 function getUpcomingEvents(events: Event[]): Event[] {
-  return events.filter(event => isFuture(event.date));
+  return events.filter((event) => isFuture(event.date));
 }
 
 // Find next future event
 function getNextEvent(events: Event[]): Event | null {
-  const upcomingEvents = events.filter(event => isFuture(event.date));
+  const upcomingEvents = events.filter((event) => isFuture(event.date));
   if (upcomingEvents.length === 0) return null;
 
   return upcomingEvents.reduce((earliest, current) =>
-    current.date < earliest.date ? current : earliest
+    current.date < earliest.date ? current : earliest,
   );
 }
 
 const events = [
-  { id: '1', name: 'Past Event', date: new Date(2024, 0, 1) },
-  { id: '2', name: 'Future Event', date: new Date(2026, 0, 1) },
-  { id: '3', name: 'Another Future Event', date: new Date(2027, 0, 1) }
+  { id: "1", name: "Past Event", date: new Date(2024, 0, 1) },
+  { id: "2", name: "Future Event", date: new Date(2026, 0, 1) },
+  { id: "3", name: "Another Future Event", date: new Date(2027, 0, 1) },
 ];
 
-getUpcomingEvents(events);  // Returns: array with 2 future events
+getUpcomingEvents(events); // Returns: array with 2 future events
 ```
 
 ### Invalid Input Handling
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 // Safely handle potentially invalid dates
 function safeDateCheck(input: unknown): boolean {
-  if (input instanceof Date || typeof input === 'number') {
+  if (input instanceof Date || typeof input === "number") {
     return isFuture(input);
   }
   return false;
 }
 
 // Invalid Date object
-isFuture(new Date('invalid'));  // Returns: false
+isFuture(new Date("invalid")); // Returns: false
 
 // Invalid numeric values
-isFuture(NaN);       // Returns: false
-isFuture(Infinity);  // Returns: false
+isFuture(NaN); // Returns: false
+isFuture(Infinity); // Returns: false
 isFuture(-Infinity); // Returns: false
 ```

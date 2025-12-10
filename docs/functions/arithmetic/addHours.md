@@ -7,20 +7,20 @@ The `addHours` function adds a specified number of hours to a given date, return
 ## Signature
 
 ```typescript
-function addHours(date: Date | number, amount: number): Date
+function addHours(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `amount` | `number` | The number of hours to add (can be negative to subtract) |
+| Parameter | Type             | Description                                              |
+| --------- | ---------------- | -------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp      |
+| `amount`  | `number`         | The number of hours to add (can be negative to subtract) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                               |
+| ------ | ----------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified hours added, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `addHours` function performs hour-based date arithmetic by adding (or subtra
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -47,6 +48,7 @@ The `addHours` function performs hour-based date arithmetic by adding (or subtra
   - Daylight Saving Time transitions (handled by native Date implementation)
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -74,7 +76,7 @@ The `addHours` function performs hour-based date arithmetic by adding (or subtra
 ### Scheduling Operations
 
 ```typescript
-import { addHours } from 'chronia';
+import { addHours } from "chronia";
 
 // Schedule a meeting 3 hours from now
 const now = new Date(2025, 0, 15, 14, 30, 0);
@@ -91,7 +93,7 @@ const twoHoursAgo = addHours(new Date(), -2);
 ### Time Zone Conversions
 
 ```typescript
-import { addHours } from 'chronia';
+import { addHours } from "chronia";
 
 // Convert UTC to EST (UTC-5)
 const utcTime = new Date(Date.UTC(2025, 0, 15, 20, 0, 0));
@@ -107,7 +109,7 @@ const jstTime = addHours(pstTime, 17);
 ### Expiration Handling
 
 ```typescript
-import { addHours } from 'chronia';
+import { addHours } from "chronia";
 
 // Set session expiration to 2 hours from now
 function createSession() {
@@ -117,7 +119,7 @@ function createSession() {
   return {
     id: generateId(),
     createdAt: now,
-    expiresAt: expiresAt
+    expiresAt: expiresAt,
   };
 }
 
@@ -131,7 +133,7 @@ function isTokenValid(tokenCreatedAt: Date): boolean {
 ### Business Hours Calculation
 
 ```typescript
-import { addHours } from 'chronia';
+import { addHours } from "chronia";
 
 // Calculate closing time from opening time
 const openingTime = new Date(2025, 0, 15, 9, 0, 0);
@@ -147,7 +149,7 @@ const shiftEnd = addHours(shiftStart, 8);
 ### Edge Cases and Validation
 
 ```typescript
-import { addHours } from 'chronia';
+import { addHours } from "chronia";
 
 // Fractional hours are truncated
 const result1 = addHours(new Date(2025, 0, 1, 12, 0, 0), 1.9);
@@ -162,7 +164,7 @@ const adjusted = addHours(precise, 3);
 // Returns: 2025-01-01 15:34:56.789
 
 // Invalid inputs return Invalid Date
-const invalid1 = addHours(new Date('invalid'), 3);
+const invalid1 = addHours(new Date("invalid"), 3);
 // Returns: Invalid Date
 
 const invalid2 = addHours(new Date(), NaN);

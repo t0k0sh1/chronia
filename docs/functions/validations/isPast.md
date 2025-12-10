@@ -7,19 +7,19 @@ The `isPast` function checks whether a given date is in the past relative to the
 ## Signature
 
 ```typescript
-function isPast(date: Date | number): boolean
+function isPast(date: Date | number): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to check against the current time |
+| Parameter | Type             | Description                                                          |
+| --------- | ---------------- | -------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to check against the current time |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                                           |
+| --------- | --------------------------------------------------------------------- |
 | `boolean` | Returns `true` if the date is strictly in the past, `false` otherwise |
 
 ## Description
@@ -71,7 +71,7 @@ The function captures the current time using `Date.now()` at the moment of invoc
 ### Session Expiry Checking
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
 interface Session {
   token: string;
@@ -84,22 +84,22 @@ function isSessionExpired(session: Session): boolean {
 
 // Check session validity
 const session = {
-  token: 'abc123',
-  expiresAt: new Date('2025-01-14T12:00:00Z')
+  token: "abc123",
+  expiresAt: new Date("2025-01-14T12:00:00Z"),
 };
 
 // If current time is 2025-01-15T12:00:00Z
-isSessionExpired(session);  // Returns: true (session expired yesterday)
+isSessionExpired(session); // Returns: true (session expired yesterday)
 
 // Using timestamp
 const tokenExpiry = Date.now() - 3600000; // 1 hour ago
-isPast(tokenExpiry);  // Returns: true
+isPast(tokenExpiry); // Returns: true
 ```
 
 ### Event Timeline Filtering
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
 interface Event {
   id: string;
@@ -108,17 +108,17 @@ interface Event {
 }
 
 function filterPastEvents(events: Event[]): Event[] {
-  return events.filter(event => isPast(event.date));
+  return events.filter((event) => isPast(event.date));
 }
 
 function filterUpcomingEvents(events: Event[]): Event[] {
-  return events.filter(event => !isPast(event.date));
+  return events.filter((event) => !isPast(event.date));
 }
 
 const events: Event[] = [
-  { id: '1', title: 'Conference', date: new Date('2025-01-10') },
-  { id: '2', title: 'Webinar', date: new Date('2025-01-20') },
-  { id: '3', title: 'Workshop', date: new Date('2025-01-05') }
+  { id: "1", title: "Conference", date: new Date("2025-01-10") },
+  { id: "2", title: "Webinar", date: new Date("2025-01-20") },
+  { id: "3", title: "Workshop", date: new Date("2025-01-05") },
 ];
 
 // If current time is 2025-01-15
@@ -135,7 +135,7 @@ const upcomingEvents = filterUpcomingEvents(events);
 ### Deadline Validation
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
 interface Task {
   id: string;
@@ -153,9 +153,24 @@ function getOverdueTasks(tasks: Task[]): Task[] {
 }
 
 const tasks: Task[] = [
-  { id: '1', title: 'Review PR', dueDate: new Date('2025-01-14'), completed: false },
-  { id: '2', title: 'Write docs', dueDate: new Date('2025-01-20'), completed: false },
-  { id: '3', title: 'Fix bug', dueDate: new Date('2025-01-10'), completed: true }
+  {
+    id: "1",
+    title: "Review PR",
+    dueDate: new Date("2025-01-14"),
+    completed: false,
+  },
+  {
+    id: "2",
+    title: "Write docs",
+    dueDate: new Date("2025-01-20"),
+    completed: false,
+  },
+  {
+    id: "3",
+    title: "Fix bug",
+    dueDate: new Date("2025-01-10"),
+    completed: true,
+  },
 ];
 
 // If current time is 2025-01-15
@@ -168,7 +183,7 @@ const overdue = getOverdueTasks(tasks);
 ### Data Archival Logic
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
 interface Record {
   id: string;
@@ -201,8 +216,8 @@ function partitionRecords(records: Record[]): {
 
 // Example usage
 const records: Record[] = [
-  { id: '1', data: { value: 'A' }, expiresAt: new Date('2025-01-10') },
-  { id: '2', data: { value: 'B' }, expiresAt: new Date('2025-01-20') }
+  { id: "1", data: { value: "A" }, expiresAt: new Date("2025-01-10") },
+  { id: "2", data: { value: "B" }, expiresAt: new Date("2025-01-20") },
 ];
 
 // If current time is 2025-01-15
@@ -214,7 +229,7 @@ const { active, archived } = partitionRecords(records);
 ### Age Verification
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
 function isAdult(birthDate: Date): boolean {
   // Calculate date 18 years ago from today
@@ -227,42 +242,48 @@ function isAdult(birthDate: Date): boolean {
     : false;
 }
 
-function canRegister(birthDate: Date | string): { allowed: boolean; reason: string } {
+function canRegister(birthDate: Date | string): {
+  allowed: boolean;
+  reason: string;
+} {
   // Parse if string provided
-  const date = typeof birthDate === 'string' ? new Date(birthDate) : birthDate;
+  const date = typeof birthDate === "string" ? new Date(birthDate) : birthDate;
 
   // Validate date
   if (!isPast(date)) {
-    return { allowed: false, reason: 'Birth date cannot be in the future or present' };
+    return {
+      allowed: false,
+      reason: "Birth date cannot be in the future or present",
+    };
   }
 
   // Check age requirement
   if (!isAdult(date)) {
-    return { allowed: false, reason: 'Must be 18 years or older to register' };
+    return { allowed: false, reason: "Must be 18 years or older to register" };
   }
 
-  return { allowed: true, reason: 'Eligible' };
+  return { allowed: true, reason: "Eligible" };
 }
 
 // Valid birth date in the past
-canRegister(new Date('2000-01-01'));
+canRegister(new Date("2000-01-01"));
 // Returns: { allowed: true, reason: 'Eligible' }
 
 // Future date (invalid)
-canRegister(new Date('2030-01-01'));
+canRegister(new Date("2030-01-01"));
 // Returns: { allowed: false, reason: 'Birth date cannot be in the future or present' }
 
 // Too young
-canRegister(new Date('2020-01-01'));
+canRegister(new Date("2020-01-01"));
 // Returns: { allowed: false, reason: 'Must be 18 years or older to register' }
 ```
 
 ### Real-time Status Indicators
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
-type EventStatus = 'completed' | 'in-progress' | 'upcoming';
+type EventStatus = "completed" | "in-progress" | "upcoming";
 
 interface ScheduledEvent {
   title: string;
@@ -274,75 +295,78 @@ function getEventStatus(event: ScheduledEvent): EventStatus {
   const now = Date.now();
 
   if (isPast(event.endTime)) {
-    return 'completed';
+    return "completed";
   }
 
   if (isPast(event.startTime)) {
-    return 'in-progress';
+    return "in-progress";
   }
 
-  return 'upcoming';
+  return "upcoming";
 }
 
 function getStatusColor(status: EventStatus): string {
   switch (status) {
-    case 'completed': return 'gray';
-    case 'in-progress': return 'green';
-    case 'upcoming': return 'blue';
+    case "completed":
+      return "gray";
+    case "in-progress":
+      return "green";
+    case "upcoming":
+      return "blue";
   }
 }
 
 // Example usage
 const meeting: ScheduledEvent = {
-  title: 'Team Standup',
-  startTime: new Date('2025-01-15T10:00:00Z'),
-  endTime: new Date('2025-01-15T10:30:00Z')
+  title: "Team Standup",
+  startTime: new Date("2025-01-15T10:00:00Z"),
+  endTime: new Date("2025-01-15T10:30:00Z"),
 };
 
 // If current time is 2025-01-15T10:15:00Z
-const status = getEventStatus(meeting);  // Returns: 'in-progress'
-const color = getStatusColor(status);     // Returns: 'green'
+const status = getEventStatus(meeting); // Returns: 'in-progress'
+const color = getStatusColor(status); // Returns: 'green'
 
 // If current time is 2025-01-15T11:00:00Z
-const statusLater = getEventStatus(meeting);  // Returns: 'completed'
+const statusLater = getEventStatus(meeting); // Returns: 'completed'
 const colorLater = getStatusColor(statusLater); // Returns: 'gray'
 ```
 
 ### Edge Cases and Invalid Input Handling
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
 // Invalid Date - returns false instead of throwing
-isPast(new Date('invalid'));  // Returns: false
+isPast(new Date("invalid")); // Returns: false
 
 // NaN timestamp - handled gracefully
-isPast(NaN);  // Returns: false
+isPast(NaN); // Returns: false
 
 // Infinity - handled gracefully
-isPast(Infinity);   // Returns: false
-isPast(-Infinity);  // Returns: false
+isPast(Infinity); // Returns: false
+isPast(-Infinity); // Returns: false
 
 // Current moment - returns false (not in the past)
-isPast(Date.now());  // Returns: false
+isPast(Date.now()); // Returns: false
 
 // 1 millisecond ago - returns true
-isPast(Date.now() - 1);  // Returns: true
+isPast(Date.now() - 1); // Returns: true
 
 // 1 millisecond in future - returns false
-isPast(Date.now() + 1);  // Returns: false
+isPast(Date.now() + 1); // Returns: false
 
 // Defensive usage with validation
 function processExpiredData(expiryDate: Date | number): void {
   if (isPast(expiryDate)) {
-    console.log('Data has expired, archiving...');
+    console.log("Data has expired, archiving...");
     // Safe to proceed - we know it's past
   } else {
-    console.log('Data is still valid');
+    console.log("Data is still valid");
   }
 }
 
 // Even with invalid input, no exceptions thrown
-processExpiredData(new Date('malformed'));  // Logs: 'Data is still valid'
-processExpiredData(NaN);                    // Logs: 'Data is still valid'
+processExpiredData(new Date("malformed")); // Logs: 'Data is still valid'
+processExpiredData(NaN); // Logs: 'Data is still valid'
 ```

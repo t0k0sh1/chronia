@@ -8,16 +8,16 @@ Chronia provides a comprehensive suite of immutable date transformation function
 
 ### Component Setters
 
-| Function | Description | Valid Range |
-|----------|-------------|-------------|
-| [`setYear`](./setYear.md) | Sets the year component | Any finite number (including negative for BC dates) |
-| [`setMonth`](./setMonth.md) | Sets the month component (0-indexed) | 0-11 (January-December), values outside roll over |
-| [`setDay`](./setDay.md) | Sets the day of the month | 1-31 (varies by month), values outside roll over |
-| [`setHours`](./setHours.md) | Sets the hours component | 0-23, values outside roll over |
-| [`setMinutes`](./setMinutes.md) | Sets the minutes component | 0-59, values outside roll over |
-| [`setSeconds`](./setSeconds.md) | Sets the seconds component | 0-59, values outside roll over |
-| [`setMilliseconds`](./setMilliseconds.md) | Sets the milliseconds component | 0-999, values outside roll over |
-| [`setTime`](./setTime.md) | Sets the complete timestamp | -8.64e15 to 8.64e15 milliseconds |
+| Function                                  | Description                          | Valid Range                                         |
+| ----------------------------------------- | ------------------------------------ | --------------------------------------------------- |
+| [`setYear`](./setYear.md)                 | Sets the year component              | Any finite number (including negative for BC dates) |
+| [`setMonth`](./setMonth.md)               | Sets the month component (0-indexed) | 0-11 (January-December), values outside roll over   |
+| [`setDay`](./setDay.md)                   | Sets the day of the month            | 1-31 (varies by month), values outside roll over    |
+| [`setHours`](./setHours.md)               | Sets the hours component             | 0-23, values outside roll over                      |
+| [`setMinutes`](./setMinutes.md)           | Sets the minutes component           | 0-59, values outside roll over                      |
+| [`setSeconds`](./setSeconds.md)           | Sets the seconds component           | 0-59, values outside roll over                      |
+| [`setMilliseconds`](./setMilliseconds.md) | Sets the milliseconds component      | 0-999, values outside roll over                     |
+| [`setTime`](./setTime.md)                 | Sets the complete timestamp          | -8.64e15 to 8.64e15 milliseconds                    |
 
 ## Common Features
 
@@ -28,19 +28,19 @@ All mutator functions in this category share the following characteristics:
 All functions return new Date instances without mutating the original input:
 
 ```typescript
-import { setYear, setMonth } from 'chronia';
+import { setYear, setMonth } from "chronia";
 
 const original = new Date(2025, 0, 15, 12, 30, 45);
 
 // Set year returns a new Date
 const newDate = setYear(original, 2026);
-console.log(original.getFullYear());  // 2025 (unchanged)
-console.log(newDate.getFullYear());   // 2026 (new instance)
+console.log(original.getFullYear()); // 2025 (unchanged)
+console.log(newDate.getFullYear()); // 2026 (new instance)
 
 // Works with all mutator functions
 const updated = setMonth(original, 5);
-console.log(original.getMonth());  // 0 (unchanged)
-console.log(updated.getMonth());   // 5 (new instance)
+console.log(original.getMonth()); // 0 (unchanged)
+console.log(updated.getMonth()); // 5 (new instance)
 ```
 
 ### Type Flexibility
@@ -48,19 +48,19 @@ console.log(updated.getMonth());   // 5 (new instance)
 All functions accept both Date objects and numeric timestamps:
 
 ```typescript
-import { setDay, setHours } from 'chronia';
+import { setDay, setHours } from "chronia";
 
 // Date objects
-setDay(new Date(2025, 0, 15), 20);     // Returns: 2025-01-20
-setHours(new Date(2025, 0, 15), 14);   // Returns: 2025-01-15 14:00
+setDay(new Date(2025, 0, 15), 20); // Returns: 2025-01-20
+setHours(new Date(2025, 0, 15), 14); // Returns: 2025-01-15 14:00
 
 // Timestamps
-setDay(1704067200000, 20);    // Returns: Date with day set to 20
-setHours(1704067200000, 14);  // Returns: Date with hours set to 14
+setDay(1704067200000, 20); // Returns: Date with day set to 20
+setHours(1704067200000, 14); // Returns: Date with hours set to 14
 
 // Mixed types
 const timestamp = Date.now();
-const newDate = setDay(timestamp, 1);  // Works seamlessly
+const newDate = setDay(timestamp, 1); // Works seamlessly
 ```
 
 ### Input Validation
@@ -68,21 +68,21 @@ const newDate = setDay(timestamp, 1);  // Works seamlessly
 All functions validate inputs and return Invalid Date for invalid inputs without throwing exceptions:
 
 ```typescript
-import { setYear, setMonth, setDay } from 'chronia';
+import { setYear, setMonth, setDay } from "chronia";
 
 // Invalid date returns Invalid Date
-setYear(new Date('invalid'), 2025);  // Returns: Invalid Date
-setMonth(NaN, 5);                     // Returns: Invalid Date
+setYear(new Date("invalid"), 2025); // Returns: Invalid Date
+setMonth(NaN, 5); // Returns: Invalid Date
 
 // Invalid component value returns Invalid Date
-setDay(new Date(2025, 0, 15), NaN);       // Returns: Invalid Date
+setDay(new Date(2025, 0, 15), NaN); // Returns: Invalid Date
 setHours(new Date(2025, 0, 15), Infinity); // Returns: Invalid Date
 
 // Check validity
-import { isValid } from 'chronia';
+import { isValid } from "chronia";
 const result = setMonth(new Date(2025, 0, 15), 5);
 if (isValid(result)) {
-  console.log('Month set successfully');
+  console.log("Month set successfully");
 }
 ```
 
@@ -91,16 +91,16 @@ if (isValid(result)) {
 All component setters truncate fractional values toward zero using `Math.trunc`:
 
 ```typescript
-import { setDay, setHours, setMinutes } from 'chronia';
+import { setDay, setHours, setMinutes } from "chronia";
 
 // Positive fractional values truncated down
-setDay(new Date(2025, 0, 15), 20.9);      // Returns: day 20 (not 21)
-setHours(new Date(2025, 0, 15), 14.9);    // Returns: hour 14 (not 15)
-setMinutes(new Date(2025, 0, 15), 45.9);  // Returns: minute 45 (not 46)
+setDay(new Date(2025, 0, 15), 20.9); // Returns: day 20 (not 21)
+setHours(new Date(2025, 0, 15), 14.9); // Returns: hour 14 (not 15)
+setMinutes(new Date(2025, 0, 15), 45.9); // Returns: minute 45 (not 46)
 
 // Negative fractional values truncated toward zero
-setDay(new Date(2025, 0, 15), -5.9);      // Returns: -5 (not -6)
-setHours(new Date(2025, 0, 15), -2.9);    // Returns: -2 (not -3)
+setDay(new Date(2025, 0, 15), -5.9); // Returns: -5 (not -6)
+setHours(new Date(2025, 0, 15), -2.9); // Returns: -2 (not -3)
 ```
 
 ### Rollover Behavior
@@ -108,23 +108,23 @@ setHours(new Date(2025, 0, 15), -2.9);    // Returns: -2 (not -3)
 Values outside the typical range automatically roll over to adjacent time units:
 
 ```typescript
-import { setMonth, setDay, setHours, setMinutes } from 'chronia';
+import { setMonth, setDay, setHours, setMinutes } from "chronia";
 
 // Month rollover
-setMonth(new Date(2025, 0, 15), 12);   // Returns: 2026-01-15 (next year)
-setMonth(new Date(2025, 0, 15), -1);   // Returns: 2024-12-15 (previous year)
+setMonth(new Date(2025, 0, 15), 12); // Returns: 2026-01-15 (next year)
+setMonth(new Date(2025, 0, 15), -1); // Returns: 2024-12-15 (previous year)
 
 // Day rollover
-setDay(new Date(2025, 0, 15), 32);     // Returns: 2025-02-01 (next month)
-setDay(new Date(2025, 0, 15), 0);      // Returns: 2024-12-31 (previous month)
+setDay(new Date(2025, 0, 15), 32); // Returns: 2025-02-01 (next month)
+setDay(new Date(2025, 0, 15), 0); // Returns: 2024-12-31 (previous month)
 
 // Hour rollover
-setHours(new Date(2025, 0, 15, 12), 24);   // Returns: 2025-01-16 00:00 (next day)
-setHours(new Date(2025, 0, 15, 12), -1);   // Returns: 2025-01-14 23:00 (previous day)
+setHours(new Date(2025, 0, 15, 12), 24); // Returns: 2025-01-16 00:00 (next day)
+setHours(new Date(2025, 0, 15, 12), -1); // Returns: 2025-01-14 23:00 (previous day)
 
 // Minute rollover
-setMinutes(new Date(2025, 0, 15, 12, 30), 60);   // Returns: 2025-01-15 13:00 (next hour)
-setMinutes(new Date(2025, 0, 15, 12, 30), -1);   // Returns: 2025-01-15 11:59 (previous hour)
+setMinutes(new Date(2025, 0, 15, 12, 30), 60); // Returns: 2025-01-15 13:00 (next hour)
+setMinutes(new Date(2025, 0, 15, 12, 30), -1); // Returns: 2025-01-15 11:59 (previous hour)
 ```
 
 ### Component Preservation
@@ -132,7 +132,7 @@ setMinutes(new Date(2025, 0, 15, 12, 30), -1);   // Returns: 2025-01-15 11:59 (p
 Each setter preserves all other date/time components:
 
 ```typescript
-import { setYear, setMonth, setDay } from 'chronia';
+import { setYear, setMonth, setDay } from "chronia";
 
 const dateTime = new Date(2025, 0, 15, 14, 30, 45, 500);
 
@@ -154,12 +154,14 @@ const newDay = setDay(dateTime, 20);
 ### Component-Specific vs Complete Replacement
 
 **Component Setters** (`setYear`, `setMonth`, `setDay`, `setHours`, `setMinutes`, `setSeconds`, `setMilliseconds`):
+
 - Modify a single date/time component
 - Preserve all other components
 - Handle rollover automatically
 - Ideal for: incremental updates, user input processing, date adjustments
 
 **Complete Replacement** (`setTime`):
+
 - Replaces the entire timestamp at once
 - Does not preserve any components
 - No rollover behavior (direct timestamp assignment)
@@ -167,25 +169,31 @@ const newDay = setDay(dateTime, 20);
 
 ### Use Case Guide
 
-| Scenario | Recommended Function | Reason |
-|----------|---------------------|--------|
-| Change year of a date | `setYear(date, year)` | Preserves month, day, and time |
-| Move to different month | `setMonth(date, month)` | Handles day overflow automatically |
-| Set specific day of month | `setDay(date, day)` | Preserves year, month, and time |
-| Set business hours | `setHours(date, hours)` | Preserves date and other time components |
-| Round to specific minute | `setMinutes(date, minutes)` | Useful for time normalization |
-| Reset milliseconds for comparison | `setMilliseconds(date, 0)` | Enables second-level comparisons |
-| Normalize to start of hour | `setMinutes(setSeconds(setMilliseconds(date, 0), 0), 0)` | Combine multiple setters |
-| Copy timestamp from one date to another | `setTime(target, source.getTime())` | Complete timestamp replacement |
-| Reset to Unix epoch | `setTime(date, 0)` | Sets to 1970-01-01 00:00:00 UTC |
-| Synchronize multiple dates | `dates.map(d => setTime(d, referenceTime))` | Align all to same timestamp |
+| Scenario                                | Recommended Function                                     | Reason                                   |
+| --------------------------------------- | -------------------------------------------------------- | ---------------------------------------- |
+| Change year of a date                   | `setYear(date, year)`                                    | Preserves month, day, and time           |
+| Move to different month                 | `setMonth(date, month)`                                  | Handles day overflow automatically       |
+| Set specific day of month               | `setDay(date, day)`                                      | Preserves year, month, and time          |
+| Set business hours                      | `setHours(date, hours)`                                  | Preserves date and other time components |
+| Round to specific minute                | `setMinutes(date, minutes)`                              | Useful for time normalization            |
+| Reset milliseconds for comparison       | `setMilliseconds(date, 0)`                               | Enables second-level comparisons         |
+| Normalize to start of hour              | `setMinutes(setSeconds(setMilliseconds(date, 0), 0), 0)` | Combine multiple setters                 |
+| Copy timestamp from one date to another | `setTime(target, source.getTime())`                      | Complete timestamp replacement           |
+| Reset to Unix epoch                     | `setTime(date, 0)`                                       | Sets to 1970-01-01 00:00:00 UTC          |
+| Synchronize multiple dates              | `dates.map(d => setTime(d, referenceTime))`              | Align all to same timestamp              |
 
 ## Common Patterns
 
 ### Date Normalization
 
 ```typescript
-import { setDay, setHours, setMinutes, setSeconds, setMilliseconds } from 'chronia';
+import {
+  setDay,
+  setHours,
+  setMinutes,
+  setSeconds,
+  setMilliseconds,
+} from "chronia";
 
 // Normalize to first day of month
 function startOfMonth(date: Date): Date {
@@ -210,15 +218,15 @@ function startOfHour(date: Date): Date {
 }
 
 const date = new Date(2025, 0, 15, 14, 37, 45, 500);
-startOfMonth(date);  // Returns: 2025-01-01 14:37:45.500
-startOfDay(date);    // Returns: 2025-01-15 00:00:00.000
-startOfHour(date);   // Returns: 2025-01-15 14:00:00.000
+startOfMonth(date); // Returns: 2025-01-01 14:37:45.500
+startOfDay(date); // Returns: 2025-01-15 00:00:00.000
+startOfHour(date); // Returns: 2025-01-15 14:00:00.000
 ```
 
 ### Time Rounding
 
 ```typescript
-import { setMinutes, setSeconds } from 'chronia';
+import { setMinutes, setSeconds } from "chronia";
 
 // Round to nearest 15 minutes
 function roundToQuarterHour(date: Date): Date {
@@ -237,14 +245,14 @@ function roundToHour(date: Date): Date {
 }
 
 const time = new Date(2025, 0, 15, 14, 38, 30);
-roundToQuarterHour(time);  // Returns: 2025-01-15 14:45:00
-roundToHour(time);         // Returns: 2025-01-15 15:00:00
+roundToQuarterHour(time); // Returns: 2025-01-15 14:45:00
+roundToHour(time); // Returns: 2025-01-15 15:00:00
 ```
 
 ### Date Arithmetic
 
 ```typescript
-import { setMonth, setDay, setYear } from 'chronia';
+import { setMonth, setDay, setYear } from "chronia";
 
 // Add months with proper overflow handling
 function addMonths(date: Date, months: number): Date {
@@ -265,19 +273,19 @@ function firstDayOfNextMonth(date: Date): Date {
 }
 
 const date = new Date(2025, 0, 31);
-addMonths(date, 1);           // Returns: 2025-02-28 (handles day overflow)
-addYears(date, 2);            // Returns: 2027-01-31
-firstDayOfNextMonth(date);    // Returns: 2025-02-01
+addMonths(date, 1); // Returns: 2025-02-28 (handles day overflow)
+addYears(date, 2); // Returns: 2027-01-31
+firstDayOfNextMonth(date); // Returns: 2025-02-01
 ```
 
 ### Recurring Events
 
 ```typescript
-import { setYear, setMonth, setDay } from 'chronia';
+import { setYear, setMonth, setDay } from "chronia";
 
 // Generate annual recurring dates
 function generateAnnualDates(baseDate: Date, years: number[]): Date[] {
-  return years.map(year => setYear(baseDate, year));
+  return years.map((year) => setYear(baseDate, year));
 }
 
 // Generate monthly recurring dates
@@ -303,24 +311,24 @@ generateMonthlyDates(firstPayment, 12);
 ### Timestamp Synchronization
 
 ```typescript
-import { setTime } from 'chronia';
+import { setTime } from "chronia";
 
 // Synchronize multiple dates to a reference time
 function synchronizeDates(dates: Date[], referenceTime: number): Date[] {
-  return dates.map(date => setTime(date, referenceTime));
+  return dates.map((date) => setTime(date, referenceTime));
 }
 
 // Copy timestamp from one date to multiple others
 function copyTimestamp(source: Date, targets: Date[]): Date[] {
   const timestamp = source.getTime();
-  return targets.map(target => setTime(target, timestamp));
+  return targets.map((target) => setTime(target, timestamp));
 }
 
 const reference = Date.now();
 const dates = [
   new Date(2023, 0, 1),
   new Date(2024, 5, 15),
-  new Date(2025, 11, 31)
+  new Date(2025, 11, 31),
 ];
 
 synchronizeDates(dates, reference);
@@ -330,7 +338,7 @@ synchronizeDates(dates, reference);
 ### Edge Case Handling
 
 ```typescript
-import { setMonth, setDay, setYear } from 'chronia';
+import { setMonth, setDay, setYear } from "chronia";
 
 // Handle leap year edge cases
 function safeSetYear(date: Date, year: number): Date {
@@ -350,14 +358,14 @@ function safeSetDay(date: Date, day: number): Date {
   return setDay(date, day);
 }
 
-const leapDay = new Date(2020, 1, 29);  // Feb 29, 2020
-safeSetYear(leapDay, 2021);  // Returns: 2021-02-28 (auto-adjusted)
+const leapDay = new Date(2020, 1, 29); // Feb 29, 2020
+safeSetYear(leapDay, 2021); // Returns: 2021-02-28 (auto-adjusted)
 
 const jan31 = new Date(2025, 0, 31);
-safeSetMonth(jan31, 1);  // Returns: 2025-02-28 (auto-adjusted)
+safeSetMonth(jan31, 1); // Returns: 2025-02-28 (auto-adjusted)
 
 const anyDate = new Date(2025, 0, 15);
-safeSetDay(anyDate, 32);  // Returns: 2025-02-01 (rolled over)
+safeSetDay(anyDate, 32); // Returns: 2025-02-01 (rolled over)
 ```
 
 ## Special Considerations
@@ -367,17 +375,17 @@ safeSetDay(anyDate, 32);  // Returns: 2025-02-01 (rolled over)
 `setYear` and `setMonth` automatically handle leap year edge cases:
 
 ```typescript
-import { setYear, setMonth } from 'chronia';
+import { setYear, setMonth } from "chronia";
 
 // Leap day to non-leap year
-const leapDay = new Date(2020, 1, 29);  // Feb 29, 2020
-setYear(leapDay, 2021);  // Returns: 2021-02-28 (adjusted)
-setYear(leapDay, 2024);  // Returns: 2024-02-29 (preserved)
+const leapDay = new Date(2020, 1, 29); // Feb 29, 2020
+setYear(leapDay, 2021); // Returns: 2021-02-28 (adjusted)
+setYear(leapDay, 2024); // Returns: 2024-02-29 (preserved)
 
 // January 31 to February
 const jan31 = new Date(2025, 0, 31);
-setMonth(jan31, 1);      // Returns: 2025-02-28 (adjusted)
-setMonth(jan31, 2);      // Returns: 2025-03-31 (preserved)
+setMonth(jan31, 1); // Returns: 2025-02-28 (adjusted)
+setMonth(jan31, 2); // Returns: 2025-03-31 (preserved)
 ```
 
 ### Negative Values and BC Dates
@@ -385,16 +393,16 @@ setMonth(jan31, 2);      // Returns: 2025-03-31 (preserved)
 Negative values are supported and follow JavaScript's Date specification:
 
 ```typescript
-import { setYear, setMonth, setDay } from 'chronia';
+import { setYear, setMonth, setDay } from "chronia";
 
 // Negative years represent BC dates
-setYear(new Date(2025, 0, 15), -100);  // Returns: Year -100 (100 BC)
+setYear(new Date(2025, 0, 15), -100); // Returns: Year -100 (100 BC)
 
 // Negative months roll back
-setMonth(new Date(2025, 0, 15), -1);   // Returns: 2024-12-15
+setMonth(new Date(2025, 0, 15), -1); // Returns: 2024-12-15
 
 // Negative days roll back
-setDay(new Date(2025, 0, 15), -1);     // Returns: 2024-12-30
+setDay(new Date(2025, 0, 15), -1); // Returns: 2024-12-30
 ```
 
 ### Large Values and Cascading Rollover
@@ -402,16 +410,16 @@ setDay(new Date(2025, 0, 15), -1);     // Returns: 2024-12-30
 Large values cascade through adjacent units:
 
 ```typescript
-import { setMonth, setHours, setMinutes } from 'chronia';
+import { setMonth, setHours, setMinutes } from "chronia";
 
 // 13 months = 1 year + 1 month
-setMonth(new Date(2025, 0, 15), 13);  // Returns: 2026-02-15
+setMonth(new Date(2025, 0, 15), 13); // Returns: 2026-02-15
 
 // 25 hours = 1 day + 1 hour
-setHours(new Date(2025, 0, 15, 12), 25);  // Returns: 2025-01-16 01:00
+setHours(new Date(2025, 0, 15, 12), 25); // Returns: 2025-01-16 01:00
 
 // 120 minutes = 2 hours
-setMinutes(new Date(2025, 0, 15, 12, 30), 120);  // Returns: 2025-01-15 14:00
+setMinutes(new Date(2025, 0, 15, 12, 30), 120); // Returns: 2025-01-15 14:00
 ```
 
 ## Performance Considerations
@@ -449,7 +457,7 @@ All mutator functions follow a consistent error handling pattern:
 - **Non-date, non-number inputs**: TypeScript prevents at compile time
 
 ```typescript
-import { setYear, setMonth, isValid } from 'chronia';
+import { setYear, setMonth, isValid } from "chronia";
 
 // Defensive programming pattern
 function safeSetYear(date: Date, year: number): Date | null {
@@ -460,9 +468,9 @@ function safeSetYear(date: Date, year: number): Date | null {
 // Validation before use
 const result = setMonth(new Date(2025, 0, 15), 5);
 if (isValid(result)) {
-  console.log('Month set successfully:', result);
+  console.log("Month set successfully:", result);
 } else {
-  console.error('Failed to set month');
+  console.error("Failed to set month");
 }
 ```
 

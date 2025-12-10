@@ -7,22 +7,26 @@ The `isBeforeOrEqual` function checks if the first date is before or equal to th
 ## Signature
 
 ```typescript
-function isBeforeOrEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean
+function isBeforeOrEqual(
+  a: Date | number,
+  b: Date | number,
+  options?: ComparisonOptions,
+): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `a` | `Date \| number` | The first date as a Date object or numeric timestamp |
-| `b` | `Date \| number` | The second date as a Date object or numeric timestamp |
-| `options` | `ComparisonOptions` | Optional configuration object |
-| `options.unit` | `TimeUnit` | The unit of comparison: `"year"`, `"month"`, `"day"`, `"hour"`, `"minute"`, `"second"`, or `"millisecond"`. Defaults to `"millisecond"` |
+| Parameter      | Type                | Description                                                                                                                             |
+| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `a`            | `Date \| number`    | The first date as a Date object or numeric timestamp                                                                                    |
+| `b`            | `Date \| number`    | The second date as a Date object or numeric timestamp                                                                                   |
+| `options`      | `ComparisonOptions` | Optional configuration object                                                                                                           |
+| `options.unit` | `TimeUnit`          | The unit of comparison: `"year"`, `"month"`, `"day"`, `"hour"`, `"minute"`, `"second"`, or `"millisecond"`. Defaults to `"millisecond"` |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                                                                               |
+| --------- | --------------------------------------------------------------------------------------------------------- |
 | `boolean` | Returns `true` if date `a` is before or equal to date `b`, `false` otherwise or if either date is invalid |
 
 ## Description
@@ -32,6 +36,7 @@ The `isBeforeOrEqual` function determines whether the first date occurs chronolo
 ### Specification
 
 #### Returns `true` when:
+
 - Date `a` is chronologically before date `b` at the specified granularity
 - Date `a` is exactly equal to date `b` (inclusive comparison)
 - Both dates are valid (not Invalid Date, not `NaN`, not `Infinity`, not `-Infinity`)
@@ -39,6 +44,7 @@ The `isBeforeOrEqual` function determines whether the first date occurs chronolo
 - Works with both Date objects and numeric timestamps
 
 #### Returns `false` when:
+
 - Date `a` is after date `b`
 - Either date `a` or date `b` is invalid (Invalid Date, `NaN`, `Infinity`, `-Infinity`)
 - When using unit-based comparison, the truncated value of `a` is greater than the truncated value of `b`
@@ -69,7 +75,7 @@ The `isBeforeOrEqual` function determines whether the first date occurs chronolo
 ### Deadline Validation
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 // Check if submission is on or before deadline
 function isSubmissionValid(submissionDate: Date, deadline: Date): boolean {
@@ -77,26 +83,26 @@ function isSubmissionValid(submissionDate: Date, deadline: Date): boolean {
 }
 
 // Example usage
-const deadline = new Date(2025, 0, 31, 23, 59, 59);  // January 31, 2025, 23:59:59
-const submission1 = new Date(2025, 0, 31, 23, 59, 59);  // Exactly at deadline
-const submission2 = new Date(2025, 0, 30);  // Before deadline
-const submission3 = new Date(2025, 1, 1);   // After deadline
+const deadline = new Date(2025, 0, 31, 23, 59, 59); // January 31, 2025, 23:59:59
+const submission1 = new Date(2025, 0, 31, 23, 59, 59); // Exactly at deadline
+const submission2 = new Date(2025, 0, 30); // Before deadline
+const submission3 = new Date(2025, 1, 1); // After deadline
 
-isSubmissionValid(submission1, deadline);  // Returns: true (equality is valid)
-isSubmissionValid(submission2, deadline);  // Returns: true (before deadline)
-isSubmissionValid(submission3, deadline);  // Returns: false (late submission)
+isSubmissionValid(submission1, deadline); // Returns: true (equality is valid)
+isSubmissionValid(submission2, deadline); // Returns: true (before deadline)
+isSubmissionValid(submission3, deadline); // Returns: false (late submission)
 
 // Compare with timestamps
 const now = Date.now();
-const deadlineTimestamp = now + 3600000;  // 1 hour from now
+const deadlineTimestamp = now + 3600000; // 1 hour from now
 
-isBeforeOrEqual(now, deadlineTimestamp);  // Returns: true
+isBeforeOrEqual(now, deadlineTimestamp); // Returns: true
 ```
 
 ### Range Validation
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 // Check if date is within inclusive range
 function isDateInRange(date: Date, start: Date, end: Date): boolean {
@@ -104,27 +110,34 @@ function isDateInRange(date: Date, start: Date, end: Date): boolean {
 }
 
 // Validate booking dates
-function isBookingValid(checkIn: Date, checkOut: Date, availableFrom: Date, availableTo: Date): boolean {
-  return isBeforeOrEqual(availableFrom, checkIn) &&
-         isBeforeOrEqual(checkOut, availableTo);
+function isBookingValid(
+  checkIn: Date,
+  checkOut: Date,
+  availableFrom: Date,
+  availableTo: Date,
+): boolean {
+  return (
+    isBeforeOrEqual(availableFrom, checkIn) &&
+    isBeforeOrEqual(checkOut, availableTo)
+  );
 }
 
 // Example usage
-const rangeStart = new Date(2025, 0, 1);   // January 1, 2025
-const rangeEnd = new Date(2025, 0, 31);    // January 31, 2025
-const testDate1 = new Date(2025, 0, 1);    // Boundary: start date
-const testDate2 = new Date(2025, 0, 15);   // Middle of range
-const testDate3 = new Date(2025, 0, 31);   // Boundary: end date
+const rangeStart = new Date(2025, 0, 1); // January 1, 2025
+const rangeEnd = new Date(2025, 0, 31); // January 31, 2025
+const testDate1 = new Date(2025, 0, 1); // Boundary: start date
+const testDate2 = new Date(2025, 0, 15); // Middle of range
+const testDate3 = new Date(2025, 0, 31); // Boundary: end date
 
-isDateInRange(testDate1, rangeStart, rangeEnd);  // Returns: true (start boundary included)
-isDateInRange(testDate2, rangeStart, rangeEnd);  // Returns: true (within range)
-isDateInRange(testDate3, rangeStart, rangeEnd);  // Returns: true (end boundary included)
+isDateInRange(testDate1, rangeStart, rangeEnd); // Returns: true (start boundary included)
+isDateInRange(testDate2, rangeStart, rangeEnd); // Returns: true (within range)
+isDateInRange(testDate3, rangeStart, rangeEnd); // Returns: true (end boundary included)
 ```
 
 ### Permission Checks
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 // Check if license is still valid
 function isLicenseValid(expirationDate: Date): boolean {
@@ -145,22 +158,22 @@ function hasAccess(userLastActive: Date, gracePeriodEnd: Date): boolean {
 }
 
 // Example usage
-const licenseExpiry = new Date(2025, 11, 31);  // December 31, 2025
-isLicenseValid(licenseExpiry);  // Returns: true if today is on or before Dec 31, 2025
+const licenseExpiry = new Date(2025, 11, 31); // December 31, 2025
+isLicenseValid(licenseExpiry); // Returns: true if today is on or before Dec 31, 2025
 
-const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);  // 14 days from now
-isTrialActive(trialEnd);  // Returns: true (trial still active)
+const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000); // 14 days from now
+isTrialActive(trialEnd); // Returns: true (trial still active)
 
 // Exact expiration date is still valid
 const exactExpiry = new Date(2025, 0, 15);
 const checkDate = new Date(2025, 0, 15);
-isBeforeOrEqual(checkDate, exactExpiry);  // Returns: true (same date is valid)
+isBeforeOrEqual(checkDate, exactExpiry); // Returns: true (same date is valid)
 ```
 
 ### Sorting and Ordering
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 interface Task {
   id: string;
@@ -171,26 +184,32 @@ interface Task {
 // Sort tasks by due date (stable sort maintaining order for equal dates)
 function sortTasksByDueDate(tasks: Task[]): Task[] {
   return tasks.sort((a, b) => {
-    if (isBeforeOrEqual(a.dueDate, b.dueDate) && !isBeforeOrEqual(b.dueDate, a.dueDate)) {
-      return -1;  // a is strictly before b
+    if (
+      isBeforeOrEqual(a.dueDate, b.dueDate) &&
+      !isBeforeOrEqual(b.dueDate, a.dueDate)
+    ) {
+      return -1; // a is strictly before b
     }
-    if (isBeforeOrEqual(b.dueDate, a.dueDate) && !isBeforeOrEqual(a.dueDate, b.dueDate)) {
-      return 1;   // b is strictly before a
+    if (
+      isBeforeOrEqual(b.dueDate, a.dueDate) &&
+      !isBeforeOrEqual(a.dueDate, b.dueDate)
+    ) {
+      return 1; // b is strictly before a
     }
-    return 0;     // Equal dates - maintain original order
+    return 0; // Equal dates - maintain original order
   });
 }
 
 // Find tasks due on or before a date
 function getTasksDueByDate(tasks: Task[], deadline: Date): Task[] {
-  return tasks.filter(task => isBeforeOrEqual(task.dueDate, deadline));
+  return tasks.filter((task) => isBeforeOrEqual(task.dueDate, deadline));
 }
 
 // Example usage
 const tasks: Task[] = [
-  { id: '1', dueDate: new Date(2025, 0, 20), priority: 1 },
-  { id: '2', dueDate: new Date(2025, 0, 15), priority: 2 },
-  { id: '3', dueDate: new Date(2025, 0, 15), priority: 1 },  // Same date as task 2
+  { id: "1", dueDate: new Date(2025, 0, 20), priority: 1 },
+  { id: "2", dueDate: new Date(2025, 0, 15), priority: 2 },
+  { id: "3", dueDate: new Date(2025, 0, 15), priority: 1 }, // Same date as task 2
 ];
 
 const sorted = sortTasksByDueDate(tasks);
@@ -204,7 +223,7 @@ const dueTasks = getTasksDueByDate(tasks, today);
 ### Sequential Validation
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 interface Event {
   name: string;
@@ -234,61 +253,71 @@ function isEventValid(event: Event): boolean {
 // Example usage
 const events: Event[] = [
   {
-    name: 'Morning Session',
+    name: "Morning Session",
     startTime: new Date(2025, 0, 15, 9, 0),
-    endTime: new Date(2025, 0, 15, 12, 0)
+    endTime: new Date(2025, 0, 15, 12, 0),
   },
   {
-    name: 'Lunch Break',
-    startTime: new Date(2025, 0, 15, 12, 0),  // Starts exactly when morning ends
-    endTime: new Date(2025, 0, 15, 13, 0)
+    name: "Lunch Break",
+    startTime: new Date(2025, 0, 15, 12, 0), // Starts exactly when morning ends
+    endTime: new Date(2025, 0, 15, 13, 0),
   },
   {
-    name: 'Afternoon Session',
+    name: "Afternoon Session",
     startTime: new Date(2025, 0, 15, 13, 0),
-    endTime: new Date(2025, 0, 15, 17, 0)
-  }
+    endTime: new Date(2025, 0, 15, 17, 0),
+  },
 ];
 
-areEventsInSequence(events);  // Returns: true (sequential with no gaps)
+areEventsInSequence(events); // Returns: true (sequential with no gaps)
 
 // Instantaneous event (start equals end)
 const instantEvent: Event = {
-  name: 'Notification',
+  name: "Notification",
   startTime: new Date(2025, 0, 15, 10, 0),
-  endTime: new Date(2025, 0, 15, 10, 0)  // Same time
+  endTime: new Date(2025, 0, 15, 10, 0), // Same time
 };
 
-isEventValid(instantEvent);  // Returns: true (equality is valid)
+isEventValid(instantEvent); // Returns: true (equality is valid)
 ```
 
 ### Period Grouping
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 // Group dates by quarter boundaries
 function getQuarterEndDate(year: number, quarter: 1 | 2 | 3 | 4): Date {
-  const month = quarter * 3 - 1;  // 2, 5, 8, 11 (Mar, Jun, Sep, Dec)
-  return new Date(year, month + 1, 0);  // Last day of the quarter
+  const month = quarter * 3 - 1; // 2, 5, 8, 11 (Mar, Jun, Sep, Dec)
+  return new Date(year, month + 1, 0); // Last day of the quarter
 }
 
-function isInQuarter(date: Date, year: number, quarter: 1 | 2 | 3 | 4): boolean {
+function isInQuarter(
+  date: Date,
+  year: number,
+  quarter: 1 | 2 | 3 | 4,
+): boolean {
   const quarterStart = new Date(year, (quarter - 1) * 3, 1);
   const quarterEnd = getQuarterEndDate(year, quarter);
 
-  return isBeforeOrEqual(quarterStart, date) && isBeforeOrEqual(date, quarterEnd);
+  return (
+    isBeforeOrEqual(quarterStart, date) && isBeforeOrEqual(date, quarterEnd)
+  );
 }
 
 // Group sales by month using day-level comparison
 function groupSalesByMonth(sales: Array<{ date: Date; amount: number }>) {
   const grouped = new Map<string, number>();
 
-  sales.forEach(sale => {
-    const monthEnd = new Date(sale.date.getFullYear(), sale.date.getMonth() + 1, 0);
+  sales.forEach((sale) => {
+    const monthEnd = new Date(
+      sale.date.getFullYear(),
+      sale.date.getMonth() + 1,
+      0,
+    );
     const monthKey = `${sale.date.getFullYear()}-${sale.date.getMonth() + 1}`;
 
-    if (isBeforeOrEqual(sale.date, monthEnd, { unit: 'day' })) {
+    if (isBeforeOrEqual(sale.date, monthEnd, { unit: "day" })) {
       grouped.set(monthKey, (grouped.get(monthKey) || 0) + sale.amount);
     }
   });
@@ -297,12 +326,12 @@ function groupSalesByMonth(sales: Array<{ date: Date; amount: number }>) {
 }
 
 // Example usage
-const testDate = new Date(2025, 2, 31);  // March 31, 2025
-isInQuarter(testDate, 2025, 1);  // Returns: true (Q1 includes Jan-Mar)
+const testDate = new Date(2025, 2, 31); // March 31, 2025
+isInQuarter(testDate, 2025, 1); // Returns: true (Q1 includes Jan-Mar)
 
 const sales = [
   { date: new Date(2025, 0, 15), amount: 100 },
-  { date: new Date(2025, 0, 31), amount: 150 },  // Last day of January
+  { date: new Date(2025, 0, 31), amount: 150 }, // Last day of January
   { date: new Date(2025, 1, 1), amount: 200 },
 ];
 
@@ -313,38 +342,38 @@ const monthlySales = groupSalesByMonth(sales);
 ### Unit-Based Comparison
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 // Compare dates at year granularity
-const dec31 = new Date(2024, 11, 31, 23, 59, 59);  // December 31, 2024, 23:59:59
-const jan1 = new Date(2025, 0, 1, 0, 0, 0);         // January 1, 2025, 00:00:00
+const dec31 = new Date(2024, 11, 31, 23, 59, 59); // December 31, 2024, 23:59:59
+const jan1 = new Date(2025, 0, 1, 0, 0, 0); // January 1, 2025, 00:00:00
 
-isBeforeOrEqual(dec31, jan1, { unit: 'year' });  // Returns: true (2024 <= 2025)
+isBeforeOrEqual(dec31, jan1, { unit: "year" }); // Returns: true (2024 <= 2025)
 
 // Same year comparison
 const sameYear1 = new Date(2025, 0, 1);
 const sameYear2 = new Date(2025, 11, 31);
 
-isBeforeOrEqual(sameYear1, sameYear2, { unit: 'year' });  // Returns: true (2025 <= 2025)
+isBeforeOrEqual(sameYear1, sameYear2, { unit: "year" }); // Returns: true (2025 <= 2025)
 
 // Compare dates at day granularity (ignores time)
-const morning = new Date(2025, 0, 15, 9, 0, 0);   // January 15, 2025, 09:00
-const evening = new Date(2025, 0, 15, 18, 0, 0);  // January 15, 2025, 18:00
+const morning = new Date(2025, 0, 15, 9, 0, 0); // January 15, 2025, 09:00
+const evening = new Date(2025, 0, 15, 18, 0, 0); // January 15, 2025, 18:00
 
-isBeforeOrEqual(morning, evening, { unit: 'day' });  // Returns: true (same day)
-isBeforeOrEqual(morning, evening);                   // Returns: true (different times)
+isBeforeOrEqual(morning, evening, { unit: "day" }); // Returns: true (same day)
+isBeforeOrEqual(morning, evening); // Returns: true (different times)
 
 // Compare dates at hour granularity
-const time1 = new Date(2025, 0, 15, 9, 30, 0);   // 09:30:00
-const time2 = new Date(2025, 0, 15, 9, 45, 0);   // 09:45:00
+const time1 = new Date(2025, 0, 15, 9, 30, 0); // 09:30:00
+const time2 = new Date(2025, 0, 15, 9, 45, 0); // 09:45:00
 
-isBeforeOrEqual(time1, time2, { unit: 'hour' });  // Returns: true (same hour)
-isBeforeOrEqual(time1, time2);                    // Returns: true (different minutes)
+isBeforeOrEqual(time1, time2, { unit: "hour" }); // Returns: true (same hour)
+isBeforeOrEqual(time1, time2); // Returns: true (different minutes)
 
 // Boundary case: exactly equal dates
 const exact1 = new Date(2025, 0, 15, 12, 0, 0);
 const exact2 = new Date(2025, 0, 15, 12, 0, 0);
 
-isBeforeOrEqual(exact1, exact2);                    // Returns: true (equal)
-isBeforeOrEqual(exact1, exact2, { unit: 'month' }); // Returns: true (same month)
+isBeforeOrEqual(exact1, exact2); // Returns: true (equal)
+isBeforeOrEqual(exact1, exact2, { unit: "month" }); // Returns: true (same month)
 ```

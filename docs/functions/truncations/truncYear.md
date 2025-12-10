@@ -7,19 +7,19 @@ The `truncYear` function truncates a given date to the start of its year, settin
 ## Signature
 
 ```typescript
-function truncYear(date: Date | number): Date
+function truncYear(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the year |
+| Parameter | Type             | Description                                                             |
+| --------- | ---------------- | ----------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the year |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to January 1st at 00:00:00.000 of the same year, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `truncYear` function removes all time components (hours, minutes, seconds, m
 ### Specification
 
 #### Returns a valid Date when:
+
 - The argument is a valid `Date` object with any date/time within a year
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -38,6 +39,7 @@ The `truncYear` function removes all time components (hours, minutes, seconds, m
 - Dates already at the start of the year remain at January 1st, 00:00:00.000
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -65,7 +67,7 @@ The `truncYear` function removes all time components (hours, minutes, seconds, m
 ### Temporal Aggregation
 
 ```typescript
-import { truncYear } from 'chronia';
+import { truncYear } from "chronia";
 
 // Group transactions by year
 interface Transaction {
@@ -76,7 +78,7 @@ interface Transaction {
 function groupByYear(transactions: Transaction[]): Map<string, Transaction[]> {
   const groups = new Map<string, Transaction[]>();
 
-  transactions.forEach(transaction => {
+  transactions.forEach((transaction) => {
     const yearStart = truncYear(transaction.date);
     const key = yearStart.toISOString();
 
@@ -91,24 +93,24 @@ function groupByYear(transactions: Transaction[]): Map<string, Transaction[]> {
 
 // Basic truncation
 const midYear = new Date(2024, 5, 15, 14, 30, 45, 123);
-truncYear(midYear);  // Returns: January 1, 2024 00:00:00.000
+truncYear(midYear); // Returns: January 1, 2024 00:00:00.000
 
 // End of year
 const endOfYear = new Date(2024, 11, 31, 23, 59, 59, 999);
-truncYear(endOfYear);  // Returns: January 1, 2024 00:00:00.000
+truncYear(endOfYear); // Returns: January 1, 2024 00:00:00.000
 ```
 
 ### Date Range Filtering
 
 ```typescript
-import { truncYear } from 'chronia';
+import { truncYear } from "chronia";
 
 // Create a year range filter
 function getYearRange(date: Date): { start: Date; end: Date } {
   const start = truncYear(date);
   const end = new Date(start);
   end.setFullYear(end.getFullYear() + 1);
-  end.setMilliseconds(-1);  // Last millisecond of the year
+  end.setMilliseconds(-1); // Last millisecond of the year
 
   return { start, end };
 }
@@ -122,7 +124,7 @@ const range = getYearRange(currentDate);
 ### Normalization
 
 ```typescript
-import { truncYear } from 'chronia';
+import { truncYear } from "chronia";
 
 // Normalize dates for comparison
 function isSameYear(date1: Date, date2: Date): boolean {
@@ -133,7 +135,7 @@ function isSameYear(date1: Date, date2: Date): boolean {
 
 const date1 = new Date(2024, 2, 15);
 const date2 = new Date(2024, 8, 20);
-isSameYear(date1, date2);  // Returns: true
+isSameYear(date1, date2); // Returns: true
 
 // Works with timestamps
 const timestamp = Date.now();
@@ -144,25 +146,25 @@ const yearStart = truncYear(timestamp);
 ### Handling Edge Cases
 
 ```typescript
-import { truncYear } from 'chronia';
+import { truncYear } from "chronia";
 
 // Already at start of year
 const alreadyStart = new Date(2024, 0, 1, 0, 0, 0, 0);
-truncYear(alreadyStart);  // Returns: January 1, 2024 00:00:00.000 (unchanged)
+truncYear(alreadyStart); // Returns: January 1, 2024 00:00:00.000 (unchanged)
 
 // Leap year handling
 const leapDay = new Date(2024, 2, 29, 12, 0, 0, 0);
-truncYear(leapDay);  // Returns: January 1, 2024 00:00:00.000
+truncYear(leapDay); // Returns: January 1, 2024 00:00:00.000
 
 // Invalid inputs return Invalid Date
-const invalid = truncYear(new Date('invalid'));
-console.log(isNaN(invalid.getTime()));  // true
+const invalid = truncYear(new Date("invalid"));
+console.log(isNaN(invalid.getTime())); // true
 
 const nanResult = truncYear(NaN);
-console.log(isNaN(nanResult.getTime()));  // true
+console.log(isNaN(nanResult.getTime())); // true
 
 // Original date is never modified
 const original = new Date(2024, 5, 15, 14, 30, 45, 123);
 const truncated = truncYear(original);
-console.log(original.getTime() !== truncated.getTime());  // true
+console.log(original.getTime() !== truncated.getTime()); // true
 ```
