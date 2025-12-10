@@ -30,7 +30,7 @@ It offers a simple, consistent, and functional API that makes working with dates
 
 ## Installation
 
-Chronia requires **Node.js v18 or higher**.
+Chronia requires **Node.js v18 to v24**.
 
 ```bash
 # Using pnpm (recommended)
