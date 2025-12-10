@@ -7,19 +7,19 @@ The `truncMonth` function truncates a given date to the start of the month, sett
 ## Signature
 
 ```typescript
-function truncMonth(date: Date | number): Date
+function truncMonth(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the month |
+| Parameter | Type             | Description                                                              |
+| --------- | ---------------- | ------------------------------------------------------------------------ |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the month |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to the 1st day of the month at 00:00:00.000, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `truncMonth` function normalizes a date to the beginning of its month by set
 ### Specification
 
 #### Returns a Date set to the 1st day of the month at 00:00:00.000 when:
+
 - The argument is a valid `Date` object
 - The argument is a finite numeric timestamp
 - The input date can be from any day of the month (1st to 28th/29th/30th/31st)
@@ -36,6 +37,7 @@ The `truncMonth` function normalizes a date to the beginning of its month by set
 - Works correctly with leap years (February in leap years)
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -63,7 +65,7 @@ The `truncMonth` function normalizes a date to the beginning of its month by set
 ### Month-based Comparisons
 
 ```typescript
-import { truncMonth } from 'chronia';
+import { truncMonth } from "chronia";
 
 // Check if two dates are in the same month
 function isSameMonth(date1: Date, date2: Date): boolean {
@@ -75,18 +77,18 @@ function isSameMonth(date1: Date, date2: Date): boolean {
 // Different days, same month
 const june15 = new Date(2024, 5, 15, 14, 30, 45);
 const june28 = new Date(2024, 5, 28, 9, 15, 30);
-isSameMonth(june15, june28);  // Returns: true
+isSameMonth(june15, june28); // Returns: true
 
 // Different months
 const june15_2024 = new Date(2024, 5, 15);
 const july15_2024 = new Date(2024, 6, 15);
-isSameMonth(june15_2024, july15_2024);  // Returns: false
+isSameMonth(june15_2024, july15_2024); // Returns: false
 ```
 
 ### Time Series Grouping
 
 ```typescript
-import { truncMonth } from 'chronia';
+import { truncMonth } from "chronia";
 
 interface Event {
   date: Date;
@@ -97,7 +99,7 @@ interface Event {
 function groupByMonth(events: Event[]): Map<number, Event[]> {
   const grouped = new Map<number, Event[]>();
 
-  events.forEach(event => {
+  events.forEach((event) => {
     const monthStart = truncMonth(event.date);
     const key = monthStart.getTime();
 
@@ -124,7 +126,7 @@ const byMonth = groupByMonth(events);
 ### Billing Cycles
 
 ```typescript
-import { truncMonth } from 'chronia';
+import { truncMonth } from "chronia";
 
 // Calculate billing period start for a subscription
 function getBillingPeriodStart(signupDate: Date): Date {
@@ -151,7 +153,7 @@ const nextBilling = getNextBillingPeriod(billingStart);
 ### Date Range Queries
 
 ```typescript
-import { truncMonth } from 'chronia';
+import { truncMonth } from "chronia";
 
 // Generate month range for database query
 function getMonthDateRange(date: Date): { start: Date; end: Date } {
@@ -175,7 +177,7 @@ const range = getMonthDateRange(someJuneDate);
 ### Edge Cases and Validation
 
 ```typescript
-import { truncMonth } from 'chronia';
+import { truncMonth } from "chronia";
 
 // Basic truncation
 const midMonth = new Date(2024, 5, 15, 14, 30, 45, 123);
@@ -203,7 +205,7 @@ truncMonth(leapYearFeb);
 // Returns: February 1, 2024 00:00:00.000
 
 // Invalid inputs return Invalid Date
-truncMonth(new Date('invalid'));  // Returns: Invalid Date
-truncMonth(NaN);                  // Returns: Invalid Date
-truncMonth(Infinity);             // Returns: Invalid Date
+truncMonth(new Date("invalid")); // Returns: Invalid Date
+truncMonth(NaN); // Returns: Invalid Date
+truncMonth(Infinity); // Returns: Invalid Date
 ```

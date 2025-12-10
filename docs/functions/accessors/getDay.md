@@ -7,19 +7,19 @@ The `getDay` function extracts the day of the month (1-31) from a given Date obj
 ## Signature
 
 ```typescript
-function getDay(date: Date | number): number
+function getDay(date: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp from which to extract the day |
+| Parameter | Type             | Description                                                      |
+| --------- | ---------------- | ---------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the day |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                   |
+| -------- | ------------------------------------------------------------- |
 | `number` | The day of the month (1-31), or `NaN` if the input is invalid |
 
 ## Description
@@ -29,11 +29,13 @@ The `getDay` function extracts and returns the day of the month from the provide
 ### Specification
 
 #### Returns a number (1-31) when:
+
 - The argument is a valid `Date` object with a valid date
 - The argument is a finite numeric timestamp representing a valid date
 - The day value corresponds to the actual day of the month (1-31) depending on the month and year
 
 #### Returns `NaN` when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -62,24 +64,24 @@ The `getDay` function extracts and returns the day of the month from the provide
 ### Date Display
 
 ```typescript
-import { getDay } from 'chronia';
+import { getDay } from "chronia";
 
 // Extract day from Date object
 const date = new Date(2025, 0, 15);
-const day = getDay(date);  // Returns: 15
+const day = getDay(date); // Returns: 15
 
 // Display formatted date component
-console.log(`Day: ${day}`);  // Output: "Day: 15"
+console.log(`Day: ${day}`); // Output: "Day: 15"
 
 // Get day from timestamp (note: uses local timezone)
 const timestamp = 1704067200000; // 2024-01-01T00:00:00.000Z in UTC
-const day2 = getDay(timestamp);  // Returns: 1 (may vary by timezone)
+const day2 = getDay(timestamp); // Returns: 1 (may vary by timezone)
 ```
 
 ### Date Calculations
 
 ```typescript
-import { getDay } from 'chronia';
+import { getDay } from "chronia";
 
 // Check if we're in the first half of the month
 function isFirstHalfOfMonth(date: Date | number): boolean {
@@ -88,10 +90,10 @@ function isFirstHalfOfMonth(date: Date | number): boolean {
 }
 
 const date1 = new Date(2025, 0, 10);
-isFirstHalfOfMonth(date1);  // Returns: true
+isFirstHalfOfMonth(date1); // Returns: true
 
 const date2 = new Date(2025, 0, 20);
-isFirstHalfOfMonth(date2);  // Returns: false
+isFirstHalfOfMonth(date2); // Returns: false
 
 // Calculate days until end of month
 function daysUntilMonthEnd(date: Date, daysInMonth: number): number {
@@ -103,46 +105,46 @@ function daysUntilMonthEnd(date: Date, daysInMonth: number): number {
 ### Date Validation
 
 ```typescript
-import { getDay } from 'chronia';
+import { getDay } from "chronia";
 
 // Check if date is the first day of the month
 function isFirstDayOfMonth(date: Date | number): boolean {
   return getDay(date) === 1;
 }
 
-isFirstDayOfMonth(new Date(2025, 0, 1));   // Returns: true
-isFirstDayOfMonth(new Date(2025, 0, 15));  // Returns: false
+isFirstDayOfMonth(new Date(2025, 0, 1)); // Returns: true
+isFirstDayOfMonth(new Date(2025, 0, 15)); // Returns: false
 
 // Check if date is a specific billing day
 function isBillingDay(date: Date | number): boolean {
   const day = getDay(date);
-  return day === 1 || day === 15;  // Bills on 1st and 15th
+  return day === 1 || day === 15; // Bills on 1st and 15th
 }
 
-isBillingDay(new Date(2025, 0, 1));   // Returns: true
-isBillingDay(new Date(2025, 0, 15));  // Returns: true
-isBillingDay(new Date(2025, 0, 10));  // Returns: false
+isBillingDay(new Date(2025, 0, 1)); // Returns: true
+isBillingDay(new Date(2025, 0, 15)); // Returns: true
+isBillingDay(new Date(2025, 0, 10)); // Returns: false
 ```
 
 ### Edge Cases
 
 ```typescript
-import { getDay } from 'chronia';
+import { getDay } from "chronia";
 
 // Leap day handling
-const leapDay = new Date(2024, 1, 29);  // February 29, 2024
-getDay(leapDay);  // Returns: 29
+const leapDay = new Date(2024, 1, 29); // February 29, 2024
+getDay(leapDay); // Returns: 29
 
 // End of month variations
-const jan31 = new Date(2025, 0, 31);  // January 31
-getDay(jan31);  // Returns: 31
+const jan31 = new Date(2025, 0, 31); // January 31
+getDay(jan31); // Returns: 31
 
-const feb28 = new Date(2025, 1, 28);  // February 28, 2025 (non-leap)
-getDay(feb28);  // Returns: 28
+const feb28 = new Date(2025, 1, 28); // February 28, 2025 (non-leap)
+getDay(feb28); // Returns: 28
 
 // Invalid date handling
-const invalid = new Date('invalid');
-getDay(invalid);  // Returns: NaN
+const invalid = new Date("invalid");
+getDay(invalid); // Returns: NaN
 
 // Safe usage with validation
 function safeGetDay(date: Date | number): number | null {
@@ -150,14 +152,14 @@ function safeGetDay(date: Date | number): number | null {
   return isNaN(day) ? null : day;
 }
 
-safeGetDay(new Date(2025, 0, 15));  // Returns: 15
-safeGetDay(new Date('invalid'));    // Returns: null
+safeGetDay(new Date(2025, 0, 15)); // Returns: 15
+safeGetDay(new Date("invalid")); // Returns: null
 ```
 
 ### Calendar Components
 
 ```typescript
-import { getDay } from 'chronia';
+import { getDay } from "chronia";
 
 // Generate calendar grid for current month
 function generateMonthDays(year: number, month: number): number[] {
@@ -181,5 +183,5 @@ function isHighlightedDay(date: Date, targetDay: number): boolean {
 }
 
 const today = new Date(2025, 0, 15);
-isHighlightedDay(today, 15);  // Returns: true
+isHighlightedDay(today, 15); // Returns: true
 ```

@@ -7,20 +7,20 @@ The `addMonths` function adds a specified number of months to a given date. It h
 ## Signature
 
 ```typescript
-function addMonths(date: Date | number, amount: number): Date
+function addMonths(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `amount` | `number` | The number of months to add (can be negative to subtract, fractional values are truncated toward zero) |
+| Parameter | Type             | Description                                                                                            |
+| --------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                                    |
+| `amount`  | `number`         | The number of months to add (can be negative to subtract, fractional values are truncated toward zero) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                               |
+| ------ | --------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of months added. Returns Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `addMonths` function performs month arithmetic on dates while handling edge 
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid `Date` object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -38,11 +39,13 @@ The `addMonths` function performs month arithmetic on dates while handling edge 
 - The `amount` argument is a finite number (positive, negative, or zero)
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
 
 #### Month Arithmetic Behavior:
+
 - **Fractional months**: Truncated toward zero using `Math.trunc`
   - `1.9` becomes `1`
   - `-1.9` becomes `-1`
@@ -75,7 +78,7 @@ The `addMonths` function performs month arithmetic on dates while handling edge 
 ### Date Range Calculations
 
 ```typescript
-import { addMonths } from 'chronia';
+import { addMonths } from "chronia";
 
 // Calculate subscription renewal date
 const subscriptionStart = new Date(2025, 0, 31); // Jan 31, 2025
@@ -91,7 +94,7 @@ const dueDate = addMonths(invoiceDate, 1);
 ### Calendar Navigation
 
 ```typescript
-import { addMonths } from 'chronia';
+import { addMonths } from "chronia";
 
 // Next month navigation
 function goToNextMonth(currentDate: Date): Date {
@@ -104,17 +107,20 @@ function goToPreviousMonth(currentDate: Date): Date {
 }
 
 const today = new Date(2025, 5, 15); // Jun 15, 2025
-goToNextMonth(today);      // Returns: 2025-07-15
-goToPreviousMonth(today);  // Returns: 2025-05-15
+goToNextMonth(today); // Returns: 2025-07-15
+goToPreviousMonth(today); // Returns: 2025-05-15
 ```
 
 ### Data Aggregation
 
 ```typescript
-import { addMonths } from 'chronia';
+import { addMonths } from "chronia";
 
 // Generate monthly boundaries for reporting
-function generateMonthlyBoundaries(startDate: Date, monthCount: number): Date[] {
+function generateMonthlyBoundaries(
+  startDate: Date,
+  monthCount: number,
+): Date[] {
   const boundaries: Date[] = [startDate];
 
   for (let i = 1; i <= monthCount; i++) {
@@ -132,48 +138,48 @@ const quarterlyBoundaries = generateMonthlyBoundaries(reportStart, 3);
 ### Fractional Amount Handling
 
 ```typescript
-import { addMonths } from 'chronia';
+import { addMonths } from "chronia";
 
 // Fractional months are truncated toward zero
 const baseDate = new Date(2025, 0, 15); // Jan 15, 2025
 
-addMonths(baseDate, 1.9);   // Returns: 2025-02-15 (1.9 → 1)
-addMonths(baseDate, 2.1);   // Returns: 2025-03-15 (2.1 → 2)
-addMonths(baseDate, -1.9);  // Returns: 2024-12-15 (-1.9 → -1)
+addMonths(baseDate, 1.9); // Returns: 2025-02-15 (1.9 → 1)
+addMonths(baseDate, 2.1); // Returns: 2025-03-15 (2.1 → 2)
+addMonths(baseDate, -1.9); // Returns: 2024-12-15 (-1.9 → -1)
 
 // Zero months returns the same date
-addMonths(baseDate, 0);     // Returns: 2025-01-15
+addMonths(baseDate, 0); // Returns: 2025-01-15
 ```
 
 ### Month-End Overflow Handling
 
 ```typescript
-import { addMonths } from 'chronia';
+import { addMonths } from "chronia";
 
 // Month-end edge cases
-const jan31 = new Date(2025, 0, 31);  // Jan 31, 2025
+const jan31 = new Date(2025, 0, 31); // Jan 31, 2025
 
-addMonths(jan31, 1);  // Returns: 2025-02-28 (Feb has 28 days in 2025)
-addMonths(jan31, 2);  // Returns: 2025-03-31 (Mar has 31 days)
-addMonths(jan31, 3);  // Returns: 2025-04-30 (Apr has 30 days)
+addMonths(jan31, 1); // Returns: 2025-02-28 (Feb has 28 days in 2025)
+addMonths(jan31, 2); // Returns: 2025-03-31 (Mar has 31 days)
+addMonths(jan31, 3); // Returns: 2025-04-30 (Apr has 30 days)
 
 // Leap year handling
-const jan31_2024 = new Date(2024, 0, 31);  // Jan 31, 2024 (leap year)
-addMonths(jan31_2024, 1);  // Returns: 2024-02-29 (2024 is a leap year)
+const jan31_2024 = new Date(2024, 0, 31); // Jan 31, 2024 (leap year)
+addMonths(jan31_2024, 1); // Returns: 2024-02-29 (2024 is a leap year)
 ```
 
 ### Error Handling
 
 ```typescript
-import { addMonths } from 'chronia';
+import { addMonths } from "chronia";
 
 // Invalid date inputs return Invalid Date
-addMonths(new Date('invalid'), 3);  // Returns: Invalid Date
-addMonths(NaN, 3);                  // Returns: Invalid Date
+addMonths(new Date("invalid"), 3); // Returns: Invalid Date
+addMonths(NaN, 3); // Returns: Invalid Date
 
 // Invalid amount inputs return Invalid Date
-addMonths(new Date(2025, 0, 15), NaN);       // Returns: Invalid Date
-addMonths(new Date(2025, 0, 15), Infinity);  // Returns: Invalid Date
+addMonths(new Date(2025, 0, 15), NaN); // Returns: Invalid Date
+addMonths(new Date(2025, 0, 15), Infinity); // Returns: Invalid Date
 
 // Defensive programming with validation
 function safeAddMonths(date: Date | number, amount: number): Date | null {

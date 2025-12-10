@@ -7,20 +7,23 @@ The `isSameSecond` function checks whether two dates fall within the same second
 ## Signature
 
 ```typescript
-function isSameSecond(dateLeft: Date | number, dateRight: Date | number): boolean
+function isSameSecond(
+  dateLeft: Date | number,
+  dateRight: Date | number,
+): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                                                                         |
+| --------- | --------------------------------------------------------------------------------------------------- |
 | `boolean` | Returns `true` if both dates are in the same second, `false` otherwise or if either date is invalid |
 
 ## Description
@@ -30,12 +33,14 @@ The `isSameSecond` function determines whether two dates represent the same seco
 ### Specification
 
 #### Returns `true` when:
+
 - Both dates have identical year, month, day, hour, minute, and second components
 - The millisecond components may differ
 - Both arguments are valid dates (as Date objects or numeric timestamps)
 - Works with any combination of Date objects and timestamps
 
 #### Returns `false` when:
+
 - The dates differ in any component (year, month, day, hour, minute, or second)
 - Either argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - Either argument is `NaN`
@@ -64,28 +69,28 @@ The `isSameSecond` function determines whether two dates represent the same seco
 ### Time Synchronization
 
 ```typescript
-import { isSameSecond } from 'chronia';
+import { isSameSecond } from "chronia";
 
 // Check if events happened in the same second
 const event1Time = new Date(2024, 5, 15, 14, 30, 45, 123);
 const event2Time = new Date(2024, 5, 15, 14, 30, 45, 789);
 
-isSameSecond(event1Time, event2Time);  // Returns: true
+isSameSecond(event1Time, event2Time); // Returns: true
 
 // Different seconds
 const event3Time = new Date(2024, 5, 15, 14, 30, 46, 0);
-isSameSecond(event1Time, event3Time);  // Returns: false
+isSameSecond(event1Time, event3Time); // Returns: false
 
 // Works with timestamps
 const timestamp1 = new Date(2024, 5, 15, 14, 30, 45, 0).getTime();
 const timestamp2 = new Date(2024, 5, 15, 14, 30, 45, 999).getTime();
-isSameSecond(timestamp1, timestamp2);  // Returns: true
+isSameSecond(timestamp1, timestamp2); // Returns: true
 ```
 
 ### Deduplication
 
 ```typescript
-import { isSameSecond } from 'chronia';
+import { isSameSecond } from "chronia";
 
 interface LogEntry {
   timestamp: Date;
@@ -110,19 +115,27 @@ function deduplicateLogs(logs: LogEntry[]): LogEntry[] {
 
 // Alternative: Check if specific entries are duplicates
 function areDuplicateEntries(log1: LogEntry, log2: LogEntry): boolean {
-  return isSameSecond(log1.timestamp, log2.timestamp) &&
-         log1.message === log2.message;
+  return (
+    isSameSecond(log1.timestamp, log2.timestamp) &&
+    log1.message === log2.message
+  );
 }
 
-const log1 = { timestamp: new Date(2024, 5, 15, 14, 30, 45, 100), message: 'Error' };
-const log2 = { timestamp: new Date(2024, 5, 15, 14, 30, 45, 900), message: 'Error' };
-areDuplicateEntries(log1, log2);  // Returns: true
+const log1 = {
+  timestamp: new Date(2024, 5, 15, 14, 30, 45, 100),
+  message: "Error",
+};
+const log2 = {
+  timestamp: new Date(2024, 5, 15, 14, 30, 45, 900),
+  message: "Error",
+};
+areDuplicateEntries(log1, log2); // Returns: true
 ```
 
 ### Interval Detection
 
 ```typescript
-import { isSameSecond } from 'chronia';
+import { isSameSecond } from "chronia";
 
 // Rate limiting: check if requests are too close
 class RateLimiter {
@@ -149,15 +162,15 @@ const time1 = new Date(2024, 5, 15, 14, 30, 45, 100);
 const time2 = new Date(2024, 5, 15, 14, 30, 45, 500);
 const time3 = new Date(2024, 5, 15, 14, 30, 46, 0);
 
-limiter.canMakeRequest(time1);  // Returns: true
-limiter.canMakeRequest(time2);  // Returns: false (same second)
-limiter.canMakeRequest(time3);  // Returns: true (different second)
+limiter.canMakeRequest(time1); // Returns: true
+limiter.canMakeRequest(time2); // Returns: false (same second)
+limiter.canMakeRequest(time3); // Returns: true (different second)
 ```
 
 ### Animation and Timing
 
 ```typescript
-import { isSameSecond } from 'chronia';
+import { isSameSecond } from "chronia";
 
 // Synchronize multiple timers that should trigger together
 class TimerCoordinator {
@@ -174,13 +187,15 @@ class TimerCoordinator {
 
 // Multiple animations triggered in the same second
 const coordinator1 = new TimerCoordinator(new Date(2024, 5, 15, 14, 30, 45, 0));
-const coordinator2 = new TimerCoordinator(new Date(2024, 5, 15, 14, 30, 45, 500));
+const coordinator2 = new TimerCoordinator(
+  new Date(2024, 5, 15, 14, 30, 45, 500),
+);
 
 const checkTime = new Date(2024, 5, 15, 14, 30, 45, 250);
-coordinator1.shouldTrigger(checkTime);  // Returns: true
-coordinator2.shouldTrigger(checkTime);  // Returns: true
+coordinator1.shouldTrigger(checkTime); // Returns: true
+coordinator2.shouldTrigger(checkTime); // Returns: true
 
 // Different second - won't trigger
 const laterTime = new Date(2024, 5, 15, 14, 30, 46, 0);
-coordinator1.shouldTrigger(laterTime);  // Returns: false
+coordinator1.shouldTrigger(laterTime); // Returns: false
 ```

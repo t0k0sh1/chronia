@@ -7,20 +7,20 @@ The `diffDays` function calculates the difference in calendar days between two d
 ## Signature
 
 ```typescript
-function diffDays(dateLeft: Date | number, dateRight: Date | number): number
+function diffDays(dateLeft: Date | number, dateRight: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                                                                                                             |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `number` | The difference in calendar days (positive if `dateLeft` is after `dateRight`, negative if before, zero if same calendar day). Returns `NaN` if either input is invalid. |
 
 ## Description
@@ -30,20 +30,24 @@ The `diffDays` function determines the number of full calendar days between two 
 ### Specification
 
 #### Returns a positive number when:
+
 - `dateLeft` represents a calendar day that occurs after `dateRight`
 - Both inputs are valid Date objects or finite numeric timestamps
 - Example: `diffDays(new Date(2024, 5, 20), new Date(2024, 5, 15))` returns `5`
 
 #### Returns zero (`0`) when:
+
 - `dateLeft` and `dateRight` represent the same calendar day
 - This applies even when the time components differ
 - Example: `diffDays(new Date(2024, 5, 15, 23, 59), new Date(2024, 5, 15, 0, 0))` returns `0`
 
 #### Returns a negative number when:
+
 - `dateLeft` represents a calendar day that occurs before `dateRight`
 - Example: `diffDays(new Date(2024, 5, 10), new Date(2024, 5, 15))` returns `-5`
 
 #### Returns `NaN` when:
+
 - Either `dateLeft` or `dateRight` is an Invalid Date object (e.g., `new Date('invalid')`)
 - Either input is `NaN`
 - Either input is `Infinity` or `-Infinity`
@@ -71,15 +75,15 @@ The `diffDays` function determines the number of full calendar days between two 
 ### Date Range Calculations
 
 ```typescript
-import { diffDays } from 'chronia';
+import { diffDays } from "chronia";
 
 // Calculate rental period duration
 function calculateRentalDays(checkIn: Date, checkOut: Date): number {
   return diffDays(checkOut, checkIn);
 }
 
-const checkIn = new Date(2024, 5, 15);   // June 15, 2024
-const checkOut = new Date(2024, 5, 20);  // June 20, 2024
+const checkIn = new Date(2024, 5, 15); // June 15, 2024
+const checkOut = new Date(2024, 5, 20); // June 20, 2024
 const rentalDays = calculateRentalDays(checkIn, checkOut);
 // Returns: 5
 
@@ -93,7 +97,7 @@ const days = diffDays(timestamp1, timestamp2);
 ### Age Calculations
 
 ```typescript
-import { diffDays } from 'chronia';
+import { diffDays } from "chronia";
 
 // Calculate age in days
 function getAgeInDays(birthDate: Date): number {
@@ -101,7 +105,7 @@ function getAgeInDays(birthDate: Date): number {
   return diffDays(today, birthDate);
 }
 
-const birthDate = new Date(2024, 0, 1);  // January 1, 2024
+const birthDate = new Date(2024, 0, 1); // January 1, 2024
 const ageInDays = getAgeInDays(birthDate);
 // Returns: number of days since birth (varies by current date)
 
@@ -115,7 +119,7 @@ const babyAgeInDays = diffDays(currentDate, babyBirthDate);
 ### Deadline Tracking
 
 ```typescript
-import { diffDays } from 'chronia';
+import { diffDays } from "chronia";
 
 // Calculate days until deadline
 function getDaysUntilDeadline(deadline: Date): number {
@@ -141,16 +145,16 @@ const daysOverdue = diffDays(today, pastDeadline);
 ### Time Components Are Ignored
 
 ```typescript
-import { diffDays } from 'chronia';
+import { diffDays } from "chronia";
 
 // Same calendar day, different times
-const morning = new Date(2024, 5, 15, 8, 0);   // 8:00 AM
+const morning = new Date(2024, 5, 15, 8, 0); // 8:00 AM
 const evening = new Date(2024, 5, 15, 23, 59); // 11:59 PM
 const sameDayDiff = diffDays(evening, morning);
 // Returns: 0 (same calendar day)
 
 // Different calendar days, close in time
-const lateNight = new Date(2024, 5, 15, 23, 59);  // 11:59 PM
+const lateNight = new Date(2024, 5, 15, 23, 59); // 11:59 PM
 const earlyMorning = new Date(2024, 5, 16, 0, 1); // 12:01 AM
 const nextDayDiff = diffDays(earlyMorning, lateNight);
 // Returns: 1 (different calendar days)
@@ -159,16 +163,19 @@ const nextDayDiff = diffDays(earlyMorning, lateNight);
 ### Error Handling
 
 ```typescript
-import { diffDays } from 'chronia';
+import { diffDays } from "chronia";
 
 // Validate result before using
-function safeDiffDays(date1: Date | number, date2: Date | number): number | null {
+function safeDiffDays(
+  date1: Date | number,
+  date2: Date | number,
+): number | null {
   const result = diffDays(date1, date2);
   return isNaN(result) ? null : result;
 }
 
 // Invalid date handling
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const validDate = new Date(2024, 5, 15);
 const result1 = diffDays(invalidDate, validDate);
 // Returns: NaN
@@ -185,30 +192,30 @@ const result3 = diffDays(Infinity, validDate);
 if (!isNaN(result1)) {
   console.log(`Days difference: ${result1}`);
 } else {
-  console.log('Invalid date input');
+  console.log("Invalid date input");
 }
 ```
 
 ### Cross-Month and Cross-Year Boundaries
 
 ```typescript
-import { diffDays } from 'chronia';
+import { diffDays } from "chronia";
 
 // Across month boundary
-const endOfMay = new Date(2024, 4, 31);    // May 31, 2024
-const startOfJune = new Date(2024, 5, 5);  // June 5, 2024
+const endOfMay = new Date(2024, 4, 31); // May 31, 2024
+const startOfJune = new Date(2024, 5, 5); // June 5, 2024
 const daysAcrossMonths = diffDays(startOfJune, endOfMay);
 // Returns: 5
 
 // Across year boundary
-const endOf2023 = new Date(2023, 11, 25);  // December 25, 2023
-const startOf2024 = new Date(2024, 0, 5);  // January 5, 2024
+const endOf2023 = new Date(2023, 11, 25); // December 25, 2023
+const startOf2024 = new Date(2024, 0, 5); // January 5, 2024
 const daysAcrossYears = diffDays(startOf2024, endOf2023);
 // Returns: 11
 
 // Leap year handling
-const feb28 = new Date(2024, 1, 28);  // February 28, 2024 (leap year)
-const mar1 = new Date(2024, 2, 1);    // March 1, 2024
+const feb28 = new Date(2024, 1, 28); // February 28, 2024 (leap year)
+const mar1 = new Date(2024, 2, 1); // March 1, 2024
 const leapYearDays = diffDays(mar1, feb28);
 // Returns: 2 (includes Feb 29)
 ```

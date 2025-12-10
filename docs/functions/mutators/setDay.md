@@ -7,20 +7,20 @@ The `setDay` function sets the day of the month for a given date, returning a ne
 ## Signature
 
 ```typescript
-function setDay(date: Date | number, day: number): Date
+function setDay(date: Date | number, day: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `day` | `number` | The day of the month to set (1-31, fractions are truncated toward zero) |
+| Parameter | Type             | Description                                                             |
+| --------- | ---------------- | ----------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                     |
+| `day`     | `number`         | The day of the month to set (1-31, fractions are truncated toward zero) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                           |
+| ------ | ------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified day set, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,16 +30,19 @@ The `setDay` function creates a new Date instance with the day of the month set 
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object or finite numeric timestamp
 - The `day` argument is a finite number (not `NaN`, `Infinity`, or `-Infinity`)
 - The resulting date is valid after setting the day
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `day` argument is `NaN`, `Infinity`, or `-Infinity`
 
 #### Day Value Behavior:
+
 - **Valid days (1-31)**: Sets the day directly to the specified value
 - **Fractional days**: Truncated toward zero (e.g., `15.9 → 15`, `-15.9 → -15`)
 - **Day overflow**: Values beyond the month's maximum roll over to the next month (e.g., January 32 → February 1)
@@ -66,7 +69,7 @@ The `setDay` function creates a new Date instance with the day of the month set 
 ### Date Manipulation
 
 ```typescript
-import { setDay } from 'chronia';
+import { setDay } from "chronia";
 
 // Set to first day of month
 const firstDay = setDay(new Date(2025, 0, 15), 1);
@@ -84,7 +87,7 @@ const fromTimestamp = setDay(1705334400000, 10);
 ### Batch Date Processing
 
 ```typescript
-import { setDay } from 'chronia';
+import { setDay } from "chronia";
 
 // Normalize all dates to first of the month
 const dates = [
@@ -93,14 +96,14 @@ const dates = [
   new Date(2025, 0, 25),
 ];
 
-const normalized = dates.map(date => setDay(date, 1));
+const normalized = dates.map((date) => setDay(date, 1));
 // Returns: Array of dates all set to January 1, 2025
 ```
 
 ### Handling Day Overflow
 
 ```typescript
-import { setDay } from 'chronia';
+import { setDay } from "chronia";
 
 // Day overflow causes rollover to next month
 const overflow = setDay(new Date(2025, 0, 15), 32);
@@ -118,7 +121,7 @@ const negative = setDay(new Date(2025, 0, 15), -1);
 ### Handling Fractional and Invalid Values
 
 ```typescript
-import { setDay, isValid } from 'chronia';
+import { setDay, isValid } from "chronia";
 
 // Fractional day is truncated toward zero
 const fractional = setDay(new Date(2025, 0, 15), 15.9);
@@ -129,7 +132,7 @@ const negativeFractional = setDay(new Date(2025, 0, 15), -15.9);
 // Returns: Date object with day set to -15 (rolls back to previous month)
 
 // Invalid date input
-const invalidDate = setDay(new Date('invalid'), 15);
+const invalidDate = setDay(new Date("invalid"), 15);
 // Returns: Invalid Date
 
 // Invalid day input (NaN)
@@ -139,14 +142,14 @@ const invalidDay = setDay(new Date(2025, 0, 15), NaN);
 // Check validity before using
 const result = setDay(new Date(2025, 0, 15), 20);
 if (isValid(result)) {
-  console.log('Day set successfully:', result);
+  console.log("Day set successfully:", result);
 }
 ```
 
 ### Conditional Date Adjustment
 
 ```typescript
-import { setDay } from 'chronia';
+import { setDay } from "chronia";
 
 // Set payment due dates to the 15th of each month
 function setPaymentDueDate(invoiceDate: Date): Date {

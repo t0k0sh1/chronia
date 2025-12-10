@@ -13,24 +13,24 @@ function parse(
   options?: {
     locale?: Locale;
     referenceDate?: Date;
-  }
-): Date
+  },
+): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateString` | `string` | The date string to parse |
-| `pattern` | `string` | The format pattern using Unicode tokens (e.g., `"yyyy-MM-dd HH:mm:ss"`) |
-| `options` | `object` (optional) | Optional parsing configuration |
-| `options.locale` | `Locale` (optional) | Localization object for parsing locale-specific text (month names, day periods, weekdays) |
-| `options.referenceDate` | `Date` (optional) | Reference date for missing components (defaults to current date) |
+| Parameter               | Type                | Description                                                                               |
+| ----------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| `dateString`            | `string`            | The date string to parse                                                                  |
+| `pattern`               | `string`            | The format pattern using Unicode tokens (e.g., `"yyyy-MM-dd HH:mm:ss"`)                   |
+| `options`               | `object` (optional) | Optional parsing configuration                                                            |
+| `options.locale`        | `Locale` (optional) | Localization object for parsing locale-specific text (month names, day periods, weekdays) |
+| `options.referenceDate` | `Date` (optional)   | Reference date for missing components (defaults to current date)                          |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                           |
+| ------ | --------------------------------------------------------------------------------------------------------------------- |
 | `Date` | Returns a valid `Date` object if parsing succeeds, or an Invalid Date object (with `NaN` time value) if parsing fails |
 
 ## Description
@@ -40,6 +40,7 @@ The `parse` function parses date strings using flexible format patterns with Uni
 ### Specification
 
 #### Returns valid `Date` object when:
+
 - The `dateString` exactly matches the `pattern` structure
 - All parsed values are within valid ranges (e.g., month 1-12, day 1-31)
 - The pattern contains supported Unicode tokens
@@ -48,6 +49,7 @@ The `parse` function parses date strings using flexible format patterns with Uni
 - 12-hour format includes both hour token (`h`/`hh`) and day period token (`a`/`aa`/`aaa`/`aaaa`/`aaaaa`)
 
 #### Returns Invalid Date object when:
+
 - The `dateString` does not match the `pattern` structure
 - Parsed values are out of valid ranges (e.g., month 13, day 32)
 - Literal text in the pattern doesn't match the input string
@@ -72,12 +74,14 @@ The `parse` function parses date strings using flexible format patterns with Uni
 ### Supported Parse Tokens
 
 #### Year Tokens
+
 - `y`: Variable length, parses all consecutive digits
 - `yy`: Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)
 - `yyy`: Exactly 3 digits required
 - `yyyy`: 1-4 digits accepted (supports years like 1 AD or 999)
 
 #### Month Tokens
+
 - `M`: 1-12 (single or double digit)
 - `MM`: 01-12 (zero-padded)
 - `MMM`: Jan/Feb/Mar/... (abbreviated, localized)
@@ -85,44 +89,53 @@ The `parse` function parses date strings using flexible format patterns with Uni
 - `MMMMM`: J/F/M/... (narrow, localized)
 
 #### Day Tokens
+
 - `d`: 1-31 (single or double digit)
 - `dd`: 01-31 (zero-padded)
 
 #### Hour Tokens
+
 - `H`: 0-23 (24-hour format, single or double digit)
 - `HH`: 00-23 (24-hour format, zero-padded)
 - `h`: 1-12 (12-hour format, single or double digit)
 - `hh`: 01-12 (12-hour format, zero-padded)
 
 #### Minute Tokens
+
 - `m`: 0-59 (single or double digit)
 - `mm`: 00-59 (zero-padded)
 
 #### Second Tokens
+
 - `s`: 0-59 (single or double digit)
 - `ss`: 00-59 (zero-padded)
 
 #### Millisecond Tokens
+
 - `S`: 0-9 (1 digit, multiplied by 100)
 - `SS`: 00-99 (2 digits, multiplied by 10)
 - `SSS`: 000-999 (3 digits, used as-is)
 
 #### Day Period Tokens
+
 - `a`/`aa`/`aaa`: AM/PM (case-insensitive, localized)
 - `aaaa`: A.M./P.M. (localized)
 - `aaaaa`: a/p (narrow, localized)
 
 #### Era Tokens
+
 - `G`/`GG`/`GGG`: AD/BC (abbreviated, localized)
 - `GGGG`: Anno Domini/Before Christ (full name, localized)
 - `GGGGG`: A/B (narrow, localized)
 
 #### Weekday Tokens
+
 - `E`/`EE`/`EEE`: Mon/Tue/Wed/... (abbreviated, localized)
 - `EEEE`: Monday/Tuesday/Wednesday/... (full name, localized)
 - `EEEEE`: M/T/W/... (narrow, localized)
 
 #### Day of Year Tokens
+
 - `D`: 1-366 (single, double, or triple digit)
 - `DD`: 01-366 (zero-padded to 2-3 digits)
 - `DDD`: 001-366 (zero-padded to 3 digits)
@@ -130,10 +143,12 @@ The `parse` function parses date strings using flexible format patterns with Uni
 ### Special Parsing Behaviors
 
 #### Two-Digit Year (yy)
+
 - Values 50-99 map to 1950-1999
 - Values 00-49 map to 2000-2049
 
 #### 12-Hour Format Conversion
+
 - Requires both hour token (`h`/`hh`) and day period token (`a`/`aa`/`aaa`/`aaaa`/`aaaaa`)
 - 12 AM converts to 00:00 (midnight)
 - 12 PM remains 12:00 (noon)
@@ -142,16 +157,19 @@ The `parse` function parses date strings using flexible format patterns with Uni
 - Day period is case-insensitive
 
 #### Millisecond Scaling
+
 - `S` token: Single digit multiplied by 100 (e.g., 5 → 500ms)
 - `SS` token: Two digits multiplied by 10 (e.g., 50 → 500ms)
 - `SSS` token: Three digits used as-is (e.g., 500 → 500ms)
 
 #### Day of Year Calculation
+
 - Automatically calculates month and day from day-of-year value
 - Respects leap years (366 days vs 365 days)
 - Example: Day 32 in 2024 → February 1st
 
 #### Weekday Parsing
+
 - Weekday tokens are parsed but don't affect the resulting date
 - Can be used for format validation
 - Parser doesn't validate that weekday matches the actual date
@@ -177,7 +195,7 @@ The `parse` function parses date strings using flexible format patterns with Uni
 ### Basic Date Parsing
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // ISO 8601-like format
 const date1 = parse("2024-01-15", "yyyy-MM-dd");
@@ -199,7 +217,7 @@ const date4 = parse("1/5/2024", "M/d/yyyy");
 ### Date and Time Parsing
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // Date with 24-hour time
 const date1 = parse("15/01/2024 14:30", "dd/MM/yyyy HH:mm");
@@ -221,7 +239,7 @@ const date4 = parse("14:30:00", "HH:mm:ss");
 ### Using Reference Date
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // Parse time only with specific reference date
 const refDate = new Date(2023, 5, 10); // June 10, 2023
@@ -236,9 +254,9 @@ const date2 = parse("01-15", "MM-dd", { referenceDate: refDate });
 ### Localized Parsing
 
 ```typescript
-import { parse } from 'chronia';
-import { enUS } from 'chronia/locale/en-US';
-import { ja } from 'chronia/locale/ja';
+import { parse } from "chronia";
+import { enUS } from "chronia/locale/en-US";
+import { ja } from "chronia/locale/ja";
 
 // English month names
 const date1 = parse("January 15, 2024", "MMMM dd, yyyy", { locale: enUS });
@@ -256,7 +274,7 @@ const date3 = parse("Monday, 2024-01-15", "EEEE, yyyy-MM-dd", { locale: enUS });
 ### Literal Text in Patterns
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // Literal text in pattern
 const date1 = parse("Year 2024, Month 01", "'Year' yyyy', Month' MM");
@@ -274,7 +292,7 @@ const date3 = parse("2024-01-15T14:30:00", "yyyy-MM-dd'T'HH:mm:ss");
 ### Special Format Parsing
 
 ```typescript
-import { parse } from 'chronia';
+import { parse } from "chronia";
 
 // Two-digit year parsing
 const date1 = parse("99-12-31", "yy-MM-dd");
@@ -295,7 +313,7 @@ const date4 = parse("100 BC", "yyyy G");
 ### Error Handling and Validation
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 // Invalid input returns Invalid Date
 const invalid1 = parse("invalid-text", "yyyy-MM-dd");
@@ -330,16 +348,16 @@ if (result) {
 ### Form Validation
 
 ```typescript
-import { parse, isValid, format } from 'chronia';
+import { parse, isValid, format } from "chronia";
 
 function validateAndFormatDate(input: string, inputFormat: string): string {
   const parsed = parse(input, inputFormat);
 
   if (!isValid(parsed)) {
-    return 'Invalid date';
+    return "Invalid date";
   }
 
-  return format(parsed, 'yyyy-MM-dd');
+  return format(parsed, "yyyy-MM-dd");
 }
 
 // Various input formats normalized to ISO format
@@ -356,12 +374,12 @@ validateAndFormatDate("not-a-date", "yyyy-MM-dd");
 ### API Data Processing
 
 ```typescript
-import { parse, isValid } from 'chronia';
+import { parse, isValid } from "chronia";
 
 interface ApiResponse {
   id: string;
-  createdAt: string;  // Format: "dd/MM/yyyy HH:mm:ss"
-  updatedAt: string;  // Format: "dd/MM/yyyy HH:mm:ss"
+  createdAt: string; // Format: "dd/MM/yyyy HH:mm:ss"
+  updatedAt: string; // Format: "dd/MM/yyyy HH:mm:ss"
 }
 
 function processApiResponse(response: ApiResponse) {
@@ -393,7 +411,7 @@ const processed = processApiResponse(apiData);
 ### Round-Trip Conversion
 
 ```typescript
-import { parse, format } from 'chronia';
+import { parse, format } from "chronia";
 
 const pattern = "yyyy-MM-dd HH:mm:ss";
 const original = new Date(2024, 0, 15, 14, 30, 45);

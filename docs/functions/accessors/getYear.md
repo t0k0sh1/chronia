@@ -7,19 +7,19 @@ The `getYear` function retrieves the full year (e.g., 2025) from a given Date ob
 ## Signature
 
 ```typescript
-function getYear(date: Date | number): number
+function getYear(date: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp from which to extract the year |
+| Parameter | Type             | Description                                                       |
+| --------- | ---------------- | ----------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the year |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                              |
+| -------- | ------------------------------------------------------------------------ |
 | `number` | The full year as a number (e.g., 2025), or `NaN` if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `getYear` function extracts the full year from the provided Date object or t
 ### Specification
 
 #### Returns the full year when:
+
 - The argument is a valid `Date` object
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -40,6 +41,7 @@ The `getYear` function extracts the full year from the provided Date object or t
   - Negative years (BC dates, represented as negative numbers)
 
 #### Returns `NaN` when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -67,7 +69,7 @@ The `getYear` function extracts the full year from the provided Date object or t
 ### Date Component Extraction
 
 ```typescript
-import { getYear } from 'chronia';
+import { getYear } from "chronia";
 
 // Get year from Date object
 const date = new Date(2025, 0, 15); // January 15, 2025
@@ -87,7 +89,7 @@ const currentYear = getYear(new Date());
 ### Age Calculation
 
 ```typescript
-import { getYear } from 'chronia';
+import { getYear } from "chronia";
 
 function calculateAge(birthDate: Date): number {
   const birthYear = getYear(birthDate);
@@ -104,7 +106,7 @@ const age = calculateAge(birthDate);
 ### Data Grouping
 
 ```typescript
-import { getYear } from 'chronia';
+import { getYear } from "chronia";
 
 interface Transaction {
   date: Date;
@@ -131,7 +133,7 @@ function groupByYear(transactions: Transaction[]): Map<number, Transaction[]> {
 const transactions = [
   { date: new Date(2024, 0, 1), amount: 100 },
   { date: new Date(2024, 5, 1), amount: 200 },
-  { date: new Date(2025, 0, 1), amount: 150 }
+  { date: new Date(2025, 0, 1), amount: 150 },
 ];
 const groupedByYear = groupByYear(transactions);
 // Returns: Map { 2024 => [...2 transactions], 2025 => [...1 transaction] }
@@ -140,7 +142,7 @@ const groupedByYear = groupByYear(transactions);
 ### Validation and Range Checking
 
 ```typescript
-import { getYear } from 'chronia';
+import { getYear } from "chronia";
 
 function isCurrentYear(date: Date | number): boolean {
   const year = getYear(date);
@@ -159,25 +161,25 @@ function isValidBirthYear(date: Date | number): boolean {
 }
 
 // Check if date is in current year
-isCurrentYear(new Date(2025, 0, 15));  // Returns: true
-isCurrentYear(new Date(2024, 0, 15));  // Returns: false
+isCurrentYear(new Date(2025, 0, 15)); // Returns: true
+isCurrentYear(new Date(2024, 0, 15)); // Returns: false
 
 // Validate birth year range
-isValidBirthYear(new Date(1990, 5, 15));  // Returns: true
-isValidBirthYear(new Date(1850, 0, 1));   // Returns: false
+isValidBirthYear(new Date(1990, 5, 15)); // Returns: true
+isValidBirthYear(new Date(1850, 0, 1)); // Returns: false
 ```
 
 ### Timestamp Analysis
 
 ```typescript
-import { getYear } from 'chronia';
+import { getYear } from "chronia";
 
 // Handle timestamps from API
 function processApiResponse(response: { createdAt: number }): string {
   const year = getYear(response.createdAt);
 
   if (isNaN(year)) {
-    return 'Unknown date';
+    return "Unknown date";
   }
 
   return `Created in ${year}`;
@@ -192,25 +194,25 @@ const message = processApiResponse(apiData);
 ### Edge Cases
 
 ```typescript
-import { getYear } from 'chronia';
+import { getYear } from "chronia";
 
 // Leap year
-getYear(new Date(2024, 1, 29));  // Returns: 2024
+getYear(new Date(2024, 1, 29)); // Returns: 2024
 
 // Historic date
-getYear(new Date(1776, 6, 4));  // Returns: 1776
+getYear(new Date(1776, 6, 4)); // Returns: 1776
 
 // Unix epoch
-getYear(0);  // Returns: 1970
+getYear(0); // Returns: 1970
 
 // Invalid date returns NaN
-getYear(new Date('invalid'));  // Returns: NaN
-getYear(NaN);                  // Returns: NaN
-getYear(Infinity);             // Returns: NaN
+getYear(new Date("invalid")); // Returns: NaN
+getYear(NaN); // Returns: NaN
+getYear(Infinity); // Returns: NaN
 
 // Check for invalid result
-const year = getYear(new Date('invalid'));
+const year = getYear(new Date("invalid"));
 if (isNaN(year)) {
-  console.log('Invalid date provided');
+  console.log("Invalid date provided");
 }
 ```

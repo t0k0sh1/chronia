@@ -7,19 +7,19 @@ The `truncSecond` function truncates a date to the start of the second by settin
 ## Signature
 
 ```typescript
-function truncSecond(date: Date | number): Date
+function truncSecond(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the second |
+| Parameter | Type             | Description                                                               |
+| --------- | ---------------- | ------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the second |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                             |
+| ------ | ----------------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object truncated to the start of the second (milliseconds set to 0), or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `truncSecond` function removes all time components below the second level by
 ### Specification
 
 #### Returns a valid Date when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -39,6 +40,7 @@ The `truncSecond` function removes all time components below the second level by
   - Milliseconds set to `0`
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -65,7 +67,7 @@ The `truncSecond` function removes all time components below the second level by
 ### Timestamp Normalization
 
 ```typescript
-import { truncSecond } from 'chronia';
+import { truncSecond } from "chronia";
 
 // Remove milliseconds from a date
 const dateWithMs = new Date(2024, 5, 15, 14, 30, 45, 123);
@@ -78,7 +80,7 @@ const result = truncSecond(exactSecond);
 // Returns: June 15, 2024 14:30:45.000 (unchanged)
 
 // Works with timestamps
-const timestamp = Date.now();  // e.g., 1718462445789
+const timestamp = Date.now(); // e.g., 1718462445789
 const truncated = truncSecond(timestamp);
 // Returns: Date at current second with 000 milliseconds
 ```
@@ -86,7 +88,7 @@ const truncated = truncSecond(timestamp);
 ### Database Storage
 
 ```typescript
-import { truncSecond } from 'chronia';
+import { truncSecond } from "chronia";
 
 interface LogEntry {
   timestamp: Date;
@@ -97,16 +99,16 @@ function createLogEntry(message: string): LogEntry {
   // Truncate to second for consistency with database precision
   return {
     timestamp: truncSecond(new Date()),
-    message
+    message,
   };
 }
 
-const log1 = createLogEntry('User logged in');
+const log1 = createLogEntry("User logged in");
 // Returns: { timestamp: Date (at XX:XX:XX.000), message: 'User logged in' }
 
 // Preparing dates for systems without millisecond support
 const userAction = {
-  performedAt: truncSecond(new Date(2024, 5, 15, 14, 30, 45, 999))
+  performedAt: truncSecond(new Date(2024, 5, 15, 14, 30, 45, 999)),
 };
 // Returns: { performedAt: June 15, 2024 14:30:45.000 }
 ```
@@ -114,7 +116,7 @@ const userAction = {
 ### Time-based Grouping
 
 ```typescript
-import { truncSecond } from 'chronia';
+import { truncSecond } from "chronia";
 
 interface Event {
   timestamp: Date;
@@ -138,9 +140,9 @@ function groupEventsBySecond(events: Event[]): Map<number, Event[]> {
 }
 
 const events: Event[] = [
-  { timestamp: new Date(2024, 5, 15, 14, 30, 45, 100), type: 'click' },
-  { timestamp: new Date(2024, 5, 15, 14, 30, 45, 500), type: 'scroll' },
-  { timestamp: new Date(2024, 5, 15, 14, 30, 46, 200), type: 'click' }
+  { timestamp: new Date(2024, 5, 15, 14, 30, 45, 100), type: "click" },
+  { timestamp: new Date(2024, 5, 15, 14, 30, 45, 500), type: "scroll" },
+  { timestamp: new Date(2024, 5, 15, 14, 30, 46, 200), type: "click" },
 ];
 
 const grouped = groupEventsBySecond(events);
@@ -152,16 +154,16 @@ const grouped = groupEventsBySecond(events);
 ### Precision Reduction
 
 ```typescript
-import { truncSecond } from 'chronia';
+import { truncSecond } from "chronia";
 
 // Handle Invalid Date inputs gracefully
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const result = truncSecond(invalidDate);
 // Returns: Invalid Date
 
 // Handle edge cases
-truncSecond(NaN);        // Returns: Invalid Date
-truncSecond(Infinity);   // Returns: Invalid Date
+truncSecond(NaN); // Returns: Invalid Date
+truncSecond(Infinity); // Returns: Invalid Date
 
 // End of second truncation
 const endOfSecond = new Date(2024, 5, 15, 14, 30, 45, 999);

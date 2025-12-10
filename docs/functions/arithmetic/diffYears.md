@@ -7,20 +7,20 @@ The `diffYears` function calculates the difference in calendar years between two
 ## Signature
 
 ```typescript
-function diffYears(dateLeft: Date | number, dateRight: Date | number): number
+function diffYears(dateLeft: Date | number, dateRight: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                                                       |
+| -------- | ----------------------------------------------------------------------------------------------------------------- |
 | `number` | The difference in calendar years (negative if `dateLeft` is before `dateRight`), or `NaN` if any input is invalid |
 
 ## Description
@@ -32,18 +32,22 @@ The calculation is straightforward: `dateLeft.getFullYear() - dateRight.getFullY
 ### Specification
 
 #### Returns a positive number when:
+
 - `dateLeft` has a year value greater than `dateRight`
 - For example: `diffYears(new Date(2024, 0, 1), new Date(2020, 11, 31))` returns `4`
 
 #### Returns `0` when:
+
 - Both dates fall within the same calendar year
 - For example: `diffYears(new Date(2024, 11, 31), new Date(2024, 0, 1))` returns `0`
 
 #### Returns a negative number when:
+
 - `dateLeft` has a year value less than `dateRight`
 - For example: `diffYears(new Date(2020, 5, 15), new Date(2024, 5, 15))` returns `-4`
 
 #### Returns `NaN` when:
+
 - Either `dateLeft` or `dateRight` is an Invalid Date object (e.g., `new Date('invalid')`)
 - Either argument is `NaN`
 - Either argument is `Infinity` or `-Infinity`
@@ -71,11 +75,11 @@ The calculation is straightforward: `dateLeft.getFullYear() - dateRight.getFullY
 ### Age Calculation
 
 ```typescript
-import { diffYears } from 'chronia';
+import { diffYears } from "chronia";
 
 // Calculate approximate age (ignores birth month/day)
-const birthDate = new Date(1990, 5, 15);  // June 15, 1990
-const today = new Date(2024, 10, 22);     // November 22, 2024
+const birthDate = new Date(1990, 5, 15); // June 15, 1990
+const today = new Date(2024, 10, 22); // November 22, 2024
 const age = diffYears(today, birthDate);
 // Returns: 34
 
@@ -89,7 +93,7 @@ const ageFromTimestamp = diffYears(currentTimestamp, birthTimestamp);
 ### Year-Based Filtering
 
 ```typescript
-import { diffYears } from 'chronia';
+import { diffYears } from "chronia";
 
 interface Record {
   id: string;
@@ -100,7 +104,7 @@ interface Record {
 // Filter records older than 5 years
 function filterOldRecords(records: Record[]): Record[] {
   const now = new Date();
-  return records.filter(record => {
+  return records.filter((record) => {
     const yearDiff = diffYears(now, record.createdAt);
     return yearDiff > 5;
   });
@@ -108,9 +112,9 @@ function filterOldRecords(records: Record[]): Record[] {
 
 // Example usage
 const records: Record[] = [
-  { id: '1', createdAt: new Date(2015, 3, 10), data: {} },
-  { id: '2', createdAt: new Date(2023, 7, 20), data: {} },
-  { id: '3', createdAt: new Date(2018, 11, 5), data: {} },
+  { id: "1", createdAt: new Date(2015, 3, 10), data: {} },
+  { id: "2", createdAt: new Date(2023, 7, 20), data: {} },
+  { id: "3", createdAt: new Date(2018, 11, 5), data: {} },
 ];
 
 const oldRecords = filterOldRecords(records);
@@ -120,7 +124,7 @@ const oldRecords = filterOldRecords(records);
 ### Simple Time Span Analysis
 
 ```typescript
-import { diffYears } from 'chronia';
+import { diffYears } from "chronia";
 
 // Calculate project duration in years
 const projectStart = new Date(2019, 0, 1);
@@ -138,11 +142,11 @@ const duration = diffYears(sameYearEnd, sameYearStart);
 ### Historical Comparisons
 
 ```typescript
-import { diffYears } from 'chronia';
+import { diffYears } from "chronia";
 
 // Compare historical events
-const eventA = new Date(1776, 6, 4);   // July 4, 1776
-const eventB = new Date(1969, 6, 20);  // July 20, 1969
+const eventA = new Date(1776, 6, 4); // July 4, 1776
+const eventB = new Date(1969, 6, 20); // July 20, 1969
 const yearsBetween = diffYears(eventB, eventA);
 // Returns: 193
 
@@ -156,10 +160,10 @@ const centuryDiff = diffYears(year1900, year1899);
 ### Error Handling
 
 ```typescript
-import { diffYears } from 'chronia';
+import { diffYears } from "chronia";
 
 // Invalid date handling
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const validDate = new Date(2024, 5, 15);
 
 const result1 = diffYears(invalidDate, validDate);

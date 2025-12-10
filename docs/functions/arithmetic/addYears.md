@@ -7,20 +7,20 @@ The `addYears` function adds a specified number of years to a given date, return
 ## Signature
 
 ```typescript
-function addYears(date: Date | number, amount: number): Date
+function addYears(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `amount` | `number` | The number of years to add (can be negative to subtract years) |
+| Parameter | Type             | Description                                                    |
+| --------- | ---------------- | -------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp            |
+| `amount`  | `number`         | The number of years to add (can be negative to subtract years) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                               |
+| ------ | ----------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified years added, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,16 +30,19 @@ The `addYears` function calculates a new date by adding the specified number of 
 ### Specification
 
 #### Returns a valid `Date` when:
+
 - The `date` argument is a valid `Date` object or finite numeric timestamp
 - The `amount` argument is a finite number
 - The resulting date is calculable
 
 The returned date will have:
+
 - Year value increased by `amount` (fractional amounts are truncated toward zero)
 - Original month, day, and time components preserved
 - Automatic adjustment to February 28 if the source date is February 29 and the target year is not a leap year
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -67,7 +70,7 @@ The returned date will have:
 ### Anniversary Calculations
 
 ```typescript
-import { addYears } from 'chronia';
+import { addYears } from "chronia";
 
 // Calculate 5-year contract renewal date
 const contractStart = new Date(2020, 0, 15); // January 15, 2020
@@ -83,7 +86,7 @@ const threeYearsAgo = addYears(currentDate, -3);
 ### Age Calculations
 
 ```typescript
-import { addYears } from 'chronia';
+import { addYears } from "chronia";
 
 // Calculate when someone will turn 18
 const birthDate = new Date(2010, 3, 22); // April 22, 2010
@@ -102,7 +105,7 @@ const leapToLeap = addYears(leapBirthday, 4);
 ### Multi-Year Projections
 
 ```typescript
-import { addYears } from 'chronia';
+import { addYears } from "chronia";
 
 // Project quarterly report date 2 years forward
 const quarterlyReport = new Date(2023, 2, 31); // March 31, 2023
@@ -122,10 +125,10 @@ const negResult = addYears(baseDate, -1.7);
 ### Input Validation and Error Handling
 
 ```typescript
-import { addYears } from 'chronia';
+import { addYears } from "chronia";
 
 // Invalid date input
-const invalidDate = new Date('invalid string');
+const invalidDate = new Date("invalid string");
 const result1 = addYears(invalidDate, 3);
 // Returns: Invalid Date
 
@@ -144,14 +147,14 @@ function safeAddYears(date: Date | number, years: number): Date | null {
   return isNaN(result.getTime()) ? null : result;
 }
 
-safeAddYears(new Date(2020, 0, 1), 5);  // Returns: Date object
-safeAddYears(new Date('invalid'), 5);   // Returns: null
+safeAddYears(new Date(2020, 0, 1), 5); // Returns: Date object
+safeAddYears(new Date("invalid"), 5); // Returns: null
 ```
 
 ### Time Preservation
 
 ```typescript
-import { addYears } from 'chronia';
+import { addYears } from "chronia";
 
 // Time components are preserved
 const dateWithTime = new Date(2020, 5, 15, 14, 30, 45, 123);

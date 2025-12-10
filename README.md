@@ -326,7 +326,6 @@ Use `isValid()` to distinguish these cases.
 ## Versioning and Backward Compatibility Policy
 
 - This library follows **Semantic Versioning (SemVer)**
-
   - **MAJOR** version (e.g., 1.x → 2.0): Introduced when backward-incompatible changes are made
   - **MINOR** version (e.g., 1.1 → 1.2): Introduced when new features are added while maintaining backward compatibility
   - **PATCH** version (e.g., 1.1.0 → 1.1.1): Introduced for bug fixes or improvements that do not break backward compatibility
@@ -345,14 +344,12 @@ Chronia includes comprehensive documentation specifically designed for AI agents
 The [`docs/`](docs/) directory contains three main sections:
 
 1. **[Function Categories](docs/functions/)** - Detailed documentation for all 74 functions
-
    - Complete function signatures with examples
    - AI guidance for recommending appropriate functions
    - Common pitfalls and edge cases
    - Cross-references to related functions
 
 2. **[Guidelines](docs/guidelines/)** - Development principles and technical specifications
-
    - [Development Principles](docs/guidelines/development-principles.md) - Core philosophy and design patterns
    - [Error Handling](docs/guidelines/error-handling.md) - No-exceptions policy and error patterns
    - [Input Validation](docs/guidelines/input-validation.md) - Validation strategies
@@ -668,6 +665,7 @@ Format:
 ## [Unreleased]
 
 ### Added
+
 - `functionName` - Brief description
 ```
 

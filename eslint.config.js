@@ -9,7 +9,6 @@ export default tseslint.config({
     "@typescript-eslint": tseslint.plugin,
   },
   rules: {
-    // ルールは必要に応じて追加
     semi: ["error", "always"],
     quotes: ["error", "double"],
   },

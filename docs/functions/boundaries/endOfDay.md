@@ -7,19 +7,19 @@ The `endOfDay` function returns a new Date object set to the last moment of the 
 ## Signature
 
 ```typescript
-function endOfDay(date: Date | number): Date
+function endOfDay(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
+| Parameter | Type             | Description                                         |
+| --------- | ---------------- | --------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                 |
+| ------ | ------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to 23:59:59.999 of the same date, or Invalid Date if input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `endOfDay` function takes a date input and returns a new Date object represe
 ### Specification
 
 #### Returns a valid Date set to 23:59:59.999 when:
+
 - The argument is a valid `Date` object
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `endOfDay` function takes a date input and returns a new Date object represe
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -63,15 +65,13 @@ The `endOfDay` function takes a date input and returns a new Date object represe
 ### Time Range Boundaries
 
 ```typescript
-import { endOfDay } from 'chronia';
+import { endOfDay } from "chronia";
 
 // Create an inclusive date range for a specific day
-function getEventsForDay(targetDate: Date, events: Array<{timestamp: Date}>) {
+function getEventsForDay(targetDate: Date, events: Array<{ timestamp: Date }>) {
   const dayEnd = endOfDay(targetDate);
 
-  return events.filter(event =>
-    event.timestamp <= dayEnd
-  );
+  return events.filter((event) => event.timestamp <= dayEnd);
 }
 
 // Example: Get end of a specific day
@@ -88,14 +88,17 @@ endOfDay(morning);
 ### Daily Aggregations
 
 ```typescript
-import { endOfDay } from 'chronia';
+import { endOfDay } from "chronia";
 
 // Calculate daily statistics with precise boundaries
-function getDailyStats(data: Array<{timestamp: number, value: number}>, day: Date) {
+function getDailyStats(
+  data: Array<{ timestamp: number; value: number }>,
+  day: Date,
+) {
   const dayEnd = endOfDay(day).getTime();
 
   return data
-    .filter(item => item.timestamp <= dayEnd)
+    .filter((item) => item.timestamp <= dayEnd)
     .reduce((sum, item) => sum + item.value, 0);
 }
 
@@ -108,7 +111,7 @@ const endOfToday = endOfDay(today);
 ### Deadline Management
 
 ```typescript
-import { endOfDay } from 'chronia';
+import { endOfDay } from "chronia";
 
 // Set end-of-day deadline for task completion
 interface Task {
@@ -124,8 +127,8 @@ function isTaskOverdue(task: Task, currentTime: Date = new Date()): boolean {
 
 // Check if task is still within the due date
 const task = {
-  id: '123',
-  dueDate: new Date(2024, 5, 30)
+  id: "123",
+  dueDate: new Date(2024, 5, 30),
 };
 
 const deadline = endOfDay(task.dueDate);
@@ -136,18 +139,18 @@ const deadline = endOfDay(task.dueDate);
 ### Date Normalization
 
 ```typescript
-import { endOfDay } from 'chronia';
+import { endOfDay } from "chronia";
 
 // Normalize multiple timestamps from the same day
 function normalizeToEndOfDay(timestamps: number[]): Date[] {
-  return timestamps.map(ts => endOfDay(ts));
+  return timestamps.map((ts) => endOfDay(ts));
 }
 
 // All times on the same day normalize to the same end-of-day
 const timestamps = [
   new Date(2024, 5, 15, 8, 0).getTime(),
   new Date(2024, 5, 15, 14, 30).getTime(),
-  new Date(2024, 5, 15, 20, 45).getTime()
+  new Date(2024, 5, 15, 20, 45).getTime(),
 ];
 
 const normalized = normalizeToEndOfDay(timestamps);
@@ -157,7 +160,7 @@ const normalized = normalizeToEndOfDay(timestamps);
 ### Error Handling
 
 ```typescript
-import { endOfDay } from 'chronia';
+import { endOfDay } from "chronia";
 
 // Handle invalid inputs gracefully
 function safeEndOfDay(date: Date | number): Date | null {
@@ -170,7 +173,7 @@ safeEndOfDay(new Date(2024, 5, 15));
 // Returns: Date object for June 15, 2024 23:59:59.999
 
 // Invalid input
-safeEndOfDay(new Date('invalid'));
+safeEndOfDay(new Date("invalid"));
 // Returns: null (after detecting Invalid Date)
 
 // Invalid number input

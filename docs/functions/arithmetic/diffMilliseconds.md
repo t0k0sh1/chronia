@@ -7,20 +7,23 @@ The `diffMilliseconds` function calculates the exact difference in milliseconds 
 ## Signature
 
 ```typescript
-function diffMilliseconds(dateLeft: Date | number, dateRight: Date | number): number
+function diffMilliseconds(
+  dateLeft: Date | number,
+  dateRight: Date | number,
+): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp (subtrahend in the calculation) |
-| `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp (minuend in the calculation) |
+| Parameter   | Type             | Description                                                                          |
+| ----------- | ---------------- | ------------------------------------------------------------------------------------ |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp (subtrahend in the calculation) |
+| `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp (minuend in the calculation)   |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                                                                                                         |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `number` | The difference in milliseconds. Returns a positive value if `dateLeft` is after `dateRight`, negative if before, `0` if identical, or `NaN` if any input is invalid |
 
 ## Description
@@ -30,19 +33,23 @@ The `diffMilliseconds` function computes the precise time difference between two
 ### Specification
 
 #### Returns a positive number when:
+
 - `dateLeft` represents a later point in time than `dateRight`
 - Both inputs are valid Date objects or finite numeric timestamps
 - The difference is calculated as: `dateLeft.getTime() - dateRight.getTime()`
 
 #### Returns `0` when:
+
 - Both dates represent the exact same millisecond in time
 - Both inputs are valid
 
 #### Returns a negative number when:
+
 - `dateLeft` represents an earlier point in time than `dateRight`
 - Both inputs are valid Date objects or finite numeric timestamps
 
 #### Returns `NaN` when:
+
 - Either `dateLeft` or `dateRight` is an Invalid Date object (e.g., `new Date('invalid')`)
 - Either argument is `NaN`
 - Either argument is `Infinity` or `-Infinity`
@@ -71,7 +78,7 @@ The `diffMilliseconds` function computes the precise time difference between two
 ### Performance Measurement
 
 ```typescript
-import { diffMilliseconds } from 'chronia';
+import { diffMilliseconds } from "chronia";
 
 // Measure function execution time
 function measurePerformance<T>(fn: () => T): { result: T; elapsed: number } {
@@ -86,61 +93,63 @@ function measurePerformance<T>(fn: () => T): { result: T; elapsed: number } {
 // Usage
 const { result, elapsed } = measurePerformance(() => {
   // Some expensive operation
-  return Array(1000000).fill(0).map((_, i) => i * 2);
+  return Array(1000000)
+    .fill(0)
+    .map((_, i) => i * 2);
 });
-console.log(`Operation took ${elapsed}ms`);  // e.g., "Operation took 42ms"
+console.log(`Operation took ${elapsed}ms`); // e.g., "Operation took 42ms"
 ```
 
 ### Precise Time Calculations
 
 ```typescript
-import { diffMilliseconds } from 'chronia';
+import { diffMilliseconds } from "chronia";
 
 // Calculate exact time difference
 const start = new Date(2024, 5, 15, 14, 30, 45, 100);
 const end = new Date(2024, 5, 15, 14, 30, 45, 500);
 
-diffMilliseconds(end, start);  // Returns: 400
+diffMilliseconds(end, start); // Returns: 400
 
 // Same time returns 0
 const date1 = new Date(2024, 5, 15, 14, 30, 45, 123);
 const date2 = new Date(2024, 5, 15, 14, 30, 45, 123);
-diffMilliseconds(date1, date2);  // Returns: 0
+diffMilliseconds(date1, date2); // Returns: 0
 
 // Negative result when first date is earlier
-diffMilliseconds(start, end);  // Returns: -400
+diffMilliseconds(start, end); // Returns: -400
 ```
 
 ### Timestamp Comparison
 
 ```typescript
-import { diffMilliseconds } from 'chronia';
+import { diffMilliseconds } from "chronia";
 
 // Compare numeric timestamps
-const timestamp1 = 1718459446000;  // Unix timestamp
+const timestamp1 = 1718459446000; // Unix timestamp
 const timestamp2 = 1718459445000;
 
-diffMilliseconds(timestamp1, timestamp2);  // Returns: 1000
+diffMilliseconds(timestamp1, timestamp2); // Returns: 1000
 
 // Mix Date objects and timestamps
 const dateObj = new Date(2024, 5, 15, 14, 30, 46, 0);
 const timestamp = new Date(2024, 5, 15, 14, 30, 45, 0).getTime();
 
-diffMilliseconds(dateObj, timestamp);  // Returns: 1000
-diffMilliseconds(timestamp, dateObj);  // Returns: -1000
+diffMilliseconds(dateObj, timestamp); // Returns: 1000
+diffMilliseconds(timestamp, dateObj); // Returns: -1000
 ```
 
 ### Input Validation
 
 ```typescript
-import { diffMilliseconds } from 'chronia';
+import { diffMilliseconds } from "chronia";
 
 // Invalid Date returns NaN
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const validDate = new Date(2024, 5, 15);
 
-diffMilliseconds(invalidDate, validDate);  // Returns: NaN
-diffMilliseconds(validDate, invalidDate);  // Returns: NaN
+diffMilliseconds(invalidDate, validDate); // Returns: NaN
+diffMilliseconds(validDate, invalidDate); // Returns: NaN
 
 // Check for valid result
 function safeDiff(date1: Date | number, date2: Date | number): number | null {
@@ -148,14 +157,14 @@ function safeDiff(date1: Date | number, date2: Date | number): number | null {
   return isNaN(diff) ? null : diff;
 }
 
-safeDiff(validDate, invalidDate);  // Returns: null
-safeDiff(validDate, validDate);    // Returns: 0
+safeDiff(validDate, invalidDate); // Returns: null
+safeDiff(validDate, validDate); // Returns: 0
 ```
 
 ### Animation Timing
 
 ```typescript
-import { diffMilliseconds } from 'chronia';
+import { diffMilliseconds } from "chronia";
 
 // Calculate animation progress
 class Animation {
@@ -169,7 +178,7 @@ class Animation {
 
   getProgress(): number {
     const elapsed = diffMilliseconds(Date.now(), this.startTime);
-    return Math.min(elapsed / this.duration, 1);  // Clamp to [0, 1]
+    return Math.min(elapsed / this.duration, 1); // Clamp to [0, 1]
   }
 
   isComplete(): boolean {
@@ -178,6 +187,6 @@ class Animation {
 }
 
 // Usage
-const animation = new Animation(1000);  // 1 second animation
-console.log(animation.getProgress());    // e.g., 0.235 (23.5% complete)
+const animation = new Animation(1000); // 1 second animation
+console.log(animation.getProgress()); // e.g., 0.235 (23.5% complete)
 ```

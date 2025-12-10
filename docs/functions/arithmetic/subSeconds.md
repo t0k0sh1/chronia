@@ -7,20 +7,20 @@ The `subSeconds` function subtracts a specified number of seconds from a given d
 ## Signature
 
 ```typescript
-function subSeconds(date: Date | number, amount: number): Date
+function subSeconds(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract seconds |
-| `amount` | `number` | The number of seconds to subtract (can be negative to add seconds instead) |
+| Parameter | Type             | Description                                                                        |
+| --------- | ---------------- | ---------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract seconds |
+| `amount`  | `number`         | The number of seconds to subtract (can be negative to add seconds instead)         |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of seconds subtracted, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `subSeconds` function subtracts a specified number of seconds from a date by
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp (positive, zero, or negative)
 - The `amount` argument is a finite number (not NaN, Infinity, or -Infinity)
@@ -37,11 +38,13 @@ The `subSeconds` function subtracts a specified number of seconds from a date by
 - Milliseconds from the original date are preserved in the result
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
 
 #### Special behaviors:
+
 - Negative `amount` values add seconds instead of subtracting (e.g., `subSeconds(date, -15)` adds 15 seconds)
 - The function automatically handles boundary crossings (minutes, hours, days, months, years)
 - The result crosses boundaries as needed (e.g., subtracting 30 seconds from 12:31:15 yields 12:30:45)
@@ -69,7 +72,7 @@ The `subSeconds` function subtracts a specified number of seconds from a date by
 ### Time Calculations
 
 ```typescript
-import { subSeconds } from 'chronia';
+import { subSeconds } from "chronia";
 
 // Calculate a time 15 seconds in the past
 const now = new Date(2025, 10, 22, 14, 30, 45);
@@ -89,7 +92,7 @@ const cacheTime = subSeconds(new Date(), 30);
 ### Countdown Timers
 
 ```typescript
-import { subSeconds } from 'chronia';
+import { subSeconds } from "chronia";
 
 // Implement a simple countdown
 let countdown = new Date(2025, 10, 22, 12, 0, 0);
@@ -103,14 +106,16 @@ function tick() {
 const sessionStart = new Date();
 const sessionDuration = 3600; // 1 hour in seconds
 const currentTime = new Date();
-const elapsed = Math.floor((currentTime.getTime() - sessionStart.getTime()) / 1000);
+const elapsed = Math.floor(
+  (currentTime.getTime() - sessionStart.getTime()) / 1000,
+);
 const timeRemaining = subSeconds(sessionStart, elapsed - sessionDuration);
 ```
 
 ### Crossing Boundaries
 
 ```typescript
-import { subSeconds } from 'chronia';
+import { subSeconds } from "chronia";
 
 // Crossing minute boundary
 const time1 = new Date(2025, 10, 22, 12, 31, 15);
@@ -131,7 +136,7 @@ const result3 = subSeconds(time3, 60);
 ### Negative Amounts (Adding Seconds)
 
 ```typescript
-import { subSeconds } from 'chronia';
+import { subSeconds } from "chronia";
 
 // Using negative amount to add seconds
 const base = new Date(2025, 10, 22, 12, 30, 30);
@@ -139,7 +144,7 @@ const future = subSeconds(base, -15);
 // Returns: 2025-11-22T12:30:45 (15 seconds added)
 
 // Equivalent to addSeconds
-import { addSeconds } from 'chronia';
+import { addSeconds } from "chronia";
 const same = addSeconds(base, 15);
 // Returns: 2025-11-22T12:30:45 (same result)
 ```
@@ -147,7 +152,7 @@ const same = addSeconds(base, 15);
 ### Fractional Seconds Handling
 
 ```typescript
-import { subSeconds } from 'chronia';
+import { subSeconds } from "chronia";
 
 // Positive fractional amounts are truncated toward zero
 const date1 = new Date(2025, 10, 22, 12, 0, 30);
@@ -165,10 +170,10 @@ const result3 = subSeconds(date1, -1.9);
 ### Error Handling
 
 ```typescript
-import { subSeconds } from 'chronia';
+import { subSeconds } from "chronia";
 
 // Invalid date input
-const invalid1 = subSeconds(new Date('invalid'), 30);
+const invalid1 = subSeconds(new Date("invalid"), 30);
 // Returns: Invalid Date
 
 // Invalid amount (NaN)
@@ -189,7 +194,7 @@ function safeSubSeconds(date: Date | number, amount: number): Date | null {
 ### Preserving Milliseconds
 
 ```typescript
-import { subSeconds } from 'chronia';
+import { subSeconds } from "chronia";
 
 // Milliseconds are preserved
 const dateWithMs = new Date(2025, 10, 22, 12, 30, 45, 750);

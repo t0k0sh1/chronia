@@ -7,19 +7,19 @@ The `getSeconds` function extracts the seconds component (0-59) from a given Dat
 ## Signature
 
 ```typescript
-function getSeconds(date: Date | number): number
+function getSeconds(date: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp from which to extract the seconds |
+| Parameter | Type             | Description                                                          |
+| --------- | ---------------- | -------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the seconds |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                       |
+| -------- | --------------------------------------------------------------------------------- |
 | `number` | Returns the seconds (0-59) of the provided date, or `NaN` if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `getSeconds` function retrieves the seconds component from the provided Date
 ### Specification
 
 #### Returns a number (0-59) when:
+
 - The argument is a valid `Date` object
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `getSeconds` function retrieves the seconds component from the provided Date
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns `NaN` when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -64,29 +66,29 @@ The `getSeconds` function retrieves the seconds component from the provided Date
 ### Time Component Extraction
 
 ```typescript
-import { getSeconds } from 'chronia';
+import { getSeconds } from "chronia";
 
 // Extract seconds from Date object
 const date = new Date(2025, 0, 15, 10, 30, 45);
-getSeconds(date);  // Returns: 45
+getSeconds(date); // Returns: 45
 
 // Extract seconds from timestamp
 const timestamp = 1704067245000; // 2024-01-01T00:00:45Z
-getSeconds(timestamp);  // Returns: 45
+getSeconds(timestamp); // Returns: 45
 
 // Start of minute (0 seconds)
 const startOfMinute = new Date(2024, 0, 1, 10, 30, 0);
-getSeconds(startOfMinute);  // Returns: 0
+getSeconds(startOfMinute); // Returns: 0
 
 // End of minute (59 seconds)
 const endOfMinute = new Date(2024, 0, 1, 10, 30, 59);
-getSeconds(endOfMinute);  // Returns: 59
+getSeconds(endOfMinute); // Returns: 59
 ```
 
 ### Time Comparison
 
 ```typescript
-import { getSeconds } from 'chronia';
+import { getSeconds } from "chronia";
 
 // Compare seconds of two dates
 function hasSameSecond(date1: Date, date2: Date): boolean {
@@ -95,16 +97,16 @@ function hasSameSecond(date1: Date, date2: Date): boolean {
 
 const time1 = new Date(2024, 0, 1, 10, 30, 45);
 const time2 = new Date(2024, 5, 15, 14, 22, 45);
-hasSameSecond(time1, time2);  // Returns: true (both at 45 seconds)
+hasSameSecond(time1, time2); // Returns: true (both at 45 seconds)
 
 const time3 = new Date(2024, 0, 1, 10, 30, 30);
-hasSameSecond(time1, time3);  // Returns: false (45 vs 30 seconds)
+hasSameSecond(time1, time3); // Returns: false (45 vs 30 seconds)
 ```
 
 ### Time Formatting
 
 ```typescript
-import { getSeconds, getMinutes, getHours } from 'chronia';
+import { getSeconds, getMinutes, getHours } from "chronia";
 
 // Build custom time format
 function formatTime(date: Date | number): string {
@@ -113,20 +115,20 @@ function formatTime(date: Date | number): string {
   const seconds = getSeconds(date);
 
   if (isNaN(seconds)) {
-    return 'Invalid time';
+    return "Invalid time";
   }
 
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
-formatTime(new Date(2024, 0, 1, 9, 5, 7));  // Returns: '09:05:07'
-formatTime(new Date(2024, 0, 1, 14, 30, 45));  // Returns: '14:30:45'
+formatTime(new Date(2024, 0, 1, 9, 5, 7)); // Returns: '09:05:07'
+formatTime(new Date(2024, 0, 1, 14, 30, 45)); // Returns: '14:30:45'
 ```
 
 ### Validation Workflows
 
 ```typescript
-import { getSeconds } from 'chronia';
+import { getSeconds } from "chronia";
 
 // Validate time precision (seconds must be 0)
 function isRoundedToMinute(date: Date | number): boolean {
@@ -134,18 +136,18 @@ function isRoundedToMinute(date: Date | number): boolean {
   return !isNaN(seconds) && seconds === 0;
 }
 
-isRoundedToMinute(new Date(2024, 0, 1, 10, 30, 0));  // Returns: true
-isRoundedToMinute(new Date(2024, 0, 1, 10, 30, 45));  // Returns: false
+isRoundedToMinute(new Date(2024, 0, 1, 10, 30, 0)); // Returns: true
+isRoundedToMinute(new Date(2024, 0, 1, 10, 30, 45)); // Returns: false
 
 // Handle invalid dates gracefully
-const invalidDate = new Date('invalid');
-isRoundedToMinute(invalidDate);  // Returns: false (NaN !== 0)
+const invalidDate = new Date("invalid");
+isRoundedToMinute(invalidDate); // Returns: false (NaN !== 0)
 ```
 
 ### Time-based Calculations
 
 ```typescript
-import { getSeconds } from 'chronia';
+import { getSeconds } from "chronia";
 
 // Calculate progress within current minute
 function getMinuteProgress(date: Date | number): number {
@@ -158,8 +160,8 @@ function getMinuteProgress(date: Date | number): number {
   return (seconds / 60) * 100; // Percentage through the minute
 }
 
-getMinuteProgress(new Date(2024, 0, 1, 10, 30, 0));   // Returns: 0 (start)
-getMinuteProgress(new Date(2024, 0, 1, 10, 30, 30));  // Returns: 50 (halfway)
-getMinuteProgress(new Date(2024, 0, 1, 10, 30, 45));  // Returns: 75
-getMinuteProgress(new Date(2024, 0, 1, 10, 30, 59));  // Returns: 98.33... (almost complete)
+getMinuteProgress(new Date(2024, 0, 1, 10, 30, 0)); // Returns: 0 (start)
+getMinuteProgress(new Date(2024, 0, 1, 10, 30, 30)); // Returns: 50 (halfway)
+getMinuteProgress(new Date(2024, 0, 1, 10, 30, 45)); // Returns: 75
+getMinuteProgress(new Date(2024, 0, 1, 10, 30, 59)); // Returns: 98.33... (almost complete)
 ```

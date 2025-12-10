@@ -7,20 +7,20 @@ The `setYear` function sets the year component of a given date to a specified va
 ## Signature
 
 ```typescript
-function setYear(date: Date | number, year: number): Date
+function setYear(date: Date | number, year: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `year` | `number` | The year to set (can be negative for BC dates, fractional values are truncated toward zero) |
+| Parameter | Type             | Description                                                                                 |
+| --------- | ---------------- | ------------------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                         |
+| `year`    | `number`         | The year to set (can be negative for BC dates, fractional values are truncated toward zero) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                            |
+| ------ | -------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified year set, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `setYear` function creates a new Date object with the year component set to 
 ### Specification
 
 #### Returns a valid Date with the specified year when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp (positive, zero, or negative)
 - The `year` argument is a finite number (positive, zero, or negative)
@@ -37,11 +38,13 @@ The `setYear` function creates a new Date object with the year component set to 
 - Fractional year values are truncated toward zero (e.g., 2023.9 → 2023, -2023.9 → -2023)
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `year` argument is `NaN`, `Infinity`, or `-Infinity`
 
 #### Special handling for leap year adjustments:
+
 - When the source date is February 29 (leap year) and the target year is not a leap year, the resulting date becomes February 28
 - This prevents invalid dates like February 29, 2021 (since 2021 is not a leap year)
 
@@ -67,7 +70,7 @@ The `setYear` function creates a new Date object with the year component set to 
 ### Date Transformation
 
 ```typescript
-import { setYear } from 'chronia';
+import { setYear } from "chronia";
 
 // Set year to future year
 const original = new Date(2025, 0, 15, 10, 30, 0);
@@ -87,7 +90,7 @@ const changed = setYear(timestamp, 2028);
 ### Leap Year Handling
 
 ```typescript
-import { setYear } from 'chronia';
+import { setYear } from "chronia";
 
 // Leap year to non-leap year (Feb 29 → Feb 28)
 const leapDay = new Date(2020, 1, 29); // Feb 29, 2020
@@ -107,7 +110,7 @@ const leapToLeap = setYear(new Date(2020, 1, 29), 2024);
 ### Input Validation
 
 ```typescript
-import { setYear, isValid } from 'chronia';
+import { setYear, isValid } from "chronia";
 
 // Fractional years are truncated
 const truncated = setYear(new Date(2025, 0, 15), 2023.9);
@@ -118,7 +121,7 @@ const ancient = setYear(new Date(2025, 0, 15), -100);
 // Returns: Date representing year -100 (100 BC)
 
 // Invalid date input returns Invalid Date
-const invalidDate = setYear(new Date('invalid'), 2025);
+const invalidDate = setYear(new Date("invalid"), 2025);
 console.log(isValid(invalidDate)); // false
 
 // Invalid year returns Invalid Date
@@ -129,7 +132,7 @@ console.log(isValid(invalidYear)); // false
 ### Time Travel Scenarios
 
 ```typescript
-import { setYear } from 'chronia';
+import { setYear } from "chronia";
 
 // Project an event to next year
 function projectToNextYear(eventDate: Date): Date {
@@ -154,7 +157,7 @@ const in1990 = historicalEquivalent(today, 1990);
 ### Birthday Calculations
 
 ```typescript
-import { setYear } from 'chronia';
+import { setYear } from "chronia";
 
 // Calculate when a birthday occurs in a specific year
 function birthdayInYear(birthDate: Date, targetYear: number): Date {

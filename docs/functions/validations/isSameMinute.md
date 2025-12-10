@@ -7,20 +7,23 @@ The `isSameMinute` function checks whether two dates fall within the same minute
 ## Signature
 
 ```typescript
-function isSameMinute(dateLeft: Date | number, dateRight: Date | number): boolean
+function isSameMinute(
+  dateLeft: Date | number,
+  dateRight: Date | number,
+): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                                            |
+| --------- | ---------------------------------------------------------------------- |
 | `boolean` | Returns `true` if both dates are in the same minute, `false` otherwise |
 
 ## Description
@@ -30,11 +33,13 @@ The `isSameMinute` function determines whether two dates share the same minute b
 ### Specification
 
 #### Returns `true` when:
+
 - Both dates have the same year, month, day, hour, and minute
 - Seconds and milliseconds may differ between the two dates
 - Both arguments are valid Date objects or finite numeric timestamps
 
 #### Returns `false` when:
+
 - The dates differ in year, month, day, hour, or minute
 - Either argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - Either argument is `NaN`
@@ -63,28 +68,28 @@ The `isSameMinute` function determines whether two dates share the same minute b
 ### Event Scheduling
 
 ```typescript
-import { isSameMinute } from 'chronia';
+import { isSameMinute } from "chronia";
 
 // Check if two meeting times are in the same minute
 const meeting1 = new Date(2024, 5, 15, 14, 30, 0);
 const meeting2 = new Date(2024, 5, 15, 14, 30, 45);
 
-isSameMinute(meeting1, meeting2);  // Returns: true
+isSameMinute(meeting1, meeting2); // Returns: true
 
 // Different minutes return false
 const meeting3 = new Date(2024, 5, 15, 14, 31, 0);
-isSameMinute(meeting1, meeting3);  // Returns: false
+isSameMinute(meeting1, meeting3); // Returns: false
 
 // Works with timestamps
 const timestamp1 = new Date(2024, 5, 15, 14, 30, 15, 500).getTime();
 const timestamp2 = new Date(2024, 5, 15, 14, 30, 45, 800).getTime();
-isSameMinute(timestamp1, timestamp2);  // Returns: true
+isSameMinute(timestamp1, timestamp2); // Returns: true
 ```
 
 ### Time-Based Grouping
 
 ```typescript
-import { isSameMinute } from 'chronia';
+import { isSameMinute } from "chronia";
 
 interface LogEntry {
   timestamp: Date;
@@ -96,7 +101,9 @@ function groupLogsByMinute(logs: LogEntry[]): LogEntry[][] {
   const groups: LogEntry[][] = [];
 
   for (const log of logs) {
-    const group = groups.find(g => isSameMinute(g[0].timestamp, log.timestamp));
+    const group = groups.find((g) =>
+      isSameMinute(g[0].timestamp, log.timestamp),
+    );
     if (group) {
       group.push(log);
     } else {
@@ -108,9 +115,9 @@ function groupLogsByMinute(logs: LogEntry[]): LogEntry[][] {
 }
 
 const logs = [
-  { timestamp: new Date(2024, 5, 15, 14, 30, 5), message: 'Error occurred' },
-  { timestamp: new Date(2024, 5, 15, 14, 30, 32), message: 'Retry attempted' },
-  { timestamp: new Date(2024, 5, 15, 14, 31, 10), message: 'Success' },
+  { timestamp: new Date(2024, 5, 15, 14, 30, 5), message: "Error occurred" },
+  { timestamp: new Date(2024, 5, 15, 14, 30, 32), message: "Retry attempted" },
+  { timestamp: new Date(2024, 5, 15, 14, 31, 10), message: "Success" },
 ];
 
 groupLogsByMinute(logs);
@@ -120,12 +127,12 @@ groupLogsByMinute(logs);
 ### Temporal Validation
 
 ```typescript
-import { isSameMinute } from 'chronia';
+import { isSameMinute } from "chronia";
 
 // Validate that start and end times are not in the same minute
 function validateTimeRange(start: Date, end: Date): boolean {
   if (isSameMinute(start, end)) {
-    console.log('Start and end times must be in different minutes');
+    console.log("Start and end times must be in different minutes");
     return false;
   }
   return true;
@@ -134,16 +141,16 @@ function validateTimeRange(start: Date, end: Date): boolean {
 const start = new Date(2024, 5, 15, 14, 30, 0);
 const end = new Date(2024, 5, 15, 14, 30, 59);
 
-validateTimeRange(start, end);  // Returns: false (same minute)
+validateTimeRange(start, end); // Returns: false (same minute)
 
 const validEnd = new Date(2024, 5, 15, 14, 31, 0);
-validateTimeRange(start, validEnd);  // Returns: true (different minutes)
+validateTimeRange(start, validEnd); // Returns: true (different minutes)
 ```
 
 ### Data Deduplication
 
 ```typescript
-import { isSameMinute } from 'chronia';
+import { isSameMinute } from "chronia";
 
 interface Activity {
   userId: string;
@@ -154,23 +161,38 @@ interface Activity {
 // Remove duplicate activities within the same minute for the same user
 function deduplicateActivities(activities: Activity[]): Activity[] {
   return activities.filter((activity, index, arr) => {
-    const duplicate = arr.slice(0, index).find(
-      prev => prev.userId === activity.userId &&
-              isSameMinute(prev.timestamp, activity.timestamp)
-    );
+    const duplicate = arr
+      .slice(0, index)
+      .find(
+        (prev) =>
+          prev.userId === activity.userId &&
+          isSameMinute(prev.timestamp, activity.timestamp),
+      );
     return !duplicate;
   });
 }
 
 const activities = [
-  { userId: 'user1', timestamp: new Date(2024, 5, 15, 14, 30, 10), action: 'click' },
-  { userId: 'user1', timestamp: new Date(2024, 5, 15, 14, 30, 45), action: 'click' },
-  { userId: 'user1', timestamp: new Date(2024, 5, 15, 14, 31, 5), action: 'click' },
+  {
+    userId: "user1",
+    timestamp: new Date(2024, 5, 15, 14, 30, 10),
+    action: "click",
+  },
+  {
+    userId: "user1",
+    timestamp: new Date(2024, 5, 15, 14, 30, 45),
+    action: "click",
+  },
+  {
+    userId: "user1",
+    timestamp: new Date(2024, 5, 15, 14, 31, 5),
+    action: "click",
+  },
 ];
 
 deduplicateActivities(activities);
 // Returns: Two activities - one at 14:30 and one at 14:31 (duplicate removed)
 
 // Invalid dates return false
-isSameMinute(new Date('invalid'), new Date(2024, 5, 15, 14, 30));  // Returns: false
+isSameMinute(new Date("invalid"), new Date(2024, 5, 15, 14, 30)); // Returns: false
 ```

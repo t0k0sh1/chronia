@@ -7,19 +7,19 @@ The `startOfDay` function returns a new Date object set to the beginning of the 
 ## Signature
 
 ```typescript
-function startOfDay(date: Date | number): Date
+function startOfDay(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
+| Parameter | Type             | Description                                         |
+| --------- | ---------------- | --------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                     |
+| ------ | ----------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to 00:00:00.000 of the same date, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `startOfDay` function takes a Date object or numeric timestamp and returns a
 ### Specification
 
 #### Returns a Date set to 00:00:00.000 when:
+
 - The argument is a valid `Date` object with any time during the day
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `startOfDay` function takes a Date object or numeric timestamp and returns a
   - Negative timestamps (dates before Unix epoch)
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -63,7 +65,7 @@ The `startOfDay` function takes a Date object or numeric timestamp and returns a
 ### Date Normalization
 
 ```typescript
-import { startOfDay } from 'chronia';
+import { startOfDay } from "chronia";
 
 // Normalize afternoon date to start of day
 const afternoon = new Date(2024, 5, 15, 14, 30, 45, 123);
@@ -84,7 +86,7 @@ const todayStart = startOfDay(timestamp);
 ### Date Comparisons
 
 ```typescript
-import { startOfDay } from 'chronia';
+import { startOfDay } from "chronia";
 
 // Compare dates ignoring time
 function isSameDay(date1: Date, date2: Date): boolean {
@@ -95,23 +97,23 @@ const morning = new Date(2024, 5, 15, 8, 0, 0);
 const evening = new Date(2024, 5, 15, 20, 0, 0);
 const nextDay = new Date(2024, 5, 16, 8, 0, 0);
 
-isSameDay(morning, evening);  // Returns: true
-isSameDay(morning, nextDay);  // Returns: false
+isSameDay(morning, evening); // Returns: true
+isSameDay(morning, nextDay); // Returns: false
 ```
 
 ### Range Calculations
 
 ```typescript
-import { startOfDay } from 'chronia';
+import { startOfDay } from "chronia";
 
 // Create a day range for filtering events
 function getEventsForDay(events: Event[], date: Date): Event[] {
   const dayStart = startOfDay(date);
   const dayEnd = new Date(dayStart);
-  dayEnd.setDate(dayEnd.getDate() + 1);  // Next day start
+  dayEnd.setDate(dayEnd.getDate() + 1); // Next day start
 
-  return events.filter(event =>
-    event.timestamp >= dayStart && event.timestamp < dayEnd
+  return events.filter(
+    (event) => event.timestamp >= dayStart && event.timestamp < dayEnd,
   );
 }
 
@@ -124,7 +126,7 @@ const rangeStart = startOfDay(userInput);
 ### Data Aggregation
 
 ```typescript
-import { startOfDay } from 'chronia';
+import { startOfDay } from "chronia";
 
 // Group events by day
 interface Event {
@@ -158,10 +160,10 @@ const totals = aggregateByDay(events);
 ### Invalid Input Handling
 
 ```typescript
-import { startOfDay } from 'chronia';
+import { startOfDay } from "chronia";
 
 // Handles invalid dates gracefully
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const result = startOfDay(invalidDate);
 // Returns: Invalid Date
 
@@ -171,7 +173,7 @@ function safeStartOfDay(date: Date | number): Date | null {
   return isNaN(result.getTime()) ? null : result;
 }
 
-safeStartOfDay(new Date(2024, 5, 15));  // Returns: Sat Jun 15 2024 00:00:00.000
-safeStartOfDay(NaN);                     // Returns: null
-safeStartOfDay(Infinity);                // Returns: null
+safeStartOfDay(new Date(2024, 5, 15)); // Returns: Sat Jun 15 2024 00:00:00.000
+safeStartOfDay(NaN); // Returns: null
+safeStartOfDay(Infinity); // Returns: null
 ```

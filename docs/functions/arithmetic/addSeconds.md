@@ -7,20 +7,20 @@ The `addSeconds` function adds a specified number of seconds to a given date, re
 ## Signature
 
 ```typescript
-function addSeconds(date: Date | number, amount: number): Date
+function addSeconds(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `amount` | `number` | The number of seconds to add (can be negative to subtract seconds) |
+| Parameter | Type             | Description                                                        |
+| --------- | ---------------- | ------------------------------------------------------------------ |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                |
+| `amount`  | `number`         | The number of seconds to add (can be negative to subtract seconds) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                           |
+| ------ | ----------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of seconds added, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,12 +30,14 @@ The `addSeconds` function performs second-based date arithmetic by adding the sp
 ### Specification
 
 #### Returns a valid `Date` when:
+
 - The `date` argument is a valid `Date` object
 - The `date` argument is a finite numeric timestamp (positive, zero, or negative)
 - The `amount` argument is a finite number (including negative values for subtraction)
 - Fractional `amount` values are truncated toward zero (e.g., `1.9` becomes `1`, `-1.9` becomes `-1`)
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -63,7 +65,7 @@ The `addSeconds` function performs second-based date arithmetic by adding the sp
 ### Time Calculations
 
 ```typescript
-import { addSeconds } from 'chronia';
+import { addSeconds } from "chronia";
 
 // Add 15 seconds to a specific time
 const baseTime = new Date(2020, 0, 1, 12, 30, 30);
@@ -87,14 +89,14 @@ const fromTimestamp = addSeconds(timestamp, 90);
 ### API Response Adjustment
 
 ```typescript
-import { addSeconds } from 'chronia';
+import { addSeconds } from "chronia";
 
 // Adjust API timestamp for network delay
 function adjustForLatency(apiTimestamp: number, latencySeconds: number): Date {
   return addSeconds(apiTimestamp, latencySeconds);
 }
 
-const serverTime = new Date('2025-01-01T12:00:00Z').getTime();
+const serverTime = new Date("2025-01-01T12:00:00Z").getTime();
 const adjustedTime = adjustForLatency(serverTime, 2);
 // Returns: 2025-01-01T12:00:02Z
 ```
@@ -102,13 +104,13 @@ const adjustedTime = adjustForLatency(serverTime, 2);
 ### Cache Expiration
 
 ```typescript
-import { addSeconds } from 'chronia';
+import { addSeconds } from "chronia";
 
 // Set cache expiration time
 function createCacheEntry<T>(data: T, ttlSeconds: number) {
   return {
     data,
-    expiresAt: addSeconds(Date.now(), ttlSeconds)
+    expiresAt: addSeconds(Date.now(), ttlSeconds),
   };
 }
 
@@ -125,10 +127,14 @@ function isCacheValid(expiresAt: Date): boolean {
 ### Time Window Operations
 
 ```typescript
-import { addSeconds } from 'chronia';
+import { addSeconds } from "chronia";
 
 // Create polling interval timestamps
-function createPollingSchedule(startTime: Date, intervalSeconds: number, count: number): Date[] {
+function createPollingSchedule(
+  startTime: Date,
+  intervalSeconds: number,
+  count: number,
+): Date[] {
   const schedule: Date[] = [startTime];
 
   for (let i = 1; i < count; i++) {
@@ -146,7 +152,7 @@ const pollTimes = createPollingSchedule(start, 30, 5);
 ### Fractional Handling
 
 ```typescript
-import { addSeconds } from 'chronia';
+import { addSeconds } from "chronia";
 
 // Fractional amounts are truncated, not rounded
 const base = new Date(2020, 0, 1, 12, 0, 0);
@@ -166,10 +172,10 @@ const preserved = addSeconds(withMillis, 5);
 ### Error Handling
 
 ```typescript
-import { addSeconds } from 'chronia';
+import { addSeconds } from "chronia";
 
 // Invalid date inputs return Invalid Date
-const invalidDate = addSeconds(new Date('invalid'), 30);
+const invalidDate = addSeconds(new Date("invalid"), 30);
 console.log(isNaN(invalidDate.getTime())); // Returns: true
 
 // Invalid amount inputs return Invalid Date

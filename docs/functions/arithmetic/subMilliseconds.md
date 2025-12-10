@@ -7,20 +7,20 @@ The `subMilliseconds` function subtracts a specified number of milliseconds from
 ## Signature
 
 ```typescript
-function subMilliseconds(date: Date | number, amount: number): Date
+function subMilliseconds(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract milliseconds |
-| `amount` | `number` | The number of milliseconds to subtract (can be negative to add milliseconds) |
+| Parameter | Type             | Description                                                                             |
+| --------- | ---------------- | --------------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract milliseconds |
+| `amount`  | `number`         | The number of milliseconds to subtract (can be negative to add milliseconds)            |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                     |
+| ------ | --------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified number of milliseconds subtracted, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,12 +30,14 @@ The `subMilliseconds` function decreases the time value of the provided date by 
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object or finite numeric timestamp
 - The `amount` argument is a finite number (including zero)
 - The resulting timestamp is within JavaScript's valid date range
 - Fractional amounts (e.g., `1.9`) are truncated to integers (`1`) before subtraction
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -65,7 +67,7 @@ The `subMilliseconds` function decreases the time value of the provided date by 
 ### Precise Time Calculations
 
 ```typescript
-import { subMilliseconds } from 'chronia';
+import { subMilliseconds } from "chronia";
 
 // Subtract 300 milliseconds
 const date = new Date(2020, 0, 1, 12, 0, 0, 500);
@@ -83,7 +85,7 @@ const result2 = subMilliseconds(date2, 1);
 ### Backward Time Adjustments
 
 ```typescript
-import { subMilliseconds } from 'chronia';
+import { subMilliseconds } from "chronia";
 
 // Calculate when an event started 2500ms ago
 const now = new Date(2025, 10, 22, 14, 30, 5, 750);
@@ -100,7 +102,7 @@ const earlier = subMilliseconds(timestamp, 1000);
 ### Negative Amounts for Addition
 
 ```typescript
-import { subMilliseconds } from 'chronia';
+import { subMilliseconds } from "chronia";
 
 // Subtract a negative amount (effectively adds)
 const date = new Date(2020, 0, 1, 12, 0, 0, 200);
@@ -112,7 +114,7 @@ const result = subMilliseconds(date, -300);
 ### Fractional Amounts
 
 ```typescript
-import { subMilliseconds } from 'chronia';
+import { subMilliseconds } from "chronia";
 
 // Fractional amounts are truncated toward zero
 const date = new Date(2020, 0, 1, 12, 0, 0, 100);
@@ -129,10 +131,10 @@ const result2 = subMilliseconds(date, -1.9);
 ### Invalid Input Handling
 
 ```typescript
-import { subMilliseconds } from 'chronia';
+import { subMilliseconds } from "chronia";
 
 // Invalid date returns Invalid Date
-const invalid = subMilliseconds(new Date('invalid'), 500);
+const invalid = subMilliseconds(new Date("invalid"), 500);
 // Returns: Invalid Date
 
 // Invalid amount returns Invalid Date

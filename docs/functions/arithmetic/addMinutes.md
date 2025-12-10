@@ -7,20 +7,20 @@ The `addMinutes` function adds a specified number of minutes to a given date, re
 ## Signature
 
 ```typescript
-function addMinutes(date: Date | number, amount: number): Date
+function addMinutes(date: Date | number, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `amount` | `number` | The number of minutes to add (can be negative to subtract) |
+| Parameter | Type             | Description                                                |
+| --------- | ---------------- | ---------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp        |
+| `amount`  | `number`         | The number of minutes to add (can be negative to subtract) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                 |
+| ------ | ------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the specified minutes added, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `addMinutes` function performs minute-based time manipulation on a given dat
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -41,6 +42,7 @@ The `addMinutes` function performs minute-based time manipulation on a given dat
   - `-1.9` becomes `-1`
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -68,7 +70,7 @@ The `addMinutes` function performs minute-based time manipulation on a given dat
 ### Time Scheduling
 
 ```typescript
-import { addMinutes } from 'chronia';
+import { addMinutes } from "chronia";
 
 // Add 15 minutes to appointment time
 const appointmentStart = new Date(2025, 0, 15, 14, 30, 0);
@@ -89,7 +91,7 @@ const eventStart = addMinutes(eventEnd, -90);
 ### Duration Calculations
 
 ```typescript
-import { addMinutes } from 'chronia';
+import { addMinutes } from "chronia";
 
 // Calculate expiration time (30 minutes from now)
 const now = new Date();
@@ -107,7 +109,7 @@ const result = addMinutes(base, 5.9);
 ### Boundary Crossing
 
 ```typescript
-import { addMinutes } from 'chronia';
+import { addMinutes } from "chronia";
 
 // Crossing hour boundary
 const time1 = new Date(2025, 0, 1, 23, 45, 30, 500);
@@ -129,15 +131,15 @@ const newYear = addMinutes(yearEnd, 10);
 ### Time Zone Adjustments
 
 ```typescript
-import { addMinutes } from 'chronia';
+import { addMinutes } from "chronia";
 
 // Convert UTC to India Standard Time (UTC+5:30)
-const utcTime = new Date('2025-01-15T12:00:00Z');
+const utcTime = new Date("2025-01-15T12:00:00Z");
 const istTime = addMinutes(utcTime, 330); // 5.5 hours = 330 minutes
 // Returns: 2025-01-15T17:30:00
 
 // Apply custom time zone offset
-const baseTime = new Date('2025-01-15T10:00:00Z');
+const baseTime = new Date("2025-01-15T10:00:00Z");
 const offset = -345; // UTC-5:45 (Nepal Time)
 const localTime = addMinutes(baseTime, offset);
 // Returns: 2025-01-15T04:15:00
@@ -146,10 +148,10 @@ const localTime = addMinutes(baseTime, offset);
 ### Input Validation
 
 ```typescript
-import { addMinutes } from 'chronia';
+import { addMinutes } from "chronia";
 
 // Handle invalid date inputs
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const result1 = addMinutes(invalidDate, 30);
 // Returns: Invalid Date
 
@@ -167,6 +169,6 @@ function safeAddMinutes(date: Date | number, minutes: number): Date | null {
 const safe1 = safeAddMinutes(new Date(2025, 0, 1), 30);
 // Returns: valid Date object
 
-const safe2 = safeAddMinutes(new Date('invalid'), 30);
+const safe2 = safeAddMinutes(new Date("invalid"), 30);
 // Returns: null
 ```

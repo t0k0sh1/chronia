@@ -8,15 +8,15 @@ All truncation functions accept both Date objects and numeric timestamps, handle
 
 ## Available Functions
 
-| Function | Description | Precision Level | Time Components Zeroed |
-|----------|-------------|-----------------|------------------------|
-| [`truncYear`](./truncYear.md) | Truncates to January 1st at 00:00:00.000 of the same year | Year | Month → 1, Day → 1, Hours, Minutes, Seconds, Milliseconds → 0 |
-| [`truncMonth`](./truncMonth.md) | Truncates to the 1st day at 00:00:00.000 of the same month | Month | Day → 1, Hours, Minutes, Seconds, Milliseconds → 0 |
-| [`truncDay`](./truncDay.md) | Truncates to 00:00:00.000 (midnight) of the same day | Day | Hours, Minutes, Seconds, Milliseconds → 0 |
-| [`truncHour`](./truncHour.md) | Truncates to the start of the hour (:00:00.000) | Hour | Minutes, Seconds, Milliseconds → 0 |
-| [`truncMinute`](./truncMinute.md) | Truncates to the start of the minute (:00.000) | Minute | Seconds, Milliseconds → 0 |
-| [`truncSecond`](./truncSecond.md) | Truncates to the start of the second (.000) | Second | Milliseconds → 0 |
-| [`truncMillisecond`](./truncMillisecond.md) | Returns the date unchanged (no precision loss) | Millisecond | None (identity operation) |
+| Function                                    | Description                                                | Precision Level | Time Components Zeroed                                        |
+| ------------------------------------------- | ---------------------------------------------------------- | --------------- | ------------------------------------------------------------- |
+| [`truncYear`](./truncYear.md)               | Truncates to January 1st at 00:00:00.000 of the same year  | Year            | Month → 1, Day → 1, Hours, Minutes, Seconds, Milliseconds → 0 |
+| [`truncMonth`](./truncMonth.md)             | Truncates to the 1st day at 00:00:00.000 of the same month | Month           | Day → 1, Hours, Minutes, Seconds, Milliseconds → 0            |
+| [`truncDay`](./truncDay.md)                 | Truncates to 00:00:00.000 (midnight) of the same day       | Day             | Hours, Minutes, Seconds, Milliseconds → 0                     |
+| [`truncHour`](./truncHour.md)               | Truncates to the start of the hour (:00:00.000)            | Hour            | Minutes, Seconds, Milliseconds → 0                            |
+| [`truncMinute`](./truncMinute.md)           | Truncates to the start of the minute (:00.000)             | Minute          | Seconds, Milliseconds → 0                                     |
+| [`truncSecond`](./truncSecond.md)           | Truncates to the start of the second (.000)                | Second          | Milliseconds → 0                                              |
+| [`truncMillisecond`](./truncMillisecond.md) | Returns the date unchanged (no precision loss)             | Millisecond     | None (identity operation)                                     |
 
 ## Common Features
 
@@ -27,14 +27,14 @@ All truncation functions in this category share the following characteristics:
 All functions accept both Date objects and numeric timestamps:
 
 ```typescript
-import { truncDay, truncHour } from 'chronia';
+import { truncDay, truncHour } from "chronia";
 
 // Date objects
-truncDay(new Date(2024, 5, 15, 14, 30, 45));  // June 15, 2024 00:00:00.000
+truncDay(new Date(2024, 5, 15, 14, 30, 45)); // June 15, 2024 00:00:00.000
 truncHour(new Date(2024, 5, 15, 14, 30, 45)); // June 15, 2024 14:00:00.000
 
 // Timestamps
-truncDay(1718462445000);  // June 15, 2024 00:00:00.000 (local time)
+truncDay(1718462445000); // June 15, 2024 00:00:00.000 (local time)
 truncHour(1718462445000); // June 15, 2024 14:00:00.000 (local time)
 
 // Mixed usage in data processing
@@ -43,7 +43,7 @@ const events = [
   1718462445000,
   new Date(2024, 5, 16, 9, 15),
 ];
-const normalized = events.map(e => truncDay(e));
+const normalized = events.map((e) => truncDay(e));
 ```
 
 ### Immutability
@@ -51,7 +51,7 @@ const normalized = events.map(e => truncDay(e));
 All truncation functions return new Date instances and never mutate the input:
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 const original = new Date(2024, 5, 15, 14, 30, 45, 123);
 const truncated = truncDay(original);
@@ -66,12 +66,12 @@ console.log(truncated.getHours()); // 0 (truncated)
 All functions validate inputs and return Invalid Date for invalid inputs without throwing exceptions:
 
 ```typescript
-import { truncDay, truncHour, truncMonth } from 'chronia';
+import { truncDay, truncHour, truncMonth } from "chronia";
 
-truncDay(new Date('invalid'));  // Invalid Date
-truncHour(NaN);                 // Invalid Date
-truncMonth(Infinity);           // Invalid Date
-truncDay(-Infinity);            // Invalid Date
+truncDay(new Date("invalid")); // Invalid Date
+truncHour(NaN); // Invalid Date
+truncMonth(Infinity); // Invalid Date
+truncDay(-Infinity); // Invalid Date
 ```
 
 ### Consistent Validation
@@ -79,18 +79,18 @@ truncDay(-Infinity);            // Invalid Date
 All functions use Chronia's internal validation logic to ensure consistency with other library functions:
 
 ```typescript
-import { truncDay, isValid } from 'chronia';
+import { truncDay, isValid } from "chronia";
 
 const date = new Date(2024, 5, 15, 14, 30);
 const truncated = truncDay(date);
 
 // Truncation preserves validity
-isValid(date);      // true
+isValid(date); // true
 isValid(truncated); // true
 
 // Invalid inputs remain invalid
-const invalid = truncDay(new Date('invalid'));
-isValid(invalid);   // false
+const invalid = truncDay(new Date("invalid"));
+isValid(invalid); // false
 ```
 
 ## Understanding Truncation
@@ -139,29 +139,31 @@ Each level preserves all larger units and zeros out all smaller units.
 
 ### By Use Case
 
-| Use Case | Recommended Function | Reason |
-|----------|---------------------|--------|
-| Group by year (annual reports) | `truncYear(date)` | Normalizes all dates to January 1st |
-| Group by month (monthly analytics) | `truncMonth(date)` | Normalizes to 1st of each month |
-| Group by day (daily summaries) | `truncDay(date)` | Removes time-of-day differences |
-| Group by hour (hourly metrics) | `truncHour(date)` | Creates hourly buckets |
-| Group by minute (minute-level logs) | `truncMinute(date)` | Second-level noise removed |
-| Remove subsecond precision | `truncSecond(date)` | Database compatibility |
-| Compare if same day | `truncDay(date1) === truncDay(date2)` | Day-level equality |
-| Compare if same hour | `truncHour(date1) === truncHour(date2)` | Hour-level equality |
-| Date range start boundary | `truncDay(startDate)` | Ensures full day inclusion |
-| Billing cycle start | `truncMonth(signupDate)` | Monthly billing alignment |
-| Cache key generation | `truncHour(now)` or `truncDay(now)` | Time-based cache invalidation |
+| Use Case                            | Recommended Function                    | Reason                              |
+| ----------------------------------- | --------------------------------------- | ----------------------------------- |
+| Group by year (annual reports)      | `truncYear(date)`                       | Normalizes all dates to January 1st |
+| Group by month (monthly analytics)  | `truncMonth(date)`                      | Normalizes to 1st of each month     |
+| Group by day (daily summaries)      | `truncDay(date)`                        | Removes time-of-day differences     |
+| Group by hour (hourly metrics)      | `truncHour(date)`                       | Creates hourly buckets              |
+| Group by minute (minute-level logs) | `truncMinute(date)`                     | Second-level noise removed          |
+| Remove subsecond precision          | `truncSecond(date)`                     | Database compatibility              |
+| Compare if same day                 | `truncDay(date1) === truncDay(date2)`   | Day-level equality                  |
+| Compare if same hour                | `truncHour(date1) === truncHour(date2)` | Hour-level equality                 |
+| Date range start boundary           | `truncDay(startDate)`                   | Ensures full day inclusion          |
+| Billing cycle start                 | `truncMonth(signupDate)`                | Monthly billing alignment           |
+| Cache key generation                | `truncHour(now)` or `truncDay(now)`     | Time-based cache invalidation       |
 
 ### Truncation vs Same-Time Validation
 
 **Truncation Functions** (`truncYear`, `truncMonth`, `truncDay`, etc.):
+
 - Transform dates to specific boundaries
 - Return new Date instances
 - Used for normalization, grouping, and bucketing
 - Ideal when you need the actual boundary date for further calculations
 
 **Same-Time Validation Functions** (`isSameYear`, `isSameMonth`, `isSameDay`, etc.):
+
 - Compare if two dates fall within the same time unit
 - Return boolean values
 - Used for filtering and conditional logic
@@ -170,21 +172,21 @@ Each level preserves all larger units and zeros out all smaller units.
 **Example Comparison:**
 
 ```typescript
-import { truncDay, isSameDay } from 'chronia';
+import { truncDay, isSameDay } from "chronia";
 
 const date1 = new Date(2024, 5, 15, 9, 30);
 const date2 = new Date(2024, 5, 15, 17, 45);
 
 // Truncation approach - get the boundary date
-const day1 = truncDay(date1);  // June 15, 2024 00:00:00.000
-const day2 = truncDay(date2);  // June 15, 2024 00:00:00.000
-const same = day1.getTime() === day2.getTime();  // true
+const day1 = truncDay(date1); // June 15, 2024 00:00:00.000
+const day2 = truncDay(date2); // June 15, 2024 00:00:00.000
+const same = day1.getTime() === day2.getTime(); // true
 
 // Same-time validation approach - direct comparison
-const same2 = isSameDay(date1, date2);  // true
+const same2 = isSameDay(date1, date2); // true
 
 // Use truncation when you need the boundary date
-const dayStart = truncDay(date1);  // Can use this for range queries
+const dayStart = truncDay(date1); // Can use this for range queries
 
 // Use same-time validation when you only need true/false
 if (isSameDay(event, today)) {
@@ -197,7 +199,7 @@ if (isSameDay(event, today)) {
 ### Date Grouping and Aggregation
 
 ```typescript
-import { truncDay, truncMonth, truncHour } from 'chronia';
+import { truncDay, truncMonth, truncHour } from "chronia";
 
 interface Event {
   timestamp: Date;
@@ -233,7 +235,11 @@ function calculateMonthlyTotals(events: Event[]): Map<string, number> {
 }
 
 // Create hourly buckets for time-series chart
-function createHourlyBuckets(events: Event[], start: Date, hours: number): Array<{ hour: Date; values: number[] }> {
+function createHourlyBuckets(
+  events: Event[],
+  start: Date,
+  hours: number,
+): Array<{ hour: Date; values: number[] }> {
   const buckets: Array<{ hour: Date; values: number[] }> = [];
   const startHour = truncHour(start);
 
@@ -242,8 +248,8 @@ function createHourlyBuckets(events: Event[], start: Date, hours: number): Array
     const hourEnd = new Date(hourStart.getTime() + 60 * 60 * 1000);
 
     const values = events
-      .filter(e => e.timestamp >= hourStart && e.timestamp < hourEnd)
-      .map(e => e.value);
+      .filter((e) => e.timestamp >= hourStart && e.timestamp < hourEnd)
+      .map((e) => e.value);
 
     buckets.push({ hour: hourStart, values });
   }
@@ -255,14 +261,14 @@ function createHourlyBuckets(events: Event[], start: Date, hours: number): Array
 ### Date Range Boundaries
 
 ```typescript
-import { truncDay, truncMonth, truncYear } from 'chronia';
+import { truncDay, truncMonth, truncYear } from "chronia";
 
 // Create inclusive day range
 function getDayRange(date: Date): { start: Date; end: Date } {
   const start = truncDay(date);
   const end = new Date(start);
   end.setDate(end.getDate() + 1);
-  end.setMilliseconds(-1);  // Last millisecond of the day
+  end.setMilliseconds(-1); // Last millisecond of the day
 
   return { start, end };
 }
@@ -298,7 +304,7 @@ function getYearRange(date: Date): { start: Date; end: Date } {
 ### Comparison at Specific Granularity
 
 ```typescript
-import { truncDay, truncMonth, truncYear } from 'chronia';
+import { truncDay, truncMonth, truncYear } from "chronia";
 
 // Check if two dates are the same day
 function isSameDay(date1: Date, date2: Date): boolean {
@@ -320,15 +326,15 @@ const date1 = new Date(2024, 5, 15, 9, 30);
 const date2 = new Date(2024, 5, 15, 17, 45);
 const date3 = new Date(2024, 5, 20, 12, 0);
 
-isSameDay(date1, date2);   // true (same day, different times)
-isSameDay(date1, date3);   // false (different days)
+isSameDay(date1, date2); // true (same day, different times)
+isSameDay(date1, date3); // false (different days)
 isSameMonth(date1, date3); // true (same month)
 ```
 
 ### Data Normalization for Storage
 
 ```typescript
-import { truncSecond, truncDay } from 'chronia';
+import { truncSecond, truncDay } from "chronia";
 
 // Normalize timestamps for database storage (no millisecond support)
 function prepareDateForDB(date: Date): Date {
@@ -348,8 +354,8 @@ interface UserProfile {
 
 function normalizeUserProfile(profile: UserProfile): UserProfile {
   return {
-    createdAt: truncSecond(profile.createdAt),    // Keep time precision
-    birthDate: truncDay(profile.birthDate),       // Date only
+    createdAt: truncSecond(profile.createdAt), // Keep time precision
+    birthDate: truncDay(profile.birthDate), // Date only
     lastLoginAt: truncSecond(profile.lastLoginAt), // Keep time precision
   };
 }
@@ -358,7 +364,7 @@ function normalizeUserProfile(profile: UserProfile): UserProfile {
 ### Time-Based Cache Keys
 
 ```typescript
-import { truncHour, truncDay } from 'chronia';
+import { truncHour, truncDay } from "chronia";
 
 // Generate hour-based cache key
 function getHourlyCacheKey(prefix: string, date: Date = new Date()): string {
@@ -373,22 +379,26 @@ function getDailyCacheKey(prefix: string, date: Date = new Date()): string {
 }
 
 // Cache invalidation check
-function shouldInvalidateCache(cachedDate: Date, currentDate: Date, granularity: 'hour' | 'day'): boolean {
-  if (granularity === 'hour') {
+function shouldInvalidateCache(
+  cachedDate: Date,
+  currentDate: Date,
+  granularity: "hour" | "day",
+): boolean {
+  if (granularity === "hour") {
     return truncHour(cachedDate).getTime() !== truncHour(currentDate).getTime();
   }
   return truncDay(cachedDate).getTime() !== truncDay(currentDate).getTime();
 }
 
 // Usage
-const analyticsKey = getHourlyCacheKey('analytics');  // 'analytics:1718460000000'
-const reportKey = getDailyCacheKey('report');         // 'report:1718409600000'
+const analyticsKey = getHourlyCacheKey("analytics"); // 'analytics:1718460000000'
+const reportKey = getDailyCacheKey("report"); // 'report:1718409600000'
 ```
 
 ### Scheduling and Intervals
 
 ```typescript
-import { truncHour, truncDay, truncMinute } from 'chronia';
+import { truncHour, truncDay, truncMinute } from "chronia";
 
 // Calculate next hourly interval
 function getNextHourlySlot(date: Date): Date {
@@ -399,8 +409,9 @@ function getNextHourlySlot(date: Date): Date {
 // Generate hourly time slots
 function generateHourlySlots(start: Date, count: number): Date[] {
   const startHour = truncHour(start);
-  return Array.from({ length: count }, (_, i) =>
-    new Date(startHour.getTime() + i * 60 * 60 * 1000)
+  return Array.from(
+    { length: count },
+    (_, i) => new Date(startHour.getTime() + i * 60 * 60 * 1000),
   );
 }
 
@@ -421,15 +432,15 @@ function shouldRunHourlyTask(lastRun: Date, now: Date = new Date()): boolean {
 
 // Usage
 const now = new Date(2024, 5, 15, 14, 30);
-const nextHour = getNextHourlySlot(now);      // June 15, 2024 15:00:00.000
-const slots = generateHourlySlots(now, 3);    // [14:00, 15:00, 16:00]
-const days = generateDailySlots(now, 7);      // 7 days starting from June 15
+const nextHour = getNextHourlySlot(now); // June 15, 2024 15:00:00.000
+const slots = generateHourlySlots(now, 3); // [14:00, 15:00, 16:00]
+const days = generateDailySlots(now, 7); // 7 days starting from June 15
 ```
 
 ### Filtering and Querying
 
 ```typescript
-import { truncDay, truncMonth } from 'chronia';
+import { truncDay, truncMonth } from "chronia";
 
 interface Transaction {
   date: Date;
@@ -437,20 +448,26 @@ interface Transaction {
 }
 
 // Get all transactions for a specific day
-function getTransactionsForDay(transactions: Transaction[], targetDay: Date): Transaction[] {
+function getTransactionsForDay(
+  transactions: Transaction[],
+  targetDay: Date,
+): Transaction[] {
   const dayStart = truncDay(targetDay);
   const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
 
-  return transactions.filter(t => t.date >= dayStart && t.date < dayEnd);
+  return transactions.filter((t) => t.date >= dayStart && t.date < dayEnd);
 }
 
 // Get all transactions for a specific month
-function getTransactionsForMonth(transactions: Transaction[], targetMonth: Date): Transaction[] {
+function getTransactionsForMonth(
+  transactions: Transaction[],
+  targetMonth: Date,
+): Transaction[] {
   const monthStart = truncMonth(targetMonth);
   const monthEnd = new Date(monthStart);
   monthEnd.setMonth(monthEnd.getMonth() + 1);
 
-  return transactions.filter(t => t.date >= monthStart && t.date < monthEnd);
+  return transactions.filter((t) => t.date >= monthStart && t.date < monthEnd);
 }
 
 // Check if transaction occurred today
@@ -478,14 +495,14 @@ function isTransactionToday(transaction: Transaction): boolean {
 All truncation functions handle leap years correctly:
 
 ```typescript
-import { truncMonth, truncDay, truncYear } from 'chronia';
+import { truncMonth, truncDay, truncYear } from "chronia";
 
 // Leap day (February 29, 2024)
 const leapDay = new Date(2024, 1, 29, 14, 30);
 
-truncDay(leapDay);   // February 29, 2024 00:00:00.000
+truncDay(leapDay); // February 29, 2024 00:00:00.000
 truncMonth(leapDay); // February 1, 2024 00:00:00.000
-truncYear(leapDay);  // January 1, 2024 00:00:00.000
+truncYear(leapDay); // January 1, 2024 00:00:00.000
 ```
 
 ### Daylight Saving Time Transitions
@@ -493,11 +510,11 @@ truncYear(leapDay);  // January 1, 2024 00:00:00.000
 Truncation functions operate in local time and handle DST transitions correctly:
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 // DST transition (Spring forward - March 10, 2024 in US)
 const dstDate = new Date(2024, 2, 10, 14, 30);
-truncDay(dstDate);  // March 10, 2024 00:00:00.000 (local time)
+truncDay(dstDate); // March 10, 2024 00:00:00.000 (local time)
 ```
 
 ### Month-End Dates
@@ -505,19 +522,19 @@ truncDay(dstDate);  // March 10, 2024 00:00:00.000 (local time)
 Functions correctly handle months with different numbers of days:
 
 ```typescript
-import { truncMonth } from 'chronia';
+import { truncMonth } from "chronia";
 
 // 31-day month
-truncMonth(new Date(2024, 0, 31));  // January 1, 2024 00:00:00.000
+truncMonth(new Date(2024, 0, 31)); // January 1, 2024 00:00:00.000
 
 // 30-day month
-truncMonth(new Date(2024, 3, 30));  // April 1, 2024 00:00:00.000
+truncMonth(new Date(2024, 3, 30)); // April 1, 2024 00:00:00.000
 
 // 28-day month (non-leap year)
-truncMonth(new Date(2023, 1, 28));  // February 1, 2023 00:00:00.000
+truncMonth(new Date(2023, 1, 28)); // February 1, 2023 00:00:00.000
 
 // 29-day month (leap year)
-truncMonth(new Date(2024, 1, 29));  // February 1, 2024 00:00:00.000
+truncMonth(new Date(2024, 1, 29)); // February 1, 2024 00:00:00.000
 ```
 
 ### Idempotency
@@ -525,11 +542,11 @@ truncMonth(new Date(2024, 1, 29));  // February 1, 2024 00:00:00.000
 Truncation functions are idempotent - truncating an already-truncated date returns the same value:
 
 ```typescript
-import { truncDay } from 'chronia';
+import { truncDay } from "chronia";
 
 const date = new Date(2024, 5, 15, 14, 30);
-const truncated1 = truncDay(date);         // June 15, 2024 00:00:00.000
-const truncated2 = truncDay(truncated1);   // June 15, 2024 00:00:00.000
+const truncated1 = truncDay(date); // June 15, 2024 00:00:00.000
+const truncated2 = truncDay(truncated1); // June 15, 2024 00:00:00.000
 
 truncated1.getTime() === truncated2.getTime(); // true
 ```
@@ -561,7 +578,7 @@ All truncation functions follow a consistent error handling pattern:
 **Checking for Invalid Results:**
 
 ```typescript
-import { truncDay, isValid } from 'chronia';
+import { truncDay, isValid } from "chronia";
 
 function safeTruncate(date: Date | number): Date | null {
   const result = truncDay(date);
@@ -569,8 +586,8 @@ function safeTruncate(date: Date | number): Date | null {
 }
 
 // Usage
-const invalid = safeTruncate(new Date('invalid'));  // null
-const valid = safeTruncate(new Date(2024, 5, 15));  // June 15, 2024 00:00:00.000
+const invalid = safeTruncate(new Date("invalid")); // null
+const valid = safeTruncate(new Date(2024, 5, 15)); // June 15, 2024 00:00:00.000
 ```
 
 ## Relationship with Other Chronia Functions
@@ -578,7 +595,7 @@ const valid = safeTruncate(new Date(2024, 5, 15));  // June 15, 2024 00:00:00.00
 ### Truncation + Validation
 
 ```typescript
-import { truncDay, isValid, isSameDay } from 'chronia';
+import { truncDay, isValid, isSameDay } from "chronia";
 
 // Validate before truncating (optional - truncation handles invalid inputs)
 function safeTruncateDay(date: Date): Date | null {
@@ -591,16 +608,16 @@ const date1 = new Date(2024, 5, 15, 9, 30);
 const date2 = new Date(2024, 5, 15, 17, 45);
 
 // Option 1: Use isSameDay directly
-isSameDay(date1, date2);  // true
+isSameDay(date1, date2); // true
 
 // Option 2: Truncate and compare
-truncDay(date1).getTime() === truncDay(date2).getTime();  // true
+truncDay(date1).getTime() === truncDay(date2).getTime(); // true
 ```
 
 ### Truncation + Comparison
 
 ```typescript
-import { truncDay, isBefore, isAfter } from 'chronia';
+import { truncDay, isBefore, isAfter } from "chronia";
 
 // Compare dates at day-level granularity
 function isBeforeDay(date1: Date, date2: Date): boolean {
@@ -614,7 +631,7 @@ function isAfterDay(date1: Date, date2: Date): boolean {
 const morning = new Date(2024, 5, 15, 9, 0);
 const evening = new Date(2024, 5, 16, 17, 0);
 
-isBeforeDay(morning, evening);  // true
+isBeforeDay(morning, evening); // true
 ```
 
 ### Truncation + Boundaries
@@ -622,12 +639,12 @@ isBeforeDay(morning, evening);  // true
 Truncation functions are conceptually similar to "start of" boundary functions. While boundary functions don't exist yet in the documented API, truncation serves this purpose:
 
 ```typescript
-import { truncDay, truncMonth, truncYear } from 'chronia';
+import { truncDay, truncMonth, truncYear } from "chronia";
 
 // These are effectively "start of" functions
-const startOfDay = truncDay(new Date());      // Equivalent to startOfDay()
-const startOfMonth = truncMonth(new Date());  // Equivalent to startOfMonth()
-const startOfYear = truncYear(new Date());    // Equivalent to startOfYear()
+const startOfDay = truncDay(new Date()); // Equivalent to startOfDay()
+const startOfMonth = truncMonth(new Date()); // Equivalent to startOfMonth()
+const startOfYear = truncYear(new Date()); // Equivalent to startOfYear()
 ```
 
 ## See Also

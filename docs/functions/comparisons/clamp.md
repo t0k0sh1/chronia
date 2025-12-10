@@ -10,22 +10,22 @@ The `clamp` function constrains a date or timestamp to fall within a specified r
 function clamp(
   date: Date | number,
   minDate: Date | number,
-  maxDate: Date | number
-): Date
+  maxDate: Date | number,
+): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The date or timestamp to clamp |
+| Parameter | Type             | Description                           |
+| --------- | ---------------- | ------------------------------------- |
+| `date`    | `Date \| number` | The date or timestamp to clamp        |
 | `minDate` | `Date \| number` | The minimum allowed date or timestamp |
 | `maxDate` | `Date \| number` | The maximum allowed date or timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                                                                                                                |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Date` | The clamped date as a Date object. Returns the `date` if it's within range, `minDate` if `date` is below the minimum, `maxDate` if `date` is above the maximum, or an Invalid Date if any input is invalid |
 
 ## Description
@@ -35,16 +35,20 @@ The `clamp` function ensures a date value stays within specified boundaries by r
 ### Specification
 
 #### Returns the original `date` when:
+
 - The date falls within the `minDate` and `maxDate` range (inclusive)
 - The date equals `minDate` or `maxDate`
 
 #### Returns `minDate` when:
+
 - The date is earlier than `minDate`
 
 #### Returns `maxDate` when:
+
 - The date is later than `maxDate`
 
 #### Returns Invalid Date when:
+
 - Any of the input parameters (`date`, `minDate`, or `maxDate`) is an Invalid Date
 - Any of the input parameters is `NaN`
 - Any of the input parameters is `Infinity` or `-Infinity`
@@ -71,7 +75,7 @@ The `clamp` function ensures a date value stays within specified boundaries by r
 ### Date Range Enforcement
 
 ```typescript
-import { clamp } from 'chronia';
+import { clamp } from "chronia";
 
 // Define allowed date range
 const minDate = new Date(2024, 5, 10); // June 10, 2024
@@ -96,12 +100,16 @@ const clampedNormal = clamp(normalDate, minDate, maxDate);
 ### UI Date Pickers
 
 ```typescript
-import { clamp } from 'chronia';
+import { clamp } from "chronia";
 
 // Restrict birth date selection
 function validateBirthDate(selectedDate: Date): Date {
   const today = new Date();
-  const minDate = new Date(today.getFullYear() - 120, today.getMonth(), today.getDate());
+  const minDate = new Date(
+    today.getFullYear() - 120,
+    today.getMonth(),
+    today.getDate(),
+  );
   const maxDate = today;
 
   return clamp(selectedDate, minDate, maxDate);
@@ -116,15 +124,15 @@ const validBirthDate = validateBirthDate(futureDate);
 ### Working with Timestamps
 
 ```typescript
-import { clamp } from 'chronia';
+import { clamp } from "chronia";
 
 // Works seamlessly with numeric timestamps
 const currentTime = Date.now();
-const oneHourAgo = currentTime - (60 * 60 * 1000);
-const oneHourFromNow = currentTime + (60 * 60 * 1000);
+const oneHourAgo = currentTime - 60 * 60 * 1000;
+const oneHourFromNow = currentTime + 60 * 60 * 1000;
 
 // Clamp a timestamp to recent time window
-const recentEvent = currentTime + (2 * 60 * 60 * 1000); // 2 hours from now
+const recentEvent = currentTime + 2 * 60 * 60 * 1000; // 2 hours from now
 const clampedEvent = clamp(recentEvent, oneHourAgo, oneHourFromNow);
 // Returns: Date object representing oneHourFromNow (clamped to maximum)
 ```
@@ -132,7 +140,7 @@ const clampedEvent = clamp(recentEvent, oneHourAgo, oneHourFromNow);
 ### Automatic Range Correction
 
 ```typescript
-import { clamp } from 'chronia';
+import { clamp } from "chronia";
 
 // If min and max are swapped, function handles it gracefully
 const date = new Date(2024, 5, 15);
@@ -147,10 +155,10 @@ const result = clamp(date, min, max);
 ### Invalid Input Handling
 
 ```typescript
-import { clamp } from 'chronia';
+import { clamp } from "chronia";
 
 // Returns Invalid Date if any input is invalid
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 const validMin = new Date(2024, 5, 10);
 const validMax = new Date(2024, 5, 20);
 

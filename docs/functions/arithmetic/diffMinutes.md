@@ -7,20 +7,20 @@ The `diffMinutes` function calculates the difference in complete minutes between
 ## Signature
 
 ```typescript
-function diffMinutes(dateLeft: Date | number, dateRight: Date | number): number
+function diffMinutes(dateLeft: Date | number, dateRight: Date | number): number;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `dateLeft` | `Date \| number` | The first date as a Date object or numeric timestamp |
+| Parameter   | Type             | Description                                           |
+| ----------- | ---------------- | ----------------------------------------------------- |
+| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
 | `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type     | Description                                                                                                                                                                   |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `number` | The difference in complete minutes between the two dates. Returns a positive number if `dateLeft` is after `dateRight`, negative if before, and `NaN` if any input is invalid |
 
 ## Description
@@ -30,19 +30,23 @@ The `diffMinutes` function computes the number of complete minutes between two d
 ### Specification
 
 #### Returns a positive integer when:
+
 - `dateLeft` represents a time that is after `dateRight`
 - Both inputs are valid Date objects or finite numeric timestamps
 - The difference is calculated by subtracting `dateRight` from `dateLeft`
 
 #### Returns zero when:
+
 - Both dates fall within the same minute (regardless of seconds or milliseconds)
 - Both dates represent the exact same minute
 
 #### Returns a negative integer when:
+
 - `dateLeft` represents a time that is before `dateRight`
 - Both inputs are valid Date objects or finite numeric timestamps
 
 #### Returns `NaN` when:
+
 - Either `dateLeft` or `dateRight` is an Invalid Date object (e.g., `new Date('invalid')`)
 - Either parameter is `NaN`
 - Either parameter is `Infinity`
@@ -71,7 +75,7 @@ The `diffMinutes` function computes the number of complete minutes between two d
 ### Time Tracking
 
 ```typescript
-import { diffMinutes } from 'chronia';
+import { diffMinutes } from "chronia";
 
 // Track elapsed time
 const sessionStart = new Date(2024, 5, 15, 14, 25);
@@ -95,7 +99,7 @@ const minutesPassed = diffMinutes(today, yesterday);
 ### Scheduling and Reminders
 
 ```typescript
-import { diffMinutes } from 'chronia';
+import { diffMinutes } from "chronia";
 
 // Calculate time until an event
 function getMinutesUntilEvent(eventTime: Date): number {
@@ -109,7 +113,7 @@ const minutesRemaining = getMinutesUntilEvent(meeting);
 if (minutesRemaining > 0) {
   console.log(`Meeting starts in ${minutesRemaining} minutes`);
 } else if (minutesRemaining === 0) {
-  console.log('Meeting is starting now');
+  console.log("Meeting is starting now");
 } else {
   console.log(`Meeting started ${Math.abs(minutesRemaining)} minutes ago`);
 }
@@ -118,7 +122,7 @@ if (minutesRemaining > 0) {
 ### Duration Calculations
 
 ```typescript
-import { diffMinutes } from 'chronia';
+import { diffMinutes } from "chronia";
 
 // Calculate meeting duration
 interface Meeting {
@@ -142,10 +146,13 @@ const duration = getMeetingDuration(meeting);
 ### Time-Based Validation
 
 ```typescript
-import { diffMinutes } from 'chronia';
+import { diffMinutes } from "chronia";
 
 // Enforce minimum time between actions
-function canPerformAction(lastActionTime: Date, cooldownMinutes: number): boolean {
+function canPerformAction(
+  lastActionTime: Date,
+  cooldownMinutes: number,
+): boolean {
   const now = new Date();
   const minutesSinceLastAction = diffMinutes(now, lastActionTime);
   return minutesSinceLastAction >= cooldownMinutes;
@@ -155,7 +162,7 @@ const lastSubmit = new Date(2024, 5, 15, 14, 25);
 const canSubmit = canPerformAction(lastSubmit, 5);
 
 if (canSubmit) {
-  console.log('Action allowed');
+  console.log("Action allowed");
 } else {
   const timeRemaining = 5 - diffMinutes(new Date(), lastSubmit);
   console.log(`Please wait ${timeRemaining} more minutes`);
@@ -165,24 +172,30 @@ if (canSubmit) {
 ### Handling Invalid Inputs
 
 ```typescript
-import { diffMinutes } from 'chronia';
+import { diffMinutes } from "chronia";
 
 // Graceful error handling
-function calculateSafeDifference(date1: Date | number, date2: Date | number): string {
+function calculateSafeDifference(
+  date1: Date | number,
+  date2: Date | number,
+): string {
   const diff = diffMinutes(date1, date2);
 
   if (isNaN(diff)) {
-    return 'Invalid date input';
+    return "Invalid date input";
   }
 
   return `${Math.abs(diff)} minutes`;
 }
 
 // Valid inputs
-calculateSafeDifference(new Date(2024, 5, 15, 14, 30), new Date(2024, 5, 15, 14, 25));
+calculateSafeDifference(
+  new Date(2024, 5, 15, 14, 30),
+  new Date(2024, 5, 15, 14, 25),
+);
 // Returns: '5 minutes'
 
 // Invalid inputs return NaN, handled gracefully
-calculateSafeDifference(new Date('invalid'), new Date(2024, 5, 15, 14, 25));
+calculateSafeDifference(new Date("invalid"), new Date(2024, 5, 15, 14, 25));
 // Returns: 'Invalid date input'
 ```

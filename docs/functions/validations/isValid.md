@@ -7,19 +7,19 @@ The `isValid` function validates whether a given Date object or timestamp repres
 ## Signature
 
 ```typescript
-function isValid(date: Date | number): boolean
+function isValid(date: Date | number): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to validate |
+| Parameter | Type             | Description                                    |
+| --------- | ---------------- | ---------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to validate |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type      | Description                                            |
+| --------- | ------------------------------------------------------ |
 | `boolean` | Returns `true` if the date is valid, `false` otherwise |
 
 ## Description
@@ -29,6 +29,7 @@ The `isValid` function determines whether the provided Date object or timestamp 
 ### Specification
 
 #### Returns `true` when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -37,6 +38,7 @@ The `isValid` function determines whether the provided Date object or timestamp 
   - Any timestamp within JavaScript's supported date range (approximately -8,640,000,000,000,000 to 8,640,000,000,000,000 milliseconds from epoch)
 
 #### Returns `false` when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -62,63 +64,58 @@ The `isValid` function determines whether the provided Date object or timestamp 
 ### Input Validation
 
 ```typescript
-import { isValid, parse } from 'chronia';
+import { isValid, parse } from "chronia";
 
 // Validate parsed date
 function processUserDate(input: string): Date | null {
-  const parsed = parse(input, 'yyyy-MM-dd');
+  const parsed = parse(input, "yyyy-MM-dd");
   return isValid(parsed) ? parsed : null;
 }
 
 // Valid Date object
-isValid(new Date(2025, 0, 1));  // Returns: true
+isValid(new Date(2025, 0, 1)); // Returns: true
 
 // Valid timestamp
-isValid(Date.now());  // Returns: true
+isValid(Date.now()); // Returns: true
 
 // Zero timestamp (Unix epoch)
-isValid(0);  // Returns: true
+isValid(0); // Returns: true
 
 // Negative timestamp (before Unix epoch)
-isValid(-1000);  // Returns: true
+isValid(-1000); // Returns: true
 
 // Invalid Date object
-isValid(new Date('invalid'));  // Returns: false
+isValid(new Date("invalid")); // Returns: false
 
 // Invalid numeric values
-isValid(NaN);       // Returns: false
-isValid(Infinity);  // Returns: false
+isValid(NaN); // Returns: false
+isValid(Infinity); // Returns: false
 isValid(-Infinity); // Returns: false
 ```
 
 ### Defensive Programming
 
 ```typescript
-import { isValid, format } from 'chronia';
+import { isValid, format } from "chronia";
 
 function formatDate(date: Date | number): string {
   if (!isValid(date)) {
-    return 'Invalid date';
+    return "Invalid date";
   }
-  return format(date, 'yyyy-MM-dd');
+  return format(date, "yyyy-MM-dd");
 }
 
 // Safe date formatting
-formatDate(new Date(2025, 0, 1));  // Returns: '2025-01-01'
-formatDate(new Date('invalid'));   // Returns: 'Invalid date'
+formatDate(new Date(2025, 0, 1)); // Returns: '2025-01-01'
+formatDate(new Date("invalid")); // Returns: 'Invalid date'
 ```
 
 ### Data Filtering
 
 ```typescript
-import { isValid } from 'chronia';
+import { isValid } from "chronia";
 
-const dates = [
-  new Date(2025, 0, 1),
-  new Date('invalid'),
-  Date.now(),
-  NaN
-];
+const dates = [new Date(2025, 0, 1), new Date("invalid"), Date.now(), NaN];
 
 const validDates = dates.filter(isValid);
 // Returns: [new Date(2025, 0, 1), Date.now()]
@@ -127,18 +124,18 @@ const validDates = dates.filter(isValid);
 ### Error Recovery
 
 ```typescript
-import { isValid, parse, format } from 'chronia';
+import { isValid, parse, format } from "chronia";
 
 function parseAndFormat(dateString: string): string {
-  const parsed = parse(dateString, 'yyyy-MM-dd');
+  const parsed = parse(dateString, "yyyy-MM-dd");
 
   if (!isValid(parsed)) {
-    return 'Failed to parse date. Please use yyyy-MM-dd format.';
+    return "Failed to parse date. Please use yyyy-MM-dd format.";
   }
 
-  return format(parsed, 'MMMM d, yyyy');
+  return format(parsed, "MMMM d, yyyy");
 }
 
-parseAndFormat('2025-01-01');  // Returns: 'January 1, 2025'
-parseAndFormat('invalid');     // Returns: 'Failed to parse date. Please use yyyy-MM-dd format.'
+parseAndFormat("2025-01-01"); // Returns: 'January 1, 2025'
+parseAndFormat("invalid"); // Returns: 'Failed to parse date. Please use yyyy-MM-dd format.'
 ```

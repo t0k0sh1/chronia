@@ -8,39 +8,39 @@ Chronia provides a comprehensive suite of date validation and comparison functio
 
 ### Date Validation
 
-| Function | Description |
-|----------|-------------|
-| [`isDate`](./isDate.md) | Checks if a value is a Date object instance |
-| [`isValid`](./isValid.md) | Checks if a Date object or timestamp is valid |
+| Function                    | Description                                                       |
+| --------------------------- | ----------------------------------------------------------------- |
+| [`isDate`](./isDate.md)     | Checks if a value is a Date object instance                       |
+| [`isValid`](./isValid.md)   | Checks if a Date object or timestamp is valid                     |
 | [`isExists`](./isExists.md) | Validates whether year, month, and day represent an existing date |
 
 ### Current Time Comparison
 
-| Function | Description | Equality Behavior |
-|----------|-------------|-------------------|
+| Function                    | Description                                                         | Equality Behavior                  |
+| --------------------------- | ------------------------------------------------------------------- | ---------------------------------- |
 | [`isFuture`](./isFuture.md) | Checks if a date is strictly in the future relative to current time | Returns `false` for current moment |
-| [`isPast`](./isPast.md) | Checks if a date is strictly in the past relative to current time | Returns `false` for current moment |
+| [`isPast`](./isPast.md)     | Checks if a date is strictly in the past relative to current time   | Returns `false` for current moment |
 
 ### Date Comparison
 
-| Function | Description | Equality Behavior |
-|----------|-------------|-------------------|
-| [`isBefore`](./isBefore.md) | Checks if the first date is strictly before the second date | Returns `false` for equal dates |
-| [`isAfter`](./isAfter.md) | Checks if the first date is strictly after the second date | Returns `false` for equal dates |
-| [`isBeforeOrEqual`](./isBeforeOrEqual.md) | Checks if the first date is before or equal to the second date | Returns `true` for equal dates |
-| [`isAfterOrEqual`](./isAfterOrEqual.md) | Checks if the first date is after or equal to the second date | Returns `true` for equal dates |
-| [`isEqual`](./isEqual.md) | Checks if two dates represent the same point in time | Returns `true` only for equal dates |
+| Function                                  | Description                                                    | Equality Behavior                   |
+| ----------------------------------------- | -------------------------------------------------------------- | ----------------------------------- |
+| [`isBefore`](./isBefore.md)               | Checks if the first date is strictly before the second date    | Returns `false` for equal dates     |
+| [`isAfter`](./isAfter.md)                 | Checks if the first date is strictly after the second date     | Returns `false` for equal dates     |
+| [`isBeforeOrEqual`](./isBeforeOrEqual.md) | Checks if the first date is before or equal to the second date | Returns `true` for equal dates      |
+| [`isAfterOrEqual`](./isAfterOrEqual.md)   | Checks if the first date is after or equal to the second date  | Returns `true` for equal dates      |
+| [`isEqual`](./isEqual.md)                 | Checks if two dates represent the same point in time           | Returns `true` only for equal dates |
 
 ### Same-Time Validation
 
-| Function | Description | Granularity |
-|----------|-------------|-------------|
-| [`isSameYear`](./isSameYear.md) | Checks if two dates are in the same year | Year only (ignores month, day, time) |
-| [`isSameMonth`](./isSameMonth.md) | Checks if two dates are in the same month and year | Month and year (ignores day, time) |
-| [`isSameDay`](./isSameDay.md) | Checks if two dates are on the same day | Day, month, and year (ignores time) |
-| [`isSameHour`](./isSameHour.md) | Checks if two dates are in the same hour | Hour, day, month, and year (ignores minutes, seconds) |
-| [`isSameMinute`](./isSameMinute.md) | Checks if two dates are in the same minute | Minute, hour, day, month, and year (ignores seconds) |
-| [`isSameSecond`](./isSameSecond.md) | Checks if two dates are in the same second | Second and all larger units (ignores milliseconds) |
+| Function                            | Description                                        | Granularity                                           |
+| ----------------------------------- | -------------------------------------------------- | ----------------------------------------------------- |
+| [`isSameYear`](./isSameYear.md)     | Checks if two dates are in the same year           | Year only (ignores month, day, time)                  |
+| [`isSameMonth`](./isSameMonth.md)   | Checks if two dates are in the same month and year | Month and year (ignores day, time)                    |
+| [`isSameDay`](./isSameDay.md)       | Checks if two dates are on the same day            | Day, month, and year (ignores time)                   |
+| [`isSameHour`](./isSameHour.md)     | Checks if two dates are in the same hour           | Hour, day, month, and year (ignores minutes, seconds) |
+| [`isSameMinute`](./isSameMinute.md) | Checks if two dates are in the same minute         | Minute, hour, day, month, and year (ignores seconds)  |
+| [`isSameSecond`](./isSameSecond.md) | Checks if two dates are in the same second         | Second and all larger units (ignores milliseconds)    |
 
 ## Common Features
 
@@ -51,18 +51,18 @@ All validation and comparison functions in this category share the following cha
 All functions accept both Date objects and numeric timestamps:
 
 ```typescript
-import { isBefore, isValid } from 'chronia';
+import { isBefore, isValid } from "chronia";
 
 // Date objects
-isBefore(new Date(2025, 0, 1), new Date(2025, 0, 2));  // true
-isValid(new Date(2025, 0, 1));  // true
+isBefore(new Date(2025, 0, 1), new Date(2025, 0, 2)); // true
+isValid(new Date(2025, 0, 1)); // true
 
 // Timestamps
-isBefore(1704067200000, 1704153600000);  // true
-isValid(1704067200000);  // true
+isBefore(1704067200000, 1704153600000); // true
+isValid(1704067200000); // true
 
 // Mixed types
-isBefore(new Date(2025, 0, 1), 1704153600000);  // true
+isBefore(new Date(2025, 0, 1), 1704153600000); // true
 ```
 
 ### Input Validation
@@ -70,11 +70,11 @@ isBefore(new Date(2025, 0, 1), 1704153600000);  // true
 All functions validate inputs and return `false` for invalid dates without throwing exceptions:
 
 ```typescript
-import { isEqual, isValid, isSameDay } from 'chronia';
+import { isEqual, isValid, isSameDay } from "chronia";
 
-isValid(new Date('invalid'));  // false
-isEqual(new Date('invalid'), new Date(2025, 0, 1));  // false
-isSameDay(NaN, new Date(2025, 0, 1));  // false
+isValid(new Date("invalid")); // false
+isEqual(new Date("invalid"), new Date(2025, 0, 1)); // false
+isSameDay(NaN, new Date(2025, 0, 1)); // false
 ```
 
 ### Unit-Based Granularity
@@ -94,15 +94,15 @@ Comparison functions (`isBefore`, `isAfter`, `isBeforeOrEqual`, `isAfterOrEqual`
 **Example:**
 
 ```typescript
-import { isEqual } from 'chronia';
+import { isEqual } from "chronia";
 
 // Same day, different times
 const morning = new Date(2025, 0, 1, 9, 0, 0);
 const evening = new Date(2025, 0, 1, 17, 0, 0);
 
-isEqual(morning, evening);  // false (different timestamps)
-isEqual(morning, evening, { unit: 'day' });  // true (same day)
-isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
+isEqual(morning, evening); // false (different timestamps)
+isEqual(morning, evening, { unit: "day" }); // true (same day)
+isEqual(morning, evening, { unit: "hour" }); // false (different hours)
 ```
 
 ## Choosing the Right Function
@@ -172,56 +172,56 @@ isEqual(morning, evening, { unit: 'hour' });  // false (different hours)
 
 ### Use Case Guide
 
-| Scenario | Recommended Function | Reason |
-|----------|---------------------|--------|
-| Check if value is Date instance | `isDate(value)` | Type checking for Date objects |
-| Type guard before Date methods | `isDate(value)` | Enables safe access to Date methods |
-| Distinguish Date from timestamp | `isDate(value)` | Differentiates Date objects from numbers |
-| Validate user input (type and validity) | `isDate(value) && isValid(value)` | Complete date validation |
-| Validate API response date | `isDate(data)` | Runtime type validation |
-| Filter Date instances from array | `array.filter(isDate)` | Extract only Date objects |
-| Validate user input | `isValid(date)` | Check if date is valid |
-| Validate separate date components | `isExists(year, month, day)` | Check that year/month/day represents a valid date |
-| Validate form with separate fields | `isExists(yearInput, monthInput, dayInput)` | Validate date parts before creating Date |
-| Check if leap year has Feb 29 | `isExists(year, 2, 29)` | Leap year validation |
-| Validate parsed date string | `isExists(parsedYear, parsedMonth, parsedDay)` | Check that parsed components are valid |
-| Check if session expired | `isPast(session.expiresAt)` | Current time-based expiry check |
-| Check if event is upcoming | `isFuture(event.date)` | Current time-based future check |
-| Filter upcoming events | `events.filter(e => isFuture(e.date))` | Simple future filtering |
-| Filter past events | `events.filter(e => isPast(e.date))` | Simple past filtering |
-| Validate cache expiration | `isFuture(cache.expiresAt)` | Check if cache is still valid |
-| Check if deadline passed | `isPast(deadline)` | Strict past check against now |
-| Check if event has passed | `isBefore(event, now())` | Strict past check with explicit now |
-| Check if deadline has been met | `isBeforeOrEqual(submission, deadline)` | Includes deadline day |
-| Validate age requirement | `isAfterOrEqual(birthdate, minDate)` | Includes exact age |
-| Check future events | `isAfter(event, now())` | Strict future check with explicit now |
-| Detect duplicate timestamps | `isEqual(date1, date2)` | Exact equality |
-| Group events by day | `isSameDay(date1, date2)` | Same-day check |
-| Group events by month | `isSameMonth(date1, date2)` | Same-month check |
-| Sort chronologically | `isBefore(a, b)` or `isAfter(a, b)` | Strict ordering |
-| Range validation (inclusive) | `isAfterOrEqual(date, start) && isBeforeOrEqual(date, end)` | Inclusive boundaries |
-| Range validation (exclusive) | `isAfter(date, start) && isBefore(date, end)` | Exclusive boundaries |
+| Scenario                                | Recommended Function                                        | Reason                                            |
+| --------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
+| Check if value is Date instance         | `isDate(value)`                                             | Type checking for Date objects                    |
+| Type guard before Date methods          | `isDate(value)`                                             | Enables safe access to Date methods               |
+| Distinguish Date from timestamp         | `isDate(value)`                                             | Differentiates Date objects from numbers          |
+| Validate user input (type and validity) | `isDate(value) && isValid(value)`                           | Complete date validation                          |
+| Validate API response date              | `isDate(data)`                                              | Runtime type validation                           |
+| Filter Date instances from array        | `array.filter(isDate)`                                      | Extract only Date objects                         |
+| Validate user input                     | `isValid(date)`                                             | Check if date is valid                            |
+| Validate separate date components       | `isExists(year, month, day)`                                | Check that year/month/day represents a valid date |
+| Validate form with separate fields      | `isExists(yearInput, monthInput, dayInput)`                 | Validate date parts before creating Date          |
+| Check if leap year has Feb 29           | `isExists(year, 2, 29)`                                     | Leap year validation                              |
+| Validate parsed date string             | `isExists(parsedYear, parsedMonth, parsedDay)`              | Check that parsed components are valid            |
+| Check if session expired                | `isPast(session.expiresAt)`                                 | Current time-based expiry check                   |
+| Check if event is upcoming              | `isFuture(event.date)`                                      | Current time-based future check                   |
+| Filter upcoming events                  | `events.filter(e => isFuture(e.date))`                      | Simple future filtering                           |
+| Filter past events                      | `events.filter(e => isPast(e.date))`                        | Simple past filtering                             |
+| Validate cache expiration               | `isFuture(cache.expiresAt)`                                 | Check if cache is still valid                     |
+| Check if deadline passed                | `isPast(deadline)`                                          | Strict past check against now                     |
+| Check if event has passed               | `isBefore(event, now())`                                    | Strict past check with explicit now               |
+| Check if deadline has been met          | `isBeforeOrEqual(submission, deadline)`                     | Includes deadline day                             |
+| Validate age requirement                | `isAfterOrEqual(birthdate, minDate)`                        | Includes exact age                                |
+| Check future events                     | `isAfter(event, now())`                                     | Strict future check with explicit now             |
+| Detect duplicate timestamps             | `isEqual(date1, date2)`                                     | Exact equality                                    |
+| Group events by day                     | `isSameDay(date1, date2)`                                   | Same-day check                                    |
+| Group events by month                   | `isSameMonth(date1, date2)`                                 | Same-month check                                  |
+| Sort chronologically                    | `isBefore(a, b)` or `isAfter(a, b)`                         | Strict ordering                                   |
+| Range validation (inclusive)            | `isAfterOrEqual(date, start) && isBeforeOrEqual(date, end)` | Inclusive boundaries                              |
+| Range validation (exclusive)            | `isAfter(date, start) && isBefore(date, end)`               | Exclusive boundaries                              |
 
 ## Quick Reference: Comparison Matrix
 
 Given two dates `a` and `b`:
 
 | Relationship | `isBefore` | `isAfter` | `isBeforeOrEqual` | `isAfterOrEqual` | `isEqual` |
-|--------------|------------|-----------|-------------------|------------------|-----------|
-| `a < b` | `true` | `false` | `true` | `false` | `false` |
-| `a > b` | `false` | `true` | `false` | `true` | `false` |
-| `a === b` | `false` | `false` | `true` | `true` | `true` |
+| ------------ | ---------- | --------- | ----------------- | ---------------- | --------- |
+| `a < b`      | `true`     | `false`   | `true`            | `false`          | `false`   |
+| `a > b`      | `false`    | `true`    | `false`           | `true`           | `false`   |
+| `a === b`    | `false`    | `false`   | `true`            | `true`           | `true`    |
 
 ## Common Patterns
 
 ### Validating Input Data
 
 ```typescript
-import { isValid } from 'chronia';
+import { isValid } from "chronia";
 
 function processDate(date: Date | number): void {
   if (!isValid(date)) {
-    throw new Error('Invalid date provided');
+    throw new Error("Invalid date provided");
   }
   // Process valid date
 }
@@ -230,10 +230,14 @@ function processDate(date: Date | number): void {
 ### Validating Date Components
 
 ```typescript
-import { isExists } from 'chronia';
+import { isExists } from "chronia";
 
 // Validate separate year/month/day inputs before creating Date
-function createDateFromComponents(year: number, month: number, day: number): Date | null {
+function createDateFromComponents(
+  year: number,
+  month: number,
+  day: number,
+): Date | null {
   // Note: isExists uses 1-based month (1=January, 12=December)
   if (!isExists(year, month, day)) {
     return null;
@@ -244,26 +248,30 @@ function createDateFromComponents(year: number, month: number, day: number): Dat
 }
 
 // Valid dates
-createDateFromComponents(2024, 2, 29);  // Date object - leap year Feb 29
-createDateFromComponents(2024, 4, 30);  // Date object - April 30
+createDateFromComponents(2024, 2, 29); // Date object - leap year Feb 29
+createDateFromComponents(2024, 4, 30); // Date object - April 30
 
 // Invalid dates return null
-createDateFromComponents(2023, 2, 29);  // null - not a leap year
-createDateFromComponents(2024, 4, 31);  // null - April has only 30 days
-createDateFromComponents(2024, 13, 1);  // null - invalid month
+createDateFromComponents(2023, 2, 29); // null - not a leap year
+createDateFromComponents(2024, 4, 31); // null - April has only 30 days
+createDateFromComponents(2024, 13, 1); // null - invalid month
 
 // Form validation with detailed error messages
-function validateDateForm(year: number, month: number, day: number): {
+function validateDateForm(
+  year: number,
+  month: number,
+  day: number,
+): {
   valid: boolean;
   error?: string;
 } {
   // Basic range checks before calling isExists
   if (month < 1 || month > 12) {
-    return { valid: false, error: 'Month must be between 1 and 12' };
+    return { valid: false, error: "Month must be between 1 and 12" };
   }
 
   if (day < 1) {
-    return { valid: false, error: 'Day must be at least 1' };
+    return { valid: false, error: "Day must be at least 1" };
   }
 
   // Use isExists for complex validation (leap years, month-specific day limits)
@@ -271,7 +279,7 @@ function validateDateForm(year: number, month: number, day: number): {
     if (month === 2 && day === 29) {
       return { valid: false, error: `${year} is not a leap year` };
     }
-    return { valid: false, error: 'This date does not exist' };
+    return { valid: false, error: "This date does not exist" };
   }
 
   return { valid: true };
@@ -281,7 +289,7 @@ function validateDateForm(year: number, month: number, day: number): {
 ### Leap Year Validation
 
 ```typescript
-import { isExists } from 'chronia';
+import { isExists } from "chronia";
 
 // Check if a year is a leap year by testing February 29
 function isLeapYear(year: number): boolean {
@@ -289,10 +297,10 @@ function isLeapYear(year: number): boolean {
 }
 
 // Test various years
-isLeapYear(2024);  // true - divisible by 4, not a century year
-isLeapYear(2000);  // true - divisible by 400
-isLeapYear(1900);  // false - divisible by 100 but not 400
-isLeapYear(2023);  // false - not divisible by 4
+isLeapYear(2024); // true - divisible by 4, not a century year
+isLeapYear(2000); // true - divisible by 400
+isLeapYear(1900); // false - divisible by 100 but not 400
+isLeapYear(2023); // false - not divisible by 4
 
 // Validate date with leap year awareness
 function getDaysInFebruary(year: number): number {
@@ -303,7 +311,7 @@ function getDaysInFebruary(year: number): number {
 ### Type Checking with isDate
 
 ```typescript
-import { isDate } from 'chronia';
+import { isDate } from "chronia";
 
 // Type guard for runtime type checking
 function processUnknownValue(value: unknown): void {
@@ -312,7 +320,7 @@ function processUnknownValue(value: unknown): void {
     console.log(value.getTime());
     console.log(value.toISOString());
   } else {
-    console.log('Not a Date instance');
+    console.log("Not a Date instance");
   }
 }
 
@@ -330,7 +338,7 @@ function normalizeToDate(input: Date | number): Date {
 ### Complete Date Validation (Type + Validity)
 
 ```typescript
-import { isDate, isValid } from 'chronia';
+import { isDate, isValid } from "chronia";
 
 // Combine isDate and isValid for complete validation
 function isValidDateInstance(value: unknown): value is Date {
@@ -338,13 +346,13 @@ function isValidDateInstance(value: unknown): value is Date {
 }
 
 // Valid Date instance
-isValidDateInstance(new Date(2025, 0, 1));  // true
+isValidDateInstance(new Date(2025, 0, 1)); // true
 
 // Invalid Date instance (type check passes, validity fails)
-isValidDateInstance(new Date('invalid'));  // false
+isValidDateInstance(new Date("invalid")); // false
 
 // Timestamp (type check fails)
-isValidDateInstance(Date.now());  // false
+isValidDateInstance(Date.now()); // false
 
 // Use in API response validation
 interface ApiResponse {
@@ -356,13 +364,13 @@ function processApiDate(response: ApiResponse): Date | null {
 
   // Check if it's a Date instance
   if (!isDate(date)) {
-    console.error('Expected Date instance');
+    console.error("Expected Date instance");
     return null;
   }
 
   // Check if it's valid
   if (!isValid(date)) {
-    console.error('Invalid Date instance');
+    console.error("Invalid Date instance");
     return null;
   }
 
@@ -373,7 +381,7 @@ function processApiDate(response: ApiResponse): Date | null {
 ### Session Expiry Checking
 
 ```typescript
-import { isPast } from 'chronia';
+import { isPast } from "chronia";
 
 interface Session {
   token: string;
@@ -387,7 +395,7 @@ function isSessionValid(session: Session): boolean {
 
 function validateSession(session: Session): void {
   if (isPast(session.expiresAt)) {
-    throw new Error('Session has expired');
+    throw new Error("Session has expired");
   }
   // Proceed with valid session
 }
@@ -396,7 +404,7 @@ function validateSession(session: Session): void {
 ### Upcoming Events Filtering
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 interface Event {
   id: string;
@@ -405,18 +413,18 @@ interface Event {
 }
 
 function getUpcomingEvents(events: Event[]): Event[] {
-  return events.filter(event => isFuture(event.date));
+  return events.filter((event) => isFuture(event.date));
 }
 
 function hasUpcomingEvents(events: Event[]): boolean {
-  return events.some(event => isFuture(event.date));
+  return events.some((event) => isFuture(event.date));
 }
 ```
 
 ### Cache Validation
 
 ```typescript
-import { isFuture } from 'chronia';
+import { isFuture } from "chronia";
 
 interface CacheEntry<T> {
   data: T;
@@ -441,7 +449,7 @@ function isCacheValid<T>(cache: CacheEntry<T>): boolean {
 **Inclusive range** (both boundaries included):
 
 ```typescript
-import { isAfterOrEqual, isBeforeOrEqual } from 'chronia';
+import { isAfterOrEqual, isBeforeOrEqual } from "chronia";
 
 function isWithinRange(date: Date, start: Date, end: Date): boolean {
   return isAfterOrEqual(date, start) && isBeforeOrEqual(date, end);
@@ -451,7 +459,7 @@ function isWithinRange(date: Date, start: Date, end: Date): boolean {
 **Exclusive range** (boundaries excluded):
 
 ```typescript
-import { isAfter, isBefore } from 'chronia';
+import { isAfter, isBefore } from "chronia";
 
 function isBetween(date: Date, start: Date, end: Date): boolean {
   return isAfter(date, start) && isBefore(date, end);
@@ -461,23 +469,21 @@ function isBetween(date: Date, start: Date, end: Date): boolean {
 ### Timeline Sorting
 
 ```typescript
-import { isBefore } from 'chronia';
+import { isBefore } from "chronia";
 
 const events = [
-  { name: 'Event C', date: new Date(2025, 2, 1) },
-  { name: 'Event A', date: new Date(2025, 0, 1) },
-  { name: 'Event B', date: new Date(2025, 1, 1) },
+  { name: "Event C", date: new Date(2025, 2, 1) },
+  { name: "Event A", date: new Date(2025, 0, 1) },
+  { name: "Event B", date: new Date(2025, 1, 1) },
 ];
 
-const sorted = events.sort((a, b) =>
-  isBefore(a.date, b.date) ? -1 : 1
-);
+const sorted = events.sort((a, b) => (isBefore(a.date, b.date) ? -1 : 1));
 ```
 
 ### Same-Day Event Grouping
 
 ```typescript
-import { isSameDay } from 'chronia';
+import { isSameDay } from "chronia";
 
 const events = [
   new Date(2025, 0, 1, 9, 0),
@@ -485,8 +491,8 @@ const events = [
   new Date(2025, 0, 2, 10, 0),
 ];
 
-const todayEvents = events.filter(event =>
-  isSameDay(event, new Date(2025, 0, 1))
+const todayEvents = events.filter((event) =>
+  isSameDay(event, new Date(2025, 0, 1)),
 );
 // Returns first two events
 ```
@@ -494,19 +500,20 @@ const todayEvents = events.filter(event =>
 ### Monthly Report Filtering
 
 ```typescript
-import { isSameMonth } from 'chronia';
+import { isSameMonth } from "chronia";
 
-function getMonthlyTransactions(transactions: Transaction[], targetMonth: Date) {
-  return transactions.filter(tx =>
-    isSameMonth(tx.date, targetMonth)
-  );
+function getMonthlyTransactions(
+  transactions: Transaction[],
+  targetMonth: Date,
+) {
+  return transactions.filter((tx) => isSameMonth(tx.date, targetMonth));
 }
 ```
 
 ### Deadline Validation
 
 ```typescript
-import { isBeforeOrEqual } from 'chronia';
+import { isBeforeOrEqual } from "chronia";
 
 function isSubmittedOnTime(submissionDate: Date, deadline: Date): boolean {
   // Includes submissions on the deadline day
@@ -518,14 +525,21 @@ function isSubmittedOnTime(submissionDate: Date, deadline: Date): boolean {
 
 - **Millisecond comparison** is the fastest as it requires no unit truncation
 - **Unit-based comparison** involves truncation overhead but is still highly efficient
-- **isSame* functions** are optimized for their specific granularity
+- **isSame\* functions** are optimized for their specific granularity
 - All functions validate inputs early for fast-fail behavior
 - Input validation has minimal overhead compared to the comparison operation
 
 ## Type Definitions
 
 ```typescript
-type TimeUnit = 'year' | 'month' | 'day' | 'hour' | 'minute' | 'second' | 'millisecond';
+type TimeUnit =
+  | "year"
+  | "month"
+  | "day"
+  | "hour"
+  | "minute"
+  | "second"
+  | "millisecond";
 
 interface ComparisonOptions {
   unit?: TimeUnit;

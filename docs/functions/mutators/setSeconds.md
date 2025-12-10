@@ -7,20 +7,20 @@ The `setSeconds` function sets the seconds component of a given Date object or t
 ## Signature
 
 ```typescript
-function setSeconds(date: Date | number, seconds: number): Date
+function setSeconds(date: Date | number, seconds: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp representing the base date |
-| `seconds` | `number` | The seconds value to set (0-59 for normal range, other values will roll over) |
+| Parameter | Type             | Description                                                                   |
+| --------- | ---------------- | ----------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp representing the base date                 |
+| `seconds` | `number`         | The seconds value to set (0-59 for normal range, other values will roll over) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                      |
+| ------ | ---------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the seconds component set to the specified value, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `setSeconds` function creates a new Date object by setting the seconds compo
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid `Date` object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -39,11 +40,13 @@ The `setSeconds` function creates a new Date object by setting the seconds compo
 - Fractional `seconds` values are provided (truncated toward zero using `Math.trunc`)
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `seconds` argument is `NaN`, `Infinity`, or `-Infinity`
 
 #### Rollover Behavior:
+
 - Seconds values >= 60 roll over to the next minute (e.g., 60 seconds → 1 minute, 0 seconds)
 - Negative seconds values roll back to the previous minute (e.g., -1 seconds → previous minute, 59 seconds)
 - Rollover may cascade to affect minutes, hours, days, months, and years
@@ -70,7 +73,7 @@ The `setSeconds` function creates a new Date object by setting the seconds compo
 ### Time Normalization
 
 ```typescript
-import { setSeconds } from 'chronia';
+import { setSeconds } from "chronia";
 
 // Reset seconds to 0 (start of minute)
 const now = new Date(2025, 0, 15, 12, 30, 45, 500);
@@ -90,7 +93,7 @@ const updated = setSeconds(timestamp, 0);
 ### Time Adjustment
 
 ```typescript
-import { setSeconds } from 'chronia';
+import { setSeconds } from "chronia";
 
 // Update specific second value
 function setSecondsFromInput(baseDate: Date, userSeconds: number): Date {
@@ -105,7 +108,7 @@ const result = setSecondsFromInput(base, 15);
 ### Rollover Behavior
 
 ```typescript
-import { setSeconds } from 'chronia';
+import { setSeconds } from "chronia";
 
 const baseDate = new Date(2025, 0, 15, 12, 30, 45);
 
@@ -125,7 +128,7 @@ const largeValue = setSeconds(baseDate, 3600); // 60 minutes worth of seconds
 ### Fractional Seconds Handling
 
 ```typescript
-import { setSeconds } from 'chronia';
+import { setSeconds } from "chronia";
 
 const baseDate = new Date(2025, 0, 15, 12, 30, 45);
 
@@ -145,10 +148,10 @@ const fraction3 = setSeconds(baseDate, 0.9);
 ### Input Validation
 
 ```typescript
-import { setSeconds } from 'chronia';
+import { setSeconds } from "chronia";
 
 // Invalid date input returns Invalid Date
-const invalid1 = setSeconds(new Date('invalid'), 30);
+const invalid1 = setSeconds(new Date("invalid"), 30);
 // Returns: Invalid Date
 
 // Invalid seconds input returns Invalid Date

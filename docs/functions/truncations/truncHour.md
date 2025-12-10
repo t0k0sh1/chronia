@@ -7,19 +7,19 @@ The `truncHour` function truncates a date to the start of the hour by setting mi
 ## Signature
 
 ```typescript
-function truncHour(date: Date | number): Date
+function truncHour(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the hour |
+| Parameter | Type             | Description                                                             |
+| --------- | ---------------- | ----------------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the hour |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                                                      |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `Date` | A new Date object truncated to the start of the hour (with minutes, seconds, and milliseconds set to 0), or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `truncHour` function removes all time components below the hour level from a
 ### Specification
 
 #### Returns a Date at the start of the hour when:
+
 - The argument is a valid `Date` object
   - Minutes, seconds, and milliseconds are set to 0
   - Hour, day, month, and year remain unchanged
@@ -38,6 +39,7 @@ The `truncHour` function removes all time components below the hour level from a
   - Hour, day, month, and year remain unchanged
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -65,21 +67,24 @@ The `truncHour` function removes all time components below the hour level from a
 ### Time-Based Grouping
 
 ```typescript
-import { truncHour } from 'chronia';
+import { truncHour } from "chronia";
 
 // Group events by hour
 const events = [
-  { timestamp: new Date(2024, 5, 15, 14, 30, 45), action: 'login' },
-  { timestamp: new Date(2024, 5, 15, 14, 45, 20), action: 'view' },
-  { timestamp: new Date(2024, 5, 15, 15, 10, 30), action: 'purchase' },
+  { timestamp: new Date(2024, 5, 15, 14, 30, 45), action: "login" },
+  { timestamp: new Date(2024, 5, 15, 14, 45, 20), action: "view" },
+  { timestamp: new Date(2024, 5, 15, 15, 10, 30), action: "purchase" },
 ];
 
-const groupedByHour = events.reduce((acc, event) => {
-  const hourKey = truncHour(event.timestamp).toISOString();
-  if (!acc[hourKey]) acc[hourKey] = [];
-  acc[hourKey].push(event);
-  return acc;
-}, {} as Record<string, typeof events>);
+const groupedByHour = events.reduce(
+  (acc, event) => {
+    const hourKey = truncHour(event.timestamp).toISOString();
+    if (!acc[hourKey]) acc[hourKey] = [];
+    acc[hourKey].push(event);
+    return acc;
+  },
+  {} as Record<string, typeof events>,
+);
 
 // Result: Events grouped by hour boundaries
 // "2024-06-15T14:00:00.000Z": [login, view]
@@ -89,38 +94,39 @@ const groupedByHour = events.reduce((acc, event) => {
 ### Time Normalization
 
 ```typescript
-import { truncHour } from 'chronia';
+import { truncHour } from "chronia";
 
 // Normalize timestamps for comparison
 const timestamp1 = new Date(2024, 5, 15, 14, 30, 45, 123);
 const timestamp2 = new Date(2024, 5, 15, 14, 45, 20, 456);
 
-const hour1 = truncHour(timestamp1);  // Returns: June 15, 2024 14:00:00.000
-const hour2 = truncHour(timestamp2);  // Returns: June 15, 2024 14:00:00.000
+const hour1 = truncHour(timestamp1); // Returns: June 15, 2024 14:00:00.000
+const hour2 = truncHour(timestamp2); // Returns: June 15, 2024 14:00:00.000
 
 // Check if events occurred in the same hour
-const sameHour = hour1.getTime() === hour2.getTime();  // Returns: true
+const sameHour = hour1.getTime() === hour2.getTime(); // Returns: true
 ```
 
 ### Scheduling Operations
 
 ```typescript
-import { truncHour } from 'chronia';
+import { truncHour } from "chronia";
 
 // Calculate next hourly interval
 function getNextHourlySlot(date: Date): Date {
   const currentHour = truncHour(date);
-  return new Date(currentHour.getTime() + 60 * 60 * 1000);  // Add 1 hour
+  return new Date(currentHour.getTime() + 60 * 60 * 1000); // Add 1 hour
 }
 
 const now = new Date(2024, 5, 15, 14, 30, 45);
-const nextSlot = getNextHourlySlot(now);  // Returns: June 15, 2024 15:00:00.000
+const nextSlot = getNextHourlySlot(now); // Returns: June 15, 2024 15:00:00.000
 
 // Generate hourly time slots
 function generateHourlySlots(start: Date, count: number): Date[] {
   const startHour = truncHour(start);
-  return Array.from({ length: count }, (_, i) =>
-    new Date(startHour.getTime() + i * 60 * 60 * 1000)
+  return Array.from(
+    { length: count },
+    (_, i) => new Date(startHour.getTime() + i * 60 * 60 * 1000),
   );
 }
 
@@ -131,7 +137,7 @@ const slots = generateHourlySlots(now, 3);
 ### Data Bucketing
 
 ```typescript
-import { truncHour } from 'chronia';
+import { truncHour } from "chronia";
 
 // Create hourly buckets for time-series data
 interface DataPoint {
@@ -154,7 +160,9 @@ function bucketByHour(data: DataPoint[]): Map<string, number[]> {
 }
 
 // Calculate hourly averages
-function calculateHourlyAverages(data: DataPoint[]): Array<{ hour: Date; average: number }> {
+function calculateHourlyAverages(
+  data: DataPoint[],
+): Array<{ hour: Date; average: number }> {
   const buckets = bucketByHour(data);
   return Array.from(buckets.entries()).map(([hourStr, values]) => ({
     hour: new Date(hourStr),
@@ -166,7 +174,7 @@ function calculateHourlyAverages(data: DataPoint[]): Array<{ hour: Date; average
 ### Cache Keys
 
 ```typescript
-import { truncHour } from 'chronia';
+import { truncHour } from "chronia";
 
 // Generate hour-based cache keys
 function getHourlyCacheKey(prefix: string, date: Date = new Date()): string {
@@ -175,7 +183,7 @@ function getHourlyCacheKey(prefix: string, date: Date = new Date()): string {
 }
 
 // Cache with hourly expiration
-const cacheKey = getHourlyCacheKey('analytics');  // Returns: 'analytics:1718460000000'
+const cacheKey = getHourlyCacheKey("analytics"); // Returns: 'analytics:1718460000000'
 
 // Invalidate cache at hour boundaries
 function shouldInvalidateCache(cachedDate: Date, currentDate: Date): boolean {
@@ -184,5 +192,5 @@ function shouldInvalidateCache(cachedDate: Date, currentDate: Date): boolean {
 
 const cached = new Date(2024, 5, 15, 14, 30, 0);
 const current = new Date(2024, 5, 15, 15, 5, 0);
-const shouldInvalidate = shouldInvalidateCache(cached, current);  // Returns: true
+const shouldInvalidate = shouldInvalidateCache(cached, current); // Returns: true
 ```

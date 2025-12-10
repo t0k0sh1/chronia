@@ -7,19 +7,19 @@ The `startOfYear` function returns a new Date object set to the first moment of 
 ## Signature
 
 ```typescript
-function startOfYear(date: Date | number): Date
+function startOfYear(date: Date | number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | A Date object or numeric timestamp representing the base date |
+| Parameter | Type             | Description                                                   |
+| --------- | ---------------- | ------------------------------------------------------------- |
+| `date`    | `Date \| number` | A Date object or numeric timestamp representing the base date |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                    |
+| ------ | -------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object set to January 1st at 00:00:00.000 of the same year, or Invalid Date if the input is invalid |
 
 ## Description
@@ -29,6 +29,7 @@ The `startOfYear` function calculates the start of the year for a given date by 
 ### Specification
 
 #### Returns a valid Date when:
+
 - The argument is a valid `Date` object (not Invalid Date)
 - The argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -36,6 +37,7 @@ The `startOfYear` function calculates the start of the year for a given date by 
   - Negative timestamps (dates before Unix epoch)
 
 The returned Date will be set to:
+
 - Month: `0` (January)
 - Day: `1`
 - Hours: `0`
@@ -45,6 +47,7 @@ The returned Date will be set to:
 - Year: Same as the input date's year
 
 #### Returns Invalid Date when:
+
 - The argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The argument is `NaN`
 - The argument is `Infinity`
@@ -72,7 +75,7 @@ The returned Date will be set to:
 ### Year Boundary Calculations
 
 ```typescript
-import { startOfYear } from 'chronia';
+import { startOfYear } from "chronia";
 
 // Get start of year from mid-year date
 const midYear = new Date(2024, 5, 15, 14, 30, 45);
@@ -93,7 +96,7 @@ const yearStart3 = startOfYear(timestamp);
 ### Year-based Grouping
 
 ```typescript
-import { startOfYear } from 'chronia';
+import { startOfYear } from "chronia";
 
 interface Event {
   date: Date;
@@ -118,9 +121,9 @@ function groupEventsByYear(events: Event[]): Map<number, Event[]> {
 
 // Usage
 const events: Event[] = [
-  { date: new Date(2024, 3, 15), name: 'Event A' },
-  { date: new Date(2024, 8, 20), name: 'Event B' },
-  { date: new Date(2023, 11, 10), name: 'Event C' },
+  { date: new Date(2024, 3, 15), name: "Event A" },
+  { date: new Date(2024, 8, 20), name: "Event B" },
+  { date: new Date(2023, 11, 10), name: "Event C" },
 ];
 
 const grouped = groupEventsByYear(events);
@@ -133,7 +136,7 @@ const grouped = groupEventsByYear(events);
 ### Time Period Comparison
 
 ```typescript
-import { startOfYear } from 'chronia';
+import { startOfYear } from "chronia";
 
 function isSameYear(date1: Date, date2: Date): boolean {
   const year1Start = startOfYear(date1);
@@ -146,14 +149,14 @@ const date1 = new Date(2024, 0, 15);
 const date2 = new Date(2024, 11, 25);
 const date3 = new Date(2023, 6, 10);
 
-isSameYear(date1, date2);  // Returns: true (both in 2024)
-isSameYear(date1, date3);  // Returns: false (2024 vs 2023)
+isSameYear(date1, date2); // Returns: true (both in 2024)
+isSameYear(date1, date3); // Returns: false (2024 vs 2023)
 ```
 
 ### Date Range Creation
 
 ```typescript
-import { startOfYear } from 'chronia';
+import { startOfYear } from "chronia";
 
 function getYearRange(date: Date): { start: Date; end: Date } {
   const start = startOfYear(date);
@@ -173,7 +176,7 @@ const range = getYearRange(new Date(2024, 5, 15));
 ### Handling Leap Years
 
 ```typescript
-import { startOfYear } from 'chronia';
+import { startOfYear } from "chronia";
 
 // Works correctly with leap year dates
 const leapYearDate = new Date(2024, 1, 29); // February 29, 2024 (leap year)
@@ -189,7 +192,7 @@ const oldYearStart = startOfYear(oldDate);
 ### Error Handling
 
 ```typescript
-import { startOfYear } from 'chronia';
+import { startOfYear } from "chronia";
 
 // Invalid inputs return Invalid Date
 const invalid1 = startOfYear(NaN);
@@ -198,7 +201,7 @@ const invalid1 = startOfYear(NaN);
 const invalid2 = startOfYear(Infinity);
 // Returns: Invalid Date
 
-const invalid3 = startOfYear(new Date('invalid'));
+const invalid3 = startOfYear(new Date("invalid"));
 // Returns: Invalid Date
 
 // Check for valid results
@@ -207,6 +210,6 @@ function safeStartOfYear(date: Date | number): Date | null {
   return isNaN(result.getTime()) ? null : result;
 }
 
-safeStartOfYear(new Date(2024, 5, 15));  // Returns: Date(2024, 0, 1, ...)
-safeStartOfYear(NaN);                     // Returns: null
+safeStartOfYear(new Date(2024, 5, 15)); // Returns: Date(2024, 0, 1, ...)
+safeStartOfYear(NaN); // Returns: null
 ```

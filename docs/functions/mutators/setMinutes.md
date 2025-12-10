@@ -7,20 +7,20 @@ The `setMinutes` function sets the minutes component of a given date to a specif
 ## Signature
 
 ```typescript
-function setMinutes(date: Date | number, minutes: number): Date
+function setMinutes(date: Date | number, minutes: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | `Date \| number` | The base date as a Date object or numeric timestamp |
-| `minutes` | `number` | The minutes value to set (typically 0-59, but values outside this range will cause rollover) |
+| Parameter | Type             | Description                                                                                  |
+| --------- | ---------------- | -------------------------------------------------------------------------------------------- |
+| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                          |
+| `minutes` | `number`         | The minutes value to set (typically 0-59, but values outside this range will cause rollover) |
 
 ## Return Value
 
-| Type | Description |
-|------|-------------|
+| Type   | Description                                                                                                      |
+| ------ | ---------------------------------------------------------------------------------------------------------------- |
 | `Date` | A new Date object with the minutes component set to the specified value, or Invalid Date if any input is invalid |
 
 ## Description
@@ -30,6 +30,7 @@ The `setMinutes` function modifies the minutes component of a date while leaving
 ### Specification
 
 #### Returns a valid Date when:
+
 - The `date` argument is a valid Date object (not Invalid Date)
 - The `date` argument is a finite numeric timestamp, including:
   - Positive timestamps (dates after Unix epoch)
@@ -43,6 +44,7 @@ The `setMinutes` function modifies the minutes component of a date while leaving
   - Large values continue to roll over accordingly
 
 #### Returns Invalid Date when:
+
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
 - The `minutes` argument is `NaN`, `Infinity`, or `-Infinity`
@@ -70,7 +72,7 @@ The `setMinutes` function modifies the minutes component of a date while leaving
 ### Time Normalization
 
 ```typescript
-import { setMinutes } from 'chronia';
+import { setMinutes } from "chronia";
 
 // Normalize to start of the hour
 const dateTime = new Date(2025, 0, 15, 12, 37, 45);
@@ -85,7 +87,7 @@ const halfHour = setMinutes(new Date(2025, 0, 15, 14, 23, 10), 30);
 ### Meeting Schedulers
 
 ```typescript
-import { setMinutes } from 'chronia';
+import { setMinutes } from "chronia";
 
 // Schedule meeting to start at :00
 function scheduleOnHour(proposedTime: Date): Date {
@@ -104,7 +106,7 @@ const hourStart = setMinutes(timestamp, 0);
 ### Time Rounding
 
 ```typescript
-import { setMinutes } from 'chronia';
+import { setMinutes } from "chronia";
 
 // Round to nearest quarter-hour
 function roundToQuarterHour(date: Date): Date {
@@ -114,16 +116,16 @@ function roundToQuarterHour(date: Date): Date {
 }
 
 const time1 = new Date(2025, 0, 15, 10, 7, 30);
-roundToQuarterHour(time1);  // Returns: 2025-01-15 10:00:30 (7 rounds to 0)
+roundToQuarterHour(time1); // Returns: 2025-01-15 10:00:30 (7 rounds to 0)
 
 const time2 = new Date(2025, 0, 15, 10, 38, 30);
-roundToQuarterHour(time2);  // Returns: 2025-01-15 10:45:30 (38 rounds to 45)
+roundToQuarterHour(time2); // Returns: 2025-01-15 10:45:30 (38 rounds to 45)
 ```
 
 ### Handling Edge Cases
 
 ```typescript
-import { setMinutes } from 'chronia';
+import { setMinutes } from "chronia";
 
 // Fractional minutes are truncated
 const fractional = setMinutes(new Date(2025, 0, 15, 12, 30, 45), 45.9);
@@ -138,7 +140,7 @@ const negative = setMinutes(new Date(2025, 0, 15, 12, 30, 45), -1);
 // Returns: 2025-01-15 11:59:45 (hour decremented)
 
 // Invalid inputs return Invalid Date
-const invalid = setMinutes(new Date('invalid'), 30);
+const invalid = setMinutes(new Date("invalid"), 30);
 // Returns: Invalid Date
 
 const nanMinutes = setMinutes(new Date(), NaN);
@@ -148,7 +150,7 @@ const nanMinutes = setMinutes(new Date(), NaN);
 ### Timestamp Manipulation
 
 ```typescript
-import { setMinutes } from 'chronia';
+import { setMinutes } from "chronia";
 
 // Create specific timestamps for testing
 function createTestTimestamp(hour: number, minute: number): number {
@@ -156,7 +158,7 @@ function createTestTimestamp(hour: number, minute: number): number {
   return setMinutes(base, minute).getTime();
 }
 
-const testTime1 = createTestTimestamp(9, 15);  // 9:15 AM
+const testTime1 = createTestTimestamp(9, 15); // 9:15 AM
 const testTime2 = createTestTimestamp(14, 45); // 2:45 PM
 
 // Works seamlessly with numeric timestamps

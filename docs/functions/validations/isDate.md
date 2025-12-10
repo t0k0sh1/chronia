@@ -7,19 +7,19 @@ The `isDate` function checks whether a given value is a Date object instance. It
 ## Signature
 
 ```typescript
-function isDate(value: unknown): value is Date
+function isDate(value: unknown): value is Date;
 ```
 
 ## Parameters
 
-| Parameter | Type      | Description                              |
-|-----------|-----------|------------------------------------------|
+| Parameter | Type      | Description                               |
+| --------- | --------- | ----------------------------------------- |
 | `value`   | `unknown` | Any value to check for Date instance type |
 
 ## Return Value
 
-| Type            | Description                                                                                                                                                      |
-|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Type            | Description                                                                                                                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `value is Date` | Returns `true` if the value is a Date instance, `false` otherwise. Type predicate that narrows the type to `Date` when `true`. |
 
 ## Description
@@ -72,7 +72,7 @@ The `isDate` function determines whether the provided value is an instance of th
 ### Type Narrowing
 
 ```typescript
-import { isDate } from 'chronia';
+import { isDate } from "chronia";
 
 // Type guard enables safe Date method access
 function processValue(value: unknown) {
@@ -81,27 +81,27 @@ function processValue(value: unknown) {
     console.log(value.getTime());
     console.log(value.toISOString());
   } else {
-    console.log('Not a Date instance');
+    console.log("Not a Date instance");
   }
 }
 
 // Valid Date object
-processValue(new Date(2025, 0, 1));  // Logs: timestamp and ISO string
+processValue(new Date(2025, 0, 1)); // Logs: timestamp and ISO string
 
 // Invalid Date object (still a Date instance!)
-processValue(new Date('invalid'));  // Logs: NaN and 'Invalid Date'
+processValue(new Date("invalid")); // Logs: NaN and 'Invalid Date'
 
 // Timestamp (number) - NOT a Date instance
-processValue(Date.now());  // Logs: 'Not a Date instance'
+processValue(Date.now()); // Logs: 'Not a Date instance'
 
 // Date string - NOT a Date instance
-processValue('2025-01-01');  // Logs: 'Not a Date instance'
+processValue("2025-01-01"); // Logs: 'Not a Date instance'
 ```
 
 ### Runtime Type Validation
 
 ```typescript
-import { isDate, isValid } from 'chronia';
+import { isDate, isValid } from "chronia";
 
 // Validate API response data
 interface ApiResponse {
@@ -113,13 +113,13 @@ function processApiDate(response: ApiResponse): Date | null {
 
   // Check if it's a Date instance
   if (!isDate(data)) {
-    console.error('Expected Date instance, received:', typeof data);
+    console.error("Expected Date instance, received:", typeof data);
     return null;
   }
 
   // Check if it's a valid Date
   if (!isValid(data)) {
-    console.error('Received Invalid Date instance');
+    console.error("Received Invalid Date instance");
     return null;
   }
 
@@ -127,31 +127,31 @@ function processApiDate(response: ApiResponse): Date | null {
 }
 
 // Valid Date instance
-processApiDate({ data: new Date(2025, 0, 1) });  // Returns: Date object
+processApiDate({ data: new Date(2025, 0, 1) }); // Returns: Date object
 
 // Invalid Date instance
-processApiDate({ data: new Date('invalid') });  // Returns: null
+processApiDate({ data: new Date("invalid") }); // Returns: null
 
 // Number (not a Date instance)
-processApiDate({ data: 1704067200000 });  // Returns: null
+processApiDate({ data: 1704067200000 }); // Returns: null
 ```
 
 ### Function Parameter Validation
 
 ```typescript
-import { isDate } from 'chronia';
+import { isDate } from "chronia";
 
 // Function that requires Date instance (not timestamp)
 function formatDateObject(date: Date | number | string): string {
   if (!isDate(date)) {
-    throw new TypeError('Expected Date instance, use new Date() to create one');
+    throw new TypeError("Expected Date instance, use new Date() to create one");
   }
 
   // Safe to use Date methods here
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 }
 
@@ -160,7 +160,7 @@ formatDateObject(new Date(2025, 0, 1));
 // Returns: 'January 1, 2025'
 
 // Invalid Date instance - still works (but may return 'Invalid Date')
-formatDateObject(new Date('invalid'));
+formatDateObject(new Date("invalid"));
 // Returns: 'Invalid Date'
 
 // Timestamp - throws TypeError
@@ -175,14 +175,14 @@ try {
 ### Filtering Mixed-Type Collections
 
 ```typescript
-import { isDate } from 'chronia';
+import { isDate } from "chronia";
 
 // Extract only Date instances from mixed array
 const mixedValues: unknown[] = [
   new Date(2025, 0, 1),
-  'not a date',
+  "not a date",
   Date.now(),
-  new Date('invalid'),  // Invalid but still a Date instance
+  new Date("invalid"), // Invalid but still a Date instance
   null,
   { date: new Date() },
 ];
@@ -191,15 +191,15 @@ const dateInstances = mixedValues.filter(isDate);
 // Returns: [new Date(2025, 0, 1), new Date('invalid')]
 
 // TypeScript knows dateInstances is Date[]
-dateInstances.forEach(date => {
-  console.log(date.getTime());  // Type-safe access to Date methods
+dateInstances.forEach((date) => {
+  console.log(date.getTime()); // Type-safe access to Date methods
 });
 ```
 
 ### Distinguishing Dates from Timestamps
 
 ```typescript
-import { isDate } from 'chronia';
+import { isDate } from "chronia";
 
 // Handle both Date objects and timestamps
 function normalizeToDate(input: Date | number): Date {
@@ -215,14 +215,14 @@ function normalizeToDate(input: Date | number): Date {
 const dateObj = new Date(2025, 0, 1);
 const timestamp = Date.now();
 
-normalizeToDate(dateObj);    // Returns: same Date instance
-normalizeToDate(timestamp);  // Returns: new Date(timestamp)
+normalizeToDate(dateObj); // Returns: same Date instance
+normalizeToDate(timestamp); // Returns: new Date(timestamp)
 ```
 
 ### Combining with isValid for Complete Validation
 
 ```typescript
-import { isDate, isValid } from 'chronia';
+import { isDate, isValid } from "chronia";
 
 // Check both type AND validity
 function isValidDateInstance(value: unknown): value is Date {
@@ -230,13 +230,13 @@ function isValidDateInstance(value: unknown): value is Date {
 }
 
 // Valid Date instance
-isValidDateInstance(new Date(2025, 0, 1));  // Returns: true
+isValidDateInstance(new Date(2025, 0, 1)); // Returns: true
 
 // Invalid Date instance (type check passes, validity fails)
-isValidDateInstance(new Date('invalid'));  // Returns: false
+isValidDateInstance(new Date("invalid")); // Returns: false
 
 // Timestamp (type check fails)
-isValidDateInstance(Date.now());  // Returns: false
+isValidDateInstance(Date.now()); // Returns: false
 
 // Use in conditional
 function processOnlyValidDates(value: unknown) {
@@ -255,10 +255,10 @@ function processOnlyValidDates(value: unknown) {
 
 ```typescript
 // INCORRECT: Assuming isDate checks validity
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 if (isDate(invalidDate)) {
   // This code runs! isDate returns true for Invalid Date
-  console.log(invalidDate.toISOString());  // Error: Invalid Date
+  console.log(invalidDate.toISOString()); // Error: Invalid Date
 }
 ```
 
@@ -266,7 +266,7 @@ if (isDate(invalidDate)) {
 
 ```typescript
 // CORRECT: Check both type and validity
-const invalidDate = new Date('invalid');
+const invalidDate = new Date("invalid");
 if (isDate(invalidDate) && isValid(invalidDate)) {
   // This code doesn't run because validity check fails
   console.log(invalidDate.toISOString());
@@ -306,7 +306,7 @@ if (isDate(date)) {
 // INCORRECT: Plain objects are not Date instances
 const fakeDateObj = {
   getTime: () => Date.now(),
-  toISOString: () => '2025-01-01T00:00:00.000Z'
+  toISOString: () => "2025-01-01T00:00:00.000Z",
 };
 
 if (isDate(fakeDateObj)) {
@@ -321,17 +321,17 @@ if (isDate(fakeDateObj)) {
 // CORRECT: Check for specific methods if duck typing is needed
 function hasDateMethods(value: unknown): boolean {
   return (
-    typeof value === 'object' &&
+    typeof value === "object" &&
     value !== null &&
-    'getTime' in value &&
-    typeof (value as any).getTime === 'function'
+    "getTime" in value &&
+    typeof (value as any).getTime === "function"
   );
 }
 
 // Or better: ensure you're working with real Date instances
-const realDate = new Date('2025-01-01');
+const realDate = new Date("2025-01-01");
 if (isDate(realDate)) {
-  console.log(realDate.toISOString());  // Works correctly
+  console.log(realDate.toISOString()); // Works correctly
 }
 ```
 
