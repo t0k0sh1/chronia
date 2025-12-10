@@ -68,7 +68,7 @@ When you report a vulnerability, here's what you can expect:
 Chronia employs several tools and practices to maintain security:
 
 - **Dependabot**: Automatically checks for vulnerable dependencies and creates pull requests to update them. This project has Dependabot enabled for automated dependency updates.
-- **Snyk**: We are evaluating continuous vulnerability scanning for known security issues in our dependencies (not yet configured).
+- **Snyk**: Continuous vulnerability scanning is enabled for known security issues in our dependencies.
 - **npm Trusted Publishing**: We use OIDC-based authentication for secure, tokenless publishing to npm, reducing the risk of compromised credentials.
 
 ## Scope
