@@ -49,7 +49,7 @@ Chronia is a modern, lightweight TypeScript date/time utility library with compr
 
 ## Installation
 
-Chronia requires **Node.js v18 or higher**.
+Chronia requires **Node.js v18 to v24**.
 
 ```bash
 # Using pnpm (recommended)
