@@ -459,7 +459,7 @@ function addDays(date: Date | number, amount: number): Date;
 function isBefore(
   a: Date | number,
   b: Date | number,
-  options?: ComparisonOptions
+  options?: ComparisonOptions,
 ): boolean;
 ```
 
