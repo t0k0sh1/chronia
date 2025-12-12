@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Get the end of the month for the given date.
@@ -8,7 +10,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * of that month and all time components are set to their maximum values. Automatically handles
  * different month lengths and leap years.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to the last day of the month at 23:59:59.999, or Invalid Date if input is invalid
  *
  * @example
@@ -26,8 +28,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result3 = endOfMonth(timestamp);
  * // Returns: Last day of current month at 23:59:59.999
  *
- * // Handles leap year February
- * const result4 = endOfMonth(new Date(2024, 1, 1));
+ * // Works with ISO 8601 strings
+ * const result4 = endOfMonth("2024-02-15");
  * // Returns: February 29, 2024 23:59:59.999 (leap year)
  *
  * // Invalid inputs return Invalid Date
@@ -37,17 +39,17 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Automatically handles different month lengths (28, 29, 30, or 31 days)
  * - Correctly handles leap years for February
  */
-export function endOfMonth(date: Date | number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function endOfMonth(date: DateInput): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
-  const dt = new Date(date);
+  const dt = toDate(date);
   return new Date(
     dt.getFullYear(),
     dt.getMonth() + 1, // Next month

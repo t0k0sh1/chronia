@@ -7,15 +7,15 @@ The `setYear` function sets the year component of a given date to a specified va
 ## Signature
 
 ```typescript
-function setYear(date: Date | number, year: number): Date;
+function setYear(date: DateInput, year: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                                 |
-| --------- | ---------------- | ------------------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                         |
-| `year`    | `number`         | The year to set (can be negative for BC dates, fractional values are truncated toward zero) |
+| Parameter | Type        | Description                                                                                 |
+| --------- | ----------- | ------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string                       |
+| `year`    | `number`    | The year to set (can be negative for BC dates, fractional values are truncated toward zero) |
 
 ## Return Value
 

@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Calculate the difference in calendar years between two dates.
@@ -6,8 +8,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * This function calculates the number of full calendar years between two dates.
  * Only year values are considered; months, days, and time components are ignored.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in calendar years (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -26,6 +28,10 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result = diffYears(timestamp1, timestamp2);
  * // Returns: 5
  *
+ * // Works with ISO 8601 strings
+ * const result = diffYears("2025-01-01", "2020-01-01");
+ * // Returns: 5
+ *
  * // Negative result when first date is earlier
  * const result = diffYears(new Date(2020, 5, 15), new Date(2024, 5, 15));
  * // Returns: -4
@@ -38,19 +44,19 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * @remarks
  * - Considers only year values for calculation
  * - Months, days, and time components (hours, minutes, seconds, milliseconds) are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles century and millennium boundaries correctly
  * - Calculation: dateLeft.getFullYear() - dateRight.getFullYear()
  */
-export function diffYears(dateLeft: Date | number, dateRight: Date | number): number {
+export function diffYears(dateLeft: DateInput, dateRight: DateInput): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
   // This differs from boolean functions (return false) and comparison functions (throw errors)
-  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+  if (!isValidDateInput(dateLeft) || !isValidDateInput(dateRight)) {
     return NaN;
   }
 
-  const dtLeft = new Date(dateLeft);
-  const dtRight = new Date(dateRight);
+  const dtLeft = toDate(dateLeft);
+  const dtRight = toDate(dateRight);
   return dtLeft.getFullYear() - dtRight.getFullYear();
 }

@@ -127,6 +127,51 @@ export function isValidNumber(value: unknown): value is number {
 
 
 // ========================================
+// String Type Validation
+// ========================================
+
+/**
+ * Validates if a value is a valid ISO 8601 date string.
+ *
+ * Uses JavaScript's Date.parse() which supports ISO 8601 format.
+ * Empty strings and whitespace-only strings are considered invalid.
+ *
+ * Supported formats:
+ * - YYYY-MM-DD (e.g., "2024-01-15")
+ * - YYYY-MM-DDTHH:mm:ss (e.g., "2024-01-15T14:30:00")
+ * - YYYY-MM-DDTHH:mm:ss.sss (e.g., "2024-01-15T14:30:00.000")
+ * - YYYY-MM-DDTHH:mm:ssZ (e.g., "2024-01-15T14:30:00Z")
+ * - YYYY-MM-DDTHH:mm:ss+HH:mm (e.g., "2024-01-15T14:30:00+09:00")
+ *
+ * @internal
+ * @param value - Any value to validate
+ * @returns true if value is a valid ISO 8601 date string, false otherwise
+ *
+ * @example
+ * ```typescript
+ * isValidDateString("2024-01-15"); // true
+ * isValidDateString("2024-01-15T14:30:00Z"); // true
+ * isValidDateString("2024-01-15T14:30:00+09:00"); // true
+ * isValidDateString(""); // false
+ * isValidDateString("invalid"); // false
+ * isValidDateString(123); // false
+ * ```
+ */
+export function isValidDateString(value: unknown): value is string {
+  if (typeof value !== "string") {
+    return false;
+  }
+  // Empty string or whitespace-only is not a valid date
+  if (value.trim() === "") {
+    return false;
+  }
+  // Use Date.parse to check if the string is parseable as ISO 8601
+  const timestamp = Date.parse(value);
+  return !isNaN(timestamp);
+}
+
+
+// ========================================
 // Compound Type Validation
 // ========================================
 
@@ -151,4 +196,31 @@ export function isValidNumber(value: unknown): value is number {
 export function isValidDateOrNumber(value: unknown): value is Date | number {
   // Use OR logic: passes if either validator passes
   return isValidDate(value) || isValidNumber(value);
+}
+
+/**
+ * Validates if a value is a valid DateInput (Date, finite number, or valid ISO 8601 string)
+ *
+ * This is the primary validation function for date input values throughout the library.
+ *
+ * @internal
+ * @param value - Any value to validate
+ * @returns true if value is a valid Date, finite number, or valid ISO 8601 string, false otherwise
+ *
+ * @example
+ * ```typescript
+ * isValidDateInput(new Date()); // true
+ * isValidDateInput(42); // true
+ * isValidDateInput("2024-01-15"); // true
+ * isValidDateInput("2024-01-15T14:30:00Z"); // true
+ * isValidDateInput(new Date('invalid')); // false
+ * isValidDateInput(NaN); // false
+ * isValidDateInput("invalid"); // false
+ * isValidDateInput(""); // false
+ * ```
+ */
+export function isValidDateInput(
+  value: unknown,
+): value is Date | number | string {
+  return isValidDate(value) || isValidNumber(value) || isValidDateString(value);
 }

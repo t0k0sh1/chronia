@@ -7,15 +7,15 @@ The `addMilliseconds` function adds a specified number of milliseconds to a give
 ## Signature
 
 ```typescript
-function addMilliseconds(date: Date | number, amount: number): Date;
+function addMilliseconds(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                     |
-| --------- | ---------------- | --------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp             |
-| `amount`  | `number`         | The number of milliseconds to add (can be negative to subtract) |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `amount`  | `number`    | The number of milliseconds to add (can be negative to subtract)       |
 
 ## Return Value
 

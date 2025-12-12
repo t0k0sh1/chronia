@@ -1,4 +1,6 @@
-import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput, isValidNumber } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Set the year of the given date.
@@ -6,7 +8,7 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * This function validates arguments before processing and returns a new Date instance
  * with the specified year set. Fractional years are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param year - The year to set (can be negative for BC dates)
  * @returns A new Date object with the year set, or Invalid Date if any input is invalid
  *
@@ -28,29 +30,33 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * const result4 = setYear(new Date(2025, 0, 15), 2023.9);
  * // Returns: 2023-01-15
  *
+ * // Set year from ISO 8601 string
+ * const result5 = setYear("2025-01-15", 2030);
+ * // Returns: 2030-01-15
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setYear(new Date("invalid"), 2025);
+ * const result6 = setYear(new Date("invalid"), 2025);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (2023.9 → 2023, -2023.9 → -2023)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
  * - Special handling: When the source date is Feb 29 and the target year is not a leap year, the result becomes Feb 28
  * - Always returns a new Date instance (does not mutate input)
  */
-export function setYear(date: Date | number, year: number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function setYear(date: DateInput, year: number): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
   if (!isValidNumber(year)) {
     return new Date(NaN);
   }
 
-  const dt = new Date(date);
+  const dt = toDate(date);
 
   const yearToSet = Math.trunc(year);
 

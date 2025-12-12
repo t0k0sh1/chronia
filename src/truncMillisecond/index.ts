@@ -1,5 +1,7 @@
+import type { DateInput } from "../types";
 import { truncateToUnit } from "../_lib/truncateToUnit";
-import { isValidDateOrNumber } from "../_lib/validators";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Truncate a date to the millisecond.
@@ -7,7 +9,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * This function returns the same date without any truncation since millisecond is the smallest unit
  * supported by JavaScript Date objects. It is provided for API consistency with other truncation functions.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object with the same value, or Invalid Date if input is invalid
  *
  * @example
@@ -25,9 +27,9 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result3 = truncMillisecond(timestamp);
  * // Returns: Date with same timestamp value
  *
- * // Unix epoch
- * const result4 = truncMillisecond(new Date(0));
- * // Returns: January 1, 1970 00:00:00.000
+ * // Works with ISO 8601 strings
+ * const result4 = truncMillisecond("2024-06-15T14:30:45.123");
+ * // Returns: June 15, 2024 14:30:45.123 (unchanged)
  *
  * // Invalid inputs return Invalid Date
  * const result5 = truncMillisecond(new Date("invalid"));
@@ -36,16 +38,16 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Provided for API consistency even though no truncation occurs
  * - Maintains millisecond precision (0-999)
  */
-export function truncMillisecond(date: Date | number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function truncMillisecond(date: DateInput): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
-  const dt = new Date(date);
+  const dt = toDate(date);
   return truncateToUnit(dt, "millisecond");
 }

@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { compareDateTimes } from "../_lib/compareDates";
 
 /**
@@ -8,7 +9,7 @@ import { compareDateTimes } from "../_lib/compareDates";
  * the given date is strictly after the current time. If the date equals the current time
  * (same millisecond), it returns `false` because the date is in the present, not the future.
  *
- * @param date - The date to check (Date object or numeric timestamp)
+ * @param date - The date to check (Date object, numeric timestamp, or ISO 8601 string)
  *
  * @returns `true` if the date is strictly in the future, `false` otherwise
  *   - Returns `true` when date > Date.now() (strictly in the future)
@@ -44,6 +45,10 @@ import { compareDateTimes } from "../_lib/compareDates";
  * // Invalid timestamp: Infinity
  * isFuture(Infinity);
  * // Returns: false
+ *
+ * // Future ISO 8601 string
+ * isFuture("2030-01-01");
+ * // Returns: true (assuming current year is before 2030)
  * ```
  *
  * @remarks
@@ -51,12 +56,12 @@ import { compareDateTimes } from "../_lib/compareDates";
  * - Comparison is performed at millisecond precision using `compareDateTimes` helper
  * - Never throws exceptions; returns `false` for invalid inputs
  * - Pure function (no side effects, but depends on current system time)
- * - Accepts both Date objects and numeric timestamps for flexibility
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings for flexibility
  * - Returns `false` when date equals current time (not strictly in the future)
  *
  * @see {@link isPast} - Check if a date is in the past
  * @see {@link isAfter} - Check if one date is after another date
  */
-export function isFuture(date: Date | number): boolean {
+export function isFuture(date: DateInput): boolean {
   return compareDateTimes(date, Date.now()) === 1;
 }

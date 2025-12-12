@@ -7,20 +7,16 @@ The `clamp` function constrains a date or timestamp to fall within a specified r
 ## Signature
 
 ```typescript
-function clamp(
-  date: Date | number,
-  minDate: Date | number,
-  maxDate: Date | number,
-): Date;
+function clamp(date: DateInput, minDate: DateInput, maxDate: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                           |
-| --------- | ---------------- | ------------------------------------- |
-| `date`    | `Date \| number` | The date or timestamp to clamp        |
-| `minDate` | `Date \| number` | The minimum allowed date or timestamp |
-| `maxDate` | `Date \| number` | The maximum allowed date or timestamp |
+| Parameter | Type        | Description                                             |
+| --------- | ----------- | ------------------------------------------------------- |
+| `date`    | `DateInput` | The date, timestamp, or ISO 8601 string to clamp        |
+| `minDate` | `DateInput` | The minimum allowed date, timestamp, or ISO 8601 string |
+| `maxDate` | `DateInput` | The maximum allowed date, timestamp, or ISO 8601 string |
 
 ## Return Value
 

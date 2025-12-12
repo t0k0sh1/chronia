@@ -7,15 +7,15 @@ The `subYears` function subtracts a specified number of years from a given date,
 ## Signature
 
 ```typescript
-function subYears(date: Date | number, amount: number): Date;
+function subYears(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                      |
-| --------- | ---------------- | -------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract years |
-| `amount`  | `number`         | The number of years to subtract (can be negative to add years instead)           |
+| Parameter | Type        | Description                                                                                        |
+| --------- | ----------- | -------------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string from which to subtract years |
+| `amount`  | `number`    | The number of years to subtract (can be negative to add years instead)                             |
 
 ## Return Value
 

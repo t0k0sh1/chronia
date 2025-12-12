@@ -24,9 +24,9 @@ It offers a simple, consistent, and functional API that makes working with dates
 - 📦 **Lightweight** – ESM/CJS dual modules, fully tree-shakable
 - 🌍 **Internationalization** – Built-in locale support (English, Japanese)
 - 📅 **Comprehensive Utilities** – Formatting, parsing, arithmetic, comparison, ranges, differences
-- 🎯 **Consistent API** – Unified support for `Date` objects and timestamps
+- 🎯 **Consistent API** – Unified support for `Date` objects, timestamps, and ISO 8601 strings
 - ✅ **Safe Error Handling** – No exceptions; standardized values (`Invalid Date`, `NaN`, `false`)
-- ⚡ **Well-tested** – 2100+ automated test cases ensure reliability
+- ⚡ **Well-tested** – 2900+ automated test cases ensure reliability
 
 ## Installation
 
@@ -225,6 +225,7 @@ Miscellaneous helper functions.
 Exported constants and TypeScript type definitions.
 
 - `constants` - Library constants
+- `DateInput` - Flexible input type (`Date | number | string`)
 - `Interval` - Type for date intervals
 - `Locale` - Type for locale configuration
 - `TimeUnit` - Type for time units

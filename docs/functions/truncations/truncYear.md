@@ -7,14 +7,14 @@ The `truncYear` function truncates a given date to the start of its year, settin
 ## Signature
 
 ```typescript
-function truncYear(date: Date | number): Date;
+function truncYear(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                             |
-| --------- | ---------------- | ----------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the year |
+| Parameter | Type        | Description                                                                               |
+| --------- | ----------- | ----------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to truncate to the start of the year |
 
 ## Return Value
 

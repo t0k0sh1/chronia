@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Get the seconds of the given date.
@@ -6,7 +8,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * This function validates arguments before processing and returns the seconds (0-59)
  * of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The seconds as a number (0-59), or NaN if invalid
  *
  * @example
@@ -19,33 +21,37 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result2 = getSeconds(1704067245000); // 2024-01-01T00:00:45Z
  * // Returns: 45
  *
+ * // Get seconds from ISO 8601 string
+ * const result3 = getSeconds("2025-01-15T10:30:45");
+ * // Returns: 45
+ *
  * // Start of minute
- * const result3 = getSeconds(new Date(2024, 0, 1, 10, 30, 0));
+ * const result4 = getSeconds(new Date(2024, 0, 1, 10, 30, 0));
  * // Returns: 0
  *
  * // End of minute
- * const result4 = getSeconds(new Date(2024, 0, 1, 10, 30, 59));
+ * const result5 = getSeconds(new Date(2024, 0, 1, 10, 30, 59));
  * // Returns: 59
  *
  * // Invalid date returns NaN
- * const result5 = getSeconds(new Date("invalid"));
+ * const result6 = getSeconds(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns the seconds in the local timezone
  * - Seconds are always in the range 0-59
  */
-export function getSeconds(date: Date | number): number {
+export function getSeconds(date: DateInput): number {
   // Validate arguments before conversion (consistent with library patterns)
-  if (!isValidDateOrNumber(date)) {
+  if (!isValidDateInput(date)) {
     return NaN;
   }
 
   // Convert input to Date object after validation
-  const dateObj = typeof date === "number" ? new Date(date) : date;
+  const dateObj = toDate(date);
   return dateObj.getSeconds();
 }

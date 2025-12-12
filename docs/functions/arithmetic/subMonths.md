@@ -7,15 +7,15 @@ The `subMonths` function subtracts a specified number of months from the given d
 ## Signature
 
 ```typescript
-function subMonths(date: Date | number, amount: number): Date;
+function subMonths(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                      |
-| --------- | ---------------- | ---------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp              |
-| `amount`  | `number`         | The number of months to subtract (can be negative to add months) |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `amount`  | `number`    | The number of months to subtract (can be negative to add months)      |
 
 ## Return Value
 

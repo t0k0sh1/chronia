@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { addDays } from "../addDays";
 import { isValidNumber } from "../_lib/validators";
 
@@ -7,7 +8,7 @@ import { isValidNumber } from "../_lib/validators";
  * This function validates arguments before processing and returns a new Date instance
  * with the specified number of days subtracted. Fractional days are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of days to subtract (can be negative to add)
  * @returns A new Date object with the days subtracted, or Invalid Date if any input is invalid
  *
@@ -26,6 +27,10 @@ import { isValidNumber } from "../_lib/validators";
  * const result = subDays(timestamp, 7);
  * // Returns: Date 7 days ago from now
  *
+ * // Works with ISO 8601 strings
+ * const result = subDays("2025-01-10", 5);
+ * // Returns: 2025-01-05
+ *
  * // Fractional amounts are truncated
  * const result = subDays(new Date(2025, 0, 5), 1.9);
  * // Returns: 2025-01-04 (1.9 truncated to 1)
@@ -40,12 +45,12 @@ import { isValidNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-export function subDays(date: Date | number, amount: number): Date {
+export function subDays(date: DateInput, amount: number): Date {
   if (!isValidNumber(amount)) {
     return new Date(NaN);
   }

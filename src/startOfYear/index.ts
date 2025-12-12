@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Get the start of the year for the given date.
@@ -7,7 +9,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * for the given date. The year remains the same while the month is set to January (0), the day
  * to 1, and all time components are reset to zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to January 1st at 00:00:00.000, or Invalid Date if input is invalid
  *
  * @example
@@ -25,8 +27,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result3 = startOfYear(timestamp);
  * // Returns: January 1st of current year at 00:00:00.000
  *
- * // Handles leap years
- * const result4 = startOfYear(new Date(2024, 1, 29));
+ * // Works with ISO 8601 strings
+ * const result4 = startOfYear("2024-06-15");
  * // Returns: January 1, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -36,16 +38,16 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Sets month to 0 (January), day to 1, and resets hours, minutes, seconds, and milliseconds to 0
  */
-export function startOfYear(date: Date | number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function startOfYear(date: DateInput): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
-  const dt = new Date(date);
+  const dt = toDate(date);
   return new Date(
     dt.getFullYear(),
     0, // January (month 0)

@@ -221,6 +221,30 @@ export type Parser = (
 ) => ParseResult;
 
 /**
+ * Date input type that accepts Date objects, Unix timestamps (milliseconds), or ISO 8601 strings.
+ *
+ * This type is used throughout the library for functions that accept date values.
+ * It provides flexibility in how dates can be specified while maintaining type safety.
+ *
+ * Supported string formats (ISO 8601):
+ * - YYYY-MM-DD (e.g., "2024-01-15")
+ * - YYYY-MM-DDTHH:mm:ss (e.g., "2024-01-15T14:30:00")
+ * - YYYY-MM-DDTHH:mm:ss.sss (e.g., "2024-01-15T14:30:00.000")
+ * - YYYY-MM-DDTHH:mm:ssZ (e.g., "2024-01-15T14:30:00Z")
+ * - YYYY-MM-DDTHH:mm:ss+HH:mm (e.g., "2024-01-15T14:30:00+09:00")
+ *
+ * @example
+ * ```typescript
+ * // All of these are valid DateInput values:
+ * const date1: DateInput = new Date(2024, 0, 15);
+ * const date2: DateInput = 1705276800000; // Unix timestamp
+ * const date3: DateInput = "2024-01-15";
+ * const date4: DateInput = "2024-01-15T14:30:00+09:00";
+ * ```
+ */
+export type DateInput = Date | number | string;
+
+/**
  * Time unit for date/time operations.
  *
  * Used in various date manipulation and comparison functions to specify
@@ -257,12 +281,12 @@ export type Interval = {
    * The start boundary of the interval.
    * If null, the interval has no lower bound (extends to MIN_DATE).
    */
-  start: Date | number | null;
+  start: DateInput | null;
   /**
    * The end boundary of the interval.
    * If null, the interval has no upper bound (extends to MAX_DATE).
    */
-  end: Date | number | null;
+  end: DateInput | null;
 };
 
 /**

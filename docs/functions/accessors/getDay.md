@@ -7,14 +7,14 @@ The `getDay` function extracts the day of the month (1-31) from a given Date obj
 ## Signature
 
 ```typescript
-function getDay(date: Date | number): number;
+function getDay(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                      |
-| --------- | ---------------- | ---------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the day |
+| Parameter | Type        | Description                                                                        |
+| --------- | ----------- | ---------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string from which to extract the day |
 
 ## Return Value
 

@@ -1,4 +1,6 @@
-import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput, isValidNumber } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Set the complete timestamp of the given date.
@@ -7,7 +9,7 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * with the specified timestamp. Unlike other setters that modify components (year, month, etc.),
  * setTime replaces the entire timestamp value.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param time - The timestamp in milliseconds since Unix epoch (January 1, 1970, 00:00:00 UTC)
  * @returns A new Date object with the timestamp set, or Invalid Date if any input is invalid
  *
@@ -29,9 +31,9 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * const result4 = setTime(new Date(), -86400000);
  * // Returns: 1969-12-31T00:00:00.000Z
  *
- * // Fractional milliseconds are preserved
- * const result5 = setTime(new Date(), 1.5);
- * // Returns: timestamp with 1.5 milliseconds (truncated by Date API)
+ * // Set time from ISO 8601 string
+ * const result5 = setTime("2025-01-15T12:30:45Z", 1704067200000);
+ * // Returns: 2024-01-01T00:00:00.000Z
  *
  * // Invalid timestamp returns Invalid Date
  * const result6 = setTime(new Date(), NaN);
@@ -40,22 +42,22 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts Date objects or numeric timestamps as the first argument (consistent with other setters)
+ * - Accepts Date objects, numeric timestamps, or ISO 8601 strings as the first argument
  * - Returns Invalid Date for: Invalid Date input, NaN, Infinity, -Infinity
  * - Valid timestamp range: -8.64e15 to 8.64e15 milliseconds
  * - Timestamps outside this range create Invalid Date
  * - Always returns a new Date instance (does not mutate input)
  * - This function replaces all date/time components at once (unlike setYear, setMonth, etc.)
  */
-export function setTime(date: Date | number, time: number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function setTime(date: DateInput, time: number): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
   if (!isValidNumber(time)) {
     return new Date(NaN);
   }
 
-  const newDate = new Date(date);
+  const newDate = toDate(date);
   newDate.setTime(time);
   return newDate;
 }

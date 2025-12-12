@@ -7,18 +7,15 @@ The `diffMilliseconds` function calculates the exact difference in milliseconds 
 ## Signature
 
 ```typescript
-function diffMilliseconds(
-  dateLeft: Date | number,
-  dateRight: Date | number,
-): number;
+function diffMilliseconds(dateLeft: DateInput, dateRight: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter   | Type             | Description                                                                          |
-| ----------- | ---------------- | ------------------------------------------------------------------------------------ |
-| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp (subtrahend in the calculation) |
-| `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp (minuend in the calculation)   |
+| Parameter   | Type        | Description                                                                                            |
+| ----------- | ----------- | ------------------------------------------------------------------------------------------------------ |
+| `dateLeft`  | `DateInput` | The first date as a Date object, numeric timestamp, or ISO 8601 string (subtrahend in the calculation) |
+| `dateRight` | `DateInput` | The second date as a Date object, numeric timestamp, or ISO 8601 string (minuend in the calculation)   |
 
 ## Return Value
 

@@ -7,15 +7,15 @@ The `setMonth` function sets the month of a given date and returns a new Date in
 ## Signature
 
 ```typescript
-function setMonth(date: Date | number, month: number): Date;
+function setMonth(date: DateInput, month: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                              |
-| --------- | ---------------- | -------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp      |
-| `month`   | `number`         | The month to set (0-indexed: 0 = January, 11 = December) |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `month`   | `number`    | The month to set (0-indexed: 0 = January, 11 = December)              |
 
 ## Return Value
 

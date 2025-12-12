@@ -7,15 +7,15 @@ The `setMilliseconds` function creates a new Date object with the milliseconds c
 ## Signature
 
 ```typescript
-function setMilliseconds(date: Date | number, milliseconds: number): Date;
+function setMilliseconds(date: DateInput, milliseconds: number): Date;
 ```
 
 ## Parameters
 
-| Parameter      | Type             | Description                                                         |
-| -------------- | ---------------- | ------------------------------------------------------------------- |
-| `date`         | `Date \| number` | The base date as a Date object or numeric timestamp                 |
-| `milliseconds` | `number`         | The milliseconds value to set (fractions are truncated toward zero) |
+| Parameter      | Type        | Description                                                           |
+| -------------- | ----------- | --------------------------------------------------------------------- |
+| `date`         | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `milliseconds` | `number`    | The milliseconds value to set (fractions are truncated toward zero)   |
 
 ## Return Value
 

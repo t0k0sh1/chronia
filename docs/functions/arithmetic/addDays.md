@@ -7,15 +7,15 @@ The `addDays` function adds a specified number of days to a given date and retur
 ## Signature
 
 ```typescript
-function addDays(date: Date | number, amount: number): Date;
+function addDays(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                             |
-| --------- | ---------------- | ------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp     |
-| `amount`  | `number`         | The number of days to add (can be negative to subtract) |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `amount`  | `number`    | The number of days to add (can be negative to subtract)               |
 
 ## Return Value
 
@@ -36,6 +36,7 @@ The `addDays` function performs day-based date arithmetic by adding (or subtract
   - Positive timestamps (dates after Unix epoch)
   - Zero (`0`, representing January 1, 1970, 00:00:00 UTC)
   - Negative timestamps (dates before Unix epoch)
+- The `date` argument is a valid ISO 8601 string (e.g., `"2025-01-15"`, `"2025-01-15T14:30:00Z"`)
 - The `amount` argument is a finite number (positive, negative, or zero)
 - Fractional `amount` values are automatically truncated toward zero:
   - `1.9` becomes `1`
@@ -46,6 +47,7 @@ The `addDays` function performs day-based date arithmetic by adding (or subtract
 
 - The `date` argument is an Invalid Date object (e.g., `new Date('invalid')`)
 - The `date` argument is `NaN`, `Infinity`, or `-Infinity`
+- The `date` argument is an invalid string (e.g., `"not-a-date"`)
 - The `amount` argument is `NaN`, `Infinity`, or `-Infinity`
 
 ### Behavior Notes
@@ -82,6 +84,13 @@ const eventDate = addDays(today, 7);
 const timestamp = Date.UTC(2025, 0, 1);
 const futureDate = addDays(timestamp, 30);
 // Returns: Date object for January 31, 2025
+
+// Works with ISO 8601 strings
+const fromString = addDays("2025-01-15", 7);
+// Returns: Date object for January 22, 2025
+
+const fromISOString = addDays("2025-01-01T00:00:00Z", 10);
+// Returns: Date object for January 11, 2025
 
 // Handles month overflow automatically
 const endOfMonth = new Date(2025, 0, 28); // January 28

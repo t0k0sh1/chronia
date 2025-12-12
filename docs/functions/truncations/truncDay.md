@@ -7,14 +7,14 @@ The `truncDay` function truncates a date to the start of the day by setting the 
 ## Signature
 
 ```typescript
-function truncDay(date: Date | number): Date;
+function truncDay(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                            |
-| --------- | ---------------- | ---------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the day |
+| Parameter | Type        | Description                                                                              |
+| --------- | ----------- | ---------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to truncate to the start of the day |
 
 ## Return Value
 

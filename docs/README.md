@@ -12,9 +12,9 @@ Chronia is a modern, lightweight TypeScript date/time utility library with compr
 - 📦 **Lightweight** – ESM/CJS dual modules, fully tree-shakable
 - 🌍 **Internationalization** – Built-in locale support
 - 📅 **Comprehensive Utilities** – 60+ functions for date operations
-- 🎯 **Consistent API** – Unified support for `Date` objects and timestamps
+- 🎯 **Consistent API** – Unified support for `Date` objects, timestamps, and ISO 8601 strings
 - ✅ **Safe Error Handling** – No exceptions; graceful degradation
-- ⚡ **Well-tested** – 2100+ automated test cases
+- ⚡ **Well-tested** – 2900+ automated test cases
 
 ---
 
@@ -82,12 +82,12 @@ const nextWeek = addDays(today, 7);
 isBefore(today, nextWeek); // true
 ```
 
-### Working with Timestamps
+### Working with Timestamps and Strings
 
-Chronia functions accept both `Date` objects and numeric timestamps:
+Chronia functions accept `Date` objects, numeric timestamps, and ISO 8601 strings:
 
 ```typescript
-import { isValid, getYear } from "chronia";
+import { isValid, getYear, addDays } from "chronia";
 
 // Date object
 isValid(new Date(2025, 0, 1)); // true
@@ -95,6 +95,11 @@ isValid(new Date(2025, 0, 1)); // true
 // Timestamp
 isValid(1704067200000); // true
 getYear(1704067200000); // 2025
+
+// ISO 8601 string
+isValid("2025-01-01"); // true
+addDays("2025-01-01", 7); // January 8, 2025
+getYear("2025-01-15T14:30:00Z"); // 2025
 ```
 
 ### Error Handling
@@ -122,15 +127,25 @@ isValid(result); // false
 
 ### Type Flexibility
 
-All Chronia functions accept `Date | number` for date parameters:
+All Chronia functions accept `DateInput` (`Date | number | string`) for date parameters:
 
 ```typescript
-function isValid(date: Date | number): boolean;
-function format(date: Date | number, pattern: string): string;
-function addDays(date: Date | number, amount: number): Date;
+type DateInput = Date | number | string;
+
+function isValid(date: DateInput): boolean;
+function format(date: DateInput, pattern: string): string;
+function addDays(date: DateInput, amount: number): Date;
 ```
 
-This provides flexibility while maintaining type safety.
+This provides flexibility while maintaining type safety. ISO 8601 strings are automatically parsed:
+
+```typescript
+// All these are equivalent
+addDays(new Date(2025, 0, 1), 7);
+addDays(1735689600000, 7);
+addDays("2025-01-01", 7);
+addDays("2025-01-01T00:00:00Z", 7);
+```
 
 ### Immutability
 
@@ -372,14 +387,17 @@ format(date, "yyyy年M月d日", { locale: "ja" }); // '2025年1月23日'
 
 ### Use Timestamps for Performance-Critical Code
 
-Timestamps are faster than Date objects:
+Timestamps are fastest, followed by Date objects, then strings:
 
 ```typescript
-// Faster
+// Fastest - direct timestamp
 isValid(1704067200000);
 
-// Slower (creates Date object internally)
+// Fast - Date object
 isValid(new Date(2025, 0, 1));
+
+// Slower - requires string parsing
+isValid("2025-01-01");
 ```
 
 ### Choose Appropriate Comparison Units
@@ -422,6 +440,9 @@ for (const event of events) {
 ### Core Types
 
 ```typescript
+// Flexible date input type - accepts Date objects, timestamps, or ISO 8601 strings
+type DateInput = Date | number | string;
+
 type TimeUnit =
   | "year"
   | "month"
@@ -441,24 +462,37 @@ interface FormatOptions {
 }
 ```
 
+### Supported ISO 8601 Formats
+
+Chronia supports standard ISO 8601 date/time formats:
+
+| Format               | Example                     |
+| -------------------- | --------------------------- |
+| Date only            | `2025-01-15`                |
+| Date and time        | `2025-01-15T14:30:00`       |
+| With milliseconds    | `2025-01-15T14:30:00.000`   |
+| UTC (Z suffix)       | `2025-01-15T14:30:00Z`      |
+| With timezone offset | `2025-01-15T14:30:00+09:00` |
+| Year and month only  | `2025-01`                   |
+
 ### Function Signatures
 
 All date functions follow consistent patterns:
 
 ```typescript
 // Validation functions return boolean
-function isValid(date: Date | number): boolean;
+function isValid(date: DateInput): boolean;
 
 // Accessor functions return number (or NaN for invalid input)
-function getYear(date: Date | number): number;
+function getYear(date: DateInput): number;
 
 // Transformation functions return Date
-function addDays(date: Date | number, amount: number): Date;
+function addDays(date: DateInput, amount: number): Date;
 
 // Comparison functions return boolean
 function isBefore(
-  a: Date | number,
-  b: Date | number,
+  a: DateInput,
+  b: DateInput,
   options?: ComparisonOptions,
 ): boolean;
 ```

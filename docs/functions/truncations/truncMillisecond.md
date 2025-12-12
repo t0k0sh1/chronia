@@ -7,14 +7,14 @@ The `truncMillisecond` function truncates a date to the millisecond unit. Since 
 ## Signature
 
 ```typescript
-function truncMillisecond(date: Date | number): Date;
+function truncMillisecond(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                    |
-| --------- | ---------------- | ---------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate |
+| Parameter | Type        | Description                                                      |
+| --------- | ----------- | ---------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to truncate |
 
 ## Return Value
 

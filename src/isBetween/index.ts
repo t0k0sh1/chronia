@@ -1,6 +1,8 @@
+import type { DateInput } from "../types";
 import { MIN_DATE, MAX_DATE } from "../constants";
 import { Interval, BetweenOption } from "../types";
-import { isValidDateOrNumber } from "../_lib/validators";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Check if a date falls between two boundary dates with configurable inclusion.
@@ -8,7 +10,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * This function checks whether a date falls within an interval defined by start and end boundaries.
  * The inclusion of boundaries can be controlled using mathematical interval notation.
  *
- * @param date - The date to check as a Date object or timestamp (number)
+ * @param date - The date to check as a Date object, timestamp (number), or ISO 8601 string
  * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
  * @param [options={}] - Configuration options for boundary inclusion.
  * @param [options.bounds="()"] - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only.
@@ -53,7 +55,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity, or invalid interval)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - If start is null, uses MIN_DATE as the lower bound
  * - If end is null, uses MAX_DATE as the upper bound
  * - Boundary inclusion is controlled by the `bounds` option using mathematical interval notation:
@@ -64,11 +66,11 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * - Invalid bounds values default to "()" behavior
  */
 export function isBetween(
-  date: Date | number,
+  date: DateInput,
   interval: Interval,
   options: BetweenOption = {},
 ): boolean {
-  if (!isValidDateOrNumber(date)) return false;
+  if (!isValidDateInput(date)) return false;
 
   if (typeof interval !== "object" || interval === null) {
     return false;
@@ -77,16 +79,16 @@ export function isBetween(
   const { start, end } = interval;
 
   // Validate start parameter
-  if (start !== null && !isValidDateOrNumber(start)) {
+  if (start !== null && !isValidDateInput(start)) {
     return false;
   }
 
   // Validate end parameter
-  if (end !== null && !isValidDateOrNumber(end)) {
+  if (end !== null && !isValidDateInput(end)) {
     return false;
   }
 
-  const dt = new Date(date);
+  const dt = toDate(date);
 
   const dateTime = dt.getTime();
 
@@ -95,7 +97,7 @@ export function isBetween(
   if (start === null) {
     effectiveStart = MIN_DATE;
   } else {
-    effectiveStart = new Date(start);
+    effectiveStart = toDate(start);
   }
 
   // Determine effective end boundary
@@ -103,7 +105,7 @@ export function isBetween(
   if (end === null) {
     effectiveEnd = MAX_DATE;
   } else {
-    effectiveEnd = new Date(end);
+    effectiveEnd = toDate(end);
   }
 
   // Get the bounds option, defaulting to "()" for backward compatibility

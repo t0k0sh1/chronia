@@ -7,14 +7,14 @@ The `getMinutes` function extracts the minutes component (0-59) from a given Dat
 ## Signature
 
 ```typescript
-function getMinutes(date: Date | number): number;
+function getMinutes(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                          |
-| --------- | ---------------- | -------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the minutes |
+| Parameter | Type        | Description                                                                            |
+| --------- | ----------- | -------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string from which to extract the minutes |
 
 ## Return Value
 

@@ -7,14 +7,14 @@ The `getTime` function returns the timestamp (milliseconds since Unix epoch) of 
 ## Signature
 
 ```typescript
-function getTime(date: Date | number): number;
+function getTime(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                  |
-| --------- | ---------------- | ------------------------------------------------------------ |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to convert to a timestamp |
+| Parameter | Type        | Description                                                                    |
+| --------- | ----------- | ------------------------------------------------------------------------------ |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to convert to a timestamp |
 
 ## Return Value
 

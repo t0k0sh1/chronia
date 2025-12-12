@@ -7,14 +7,14 @@ The `getHours` function extracts the hour component from a given Date object or 
 ## Signature
 
 ```typescript
-function getHours(date: Date | number): number;
+function getHours(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                        |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the hours |
+| Parameter | Type        | Description                                                                          |
+| --------- | ----------- | ------------------------------------------------------------------------------------ |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string from which to extract the hours |
 
 ## Return Value
 

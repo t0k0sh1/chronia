@@ -7,15 +7,15 @@ The `isSameDay` function checks whether two given dates fall on the same calenda
 ## Signature
 
 ```typescript
-function isSameDay(dateLeft: Date | number, dateRight: Date | number): boolean;
+function isSameDay(dateLeft: DateInput, dateRight: DateInput): boolean;
 ```
 
 ## Parameters
 
-| Parameter   | Type             | Description                                           |
-| ----------- | ---------------- | ----------------------------------------------------- |
-| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
-| `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
+| Parameter   | Type        | Description                                                             |
+| ----------- | ----------- | ----------------------------------------------------------------------- |
+| `dateLeft`  | `DateInput` | The first date as a Date object, numeric timestamp, or ISO 8601 string  |
+| `dateRight` | `DateInput` | The second date as a Date object, numeric timestamp, or ISO 8601 string |
 
 ## Return Value
 

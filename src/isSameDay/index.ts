@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { diffDays } from "../diffDays";
 
 /**
@@ -6,8 +7,8 @@ import { diffDays } from "../diffDays";
  * This function compares two dates and returns true if they fall on the same calendar day,
  * regardless of time components.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are on the same day, false otherwise or if either date is invalid
  *
  * @example
@@ -46,12 +47,12 @@ import { diffDays } from "../diffDays";
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores hour, minute, second, and millisecond components in the comparison
  * - Compares based on local timezone calendar day
  * - Uses diffDays internally to determine if the day difference is zero
  * - Handles DST transitions and leap years correctly
  */
-export function isSameDay(dateLeft: Date | number, dateRight: Date | number): boolean {
+export function isSameDay(dateLeft: DateInput, dateRight: DateInput): boolean {
   return diffDays(dateLeft, dateRight) === 0;
 }

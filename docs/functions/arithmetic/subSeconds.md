@@ -7,15 +7,15 @@ The `subSeconds` function subtracts a specified number of seconds from a given d
 ## Signature
 
 ```typescript
-function subSeconds(date: Date | number, amount: number): Date;
+function subSeconds(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                        |
-| --------- | ---------------- | ---------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract seconds |
-| `amount`  | `number`         | The number of seconds to subtract (can be negative to add seconds instead)         |
+| Parameter | Type        | Description                                                                                          |
+| --------- | ----------- | ---------------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string from which to subtract seconds |
+| `amount`  | `number`    | The number of seconds to subtract (can be negative to add seconds instead)                           |
 
 ## Return Value
 

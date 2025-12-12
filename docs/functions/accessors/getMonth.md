@@ -7,14 +7,14 @@ The `getMonth` function extracts the month component from a given Date object or
 ## Signature
 
 ```typescript
-function getMonth(date: Date | number): number;
+function getMonth(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                        |
-| --------- | ---------------- | ------------------------------------------------------------------ |
-| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the month |
+| Parameter | Type        | Description                                                                          |
+| --------- | ----------- | ------------------------------------------------------------------------------------ |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string from which to extract the month |
 
 ## Return Value
 

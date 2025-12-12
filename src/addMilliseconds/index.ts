@@ -1,4 +1,6 @@
-import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput, isValidNumber } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Add the specified number of milliseconds to the given date.
@@ -6,7 +8,7 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * This function validates arguments before processing and returns a new Date instance
  * with the specified number of milliseconds added. Fractional milliseconds are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of milliseconds to add (can be negative to subtract)
  * @returns A new Date object with the milliseconds added, or Invalid Date if any input is invalid
  *
@@ -19,6 +21,10 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * // Subtract milliseconds (negative amount)
  * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 500), -300);
  * // Returns: 2020-01-01T12:00:00.200
+ *
+ * // Works with ISO 8601 strings
+ * const result = addMilliseconds("2020-01-01T12:00:00.000", 500);
+ * // Returns: 2020-01-01T12:00:00.500
  *
  * // Fractional amounts are truncated
  * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 0), 1.9);
@@ -35,16 +41,16 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-export function addMilliseconds(date: Date | number, amount: number): Date {
-  if (!isValidDateOrNumber(date) || !isValidNumber(amount))
+export function addMilliseconds(date: DateInput, amount: number): Date {
+  if (!isValidDateInput(date) || !isValidNumber(amount))
     return new Date(NaN);
 
-  const dt = new Date(date);
+  const dt = toDate(date);
 
   const millisecondsToAdd = Math.trunc(amount);
   dt.setMilliseconds(dt.getMilliseconds() + millisecondsToAdd);

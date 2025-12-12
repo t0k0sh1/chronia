@@ -7,14 +7,14 @@ The `getSeconds` function extracts the seconds component (0-59) from a given Dat
 ## Signature
 
 ```typescript
-function getSeconds(date: Date | number): number;
+function getSeconds(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                          |
-| --------- | ---------------- | -------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the seconds |
+| Parameter | Type        | Description                                                                            |
+| --------- | ----------- | -------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string from which to extract the seconds |
 
 ## Return Value
 

@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Clamp a date within a specified range.
@@ -8,9 +10,9 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * If the date is after the maximum, returns the maximum.
  * If any date is invalid, returns an Invalid Date.
  *
- * @param date - The date to clamp
- * @param minDate - The minimum allowed date
- * @param maxDate - The maximum allowed date
+ * @param date - The date to clamp (Date object, timestamp, or ISO 8601 string)
+ * @param minDate - The minimum allowed date (Date object, timestamp, or ISO 8601 string)
+ * @param maxDate - The maximum allowed date (Date object, timestamp, or ISO 8601 string)
  * @returns The clamped date, or Invalid Date if any input is invalid
  *
  * @example
@@ -33,6 +35,9 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const maxTimestamp = timestamp + 1000;
  * const clampedTimestamp = clamp(timestamp, minTimestamp, maxTimestamp);
  *
+ * // Works with ISO 8601 strings
+ * const clampedString = clamp("2024-06-05", "2024-06-10", "2024-06-20"); // June 10, 2024
+ *
  * // Returns Invalid Date if any input is invalid
  * const invalidDate = new Date('invalid');
  * const validMin = new Date(2024, 5, 10);
@@ -41,19 +46,19 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * ```
  */
 export function clamp(
-  date: Date | number,
-  minDate: Date | number,
-  maxDate: Date | number
+  date: DateInput,
+  minDate: DateInput,
+  maxDate: DateInput
 ): Date {
-  // Validate arguments before conversion (consistent with addDays pattern)
-  if (!isValidDateOrNumber(date) || !isValidDateOrNumber(minDate) || !isValidDateOrNumber(maxDate)) {
+  // Validate arguments before conversion (consistent with library patterns)
+  if (!isValidDateInput(date) || !isValidDateInput(minDate) || !isValidDateInput(maxDate)) {
     return new Date(NaN);
   }
 
   // Convert inputs to Date objects after validation
-  const dateObj = typeof date === "number" ? new Date(date) : date;
-  const minDateObj = typeof minDate === "number" ? new Date(minDate) : minDate;
-  const maxDateObj = typeof maxDate === "number" ? new Date(maxDate) : maxDate;
+  const dateObj = toDate(date);
+  const minDateObj = toDate(minDate);
+  const maxDateObj = toDate(maxDate);
 
   // Ensure min <= max, swap if necessary
   const actualMin = minDateObj.getTime() <= maxDateObj.getTime() ? minDateObj : maxDateObj;

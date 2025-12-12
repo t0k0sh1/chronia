@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Calculate the difference in calendar months between two dates.
@@ -6,8 +8,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * This function calculates the number of full calendar months between two dates.
  * Only year and month values are considered; days and time components are ignored.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in calendar months (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -26,6 +28,10 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result = diffMonths(timestamp1, timestamp2);
  * // Returns: 12
  *
+ * // Works with ISO 8601 strings
+ * const result = diffMonths("2025-03-01", "2024-03-31");
+ * // Returns: 12
+ *
  * // Negative result when first date is earlier
  * const result = diffMonths(new Date(2024, 2, 15), new Date(2024, 5, 15));
  * // Returns: -3
@@ -38,20 +44,20 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * @remarks
  * - Considers only year and month values for calculation
  * - Days and time components (hours, minutes, seconds, milliseconds) are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles year boundaries correctly
  * - Calculation: (yearDiff * 12) + monthDiff
  */
-export function diffMonths(dateLeft: Date | number, dateRight: Date | number): number {
+export function diffMonths(dateLeft: DateInput, dateRight: DateInput): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
   // This differs from boolean functions (return false) and comparison functions (throw errors)
-  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) {
+  if (!isValidDateInput(dateLeft) || !isValidDateInput(dateRight)) {
     return NaN;
   }
 
-  const dtLeft = new Date(dateLeft);
-  const dtRight = new Date(dateRight);
+  const dtLeft = toDate(dateLeft);
+  const dtRight = toDate(dateRight);
   const yearDiff = dtLeft.getFullYear() - dtRight.getFullYear();
   const monthDiff = dtLeft.getMonth() - dtRight.getMonth();
   return yearDiff * 12 + monthDiff;

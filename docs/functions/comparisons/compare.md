@@ -8,19 +8,19 @@ The `compare` function compares two Date objects or timestamps chronologically w
 
 ```typescript
 function compare(
-  date1: Date | number,
-  date2: Date | number,
+  date1: DateInput,
+  date2: DateInput,
   options?: CompareOptions,
 ): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                 |
-| --------- | ---------------- | ----------------------------------------------------------- |
-| `date1`   | `Date \| number` | The first Date object or timestamp to compare               |
-| `date2`   | `Date \| number` | The second Date object or timestamp to compare              |
-| `options` | `CompareOptions` | Optional comparison options. Defaults to `{ order: "ASC" }` |
+| Parameter | Type             | Description                                                      |
+| --------- | ---------------- | ---------------------------------------------------------------- |
+| `date1`   | `DateInput`      | The first Date object, timestamp, or ISO 8601 string to compare  |
+| `date2`   | `DateInput`      | The second Date object, timestamp, or ISO 8601 string to compare |
+| `options` | `CompareOptions` | Optional comparison options. Defaults to `{ order: "ASC" }`      |
 
 ### CompareOptions
 

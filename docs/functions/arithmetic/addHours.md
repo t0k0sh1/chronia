@@ -7,15 +7,15 @@ The `addHours` function adds a specified number of hours to a given date, return
 ## Signature
 
 ```typescript
-function addHours(date: Date | number, amount: number): Date;
+function addHours(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                              |
-| --------- | ---------------- | -------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp      |
-| `amount`  | `number`         | The number of hours to add (can be negative to subtract) |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `amount`  | `number`    | The number of hours to add (can be negative to subtract)              |
 
 ## Return Value
 

@@ -7,14 +7,14 @@ The `startOfYear` function returns a new Date object set to the first moment of 
 ## Signature
 
 ```typescript
-function startOfYear(date: Date | number): Date;
+function startOfYear(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                   |
-| --------- | ---------------- | ------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp representing the base date |
+| Parameter | Type        | Description                                                                     |
+| --------- | ----------- | ------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string representing the base date |
 
 ## Return Value
 
