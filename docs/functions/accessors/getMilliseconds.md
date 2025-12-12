@@ -7,14 +7,14 @@ The `getMilliseconds` function extracts the milliseconds component (0-999) from 
 ## Signature
 
 ```typescript
-function getMilliseconds(date: Date | number): number;
+function getMilliseconds(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                           |
-| --------- | ---------------- | --------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract milliseconds |
+| Parameter | Type        | Description                                                                             |
+| --------- | ----------- | --------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string from which to extract milliseconds |
 
 ## Return Value
 

@@ -1,4 +1,6 @@
-import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput, isValidNumber } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Add the specified number of months to the given date.
@@ -8,7 +10,7 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * Preserves time components (hours, minutes, seconds, milliseconds). When the day of month
  * doesn't exist in the target month, the result becomes the last day of that month.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of months to add (can be negative to subtract)
  * @returns A new Date object with the months added, or Invalid Date if any input is invalid
  *
@@ -20,6 +22,10 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  *
  * // Subtract months (negative amount)
  * const result = addMonths(new Date(2020, 5, 15), -2);
+ * // Returns: 2020-04-15
+ *
+ * // Works with ISO 8601 strings
+ * const result = addMonths("2020-01-15", 3);
  * // Returns: 2020-04-15
  *
  * // Fractional amounts are truncated
@@ -41,18 +47,18 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves time components (hours, minutes, seconds, milliseconds)
  * - Month-end overflow: if original day doesn't exist in target month, returns last day of that month
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-export function addMonths(date: Date | number, amount: number): Date {
-  if (!isValidDateOrNumber(date) || !isValidNumber(amount))
+export function addMonths(date: DateInput, amount: number): Date {
+  if (!isValidDateInput(date) || !isValidNumber(amount))
     return new Date(NaN);
 
-  const dt = new Date(date);
+  const dt = toDate(date);
   const originalDay = dt.getDate();
   const monthsToAdd = Math.trunc(amount);
 

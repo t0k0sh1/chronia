@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Get the start of the day for the given date.
@@ -6,7 +8,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * This function returns a new Date object set to the beginning of the day (00:00:00.000)
  * for the given date. The date remains the same while all time components are reset to zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to 00:00:00.000 of the same date, or Invalid Date if input is invalid
  *
  * @example
@@ -24,9 +26,9 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result3 = startOfDay(timestamp);
  * // Returns: Start of today (00:00:00.000)
  *
- * // Handles month boundaries
- * const result4 = startOfDay(new Date(2024, 5, 30, 15, 30));
- * // Returns: June 30, 2024 00:00:00.000
+ * // Works with ISO 8601 strings
+ * const result4 = startOfDay("2024-06-15T14:30:00");
+ * // Returns: June 15, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
  * const result5 = startOfDay(new Date("invalid"));
@@ -35,15 +37,15 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Preserves the date while resetting hours, minutes, seconds, and milliseconds to 0
  */
-export function startOfDay(date: Date | number): Date {
-  if (!isValidDateOrNumber(date)) return new Date(NaN);
+export function startOfDay(date: DateInput): Date {
+  if (!isValidDateInput(date)) return new Date(NaN);
 
-  const dt = new Date(date);
+  const dt = toDate(date);
 
   return new Date(
     dt.getFullYear(),

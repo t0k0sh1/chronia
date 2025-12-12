@@ -200,7 +200,7 @@ describe("compare", () => {
       it.each([
         { name: "null", input: null },
         { name: "undefined", input: undefined },
-        { name: "string", input: "2024-01-01" },
+        { name: "invalid string", input: "not-a-date" },
         { name: "boolean", input: true },
         { name: "object", input: {} },
         { name: "array", input: [] },
@@ -216,13 +216,21 @@ describe("compare", () => {
         expect(compare(timestamp, date)).not.toBeNaN();
         expect(compare(timestamp, date)).toBe(-1); // timestamp is earlier
       });
+
+      it("should accept ISO 8601 string as first argument", () => {
+        const isoString = "2024-01-01";
+        const date = new Date("2024-01-02");
+
+        expect(compare(isoString, date)).not.toBeNaN();
+        expect(compare(isoString, date)).toBe(-1); // isoString is earlier
+      });
     });
 
     describe("Invalid second argument", () => {
       it.each([
         { name: "null", input: null },
         { name: "undefined", input: undefined },
-        { name: "string", input: "2024-01-01" },
+        { name: "invalid string", input: "not-a-date" },
         { name: "boolean", input: true },
         { name: "object", input: {} },
         { name: "array", input: [] },
@@ -237,6 +245,14 @@ describe("compare", () => {
 
         expect(compare(date, timestamp)).not.toBeNaN();
         expect(compare(date, timestamp)).toBe(-1); // date is earlier than timestamp
+      });
+
+      it("should accept ISO 8601 string as second argument", () => {
+        const date = new Date("2024-01-01");
+        const isoString = "2024-01-02";
+
+        expect(compare(date, isoString)).not.toBeNaN();
+        expect(compare(date, isoString)).toBe(-1); // date is earlier
       });
     });
 

@@ -7,14 +7,14 @@ The `truncSecond` function truncates a date to the start of the second by settin
 ## Signature
 
 ```typescript
-function truncSecond(date: Date | number): Date;
+function truncSecond(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                               |
-| --------- | ---------------- | ------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the second |
+| Parameter | Type        | Description                                                                                 |
+| --------- | ----------- | ------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to truncate to the start of the second |
 
 ## Return Value
 

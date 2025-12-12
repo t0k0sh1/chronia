@@ -8,8 +8,8 @@ The `isAfter` function checks if the first date is strictly after the second dat
 
 ```typescript
 function isAfter(
-  a: Date | number,
-  b: Date | number,
+  a: DateInput,
+  b: DateInput,
   options?: ComparisonOptions,
 ): boolean;
 ```
@@ -18,8 +18,8 @@ function isAfter(
 
 | Parameter      | Type                | Description                                                                                                                             |
 | -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `a`            | `Date \| number`    | The first date as a Date object or numeric timestamp                                                                                    |
-| `b`            | `Date \| number`    | The second date as a Date object or numeric timestamp                                                                                   |
+| `a`            | `DateInput`         | The first date as a Date object, numeric timestamp, or ISO 8601 string                                                                  |
+| `b`            | `DateInput`         | The second date as a Date object, numeric timestamp, or ISO 8601 string                                                                 |
 | `options`      | `ComparisonOptions` | Optional configuration object                                                                                                           |
 | `options.unit` | `TimeUnit`          | The unit of comparison: `"year"`, `"month"`, `"day"`, `"hour"`, `"minute"`, `"second"`, or `"millisecond"`. Defaults to `"millisecond"` |
 

@@ -7,15 +7,15 @@ The `subMilliseconds` function subtracts a specified number of milliseconds from
 ## Signature
 
 ```typescript
-function subMilliseconds(date: Date | number, amount: number): Date;
+function subMilliseconds(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                             |
-| --------- | ---------------- | --------------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract milliseconds |
-| `amount`  | `number`         | The number of milliseconds to subtract (can be negative to add milliseconds)            |
+| Parameter | Type        | Description                                                                                               |
+| --------- | ----------- | --------------------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string from which to subtract milliseconds |
+| `amount`  | `number`    | The number of milliseconds to subtract (can be negative to add milliseconds)                              |
 
 ## Return Value
 

@@ -7,14 +7,14 @@ The `isFuture` function checks if a given date is in the future relative to the 
 ## Signature
 
 ```typescript
-function isFuture(date: Date | number): boolean;
+function isFuture(date: DateInput): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                 |
-| --------- | ---------------- | ------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to check |
+| Parameter | Type        | Description                                                   |
+| --------- | ----------- | ------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to check |
 
 ## Return Value
 

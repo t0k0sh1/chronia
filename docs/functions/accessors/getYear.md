@@ -7,14 +7,14 @@ The `getYear` function retrieves the full year (e.g., 2025) from a given Date ob
 ## Signature
 
 ```typescript
-function getYear(date: Date | number): number;
+function getYear(date: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                       |
-| --------- | ---------------- | ----------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp from which to extract the year |
+| Parameter | Type        | Description                                                                         |
+| --------- | ----------- | ----------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string from which to extract the year |
 
 ## Return Value
 

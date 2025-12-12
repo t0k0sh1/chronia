@@ -7,15 +7,15 @@ The `isSameYear` function checks if two dates fall within the same calendar year
 ## Signature
 
 ```typescript
-function isSameYear(dateLeft: Date | number, dateRight: Date | number): boolean;
+function isSameYear(dateLeft: DateInput, dateRight: DateInput): boolean;
 ```
 
 ## Parameters
 
-| Parameter   | Type             | Description                                           |
-| ----------- | ---------------- | ----------------------------------------------------- |
-| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
-| `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
+| Parameter   | Type        | Description                                                             |
+| ----------- | ----------- | ----------------------------------------------------------------------- |
+| `dateLeft`  | `DateInput` | The first date as a Date object, numeric timestamp, or ISO 8601 string  |
+| `dateRight` | `DateInput` | The second date as a Date object, numeric timestamp, or ISO 8601 string |
 
 ## Return Value
 

@@ -7,15 +7,15 @@ The `subMinutes` function subtracts a specified number of minutes from a given d
 ## Signature
 
 ```typescript
-function subMinutes(date: Date | number, amount: number): Date;
+function subMinutes(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                               |
-| --------- | ---------------- | ----------------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which minutes will be subtracted |
-| `amount`  | `number`         | The number of minutes to subtract (can be negative to effectively add minutes)            |
+| Parameter | Type        | Description                                                                                                 |
+| --------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string from which minutes will be subtracted |
+| `amount`  | `number`    | The number of minutes to subtract (can be negative to effectively add minutes)                              |
 
 ## Return Value
 

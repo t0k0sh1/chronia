@@ -1,5 +1,7 @@
+import type { DateInput } from "../types";
 import { truncateToUnit } from "../_lib/truncateToUnit";
-import { isValidDateOrNumber } from "../_lib/validators";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 import { ComparisonOptions } from "../types";
 
 /**
@@ -9,8 +11,8 @@ import { ComparisonOptions } from "../types";
  * before or equal to the second date. The comparison can be performed at different granularities
  * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - The first date as a Date object or timestamp (number)
- * @param b - The second date as a Date object or timestamp (number)
+ * @param a - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param b - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @param [options={}] - Configuration options.
  * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before or equal to date `b`, false otherwise or if either date is invalid
@@ -46,22 +48,22 @@ import { ComparisonOptions } from "../types";
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Includes equality in the comparison (a <= b)
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
 export function isBeforeOrEqual(
-  a: Date | number,
-  b: Date | number,
+  a: DateInput,
+  b: DateInput,
   options: ComparisonOptions = {},
 ): boolean {
   // Early validation for fast-fail behavior and code consistency across functions
   // Slight overhead of Date construction is acceptable for clarity and uniform validation
-  if (!isValidDateOrNumber(a) || !isValidDateOrNumber(b)) return false;
+  if (!isValidDateInput(a) || !isValidDateInput(b)) return false;
 
-  const dtA = new Date(a);
-  const dtB = new Date(b);
+  const dtA = toDate(a);
+  const dtB = toDate(b);
 
   const unit = options?.unit ?? "millisecond";
 

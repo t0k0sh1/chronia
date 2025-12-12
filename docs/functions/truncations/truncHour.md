@@ -7,14 +7,14 @@ The `truncHour` function truncates a date to the start of the hour by setting mi
 ## Signature
 
 ```typescript
-function truncHour(date: Date | number): Date;
+function truncHour(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                             |
-| --------- | ---------------- | ----------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the hour |
+| Parameter | Type        | Description                                                                               |
+| --------- | ----------- | ----------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to truncate to the start of the hour |
 
 ## Return Value
 

@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { diffYears } from "../diffYears";
 
 /**
@@ -6,8 +7,8 @@ import { diffYears } from "../diffYears";
  * This function compares two dates and returns true if they fall within the same calendar year,
  * regardless of month, day, or time components.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same year, false otherwise or if either date is invalid
  *
  * @example
@@ -39,11 +40,11 @@ import { diffYears } from "../diffYears";
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores month, day, and time components in the comparison
  * - Uses diffYears internally to determine if the year difference is zero
  * - Handles leap years, BC dates, and century boundaries correctly
  */
-export function isSameYear(dateLeft: Date | number, dateRight: Date | number): boolean {
+export function isSameYear(dateLeft: DateInput, dateRight: DateInput): boolean {
   return diffYears(dateLeft, dateRight) === 0;
 }

@@ -7,15 +7,15 @@ The `setMinutes` function sets the minutes component of a given date to a specif
 ## Signature
 
 ```typescript
-function setMinutes(date: Date | number, minutes: number): Date;
+function setMinutes(date: DateInput, minutes: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                                  |
-| --------- | ---------------- | -------------------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                          |
-| `minutes` | `number`         | The minutes value to set (typically 0-59, but values outside this range will cause rollover) |
+| Parameter | Type        | Description                                                                                  |
+| --------- | ----------- | -------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string                        |
+| `minutes` | `number`    | The minutes value to set (typically 0-59, but values outside this range will cause rollover) |
 
 ## Return Value
 

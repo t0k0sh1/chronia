@@ -7,15 +7,15 @@ The `setTime` function sets the complete timestamp of a given date, replacing th
 ## Signature
 
 ```typescript
-function setTime(date: Date | number, time: number): Date;
+function setTime(date: DateInput, time: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                         |
-| --------- | ---------------- | ----------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp (milliseconds since Unix epoch) |
-| `time`    | `number`         | The new timestamp in milliseconds since Unix epoch (January 1, 1970, 00:00:00 UTC)  |
+| Parameter | Type        | Description                                                                                           |
+| --------- | ----------- | ----------------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string (milliseconds since Unix epoch) |
+| `time`    | `number`    | The new timestamp in milliseconds since Unix epoch (January 1, 1970, 00:00:00 UTC)                    |
 
 ## Return Value
 

@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Get the end of the day for the given date.
@@ -7,7 +9,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * for the given date. The date remains the same while all time components are set to their
  * maximum values.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to 23:59:59.999 of the same date, or Invalid Date if input is invalid
  *
  * @example
@@ -25,9 +27,9 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result3 = endOfDay(timestamp);
  * // Returns: End of today (23:59:59.999)
  *
- * // Handles month boundaries
- * const result4 = endOfDay(new Date(2024, 5, 30, 9, 15));
- * // Returns: June 30, 2024 23:59:59.999
+ * // Works with ISO 8601 strings
+ * const result4 = endOfDay("2024-06-15");
+ * // Returns: June 15, 2024 23:59:59.999
  *
  * // Invalid inputs return Invalid Date
  * const result5 = endOfDay(new Date(NaN));
@@ -36,16 +38,16 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Sets hours to 23, minutes to 59, seconds to 59, and milliseconds to 999
  */
-export function endOfDay(date: Date | number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function endOfDay(date: DateInput): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
-  const dt = new Date(date);
+  const dt = toDate(date);
   return new Date(
     dt.getFullYear(),
     dt.getMonth(),

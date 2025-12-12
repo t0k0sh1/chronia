@@ -7,15 +7,15 @@ The `addYears` function adds a specified number of years to a given date, return
 ## Signature
 
 ```typescript
-function addYears(date: Date | number, amount: number): Date;
+function addYears(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                    |
-| --------- | ---------------- | -------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp            |
-| `amount`  | `number`         | The number of years to add (can be negative to subtract years) |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `amount`  | `number`    | The number of years to add (can be negative to subtract years)        |
 
 ## Return Value
 

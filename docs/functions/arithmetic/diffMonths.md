@@ -7,15 +7,15 @@ The `diffMonths` function calculates the difference in calendar months between t
 ## Signature
 
 ```typescript
-function diffMonths(dateLeft: Date | number, dateRight: Date | number): number;
+function diffMonths(dateLeft: DateInput, dateRight: DateInput): number;
 ```
 
 ## Parameters
 
-| Parameter   | Type             | Description                                           |
-| ----------- | ---------------- | ----------------------------------------------------- |
-| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
-| `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
+| Parameter   | Type        | Description                                                             |
+| ----------- | ----------- | ----------------------------------------------------------------------- |
+| `dateLeft`  | `DateInput` | The first date as a Date object, numeric timestamp, or ISO 8601 string  |
+| `dateRight` | `DateInput` | The second date as a Date object, numeric timestamp, or ISO 8601 string |
 
 ## Return Value
 

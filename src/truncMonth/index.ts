@@ -1,5 +1,7 @@
+import type { DateInput } from "../types";
 import { truncateToUnit } from "../_lib/truncateToUnit";
-import { isValidDateOrNumber } from "../_lib/validators";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Truncate a date to the start of the month.
@@ -7,7 +9,7 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * This function sets the date to the 1st day of the month at 00:00:00.000,
  * effectively removing all time components and resetting the day to 1.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object truncated to the start of the month, or Invalid Date if input is invalid
  *
  * @example
@@ -25,8 +27,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result3 = truncMonth(timestamp);
  * // Returns: Date at 1st day of current month at 00:00:00.000
  *
- * // End of month
- * const result4 = truncMonth(new Date(2024, 5, 30, 23, 59, 59, 999));
+ * // Works with ISO 8601 strings
+ * const result4 = truncMonth("2024-06-15");
  * // Returns: June 1, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -36,15 +38,15 @@ import { isValidDateOrNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Handles leap years correctly (February in leap years)
  */
-export function truncMonth(date: Date | number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function truncMonth(date: DateInput): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
-  const dt = new Date(date);
+  const dt = toDate(date);
   return truncateToUnit(dt, "month");
 }

@@ -7,14 +7,14 @@ The `truncMinute` function truncates a given Date object or timestamp to the sta
 ## Signature
 
 ```typescript
-function truncMinute(date: Date | number): Date;
+function truncMinute(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                               |
-| --------- | ---------------- | ------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the minute |
+| Parameter | Type        | Description                                                                                 |
+| --------- | ----------- | ------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to truncate to the start of the minute |
 
 ## Return Value
 

@@ -74,6 +74,7 @@ export * from "./clamp";
 export * from "./compare";
 export * from "./constants";
 export type {
+  DateInput,
   Interval,
   Locale,
   TimeUnit,

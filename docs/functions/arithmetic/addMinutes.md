@@ -7,15 +7,15 @@ The `addMinutes` function adds a specified number of minutes to a given date, re
 ## Signature
 
 ```typescript
-function addMinutes(date: Date | number, amount: number): Date;
+function addMinutes(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                |
-| --------- | ---------------- | ---------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp        |
-| `amount`  | `number`         | The number of minutes to add (can be negative to subtract) |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
+| `amount`  | `number`    | The number of minutes to add (can be negative to subtract)            |
 
 ## Return Value
 

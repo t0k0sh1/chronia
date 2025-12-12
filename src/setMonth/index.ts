@@ -1,4 +1,6 @@
-import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput, isValidNumber } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Set the month of the given date.
@@ -6,7 +8,7 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * This function validates arguments before processing and returns a new Date instance
  * with the specified month set. Fractional months are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param month - The month to set (0-indexed: 0 = January, 11 = December)
  * @returns A new Date object with the month set, or Invalid Date if any input is invalid
  *
@@ -28,29 +30,33 @@ import { isValidDateOrNumber, isValidNumber } from "../_lib/validators";
  * const result4 = setMonth(new Date(2025, 0, 15), 5.9);
  * // Returns: 2025-06-15
  *
+ * // Set month from ISO 8601 string
+ * const result5 = setMonth("2025-01-15", 6);
+ * // Returns: 2025-07-15
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setMonth(new Date("invalid"), 5);
+ * const result6 = setMonth(new Date("invalid"), 5);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (5.9 → 5, -1.9 → -1)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves year, day, and time components (hours, minutes, seconds, milliseconds)
  * - Special handling: When the original day doesn't exist in the target month (e.g., Jan 31 → Feb), adjusts to the last valid day of the month (Feb 28 or 29)
  * - Always returns a new Date instance (does not mutate input)
  */
-export function setMonth(date: Date | number, month: number): Date {
-  if (!isValidDateOrNumber(date)) {
+export function setMonth(date: DateInput, month: number): Date {
+  if (!isValidDateInput(date)) {
     return new Date(NaN);
   }
   if (!isValidNumber(month)) {
     return new Date(NaN);
   }
 
-  const dt = new Date(date);
+  const dt = toDate(date);
 
   const monthToSet = Math.trunc(month);
 

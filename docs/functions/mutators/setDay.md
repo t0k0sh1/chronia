@@ -7,15 +7,15 @@ The `setDay` function sets the day of the month for a given date, returning a ne
 ## Signature
 
 ```typescript
-function setDay(date: Date | number, day: number): Date;
+function setDay(date: DateInput, day: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                             |
-| --------- | ---------------- | ----------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                     |
-| `day`     | `number`         | The day of the month to set (1-31, fractions are truncated toward zero) |
+| Parameter | Type        | Description                                                             |
+| --------- | ----------- | ----------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string   |
+| `day`     | `number`    | The day of the month to set (1-31, fractions are truncated toward zero) |
 
 ## Return Value
 

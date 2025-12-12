@@ -7,14 +7,14 @@ The `endOfYear` function returns a new Date object representing the last moment 
 ## Signature
 
 ```typescript
-function endOfYear(date: Date | number): Date;
+function endOfYear(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                   |
-| --------- | ---------------- | ------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp representing the base date |
+| Parameter | Type        | Description                                                                     |
+| --------- | ----------- | ------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string representing the base date |
 
 ## Return Value
 

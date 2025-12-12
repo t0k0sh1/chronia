@@ -7,15 +7,15 @@ The `setSeconds` function sets the seconds component of a given Date object or t
 ## Signature
 
 ```typescript
-function setSeconds(date: Date | number, seconds: number): Date;
+function setSeconds(date: DateInput, seconds: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                   |
-| --------- | ---------------- | ----------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp representing the base date                 |
-| `seconds` | `number`         | The seconds value to set (0-59 for normal range, other values will roll over) |
+| Parameter | Type        | Description                                                                     |
+| --------- | ----------- | ------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string representing the base date |
+| `seconds` | `number`    | The seconds value to set (0-59 for normal range, other values will roll over)   |
 
 ## Return Value
 

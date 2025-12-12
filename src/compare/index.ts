@@ -1,11 +1,13 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 import type { CompareOptions } from "../types";
 
 /**
- * Compare two Date objects or timestamps chronologically with configurable sort order.
+ * Compare two Date objects, timestamps, or ISO 8601 strings chronologically with configurable sort order.
  *
- * @param date1 - The first Date object or timestamp to compare
- * @param date2 - The second Date object or timestamp to compare
+ * @param date1 - The first Date object, timestamp, or ISO 8601 string to compare
+ * @param date2 - The second Date object, timestamp, or ISO 8601 string to compare
  * @param options - Comparison options with default { order: "ASC" }
  * @returns -1 if date1 < date2, 1 if date1 > date2, 0 if equal (adjusted for order)
  *          Returns NaN if inputs are invalid
@@ -25,6 +27,11 @@ import type { CompareOptions } from "../types";
  * const timestamp2 = new Date('2024-01-02').getTime();
  * compare(timestamp1, timestamp2); // -1 (ascending)
  * compare(timestamp1, timestamp2, { order: 'DESC' }); // 1 (descending)
+ *
+ * @example
+ * // Compare ISO 8601 strings
+ * compare("2024-01-01", "2024-01-02"); // -1 (ascending)
+ * compare("2024-01-02", "2024-01-01", { order: 'DESC' }); // -1 (descending)
  *
  * @example
  * // Compare mixed Date and timestamp inputs
@@ -51,16 +58,16 @@ import type { CompareOptions } from "../types";
  * // compare(date1, date2, { order: 'xyz' });  // treated as 'ASC' (default)
  */
 export function compare(
-  date1: Date | number,
-  date2: Date | number,
+  date1: DateInput,
+  date2: DateInput,
   options: CompareOptions = { order: "ASC" },
 ): number {
   // Validate inputs early for NaN cases
-  if (!isValidDateOrNumber(date1) || !isValidDateOrNumber(date2)) return NaN;
+  if (!isValidDateInput(date1) || !isValidDateInput(date2)) return NaN;
 
-  // Convert Validated inputs directly to Date objects
-  const dateLeft = new Date(date1);
-  const dateRight = new Date(date2);
+  // Convert validated inputs to Date objects
+  const dateLeft = toDate(date1);
+  const dateRight = toDate(date2);
 
   // Options normalization (case-insensitive order, default to ASC for invalid values)
   /**

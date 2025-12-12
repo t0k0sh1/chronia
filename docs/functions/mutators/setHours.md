@@ -7,15 +7,15 @@ The `setHours` function creates a new Date object with the hours component set t
 ## Signature
 
 ```typescript
-function setHours(date: Date | number, hours: number): Date;
+function setHours(date: DateInput, hours: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                            |
-| --------- | ---------------- | -------------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                    |
-| `hours`   | `number`         | The hours to set (typically 0-23, though out-of-range values will cause date rollover) |
+| Parameter | Type        | Description                                                                            |
+| --------- | ----------- | -------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string                  |
+| `hours`   | `number`    | The hours to set (typically 0-23, though out-of-range values will cause date rollover) |
 
 ## Return Value
 

@@ -7,15 +7,15 @@ The `addMonths` function adds a specified number of months to a given date. It h
 ## Signature
 
 ```typescript
-function addMonths(date: Date | number, amount: number): Date;
+function addMonths(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                                            |
-| --------- | ---------------- | ------------------------------------------------------------------------------------------------------ |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp                                                    |
-| `amount`  | `number`         | The number of months to add (can be negative to subtract, fractional values are truncated toward zero) |
+| Parameter | Type        | Description                                                                                            |
+| --------- | ----------- | ------------------------------------------------------------------------------------------------------ |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string                                  |
+| `amount`  | `number`    | The number of months to add (can be negative to subtract, fractional values are truncated toward zero) |
 
 ## Return Value
 

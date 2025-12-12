@@ -7,15 +7,15 @@ The `subDays` function subtracts a specified number of days from a given date, r
 ## Signature
 
 ```typescript
-function subDays(date: Date | number, amount: number): Date;
+function subDays(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                            |
-| --------- | ---------------- | -------------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which days will be subtracted |
-| `amount`  | `number`         | The number of days to subtract (can be negative to add days instead)                   |
+| Parameter | Type        | Description                                                                                              |
+| --------- | ----------- | -------------------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string from which days will be subtracted |
+| `amount`  | `number`    | The number of days to subtract (can be negative to add days instead)                                     |
 
 ## Return Value
 

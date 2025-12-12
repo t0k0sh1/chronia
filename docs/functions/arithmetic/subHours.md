@@ -7,15 +7,15 @@ The `subHours` function subtracts a specified number of hours from a given date 
 ## Signature
 
 ```typescript
-function subHours(date: Date | number, amount: number): Date;
+function subHours(date: DateInput, amount: number): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                                      |
-| --------- | ---------------- | -------------------------------------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp from which to subtract hours |
-| `amount`  | `number`         | The number of hours to subtract (can be negative to effectively add hours)       |
+| Parameter | Type        | Description                                                                                        |
+| --------- | ----------- | -------------------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string from which to subtract hours |
+| `amount`  | `number`    | The number of hours to subtract (can be negative to effectively add hours)                         |
 
 ## Return Value
 

@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { addMonths } from "../addMonths";
 import { isValidNumber } from "../_lib/validators";
 
@@ -9,7 +10,7 @@ import { isValidNumber } from "../_lib/validators";
  * Preserves time components (hours, minutes, seconds, milliseconds). When the day of month
  * doesn't exist in the target month, the result becomes the last day of that month.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of months to subtract (can be negative to add)
  * @returns A new Date object with the months subtracted, or Invalid Date if any input is invalid
  *
@@ -22,6 +23,10 @@ import { isValidNumber } from "../_lib/validators";
  * // Add months (negative amount)
  * const result = subMonths(new Date(2020, 3, 15), -2);
  * // Returns: 2020-05-15
+ *
+ * // Works with ISO 8601 strings
+ * const result = subMonths("2020-04-15", 3);
+ * // Returns: 2020-01-15
  *
  * // Fractional amounts are truncated
  * const result = subMonths(new Date(2020, 3, 15), 1.9);
@@ -42,14 +47,14 @@ import { isValidNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves time components (hours, minutes, seconds, milliseconds)
  * - Month-end overflow: if original day doesn't exist in target month, returns last day of that month
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-export function subMonths(date: Date | number, amount: number): Date {
+export function subMonths(date: DateInput, amount: number): Date {
   if (!isValidNumber(amount)) {
     return new Date(NaN);
   }

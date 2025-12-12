@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { addYears } from "../addYears";
 import { isValidNumber } from "../_lib/validators";
 
@@ -9,7 +10,7 @@ import { isValidNumber } from "../_lib/validators";
  * Preserves month, day, and time components. When the source date is Feb 29 and the target
  * year is not a leap year, the result becomes Feb 28.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of years to subtract (can be negative to add)
  * @returns A new Date object with the years subtracted, or Invalid Date if any input is invalid
  *
@@ -22,6 +23,10 @@ import { isValidNumber } from "../_lib/validators";
  * // Add years (negative amount)
  * const result = subYears(new Date(2020, 0, 15), -3);
  * // Returns: 2023-01-15
+ *
+ * // Works with ISO 8601 strings
+ * const result = subYears("2020-01-15", 3);
+ * // Returns: 2017-01-15
  *
  * // Fractional amounts are truncated
  * const result = subYears(new Date(2020, 0, 1), 1.9);
@@ -42,14 +47,14 @@ import { isValidNumber } from "../_lib/validators";
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
  * - Leap year adjustment: Feb 29 → Feb 28 when target year is not a leap year
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-export function subYears(date: Date | number, amount: number): Date {
+export function subYears(date: DateInput, amount: number): Date {
   if (!isValidNumber(amount)) {
     return new Date(NaN);
   }

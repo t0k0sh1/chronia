@@ -7,18 +7,15 @@ The `isSameSecond` function checks whether two dates fall within the same second
 ## Signature
 
 ```typescript
-function isSameSecond(
-  dateLeft: Date | number,
-  dateRight: Date | number,
-): boolean;
+function isSameSecond(dateLeft: DateInput, dateRight: DateInput): boolean;
 ```
 
 ## Parameters
 
-| Parameter   | Type             | Description                                           |
-| ----------- | ---------------- | ----------------------------------------------------- |
-| `dateLeft`  | `Date \| number` | The first date as a Date object or numeric timestamp  |
-| `dateRight` | `Date \| number` | The second date as a Date object or numeric timestamp |
+| Parameter   | Type        | Description                                                             |
+| ----------- | ----------- | ----------------------------------------------------------------------- |
+| `dateLeft`  | `DateInput` | The first date as a Date object, numeric timestamp, or ISO 8601 string  |
+| `dateRight` | `DateInput` | The second date as a Date object, numeric timestamp, or ISO 8601 string |
 
 ## Return Value
 

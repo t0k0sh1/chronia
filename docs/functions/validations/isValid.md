@@ -7,14 +7,14 @@ The `isValid` function validates whether a given Date object or timestamp repres
 ## Signature
 
 ```typescript
-function isValid(date: Date | number): boolean;
+function isValid(date: DateInput): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                    |
-| --------- | ---------------- | ---------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to validate |
+| Parameter | Type        | Description                                                      |
+| --------- | ----------- | ---------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to validate |
 
 ## Return Value
 

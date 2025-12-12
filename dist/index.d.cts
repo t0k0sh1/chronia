@@ -1,5 +1,5 @@
-import { L as Locale, C as ComparisonOptions, I as Interval, B as BetweenOption, a as CompareOptions } from './types-NwmfnHjU.cjs';
-export { b as BoundsType, c as TZ, T as TimeUnit } from './types-NwmfnHjU.cjs';
+import { D as DateInput, L as Locale, C as ComparisonOptions, I as Interval, B as BetweenOption, a as CompareOptions } from './types-YhpkQnbO.cjs';
+export { b as BoundsType, c as TZ, T as TimeUnit } from './types-YhpkQnbO.cjs';
 
 /**
  * Add the specified number of days to the given date.
@@ -7,7 +7,7 @@ export { b as BoundsType, c as TZ, T as TimeUnit } from './types-NwmfnHjU.cjs';
  * This function validates arguments before processing and returns a new Date instance
  * with the specified number of days added. Fractional days are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of days to add (can be negative to subtract)
  * @returns A new Date object with the days added, or Invalid Date if any input is invalid
  *
@@ -26,6 +26,10 @@ export { b as BoundsType, c as TZ, T as TimeUnit } from './types-NwmfnHjU.cjs';
  * const result = addDays(timestamp, 7);
  * // Returns: Date 7 days from now
  *
+ * // Works with ISO 8601 strings
+ * const result = addDays("2025-01-01", 5);
+ * // Returns: 2025-01-06
+ *
  * // Fractional amounts are truncated
  * const result = addDays(new Date(2025, 0, 1), 1.9);
  * // Returns: 2025-01-02 (1.9 truncated to 1)
@@ -40,12 +44,12 @@ export { b as BoundsType, c as TZ, T as TimeUnit } from './types-NwmfnHjU.cjs';
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addDays(date: Date | number, amount: number): Date;
+declare function addDays(date: DateInput, amount: number): Date;
 
 /**
  * Add the specified number of hours to the given date.
@@ -54,7 +58,7 @@ declare function addDays(date: Date | number, amount: number): Date;
  * with the specified number of hours added. Fractional hours are truncated toward zero.
  * Minutes, seconds, and milliseconds are preserved.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of hours to add (can be negative to subtract)
  * @returns A new Date object with the hours added, or Invalid Date if any input is invalid
  *
@@ -67,6 +71,10 @@ declare function addDays(date: Date | number, amount: number): Date;
  * // Subtract hours (negative amount)
  * const result = addHours(new Date(2025, 8, 10, 15, 30, 0), -5);
  * // Returns: 2025-09-10 10:30:00
+ *
+ * // Works with ISO 8601 strings
+ * const result = addHours("2020-06-15T12:00:00", 3);
+ * // Returns: 2020-06-15 15:00:00
  *
  * // Fractional amounts are truncated
  * const result = addHours(new Date(2020, 0, 1, 12, 0, 0), 1.9);
@@ -83,13 +91,13 @@ declare function addDays(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves minutes, seconds, and milliseconds
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addHours(date: Date | number, amount: number): Date;
+declare function addHours(date: DateInput, amount: number): Date;
 
 /**
  * Add the specified number of milliseconds to the given date.
@@ -97,7 +105,7 @@ declare function addHours(date: Date | number, amount: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified number of milliseconds added. Fractional milliseconds are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of milliseconds to add (can be negative to subtract)
  * @returns A new Date object with the milliseconds added, or Invalid Date if any input is invalid
  *
@@ -110,6 +118,10 @@ declare function addHours(date: Date | number, amount: number): Date;
  * // Subtract milliseconds (negative amount)
  * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 500), -300);
  * // Returns: 2020-01-01T12:00:00.200
+ *
+ * // Works with ISO 8601 strings
+ * const result = addMilliseconds("2020-01-01T12:00:00.000", 500);
+ * // Returns: 2020-01-01T12:00:00.500
  *
  * // Fractional amounts are truncated
  * const result = addMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 0), 1.9);
@@ -126,12 +138,12 @@ declare function addHours(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addMilliseconds(date: Date | number, amount: number): Date;
+declare function addMilliseconds(date: DateInput, amount: number): Date;
 
 /**
  * Add the specified number of minutes to the given date.
@@ -140,7 +152,7 @@ declare function addMilliseconds(date: Date | number, amount: number): Date;
  * with the specified number of minutes added. Fractional minutes are truncated toward zero.
  * Preserves seconds and milliseconds.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of minutes to add (can be negative to subtract)
  * @returns A new Date object with the minutes added, or Invalid Date if any input is invalid
  *
@@ -153,6 +165,10 @@ declare function addMilliseconds(date: Date | number, amount: number): Date;
  * // Subtract minutes (negative amount)
  * const result = addMinutes(new Date(2020, 0, 1, 12, 30, 0), -15);
  * // Returns: 2020-01-01T12:15:00
+ *
+ * // Works with ISO 8601 strings
+ * const result = addMinutes("2020-01-01T12:30:00", 15);
+ * // Returns: 2020-01-01T12:45:00
  *
  * // Fractional amounts are truncated
  * const result = addMinutes(new Date(2020, 0, 1, 12, 0, 0), 1.9);
@@ -169,13 +185,13 @@ declare function addMilliseconds(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves seconds and milliseconds
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addMinutes(date: Date | number, amount: number): Date;
+declare function addMinutes(date: DateInput, amount: number): Date;
 
 /**
  * Add the specified number of months to the given date.
@@ -185,7 +201,7 @@ declare function addMinutes(date: Date | number, amount: number): Date;
  * Preserves time components (hours, minutes, seconds, milliseconds). When the day of month
  * doesn't exist in the target month, the result becomes the last day of that month.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of months to add (can be negative to subtract)
  * @returns A new Date object with the months added, or Invalid Date if any input is invalid
  *
@@ -197,6 +213,10 @@ declare function addMinutes(date: Date | number, amount: number): Date;
  *
  * // Subtract months (negative amount)
  * const result = addMonths(new Date(2020, 5, 15), -2);
+ * // Returns: 2020-04-15
+ *
+ * // Works with ISO 8601 strings
+ * const result = addMonths("2020-01-15", 3);
  * // Returns: 2020-04-15
  *
  * // Fractional amounts are truncated
@@ -218,14 +238,14 @@ declare function addMinutes(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves time components (hours, minutes, seconds, milliseconds)
  * - Month-end overflow: if original day doesn't exist in target month, returns last day of that month
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addMonths(date: Date | number, amount: number): Date;
+declare function addMonths(date: DateInput, amount: number): Date;
 
 /**
  * Add the specified number of seconds to the given date.
@@ -234,7 +254,7 @@ declare function addMonths(date: Date | number, amount: number): Date;
  * with the specified number of seconds added. Fractional seconds are truncated toward zero.
  * Preserves milliseconds.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of seconds to add (can be negative to subtract)
  * @returns A new Date object with the seconds added, or Invalid Date if any input is invalid
  *
@@ -247,6 +267,10 @@ declare function addMonths(date: Date | number, amount: number): Date;
  * // Subtract seconds (negative amount)
  * const result = addSeconds(new Date(2020, 0, 1, 12, 30, 30), -15);
  * // Returns: 2020-01-01T12:30:15
+ *
+ * // Works with ISO 8601 strings
+ * const result = addSeconds("2020-01-01T12:30:30", 15);
+ * // Returns: 2020-01-01T12:30:45
  *
  * // Fractional amounts are truncated
  * const result = addSeconds(new Date(2020, 0, 1, 12, 0, 0), 1.9);
@@ -263,13 +287,13 @@ declare function addMonths(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves milliseconds
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addSeconds(date: Date | number, amount: number): Date;
+declare function addSeconds(date: DateInput, amount: number): Date;
 
 /**
  * Add the specified number of years to the given date.
@@ -279,7 +303,7 @@ declare function addSeconds(date: Date | number, amount: number): Date;
  * Preserves month, day, and time components. When the source date is Feb 29 and the target
  * year is not a leap year, the result becomes Feb 28.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of years to add (can be negative to subtract)
  * @returns A new Date object with the years added, or Invalid Date if any input is invalid
  *
@@ -292,6 +316,10 @@ declare function addSeconds(date: Date | number, amount: number): Date;
  * // Subtract years (negative amount)
  * const result = addYears(new Date(2020, 0, 15), -3);
  * // Returns: 2017-01-15
+ *
+ * // Works with ISO 8601 strings
+ * const result = addYears("2020-01-15", 3);
+ * // Returns: 2023-01-15
  *
  * // Fractional amounts are truncated
  * const result = addYears(new Date(2020, 0, 1), 1.9);
@@ -312,14 +340,14 @@ declare function addSeconds(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
  * - Leap year adjustment: Feb 29 → Feb 28 when target year is not a leap year
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addYears(date: Date | number, amount: number): Date;
+declare function addYears(date: DateInput, amount: number): Date;
 
 /**
  * Format a Date object according to a format pattern.
@@ -486,7 +514,7 @@ declare function format(date: Date, pattern: string, locale?: Locale): string;
  * This function validates arguments before processing and returns the day of the month
  * (1-31) of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The day of the month as a number (1-31), or NaN if invalid
  *
  * @example
@@ -499,27 +527,31 @@ declare function format(date: Date, pattern: string, locale?: Locale): string;
  * const result2 = getDay(1704067200000); // 2024-01-01
  * // Returns: 1
  *
+ * // Get day from ISO 8601 string
+ * const result3 = getDay("2025-01-15");
+ * // Returns: 15
+ *
  * // Leap day
- * const result3 = getDay(new Date(2024, 1, 29));
+ * const result4 = getDay(new Date(2024, 1, 29));
  * // Returns: 29
  *
  * // End of month
- * const result4 = getDay(new Date(2024, 0, 31));
+ * const result5 = getDay(new Date(2024, 0, 31));
  * // Returns: 31
  *
  * // Invalid date returns NaN
- * const result5 = getDay(new Date("invalid"));
+ * const result6 = getDay(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns the day in the local timezone
  * - Day values range from 1 to 31 depending on the month
  */
-declare function getDay(date: Date | number): number;
+declare function getDay(date: DateInput): number;
 
 /**
  * Get the hours of the given date.
@@ -527,7 +559,7 @@ declare function getDay(date: Date | number): number;
  * This function validates arguments before processing and returns the hours
  * (0-23) of the given date in 24-hour format. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The hours as a number (0-23), or NaN if invalid
  *
  * @example
@@ -540,27 +572,31 @@ declare function getDay(date: Date | number): number;
  * const result2 = getHours(1704110400000); // 2024-01-01 12:00:00
  * // Returns: 12
  *
+ * // Get hours from ISO 8601 string
+ * const result3 = getHours("2025-01-15T14:30:00");
+ * // Returns: 14
+ *
  * // Midnight (start of day)
- * const result3 = getHours(new Date(2024, 0, 1, 0, 0, 0));
+ * const result4 = getHours(new Date(2024, 0, 1, 0, 0, 0));
  * // Returns: 0
  *
  * // End of day
- * const result4 = getHours(new Date(2024, 0, 1, 23, 59, 59));
+ * const result5 = getHours(new Date(2024, 0, 1, 23, 59, 59));
  * // Returns: 23
  *
  * // Invalid date returns NaN
- * const result5 = getHours(new Date("invalid"));
+ * const result6 = getHours(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns the hours in the local timezone (not UTC)
  * - Hours are in 24-hour format (0-23)
  */
-declare function getHours(date: Date | number): number;
+declare function getHours(date: DateInput): number;
 
 /**
  * Get the milliseconds of the given date.
@@ -568,7 +604,7 @@ declare function getHours(date: Date | number): number;
  * This function validates arguments before processing and returns the milliseconds
  * component (0-999) of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The milliseconds as a number (0-999), or NaN if invalid
  *
  * @example
@@ -581,27 +617,31 @@ declare function getHours(date: Date | number): number;
  * const result2 = getMilliseconds(1704067200500); // 500ms past epoch
  * // Returns: 500
  *
+ * // Get milliseconds from ISO 8601 string
+ * const result3 = getMilliseconds("2024-01-15T12:30:45.123Z");
+ * // Returns: 123
+ *
  * // Start of second (0 milliseconds)
- * const result3 = getMilliseconds(new Date(2024, 0, 1, 0, 0, 0, 0));
+ * const result4 = getMilliseconds(new Date(2024, 0, 1, 0, 0, 0, 0));
  * // Returns: 0
  *
  * // End of second (999 milliseconds)
- * const result4 = getMilliseconds(new Date(2024, 0, 1, 0, 0, 0, 999));
+ * const result5 = getMilliseconds(new Date(2024, 0, 1, 0, 0, 0, 999));
  * // Returns: 999
  *
  * // Invalid date returns NaN
- * const result5 = getMilliseconds(new Date("invalid"));
+ * const result6 = getMilliseconds(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns milliseconds in the range 0-999
  * - Works with dates in any timezone (returns local time component)
  */
-declare function getMilliseconds(date: Date | number): number;
+declare function getMilliseconds(date: DateInput): number;
 
 /**
  * Get the minutes of the given date.
@@ -609,7 +649,7 @@ declare function getMilliseconds(date: Date | number): number;
  * This function validates arguments before processing and returns the minutes (0-59)
  * of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The minutes as a number (0-59), or NaN if invalid
  *
  * @example
@@ -622,27 +662,31 @@ declare function getMilliseconds(date: Date | number): number;
  * const result2 = getMinutes(1704067200000); // 2024-01-01 00:00:00
  * // Returns: 0
  *
+ * // Get minutes from ISO 8601 string
+ * const result3 = getMinutes("2025-01-15T14:30:45");
+ * // Returns: 30
+ *
  * // Minutes at the end of an hour
- * const result3 = getMinutes(new Date(2024, 11, 31, 23, 59, 59));
+ * const result4 = getMinutes(new Date(2024, 11, 31, 23, 59, 59));
  * // Returns: 59
  *
  * // Minutes at the start of an hour
- * const result4 = getMinutes(new Date(2024, 5, 15, 8, 0, 0));
+ * const result5 = getMinutes(new Date(2024, 5, 15, 8, 0, 0));
  * // Returns: 0
  *
  * // Invalid date returns NaN
- * const result5 = getMinutes(new Date("invalid"));
+ * const result6 = getMinutes(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns the minutes in the local timezone
  * - Always returns a value between 0 and 59 for valid dates
  */
-declare function getMinutes(date: Date | number): number;
+declare function getMinutes(date: DateInput): number;
 
 /**
  * Get the month of the given date.
@@ -650,7 +694,7 @@ declare function getMinutes(date: Date | number): number;
  * This function validates arguments before processing and returns the month
  * (0-11, where January is 0 and December is 11) of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The month as a number (0-11, where 0 is January and 11 is December), or NaN if invalid
  *
  * @example
@@ -663,27 +707,31 @@ declare function getMinutes(date: Date | number): number;
  * const result2 = getMonth(1704067200000); // 2024-01-01
  * // Returns: 0
  *
+ * // Get month from ISO 8601 string
+ * const result3 = getMonth("2024-06-15");
+ * // Returns: 5
+ *
  * // Leap year February
- * const result3 = getMonth(new Date(2024, 1, 29));
+ * const result4 = getMonth(new Date(2024, 1, 29));
  * // Returns: 1
  *
  * // December
- * const result4 = getMonth(new Date(2024, 11, 25));
+ * const result5 = getMonth(new Date(2024, 11, 25));
  * // Returns: 11
  *
  * // Invalid date returns NaN
- * const result5 = getMonth(new Date("invalid"));
+ * const result6 = getMonth(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns the month in the local timezone
  * - Uses 0-based indexing (0-11), same as JavaScript's native getMonth()
  */
-declare function getMonth(date: Date | number): number;
+declare function getMonth(date: DateInput): number;
 
 /**
  * Get the seconds of the given date.
@@ -691,7 +739,7 @@ declare function getMonth(date: Date | number): number;
  * This function validates arguments before processing and returns the seconds (0-59)
  * of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The seconds as a number (0-59), or NaN if invalid
  *
  * @example
@@ -704,27 +752,31 @@ declare function getMonth(date: Date | number): number;
  * const result2 = getSeconds(1704067245000); // 2024-01-01T00:00:45Z
  * // Returns: 45
  *
+ * // Get seconds from ISO 8601 string
+ * const result3 = getSeconds("2025-01-15T10:30:45");
+ * // Returns: 45
+ *
  * // Start of minute
- * const result3 = getSeconds(new Date(2024, 0, 1, 10, 30, 0));
+ * const result4 = getSeconds(new Date(2024, 0, 1, 10, 30, 0));
  * // Returns: 0
  *
  * // End of minute
- * const result4 = getSeconds(new Date(2024, 0, 1, 10, 30, 59));
+ * const result5 = getSeconds(new Date(2024, 0, 1, 10, 30, 59));
  * // Returns: 59
  *
  * // Invalid date returns NaN
- * const result5 = getSeconds(new Date("invalid"));
+ * const result6 = getSeconds(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns the seconds in the local timezone
  * - Seconds are always in the range 0-59
  */
-declare function getSeconds(date: Date | number): number;
+declare function getSeconds(date: DateInput): number;
 
 /**
  * Get the timestamp of the given date.
@@ -732,7 +784,7 @@ declare function getSeconds(date: Date | number): number;
  * This function validates arguments before processing and returns the timestamp
  * (milliseconds since Unix epoch) of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The timestamp in milliseconds since Unix epoch (1970-01-01), or NaN if invalid
  *
  * @example
@@ -745,27 +797,31 @@ declare function getSeconds(date: Date | number): number;
  * const result2 = getTime(1704067200000);
  * // Returns: 1704067200000
  *
+ * // Get timestamp from ISO 8601 string
+ * const result3 = getTime("2024-01-01T00:00:00.000Z");
+ * // Returns: 1704067200000
+ *
  * // Unix epoch
- * const result3 = getTime(new Date(0));
+ * const result4 = getTime(new Date(0));
  * // Returns: 0
  *
  * // Negative timestamp (before epoch)
- * const result4 = getTime(new Date("1969-12-31T00:00:00.000Z"));
+ * const result5 = getTime(new Date("1969-12-31T00:00:00.000Z"));
  * // Returns: -86400000
  *
  * // Invalid date returns NaN
- * const result5 = getTime(new Date("invalid"));
+ * const result6 = getTime(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns timestamp in milliseconds since Unix epoch (1970-01-01T00:00:00.000Z)
  * - For numeric input, returns the value as-is if valid
  */
-declare function getTime(date: Date | number): number;
+declare function getTime(date: DateInput): number;
 
 /**
  * Get the full year of the given date.
@@ -773,7 +829,7 @@ declare function getTime(date: Date | number): number;
  * This function validates arguments before processing and returns the full year
  * (e.g., 2025) of the given date. Returns NaN for invalid input.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The year as a number, or NaN if invalid
  *
  * @example
@@ -786,27 +842,31 @@ declare function getTime(date: Date | number): number;
  * const result2 = getYear(1704067200000); // 2024-01-01
  * // Returns: 2024
  *
+ * // Get year from ISO 8601 string
+ * const result3 = getYear("2025-01-15");
+ * // Returns: 2025
+ *
  * // Leap year
- * const result3 = getYear(new Date(2024, 1, 29));
+ * const result4 = getYear(new Date(2024, 1, 29));
  * // Returns: 2024
  *
  * // Historic date
- * const result4 = getYear(new Date(1776, 6, 4));
+ * const result5 = getYear(new Date(1776, 6, 4));
  * // Returns: 1776
  *
  * // Invalid date returns NaN
- * const result5 = getYear(new Date("invalid"));
+ * const result6 = getYear(new Date("invalid"));
  * // Returns: NaN
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns the year in the local timezone
  * - Supports negative years (BC dates)
  */
-declare function getYear(date: Date | number): number;
+declare function getYear(date: DateInput): number;
 
 /**
  * Set the year of the given date.
@@ -814,7 +874,7 @@ declare function getYear(date: Date | number): number;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified year set. Fractional years are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param year - The year to set (can be negative for BC dates)
  * @returns A new Date object with the year set, or Invalid Date if any input is invalid
  *
@@ -836,21 +896,25 @@ declare function getYear(date: Date | number): number;
  * const result4 = setYear(new Date(2025, 0, 15), 2023.9);
  * // Returns: 2023-01-15
  *
+ * // Set year from ISO 8601 string
+ * const result5 = setYear("2025-01-15", 2030);
+ * // Returns: 2030-01-15
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setYear(new Date("invalid"), 2025);
+ * const result6 = setYear(new Date("invalid"), 2025);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (2023.9 → 2023, -2023.9 → -2023)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
  * - Special handling: When the source date is Feb 29 and the target year is not a leap year, the result becomes Feb 28
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setYear(date: Date | number, year: number): Date;
+declare function setYear(date: DateInput, year: number): Date;
 
 /**
  * Set the month of the given date.
@@ -858,7 +922,7 @@ declare function setYear(date: Date | number, year: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified month set. Fractional months are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param month - The month to set (0-indexed: 0 = January, 11 = December)
  * @returns A new Date object with the month set, or Invalid Date if any input is invalid
  *
@@ -880,21 +944,25 @@ declare function setYear(date: Date | number, year: number): Date;
  * const result4 = setMonth(new Date(2025, 0, 15), 5.9);
  * // Returns: 2025-06-15
  *
+ * // Set month from ISO 8601 string
+ * const result5 = setMonth("2025-01-15", 6);
+ * // Returns: 2025-07-15
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setMonth(new Date("invalid"), 5);
+ * const result6 = setMonth(new Date("invalid"), 5);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (5.9 → 5, -1.9 → -1)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves year, day, and time components (hours, minutes, seconds, milliseconds)
  * - Special handling: When the original day doesn't exist in the target month (e.g., Jan 31 → Feb), adjusts to the last valid day of the month (Feb 28 or 29)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setMonth(date: Date | number, month: number): Date;
+declare function setMonth(date: DateInput, month: number): Date;
 
 /**
  * Set the day of the month of the given date.
@@ -902,7 +970,7 @@ declare function setMonth(date: Date | number, month: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified day set. Fractional days are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param day - The day to set (1-31, fractions are truncated)
  * @returns A new Date object with the day set, or Invalid Date if any input is invalid
  *
@@ -924,21 +992,25 @@ declare function setMonth(date: Date | number, month: number): Date;
  * const result4 = setDay(new Date(2025, 0, 15), 15.9);
  * // Returns: 2025-01-15
  *
+ * // Set day from ISO 8601 string
+ * const result5 = setDay("2025-01-15", 20);
+ * // Returns: 2025-01-20
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setDay(new Date("invalid"), 15);
+ * const result6 = setDay(new Date("invalid"), 15);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (15.9 → 15, -15.9 → -15)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves year, month, and time components (hours, minutes, seconds, milliseconds)
  * - Rollover behavior: Day values outside valid range cause date to roll over to adjacent months (e.g., Jan 32 → Feb 1, day 0 → last day of previous month)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setDay(date: Date | number, day: number): Date;
+declare function setDay(date: DateInput, day: number): Date;
 
 /**
  * Set the hours of the given date.
@@ -946,7 +1018,7 @@ declare function setDay(date: Date | number, day: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified hours set. Fractional hours are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param hours - The hours to set (0-23, fractions are truncated)
  * @returns A new Date object with the hours set, or Invalid Date if any input is invalid
  *
@@ -968,21 +1040,25 @@ declare function setDay(date: Date | number, day: number): Date;
  * const result4 = setHours(new Date(2025, 0, 15, 12, 30, 45), 14.9);
  * // Returns: 2025-01-15 14:30:45
  *
+ * // Set hours from ISO 8601 string
+ * const result5 = setHours("2025-01-15T12:30:45", 18);
+ * // Returns: 2025-01-15 18:30:45
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setHours(new Date("invalid"), 12);
+ * const result6 = setHours(new Date("invalid"), 12);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (14.9 → 14, -14.9 → -14)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves date, minutes, seconds, and milliseconds components
  * - Hours outside 0-23 will cause date rollover (e.g., 24 → next day, -1 → previous day)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setHours(date: Date | number, hours: number): Date;
+declare function setHours(date: DateInput, hours: number): Date;
 
 /**
  * Set the minutes of the given date.
@@ -990,7 +1066,7 @@ declare function setHours(date: Date | number, hours: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified minutes set. Fractional minutes are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param minutes - The minutes to set (typically 0-59, but values outside this range will cause rollover)
  * @returns A new Date object with the minutes set, or Invalid Date if any input is invalid
  *
@@ -1012,21 +1088,25 @@ declare function setHours(date: Date | number, hours: number): Date;
  * const result4 = setMinutes(new Date(2025, 0, 15, 12, 30, 45), 60);
  * // Returns: 2025-01-15 13:00:45 (rolls over to next hour)
  *
+ * // Set minutes from ISO 8601 string
+ * const result5 = setMinutes("2025-01-15T12:30:45", 15);
+ * // Returns: 2025-01-15 12:15:45
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setMinutes(new Date("invalid"), 30);
+ * const result6 = setMinutes(new Date("invalid"), 30);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (45.9 → 45, -45.9 → -45)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves year, month, day, hour, seconds, and milliseconds components
  * - Values outside 0-59 cause rollover: 60 → next hour, -1 → previous hour
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setMinutes(date: Date | number, minutes: number): Date;
+declare function setMinutes(date: DateInput, minutes: number): Date;
 
 /**
  * Set the seconds of the given date.
@@ -1034,7 +1114,7 @@ declare function setMinutes(date: Date | number, minutes: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified seconds set. Fractional seconds are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param seconds - The seconds to set (0-59 for normal range, other values will roll over)
  * @returns A new Date object with the seconds set, or Invalid Date if any input is invalid
  *
@@ -1056,21 +1136,25 @@ declare function setMinutes(date: Date | number, minutes: number): Date;
  * const result4 = setSeconds(new Date(2025, 0, 15, 12, 30, 45), 30.9);
  * // Returns: 2025-01-15 12:30:30
  *
+ * // Set seconds from ISO 8601 string
+ * const result5 = setSeconds("2025-01-15T12:30:45", 15);
+ * // Returns: 2025-01-15 12:30:15
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setSeconds(new Date("invalid"), 30);
+ * const result6 = setSeconds(new Date("invalid"), 30);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (30.9 → 30, -30.9 → -30)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves year, month, day, hours, minutes, and milliseconds components
  * - Seconds outside 0-59 range cause rollover to adjacent minutes (60 → next minute, -1 → previous minute)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setSeconds(date: Date | number, seconds: number): Date;
+declare function setSeconds(date: DateInput, seconds: number): Date;
 
 /**
  * Set the complete timestamp of the given date.
@@ -1079,7 +1163,7 @@ declare function setSeconds(date: Date | number, seconds: number): Date;
  * with the specified timestamp. Unlike other setters that modify components (year, month, etc.),
  * setTime replaces the entire timestamp value.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param time - The timestamp in milliseconds since Unix epoch (January 1, 1970, 00:00:00 UTC)
  * @returns A new Date object with the timestamp set, or Invalid Date if any input is invalid
  *
@@ -1101,9 +1185,9 @@ declare function setSeconds(date: Date | number, seconds: number): Date;
  * const result4 = setTime(new Date(), -86400000);
  * // Returns: 1969-12-31T00:00:00.000Z
  *
- * // Fractional milliseconds are preserved
- * const result5 = setTime(new Date(), 1.5);
- * // Returns: timestamp with 1.5 milliseconds (truncated by Date API)
+ * // Set time from ISO 8601 string
+ * const result5 = setTime("2025-01-15T12:30:45Z", 1704067200000);
+ * // Returns: 2024-01-01T00:00:00.000Z
  *
  * // Invalid timestamp returns Invalid Date
  * const result6 = setTime(new Date(), NaN);
@@ -1112,14 +1196,14 @@ declare function setSeconds(date: Date | number, seconds: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts Date objects or numeric timestamps as the first argument (consistent with other setters)
+ * - Accepts Date objects, numeric timestamps, or ISO 8601 strings as the first argument
  * - Returns Invalid Date for: Invalid Date input, NaN, Infinity, -Infinity
  * - Valid timestamp range: -8.64e15 to 8.64e15 milliseconds
  * - Timestamps outside this range create Invalid Date
  * - Always returns a new Date instance (does not mutate input)
  * - This function replaces all date/time components at once (unlike setYear, setMonth, etc.)
  */
-declare function setTime(date: Date | number, time: number): Date;
+declare function setTime(date: DateInput, time: number): Date;
 
 /**
  * Set the milliseconds of the given date.
@@ -1127,7 +1211,7 @@ declare function setTime(date: Date | number, time: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified milliseconds set. Fractional milliseconds are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param milliseconds - The milliseconds to set (typically 0-999, fractions are truncated)
  * @returns A new Date object with the milliseconds set, or Invalid Date if any input is invalid
  *
@@ -1149,21 +1233,25 @@ declare function setTime(date: Date | number, time: number): Date;
  * const result4 = setMilliseconds(new Date(2025, 0, 15, 12, 30, 45, 123), 500.9);
  * // Returns: 2025-01-15 12:30:45.500
  *
+ * // Set milliseconds from ISO 8601 string
+ * const result5 = setMilliseconds("2025-01-15T12:30:45.123Z", 500);
+ * // Returns: 2025-01-15 12:30:45.500
+ *
  * // Invalid date returns Invalid Date
- * const result5 = setMilliseconds(new Date("invalid"), 500);
+ * const result6 = setMilliseconds(new Date("invalid"), 500);
  * // Returns: Invalid Date
  * ```
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (500.9 → 500, -500.9 → -500)
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
  * - Preserves year, month, day, and time components (hours, minutes, seconds)
  * - Special handling: Values outside 0-999 cause rollover to adjacent seconds (1000 → next second, -1 → previous second)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setMilliseconds(date: Date | number, milliseconds: number): Date;
+declare function setMilliseconds(date: DateInput, milliseconds: number): Date;
 
 /**
  * Check if the first date is strictly after the second date.
@@ -1172,8 +1260,8 @@ declare function setMilliseconds(date: Date | number, milliseconds: number): Dat
  * after the second date. The comparison can be performed at different granularities
  * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - The first date as a Date object or timestamp (number)
- * @param b - The second date as a Date object or timestamp (number)
+ * @param a - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param b - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @param [options={}] - Configuration options.
  * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is after date `b`, false otherwise or if either date is invalid
@@ -1209,12 +1297,12 @@ declare function setMilliseconds(date: Date | number, milliseconds: number): Dat
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Equality is not considered "after" (strict comparison)
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isAfter(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
+declare function isAfter(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 
 /**
  * Check if the first date is after or equal to the second date.
@@ -1223,8 +1311,8 @@ declare function isAfter(a: Date | number, b: Date | number, options?: Compariso
  * after or equal to the second date. The comparison can be performed at different granularities
  * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - The first date as a Date object or timestamp (number)
- * @param b - The second date as a Date object or timestamp (number)
+ * @param a - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param b - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @param [options={}] - Configuration options.
  * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is after or equal to date `b`, false otherwise or if either date is invalid
@@ -1260,12 +1348,12 @@ declare function isAfter(a: Date | number, b: Date | number, options?: Compariso
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Includes equality in the comparison (a >= b)
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isAfterOrEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
+declare function isAfterOrEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 
 /**
  * Check if the first date is strictly before the second date.
@@ -1274,8 +1362,8 @@ declare function isAfterOrEqual(a: Date | number, b: Date | number, options?: Co
  * before the second date. The comparison can be performed at different granularities
  * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - The first date as a Date object or timestamp (number)
- * @param b - The second date as a Date object or timestamp (number)
+ * @param a - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param b - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @param [options={}] - Configuration options.
  * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before date `b`, false otherwise or if either date is invalid
@@ -1311,12 +1399,12 @@ declare function isAfterOrEqual(a: Date | number, b: Date | number, options?: Co
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Equality is not considered "before" (strict comparison)
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isBefore(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
+declare function isBefore(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 
 /**
  * Check if the first date is before or equal to the second date.
@@ -1325,8 +1413,8 @@ declare function isBefore(a: Date | number, b: Date | number, options?: Comparis
  * before or equal to the second date. The comparison can be performed at different granularities
  * (year, month, day, hour, minute, second, or millisecond).
  *
- * @param a - The first date as a Date object or timestamp (number)
- * @param b - The second date as a Date object or timestamp (number)
+ * @param a - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param b - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @param [options={}] - Configuration options.
  * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is before or equal to date `b`, false otherwise or if either date is invalid
@@ -1362,12 +1450,12 @@ declare function isBefore(a: Date | number, b: Date | number, options?: Comparis
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Includes equality in the comparison (a <= b)
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isBeforeOrEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
+declare function isBeforeOrEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 
 /**
  * Check if a date falls between two boundary dates with configurable inclusion.
@@ -1375,7 +1463,7 @@ declare function isBeforeOrEqual(a: Date | number, b: Date | number, options?: C
  * This function checks whether a date falls within an interval defined by start and end boundaries.
  * The inclusion of boundaries can be controlled using mathematical interval notation.
  *
- * @param date - The date to check as a Date object or timestamp (number)
+ * @param date - The date to check as a Date object, timestamp (number), or ISO 8601 string
  * @param interval - Interval object with start and end boundaries (can be null for open-ended intervals)
  * @param [options={}] - Configuration options for boundary inclusion.
  * @param [options.bounds="()"] - Boundary inclusion mode: "()" excludes both, "[]" includes both, "[)" includes start only, "(]" includes end only.
@@ -1420,7 +1508,7 @@ declare function isBeforeOrEqual(a: Date | number, b: Date | number, options?: C
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity, or invalid interval)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - If start is null, uses MIN_DATE as the lower bound
  * - If end is null, uses MAX_DATE as the upper bound
  * - Boundary inclusion is controlled by the `bounds` option using mathematical interval notation:
@@ -1430,7 +1518,7 @@ declare function isBeforeOrEqual(a: Date | number, b: Date | number, options?: C
  *   - "(]" - Start excluded, end included
  * - Invalid bounds values default to "()" behavior
  */
-declare function isBetween(date: Date | number, interval: Interval, options?: BetweenOption): boolean;
+declare function isBetween(date: DateInput, interval: Interval, options?: BetweenOption): boolean;
 
 /**
  * Check if two dates are equal.
@@ -1439,8 +1527,8 @@ declare function isBetween(date: Date | number, interval: Interval, options?: Be
  * The comparison can be performed at different granularities (year, month, day, hour, minute,
  * second, or millisecond).
  *
- * @param a - The first date as a Date object or timestamp (number)
- * @param b - The second date as a Date object or timestamp (number)
+ * @param a - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param b - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @param [options={}] - Configuration options.
  * @param [options.unit="millisecond"] - The unit of comparison (year, month, day, hour, minute, second, millisecond).
  * @returns True if date `a` is equal to date `b`, false otherwise or if either date is invalid
@@ -1478,12 +1566,12 @@ declare function isBetween(date: Date | number, interval: Interval, options?: Be
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  * - Two dates with the same timestamp are always equal (at millisecond precision)
  */
-declare function isEqual(a: Date | number, b: Date | number, options?: ComparisonOptions): boolean;
+declare function isEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 
 /**
  * Checks if the given date is in the future relative to the current time.
@@ -1493,7 +1581,7 @@ declare function isEqual(a: Date | number, b: Date | number, options?: Compariso
  * the given date is strictly after the current time. If the date equals the current time
  * (same millisecond), it returns `false` because the date is in the present, not the future.
  *
- * @param date - The date to check (Date object or numeric timestamp)
+ * @param date - The date to check (Date object, numeric timestamp, or ISO 8601 string)
  *
  * @returns `true` if the date is strictly in the future, `false` otherwise
  *   - Returns `true` when date > Date.now() (strictly in the future)
@@ -1529,6 +1617,10 @@ declare function isEqual(a: Date | number, b: Date | number, options?: Compariso
  * // Invalid timestamp: Infinity
  * isFuture(Infinity);
  * // Returns: false
+ *
+ * // Future ISO 8601 string
+ * isFuture("2030-01-01");
+ * // Returns: true (assuming current year is before 2030)
  * ```
  *
  * @remarks
@@ -1536,13 +1628,13 @@ declare function isEqual(a: Date | number, b: Date | number, options?: Compariso
  * - Comparison is performed at millisecond precision using `compareDateTimes` helper
  * - Never throws exceptions; returns `false` for invalid inputs
  * - Pure function (no side effects, but depends on current system time)
- * - Accepts both Date objects and numeric timestamps for flexibility
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings for flexibility
  * - Returns `false` when date equals current time (not strictly in the future)
  *
  * @see {@link isPast} - Check if a date is in the past
  * @see {@link isAfter} - Check if one date is after another date
  */
-declare function isFuture(date: Date | number): boolean;
+declare function isFuture(date: DateInput): boolean;
 
 /**
  * Checks if the given date is in the past relative to the current time.
@@ -1552,7 +1644,7 @@ declare function isFuture(date: Date | number): boolean;
  * the given date is strictly before the current time. If the date equals the current time
  * (same millisecond), it returns `false` because the date is in the present, not the past.
  *
- * @param date - The date to check (Date object or numeric timestamp)
+ * @param date - The date to check (Date object, numeric timestamp, or ISO 8601 string)
  *
  * @returns `true` if the date is strictly in the past, `false` otherwise
  *   - Returns `true` when date < Date.now() (strictly in the past)
@@ -1588,6 +1680,10 @@ declare function isFuture(date: Date | number): boolean;
  * // Invalid timestamp: Infinity
  * isPast(Infinity);
  * // Returns: false
+ *
+ * // Past ISO 8601 string
+ * isPast("2020-01-01");
+ * // Returns: true (assuming current year is after 2020)
  * ```
  *
  * @remarks
@@ -1595,13 +1691,13 @@ declare function isFuture(date: Date | number): boolean;
  * - Comparison is performed at millisecond precision using `compareDateTimes` helper
  * - Never throws exceptions; returns `false` for invalid inputs
  * - Pure function (no side effects, but depends on current system time)
- * - Accepts both Date objects and numeric timestamps for flexibility
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings for flexibility
  * - Returns `false` when date equals current time (not strictly in the past)
  *
  * @see {@link isFuture} - Check if a date is in the future
  * @see {@link isBefore} - Check if one date is before another date
  */
-declare function isPast(date: Date | number): boolean;
+declare function isPast(date: DateInput): boolean;
 
 /**
  * Check if the given value is a Date object instance.
@@ -1719,12 +1815,13 @@ declare function isDate(value: unknown): value is Date;
 declare function isExists(year: number, month: number, day: number): boolean;
 
 /**
- * Check if the given value is a valid Date or timestamp.
+ * Check if the given value is a valid Date, timestamp, or ISO 8601 string.
  *
- * This function checks if a Date object is valid (not Invalid Date) or if a timestamp is a finite number.
- * It returns false for Invalid Date, NaN, Infinity, and -Infinity values.
+ * This function checks if a Date object is valid (not Invalid Date), if a timestamp is a finite number,
+ * or if a string is a valid ISO 8601 date string. It returns false for Invalid Date, NaN, Infinity,
+ * -Infinity values, and invalid date strings.
  *
- * @param date - The Date object or timestamp (number) to validate
+ * @param date - The Date object, timestamp (number), or ISO 8601 string to validate
  * @returns True if the date is valid, false otherwise
  *
  * @example
@@ -1748,16 +1845,24 @@ declare function isExists(year: number, month: number, day: number): boolean;
  * // Invalid timestamp
  * const result5 = isValid(NaN);
  * // Returns: false
+ *
+ * // Valid ISO 8601 string
+ * const result6 = isValid("2025-01-15");
+ * // Returns: true
+ *
+ * // Invalid string
+ * const result7 = isValid("not-a-date");
+ * // Returns: false
  * ```
  *
  * @remarks
  * - Validates arguments using internal validation utilities for optimal performance
- * - Accepts both Date objects and numeric timestamps
- * - Returns false for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns false for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Returns true for all finite numeric timestamps, including 0 (Unix epoch) and negative values
  * - Uses the same validation logic as other library functions for consistency
  */
-declare function isValid(date: Date | number): boolean;
+declare function isValid(date: DateInput): boolean;
 
 /**
  * Parse a date string according to a format pattern.
@@ -1969,7 +2074,7 @@ declare function parse(dateString: string, pattern: string, options?: {
  * This function validates arguments before processing and returns a new Date instance
  * with the specified number of days subtracted. Fractional days are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of days to subtract (can be negative to add)
  * @returns A new Date object with the days subtracted, or Invalid Date if any input is invalid
  *
@@ -1988,6 +2093,10 @@ declare function parse(dateString: string, pattern: string, options?: {
  * const result = subDays(timestamp, 7);
  * // Returns: Date 7 days ago from now
  *
+ * // Works with ISO 8601 strings
+ * const result = subDays("2025-01-10", 5);
+ * // Returns: 2025-01-05
+ *
  * // Fractional amounts are truncated
  * const result = subDays(new Date(2025, 0, 5), 1.9);
  * // Returns: 2025-01-04 (1.9 truncated to 1)
@@ -2002,12 +2111,12 @@ declare function parse(dateString: string, pattern: string, options?: {
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subDays(date: Date | number, amount: number): Date;
+declare function subDays(date: DateInput, amount: number): Date;
 
 /**
  * Subtract the specified number of hours from the given date.
@@ -2016,7 +2125,7 @@ declare function subDays(date: Date | number, amount: number): Date;
  * with the specified number of hours subtracted. Fractional hours are truncated toward zero.
  * Minutes, seconds, and milliseconds are preserved.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of hours to subtract (can be negative to add)
  * @returns A new Date object with the hours subtracted, or Invalid Date if any input is invalid
  *
@@ -2029,6 +2138,10 @@ declare function subDays(date: Date | number, amount: number): Date;
  * // Add hours (negative amount)
  * const result = subHours(new Date(2025, 0, 15, 10, 30, 0), -3);
  * // Returns: 2025-01-15 13:30:00
+ *
+ * // Works with ISO 8601 strings
+ * const result = subHours("2025-01-15T18:00:00", 5);
+ * // Returns: 2025-01-15 13:00:00
  *
  * // Fractional amounts are truncated
  * const result = subHours(new Date(2025, 0, 15, 15, 0, 0), 1.9);
@@ -2045,13 +2158,13 @@ declare function subDays(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves minutes, seconds, and milliseconds
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subHours(date: Date | number, amount: number): Date;
+declare function subHours(date: DateInput, amount: number): Date;
 
 /**
  * Subtract the specified number of milliseconds from the given date.
@@ -2059,7 +2172,7 @@ declare function subHours(date: Date | number, amount: number): Date;
  * This function validates arguments before processing and returns a new Date instance
  * with the specified number of milliseconds subtracted. Fractional milliseconds are truncated toward zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of milliseconds to subtract (can be negative to add)
  * @returns A new Date object with the milliseconds subtracted, or Invalid Date if any input is invalid
  *
@@ -2072,6 +2185,10 @@ declare function subHours(date: Date | number, amount: number): Date;
  * // Add milliseconds (negative amount)
  * const result = subMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 200), -300);
  * // Returns: 2020-01-01T12:00:00.500
+ *
+ * // Works with ISO 8601 strings
+ * const result = subMilliseconds("2020-01-01T12:00:00.500", 300);
+ * // Returns: 2020-01-01T12:00:00.200
  *
  * // Fractional amounts are truncated
  * const result = subMilliseconds(new Date(2020, 0, 1, 12, 0, 0, 100), 1.9);
@@ -2088,12 +2205,12 @@ declare function subHours(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subMilliseconds(date: Date | number, amount: number): Date;
+declare function subMilliseconds(date: DateInput, amount: number): Date;
 
 /**
  * Subtract the specified number of minutes from the given date.
@@ -2102,7 +2219,7 @@ declare function subMilliseconds(date: Date | number, amount: number): Date;
  * with the specified number of minutes subtracted. Fractional minutes are truncated toward zero.
  * Preserves seconds and milliseconds.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of minutes to subtract (can be negative to add)
  * @returns A new Date object with the minutes subtracted, or Invalid Date if any input is invalid
  *
@@ -2115,6 +2232,10 @@ declare function subMilliseconds(date: Date | number, amount: number): Date;
  * // Add minutes (negative amount)
  * const result = subMinutes(new Date(2020, 0, 1, 12, 30, 0), -15);
  * // Returns: 2020-01-01T12:45:00
+ *
+ * // Works with ISO 8601 strings
+ * const result = subMinutes("2020-01-01T12:30:00", 15);
+ * // Returns: 2020-01-01T12:15:00
  *
  * // Fractional amounts are truncated
  * const result = subMinutes(new Date(2020, 0, 1, 12, 30, 0), 1.9);
@@ -2131,13 +2252,13 @@ declare function subMilliseconds(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves seconds and milliseconds
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subMinutes(date: Date | number, amount: number): Date;
+declare function subMinutes(date: DateInput, amount: number): Date;
 
 /**
  * Subtract the specified number of months from the given date.
@@ -2147,7 +2268,7 @@ declare function subMinutes(date: Date | number, amount: number): Date;
  * Preserves time components (hours, minutes, seconds, milliseconds). When the day of month
  * doesn't exist in the target month, the result becomes the last day of that month.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of months to subtract (can be negative to add)
  * @returns A new Date object with the months subtracted, or Invalid Date if any input is invalid
  *
@@ -2160,6 +2281,10 @@ declare function subMinutes(date: Date | number, amount: number): Date;
  * // Add months (negative amount)
  * const result = subMonths(new Date(2020, 3, 15), -2);
  * // Returns: 2020-05-15
+ *
+ * // Works with ISO 8601 strings
+ * const result = subMonths("2020-04-15", 3);
+ * // Returns: 2020-01-15
  *
  * // Fractional amounts are truncated
  * const result = subMonths(new Date(2020, 3, 15), 1.9);
@@ -2180,14 +2305,14 @@ declare function subMinutes(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves time components (hours, minutes, seconds, milliseconds)
  * - Month-end overflow: if original day doesn't exist in target month, returns last day of that month
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subMonths(date: Date | number, amount: number): Date;
+declare function subMonths(date: DateInput, amount: number): Date;
 
 /**
  * Subtract the specified number of seconds from the given date.
@@ -2196,7 +2321,7 @@ declare function subMonths(date: Date | number, amount: number): Date;
  * with the specified number of seconds subtracted. Fractional seconds are truncated toward zero.
  * Preserves milliseconds.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of seconds to subtract (can be negative to add)
  * @returns A new Date object with the seconds subtracted, or Invalid Date if any input is invalid
  *
@@ -2209,6 +2334,10 @@ declare function subMonths(date: Date | number, amount: number): Date;
  * // Add seconds (negative amount)
  * const result = subSeconds(new Date(2020, 0, 1, 12, 30, 30), -15);
  * // Returns: 2020-01-01T12:30:45
+ *
+ * // Works with ISO 8601 strings
+ * const result = subSeconds("2020-01-01T12:30:45", 15);
+ * // Returns: 2020-01-01T12:30:30
  *
  * // Fractional amounts are truncated
  * const result = subSeconds(new Date(2020, 0, 1, 12, 0, 30), 1.9);
@@ -2225,13 +2354,13 @@ declare function subMonths(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves milliseconds
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subSeconds(date: Date | number, amount: number): Date;
+declare function subSeconds(date: DateInput, amount: number): Date;
 
 /**
  * Subtract the specified number of years from the given date.
@@ -2241,7 +2370,7 @@ declare function subSeconds(date: Date | number, amount: number): Date;
  * Preserves month, day, and time components. When the source date is Feb 29 and the target
  * year is not a leap year, the result becomes Feb 28.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @param amount - The number of years to subtract (can be negative to add)
  * @returns A new Date object with the years subtracted, or Invalid Date if any input is invalid
  *
@@ -2254,6 +2383,10 @@ declare function subSeconds(date: Date | number, amount: number): Date;
  * // Add years (negative amount)
  * const result = subYears(new Date(2020, 0, 15), -3);
  * // Returns: 2023-01-15
+ *
+ * // Works with ISO 8601 strings
+ * const result = subYears("2020-01-15", 3);
+ * // Returns: 2017-01-15
  *
  * // Fractional amounts are truncated
  * const result = subYears(new Date(2020, 0, 1), 1.9);
@@ -2274,14 +2407,14 @@ declare function subSeconds(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before conversion (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Fractions are truncated using Math.trunc (1.9 → 1, -1.9 → -1)
  * - Preserves month, day, and time components (hours, minutes, seconds, milliseconds)
  * - Leap year adjustment: Feb 29 → Feb 28 when target year is not a leap year
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subYears(date: Date | number, amount: number): Date;
+declare function subYears(date: DateInput, amount: number): Date;
 
 /**
  * Truncate a date to the start of the day.
@@ -2289,7 +2422,7 @@ declare function subYears(date: Date | number, amount: number): Date;
  * This function sets the time to 00:00:00.000 while keeping the same date,
  * effectively removing all time components below the day level.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object truncated to the start of the day, or Invalid Date if input is invalid
  *
  * @example
@@ -2307,8 +2440,8 @@ declare function subYears(date: Date | number, amount: number): Date;
  * const result3 = truncDay(timestamp);
  * // Returns: Date at 00:00:00.000 of current day
  *
- * // End of day
- * const result4 = truncDay(new Date(2024, 5, 15, 23, 59, 59, 999));
+ * // Works with ISO 8601 strings
+ * const result4 = truncDay("2024-06-15T14:30:00");
  * // Returns: June 15, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -2318,12 +2451,12 @@ declare function subYears(date: Date | number, amount: number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Preserves the date across DST transitions
  */
-declare function truncDay(date: Date | number): Date;
+declare function truncDay(date: DateInput): Date;
 
 /**
  * Truncate a date to the start of the hour.
@@ -2331,7 +2464,7 @@ declare function truncDay(date: Date | number): Date;
  * This function sets the minutes, seconds, and milliseconds to 0 while keeping the same date and hour,
  * effectively removing all time components below the hour level.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object truncated to the start of the hour, or Invalid Date if input is invalid
  *
  * @example
@@ -2349,8 +2482,8 @@ declare function truncDay(date: Date | number): Date;
  * const result3 = truncHour(timestamp);
  * // Returns: Date at XX:00:00.000 of current hour
  *
- * // End of hour
- * const result4 = truncHour(new Date(2024, 5, 15, 14, 59, 59, 999));
+ * // Works with ISO 8601 strings
+ * const result4 = truncHour("2024-06-15T14:30:00");
  * // Returns: June 15, 2024 14:00:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -2360,12 +2493,12 @@ declare function truncDay(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Works correctly across all 24 hours of the day
  */
-declare function truncHour(date: Date | number): Date;
+declare function truncHour(date: DateInput): Date;
 
 /**
  * Truncate a date to the millisecond.
@@ -2373,7 +2506,7 @@ declare function truncHour(date: Date | number): Date;
  * This function returns the same date without any truncation since millisecond is the smallest unit
  * supported by JavaScript Date objects. It is provided for API consistency with other truncation functions.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object with the same value, or Invalid Date if input is invalid
  *
  * @example
@@ -2391,9 +2524,9 @@ declare function truncHour(date: Date | number): Date;
  * const result3 = truncMillisecond(timestamp);
  * // Returns: Date with same timestamp value
  *
- * // Unix epoch
- * const result4 = truncMillisecond(new Date(0));
- * // Returns: January 1, 1970 00:00:00.000
+ * // Works with ISO 8601 strings
+ * const result4 = truncMillisecond("2024-06-15T14:30:45.123");
+ * // Returns: June 15, 2024 14:30:45.123 (unchanged)
  *
  * // Invalid inputs return Invalid Date
  * const result5 = truncMillisecond(new Date("invalid"));
@@ -2402,13 +2535,13 @@ declare function truncHour(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Provided for API consistency even though no truncation occurs
  * - Maintains millisecond precision (0-999)
  */
-declare function truncMillisecond(date: Date | number): Date;
+declare function truncMillisecond(date: DateInput): Date;
 
 /**
  * Truncate a date to the start of the minute.
@@ -2416,7 +2549,7 @@ declare function truncMillisecond(date: Date | number): Date;
  * This function sets the seconds and milliseconds to 0 while keeping the same date, hour, and minute,
  * effectively removing all time components below the minute level.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object truncated to the start of the minute, or Invalid Date if input is invalid
  *
  * @example
@@ -2434,8 +2567,8 @@ declare function truncMillisecond(date: Date | number): Date;
  * const result3 = truncMinute(timestamp);
  * // Returns: Date at XX:XX:00.000 of current minute
  *
- * // End of minute
- * const result4 = truncMinute(new Date(2024, 5, 15, 14, 30, 59, 999));
+ * // Works with ISO 8601 strings
+ * const result4 = truncMinute("2024-06-15T14:30:45");
  * // Returns: June 15, 2024 14:30:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -2445,12 +2578,12 @@ declare function truncMillisecond(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Works correctly across all 60 minutes of an hour
  */
-declare function truncMinute(date: Date | number): Date;
+declare function truncMinute(date: DateInput): Date;
 
 /**
  * Truncate a date to the start of the month.
@@ -2458,7 +2591,7 @@ declare function truncMinute(date: Date | number): Date;
  * This function sets the date to the 1st day of the month at 00:00:00.000,
  * effectively removing all time components and resetting the day to 1.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object truncated to the start of the month, or Invalid Date if input is invalid
  *
  * @example
@@ -2476,8 +2609,8 @@ declare function truncMinute(date: Date | number): Date;
  * const result3 = truncMonth(timestamp);
  * // Returns: Date at 1st day of current month at 00:00:00.000
  *
- * // End of month
- * const result4 = truncMonth(new Date(2024, 5, 30, 23, 59, 59, 999));
+ * // Works with ISO 8601 strings
+ * const result4 = truncMonth("2024-06-15");
  * // Returns: June 1, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -2487,12 +2620,12 @@ declare function truncMinute(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Handles leap years correctly (February in leap years)
  */
-declare function truncMonth(date: Date | number): Date;
+declare function truncMonth(date: DateInput): Date;
 
 /**
  * Truncate a date to the start of the second.
@@ -2500,7 +2633,7 @@ declare function truncMonth(date: Date | number): Date;
  * This function sets the milliseconds to 0 while keeping the same date, hour, minute, and second,
  * effectively removing all time components below the second level.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object truncated to the start of the second, or Invalid Date if input is invalid
  *
  * @example
@@ -2518,8 +2651,8 @@ declare function truncMonth(date: Date | number): Date;
  * const result3 = truncSecond(timestamp);
  * // Returns: Date at XX:XX:XX.000 of current second
  *
- * // End of second
- * const result4 = truncSecond(new Date(2024, 5, 15, 14, 30, 45, 999));
+ * // Works with ISO 8601 strings
+ * const result4 = truncSecond("2024-06-15T14:30:45.999");
  * // Returns: June 15, 2024 14:30:45.000
  *
  * // Invalid inputs return Invalid Date
@@ -2529,12 +2662,12 @@ declare function truncMonth(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Works correctly across all 60 seconds of a minute
  */
-declare function truncSecond(date: Date | number): Date;
+declare function truncSecond(date: DateInput): Date;
 
 /**
  * Truncate a date to the start of the year.
@@ -2542,7 +2675,7 @@ declare function truncSecond(date: Date | number): Date;
  * This function sets the date to January 1st at 00:00:00.000 of the same year,
  * effectively removing all time components and resetting the month and day to January 1st.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object truncated to the start of the year, or Invalid Date if input is invalid
  *
  * @example
@@ -2560,8 +2693,8 @@ declare function truncSecond(date: Date | number): Date;
  * const result3 = truncYear(timestamp);
  * // Returns: Date at January 1st of current year at 00:00:00.000
  *
- * // End of year
- * const result4 = truncYear(new Date(2024, 11, 31, 23, 59, 59, 999));
+ * // Works with ISO 8601 strings
+ * const result4 = truncYear("2024-06-15");
  * // Returns: January 1, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -2571,12 +2704,12 @@ declare function truncSecond(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Handles leap years correctly
  */
-declare function truncYear(date: Date | number): Date;
+declare function truncYear(date: DateInput): Date;
 
 /**
  * Calculate the difference in calendar days between two dates.
@@ -2585,8 +2718,8 @@ declare function truncYear(date: Date | number): Date;
  * comparing them at midnight. Time components are ignored to ensure accurate
  * calendar day counting.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in calendar days (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -2605,6 +2738,10 @@ declare function truncYear(date: Date | number): Date;
  * const result = diffDays(timestamp1, timestamp2);
  * // Returns: 5
  *
+ * // Works with ISO 8601 strings
+ * const result = diffDays("2024-06-20", "2024-06-15");
+ * // Returns: 5
+ *
  * // Negative result when first date is earlier
  * const result = diffDays(new Date(2024, 5, 10), new Date(2024, 5, 15));
  * // Returns: -5
@@ -2617,12 +2754,12 @@ declare function truncYear(date: Date | number): Date;
  * @remarks
  * - Compares dates at midnight for accurate calendar day counting
  * - Time components (hours, minutes, seconds, milliseconds) are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles leap years, month boundaries, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffDays(dateLeft: Date | number, dateRight: Date | number): number;
+declare function diffDays(dateLeft: DateInput, dateRight: DateInput): number;
 
 /**
  * Calculate the difference in complete hours between two dates.
@@ -2631,8 +2768,8 @@ declare function diffDays(dateLeft: Date | number, dateRight: Date | number): nu
  * comparing them at the start of each hour. Minutes, seconds, and milliseconds
  * are ignored to ensure accurate hour counting.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in complete hours (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -2651,6 +2788,10 @@ declare function diffDays(dateLeft: Date | number, dateRight: Date | number): nu
  * const result = diffHours(timestamp1, timestamp2);
  * // Returns: 2
  *
+ * // Works with ISO 8601 strings
+ * const result = diffHours("2024-06-15T16:00:00", "2024-06-15T14:00:00");
+ * // Returns: 2
+ *
  * // Negative result when first date is earlier
  * const result = diffHours(new Date(2024, 5, 15, 10, 30), new Date(2024, 5, 15, 14, 30));
  * // Returns: -4
@@ -2663,12 +2804,12 @@ declare function diffDays(dateLeft: Date | number, dateRight: Date | number): nu
  * @remarks
  * - Compares dates at the start of each hour for accurate hour counting
  * - Minutes, seconds, and milliseconds are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles day, month, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffHours(dateLeft: Date | number, dateRight: Date | number): number;
+declare function diffHours(dateLeft: DateInput, dateRight: DateInput): number;
 
 /**
  * Calculate the difference in milliseconds between two dates.
@@ -2677,8 +2818,8 @@ declare function diffHours(dateLeft: Date | number, dateRight: Date | number): n
  * This is the most precise time difference calculation available, equivalent to
  * subtracting the results of getTime().
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in milliseconds (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -2697,6 +2838,10 @@ declare function diffHours(dateLeft: Date | number, dateRight: Date | number): n
  * const result = diffMilliseconds(timestamp1, timestamp2);
  * // Returns: 1000
  *
+ * // Works with ISO 8601 strings
+ * const result = diffMilliseconds("2024-06-15T14:30:46.000Z", "2024-06-15T14:30:45.000Z");
+ * // Returns: 1000
+ *
  * // Negative result when first date is earlier
  * const result = diffMilliseconds(new Date(2024, 5, 15, 14, 30, 45, 100), new Date(2024, 5, 15, 14, 30, 45, 500));
  * // Returns: -400
@@ -2709,12 +2854,12 @@ declare function diffHours(dateLeft: Date | number, dateRight: Date | number): n
  * @remarks
  * - Returns exact millisecond difference (no rounding or truncation)
  * - Equivalent to: dateLeft.getTime() - dateRight.getTime()
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Most precise time difference function in the library
  * - Useful for performance measurements and precise time calculations
  */
-declare function diffMilliseconds(dateLeft: Date | number, dateRight: Date | number): number;
+declare function diffMilliseconds(dateLeft: DateInput, dateRight: DateInput): number;
 
 /**
  * Calculate the difference in complete minutes between two dates.
@@ -2723,8 +2868,8 @@ declare function diffMilliseconds(dateLeft: Date | number, dateRight: Date | num
  * comparing them at the start of each minute. Seconds and milliseconds are
  * ignored to ensure accurate minute counting.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in complete minutes (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -2743,6 +2888,10 @@ declare function diffMilliseconds(dateLeft: Date | number, dateRight: Date | num
  * const result = diffMinutes(timestamp1, timestamp2);
  * // Returns: 15
  *
+ * // Works with ISO 8601 strings
+ * const result = diffMinutes("2024-06-15T15:00:00", "2024-06-15T14:45:00");
+ * // Returns: 15
+ *
  * // Negative result when first date is earlier
  * const result = diffMinutes(new Date(2024, 5, 15, 14, 25), new Date(2024, 5, 15, 14, 30));
  * // Returns: -5
@@ -2755,12 +2904,12 @@ declare function diffMilliseconds(dateLeft: Date | number, dateRight: Date | num
  * @remarks
  * - Compares dates at the start of each minute for accurate minute counting
  * - Seconds and milliseconds are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles hour, day, month, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffMinutes(dateLeft: Date | number, dateRight: Date | number): number;
+declare function diffMinutes(dateLeft: DateInput, dateRight: DateInput): number;
 
 /**
  * Calculate the difference in calendar months between two dates.
@@ -2768,8 +2917,8 @@ declare function diffMinutes(dateLeft: Date | number, dateRight: Date | number):
  * This function calculates the number of full calendar months between two dates.
  * Only year and month values are considered; days and time components are ignored.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in calendar months (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -2788,6 +2937,10 @@ declare function diffMinutes(dateLeft: Date | number, dateRight: Date | number):
  * const result = diffMonths(timestamp1, timestamp2);
  * // Returns: 12
  *
+ * // Works with ISO 8601 strings
+ * const result = diffMonths("2025-03-01", "2024-03-31");
+ * // Returns: 12
+ *
  * // Negative result when first date is earlier
  * const result = diffMonths(new Date(2024, 2, 15), new Date(2024, 5, 15));
  * // Returns: -3
@@ -2800,12 +2953,12 @@ declare function diffMinutes(dateLeft: Date | number, dateRight: Date | number):
  * @remarks
  * - Considers only year and month values for calculation
  * - Days and time components (hours, minutes, seconds, milliseconds) are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles year boundaries correctly
  * - Calculation: (yearDiff * 12) + monthDiff
  */
-declare function diffMonths(dateLeft: Date | number, dateRight: Date | number): number;
+declare function diffMonths(dateLeft: DateInput, dateRight: DateInput): number;
 
 /**
  * Calculate the difference in complete seconds between two dates.
@@ -2814,8 +2967,8 @@ declare function diffMonths(dateLeft: Date | number, dateRight: Date | number): 
  * comparing them at the start of each second. Milliseconds are ignored to
  * ensure accurate second counting.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in complete seconds (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -2834,6 +2987,10 @@ declare function diffMonths(dateLeft: Date | number, dateRight: Date | number): 
  * const result = diffSeconds(timestamp1, timestamp2);
  * // Returns: 30
  *
+ * // Works with ISO 8601 strings
+ * const result = diffSeconds("2024-06-15T14:31:00", "2024-06-15T14:30:30");
+ * // Returns: 30
+ *
  * // Negative result when first date is earlier
  * const result = diffSeconds(new Date(2024, 5, 15, 14, 30, 40), new Date(2024, 5, 15, 14, 30, 45));
  * // Returns: -5
@@ -2846,12 +3003,12 @@ declare function diffMonths(dateLeft: Date | number, dateRight: Date | number): 
  * @remarks
  * - Compares dates at the start of each second for accurate second counting
  * - Milliseconds are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles minute, hour, day, month, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffSeconds(dateLeft: Date | number, dateRight: Date | number): number;
+declare function diffSeconds(dateLeft: DateInput, dateRight: DateInput): number;
 
 /**
  * Calculate the difference in calendar years between two dates.
@@ -2859,8 +3016,8 @@ declare function diffSeconds(dateLeft: Date | number, dateRight: Date | number):
  * This function calculates the number of full calendar years between two dates.
  * Only year values are considered; months, days, and time components are ignored.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in calendar years (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -2879,6 +3036,10 @@ declare function diffSeconds(dateLeft: Date | number, dateRight: Date | number):
  * const result = diffYears(timestamp1, timestamp2);
  * // Returns: 5
  *
+ * // Works with ISO 8601 strings
+ * const result = diffYears("2025-01-01", "2020-01-01");
+ * // Returns: 5
+ *
  * // Negative result when first date is earlier
  * const result = diffYears(new Date(2020, 5, 15), new Date(2024, 5, 15));
  * // Returns: -4
@@ -2891,12 +3052,12 @@ declare function diffSeconds(dateLeft: Date | number, dateRight: Date | number):
  * @remarks
  * - Considers only year values for calculation
  * - Months, days, and time components (hours, minutes, seconds, milliseconds) are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles century and millennium boundaries correctly
  * - Calculation: dateLeft.getFullYear() - dateRight.getFullYear()
  */
-declare function diffYears(dateLeft: Date | number, dateRight: Date | number): number;
+declare function diffYears(dateLeft: DateInput, dateRight: DateInput): number;
 
 /**
  * Get the end of the month for the given date.
@@ -2906,7 +3067,7 @@ declare function diffYears(dateLeft: Date | number, dateRight: Date | number): n
  * of that month and all time components are set to their maximum values. Automatically handles
  * different month lengths and leap years.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to the last day of the month at 23:59:59.999, or Invalid Date if input is invalid
  *
  * @example
@@ -2924,8 +3085,8 @@ declare function diffYears(dateLeft: Date | number, dateRight: Date | number): n
  * const result3 = endOfMonth(timestamp);
  * // Returns: Last day of current month at 23:59:59.999
  *
- * // Handles leap year February
- * const result4 = endOfMonth(new Date(2024, 1, 1));
+ * // Works with ISO 8601 strings
+ * const result4 = endOfMonth("2024-02-15");
  * // Returns: February 29, 2024 23:59:59.999 (leap year)
  *
  * // Invalid inputs return Invalid Date
@@ -2935,13 +3096,13 @@ declare function diffYears(dateLeft: Date | number, dateRight: Date | number): n
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Automatically handles different month lengths (28, 29, 30, or 31 days)
  * - Correctly handles leap years for February
  */
-declare function endOfMonth(date: Date | number): Date;
+declare function endOfMonth(date: DateInput): Date;
 
 /**
  * Get the start of the month for the given date.
@@ -2950,7 +3111,7 @@ declare function endOfMonth(date: Date | number): Date;
  * for the given date. The year and month remain the same while the day is set to 1 and
  * all time components are reset to zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to the first day of the month at 00:00:00.000, or Invalid Date if input is invalid
  *
  * @example
@@ -2968,9 +3129,9 @@ declare function endOfMonth(date: Date | number): Date;
  * const result3 = startOfMonth(timestamp);
  * // Returns: First day of current month at 00:00:00.000
  *
- * // Handles leap year February
- * const result4 = startOfMonth(new Date(2024, 1, 29));
- * // Returns: February 1, 2024 00:00:00.000
+ * // Works with ISO 8601 strings
+ * const result4 = startOfMonth("2024-06-15");
+ * // Returns: June 1, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
  * const result5 = startOfMonth(NaN);
@@ -2979,12 +3140,12 @@ declare function endOfMonth(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Sets day to 1 and resets hours, minutes, seconds, and milliseconds to 0
  */
-declare function startOfMonth(date: Date | number): Date;
+declare function startOfMonth(date: DateInput): Date;
 
 /**
  * Get the end of the year for the given date.
@@ -2993,7 +3154,7 @@ declare function startOfMonth(date: Date | number): Date;
  * for the given date. The year remains the same while the month is set to December (11), the day
  * to 31, and all time components are set to their maximum values.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to December 31st at 23:59:59.999, or Invalid Date if input is invalid
  *
  * @example
@@ -3011,8 +3172,8 @@ declare function startOfMonth(date: Date | number): Date;
  * const result3 = endOfYear(timestamp);
  * // Returns: December 31st of current year at 23:59:59.999
  *
- * // Works regardless of leap year
- * const result4 = endOfYear(new Date(2024, 1, 29));
+ * // Works with ISO 8601 strings
+ * const result4 = endOfYear("2024-06-15");
  * // Returns: December 31, 2024 23:59:59.999
  *
  * // Invalid inputs return Invalid Date
@@ -3022,12 +3183,12 @@ declare function startOfMonth(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Sets month to 11 (December), day to 31, hours to 23, minutes to 59, seconds to 59, and milliseconds to 999
  */
-declare function endOfYear(date: Date | number): Date;
+declare function endOfYear(date: DateInput): Date;
 
 /**
  * Get the start of the year for the given date.
@@ -3036,7 +3197,7 @@ declare function endOfYear(date: Date | number): Date;
  * for the given date. The year remains the same while the month is set to January (0), the day
  * to 1, and all time components are reset to zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to January 1st at 00:00:00.000, or Invalid Date if input is invalid
  *
  * @example
@@ -3054,8 +3215,8 @@ declare function endOfYear(date: Date | number): Date;
  * const result3 = startOfYear(timestamp);
  * // Returns: January 1st of current year at 00:00:00.000
  *
- * // Handles leap years
- * const result4 = startOfYear(new Date(2024, 1, 29));
+ * // Works with ISO 8601 strings
+ * const result4 = startOfYear("2024-06-15");
  * // Returns: January 1, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
@@ -3065,12 +3226,12 @@ declare function endOfYear(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Sets month to 0 (January), day to 1, and resets hours, minutes, seconds, and milliseconds to 0
  */
-declare function startOfYear(date: Date | number): Date;
+declare function startOfYear(date: DateInput): Date;
 
 /**
  * Get the end of the day for the given date.
@@ -3079,7 +3240,7 @@ declare function startOfYear(date: Date | number): Date;
  * for the given date. The date remains the same while all time components are set to their
  * maximum values.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to 23:59:59.999 of the same date, or Invalid Date if input is invalid
  *
  * @example
@@ -3097,9 +3258,9 @@ declare function startOfYear(date: Date | number): Date;
  * const result3 = endOfDay(timestamp);
  * // Returns: End of today (23:59:59.999)
  *
- * // Handles month boundaries
- * const result4 = endOfDay(new Date(2024, 5, 30, 9, 15));
- * // Returns: June 30, 2024 23:59:59.999
+ * // Works with ISO 8601 strings
+ * const result4 = endOfDay("2024-06-15");
+ * // Returns: June 15, 2024 23:59:59.999
  *
  * // Invalid inputs return Invalid Date
  * const result5 = endOfDay(new Date(NaN));
@@ -3108,12 +3269,12 @@ declare function startOfYear(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Sets hours to 23, minutes to 59, seconds to 59, and milliseconds to 999
  */
-declare function endOfDay(date: Date | number): Date;
+declare function endOfDay(date: DateInput): Date;
 
 /**
  * Get the start of the day for the given date.
@@ -3121,7 +3282,7 @@ declare function endOfDay(date: Date | number): Date;
  * This function returns a new Date object set to the beginning of the day (00:00:00.000)
  * for the given date. The date remains the same while all time components are reset to zero.
  *
- * @param date - The base date as a Date object or timestamp (number)
+ * @param date - The base date as a Date object, timestamp (number), or ISO 8601 string
  * @returns A new Date object set to 00:00:00.000 of the same date, or Invalid Date if input is invalid
  *
  * @example
@@ -3139,9 +3300,9 @@ declare function endOfDay(date: Date | number): Date;
  * const result3 = startOfDay(timestamp);
  * // Returns: Start of today (00:00:00.000)
  *
- * // Handles month boundaries
- * const result4 = startOfDay(new Date(2024, 5, 30, 15, 30));
- * // Returns: June 30, 2024 00:00:00.000
+ * // Works with ISO 8601 strings
+ * const result4 = startOfDay("2024-06-15T14:30:00");
+ * // Returns: June 15, 2024 00:00:00.000
  *
  * // Invalid inputs return Invalid Date
  * const result5 = startOfDay(new Date("invalid"));
@@ -3150,12 +3311,12 @@ declare function endOfDay(date: Date | number): Date;
  *
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
- * - Accepts both Date objects and numeric timestamps
- * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
+ * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  * - Preserves the date while resetting hours, minutes, seconds, and milliseconds to 0
  */
-declare function startOfDay(date: Date | number): Date;
+declare function startOfDay(date: DateInput): Date;
 
 /**
  * Check if two dates are in the same calendar year.
@@ -3163,8 +3324,8 @@ declare function startOfDay(date: Date | number): Date;
  * This function compares two dates and returns true if they fall within the same calendar year,
  * regardless of month, day, or time components.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same year, false otherwise or if either date is invalid
  *
  * @example
@@ -3196,12 +3357,12 @@ declare function startOfDay(date: Date | number): Date;
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores month, day, and time components in the comparison
  * - Uses diffYears internally to determine if the year difference is zero
  * - Handles leap years, BC dates, and century boundaries correctly
  */
-declare function isSameYear(dateLeft: Date | number, dateRight: Date | number): boolean;
+declare function isSameYear(dateLeft: DateInput, dateRight: DateInput): boolean;
 
 /**
  * Check if two dates are in the same calendar month and year.
@@ -3209,8 +3370,8 @@ declare function isSameYear(dateLeft: Date | number, dateRight: Date | number): 
  * This function compares two dates and returns true if they fall within the same calendar month
  * and year, regardless of day or time components.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same month and year, false otherwise or if either date is invalid
  *
  * @example
@@ -3242,13 +3403,13 @@ declare function isSameYear(dateLeft: Date | number, dateRight: Date | number): 
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores day and time components in the comparison
  * - Requires both month AND year to match (June 2024 ≠ June 2023)
  * - Uses diffMonths internally to determine if the month difference is zero
  * - Handles month boundaries and leap years correctly
  */
-declare function isSameMonth(dateLeft: Date | number, dateRight: Date | number): boolean;
+declare function isSameMonth(dateLeft: DateInput, dateRight: DateInput): boolean;
 
 /**
  * Check if two dates are on the same calendar day.
@@ -3256,8 +3417,8 @@ declare function isSameMonth(dateLeft: Date | number, dateRight: Date | number):
  * This function compares two dates and returns true if they fall on the same calendar day,
  * regardless of time components.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are on the same day, false otherwise or if either date is invalid
  *
  * @example
@@ -3296,13 +3457,13 @@ declare function isSameMonth(dateLeft: Date | number, dateRight: Date | number):
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores hour, minute, second, and millisecond components in the comparison
  * - Compares based on local timezone calendar day
  * - Uses diffDays internally to determine if the day difference is zero
  * - Handles DST transitions and leap years correctly
  */
-declare function isSameDay(dateLeft: Date | number, dateRight: Date | number): boolean;
+declare function isSameDay(dateLeft: DateInput, dateRight: DateInput): boolean;
 
 /**
  * Check if two dates are in the same hour.
@@ -3310,8 +3471,8 @@ declare function isSameDay(dateLeft: Date | number, dateRight: Date | number): b
  * This function compares two dates and returns true if they fall within the same hour,
  * regardless of minutes, seconds, or milliseconds.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same hour, false otherwise or if either date is invalid
  *
  * @example
@@ -3352,13 +3513,13 @@ declare function isSameDay(dateLeft: Date | number, dateRight: Date | number): b
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores minute, second, and millisecond components in the comparison
  * - Requires year, month, day, AND hour to match
  * - Uses diffHours internally to determine if the hour difference is zero
  * - Handles DST transitions correctly
  */
-declare function isSameHour(dateLeft: Date | number, dateRight: Date | number): boolean;
+declare function isSameHour(dateLeft: DateInput, dateRight: DateInput): boolean;
 
 /**
  * Check if two dates are in the same minute.
@@ -3366,8 +3527,8 @@ declare function isSameHour(dateLeft: Date | number, dateRight: Date | number): 
  * This function compares two dates and returns true if they fall within the same minute,
  * regardless of seconds or milliseconds.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same minute, false otherwise or if either date is invalid
  *
  * @example
@@ -3408,13 +3569,13 @@ declare function isSameHour(dateLeft: Date | number, dateRight: Date | number): 
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores second and millisecond components in the comparison
  * - Requires year, month, day, hour, AND minute to match
  * - Uses diffMinutes internally to determine if the minute difference is zero
  * - Handles DST transitions correctly
  */
-declare function isSameMinute(dateLeft: Date | number, dateRight: Date | number): boolean;
+declare function isSameMinute(dateLeft: DateInput, dateRight: DateInput): boolean;
 
 /**
  * Check if two dates are in the same second.
@@ -3422,8 +3583,8 @@ declare function isSameMinute(dateLeft: Date | number, dateRight: Date | number)
  * This function compares two dates and returns true if they fall within the same second,
  * regardless of milliseconds.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same second, false otherwise or if either date is invalid
  *
  * @example
@@ -3464,21 +3625,21 @@ declare function isSameMinute(dateLeft: Date | number, dateRight: Date | number)
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores millisecond component in the comparison
  * - Requires year, month, day, hour, minute, AND second to match
  * - Uses diffSeconds internally to determine if the second difference is zero
  * - Handles DST transitions correctly
  */
-declare function isSameSecond(dateLeft: Date | number, dateRight: Date | number): boolean;
+declare function isSameSecond(dateLeft: DateInput, dateRight: DateInput): boolean;
 
 /**
  * Return the earliest (minimum) date from the given dates.
  *
- * Takes one or more Date objects or timestamps and returns the earliest one.
+ * Takes one or more Date objects, timestamps, or ISO 8601 strings and returns the earliest one.
  * If any date is invalid, returns an Invalid Date.
  *
- * @param dates - One or more dates or timestamps to compare
+ * @param dates - One or more dates, timestamps, or ISO 8601 strings to compare
  * @returns The earliest date, or Invalid Date if any input is invalid
  *
  * @example
@@ -3494,23 +3655,23 @@ declare function isSameSecond(dateLeft: Date | number, dateRight: Date | number)
  *
  * const mixed = min(new Date(2024, 5, 15), 1718409600000); // mixed Date and timestamp
  *
- * const singleDate = new Date(2024, 5, 15);
- * const result = min(singleDate); // June 15, 2024
+ * // Works with ISO 8601 strings
+ * const minString = min("2024-06-15", "2024-06-10", "2024-06-20"); // June 10, 2024
  *
  * const invalidDate = new Date('invalid');
  * const validDate = new Date(2024, 5, 15);
  * const minResult = min(invalidDate, validDate); // Invalid Date
  * ```
  */
-declare function min(...dates: (Date | number)[]): Date;
+declare function min(...dates: DateInput[]): Date;
 
 /**
  * Return the latest (maximum) date from the given dates.
  *
- * Takes one or more Date objects or timestamps and returns the latest one.
+ * Takes one or more Date objects, timestamps, or ISO 8601 strings and returns the latest one.
  * If any date is invalid, returns an Invalid Date.
  *
- * @param dates - One or more dates or timestamps to compare
+ * @param dates - One or more dates, timestamps, or ISO 8601 strings to compare
  * @returns The latest date, or Invalid Date if any input is invalid
  *
  * @example
@@ -3526,15 +3687,15 @@ declare function min(...dates: (Date | number)[]): Date;
  *
  * const mixed = max(new Date(2024, 5, 15), 1718409600000); // mixed Date and timestamp
  *
- * const singleDate = new Date(2024, 5, 15);
- * const result = max(singleDate); // June 15, 2024
+ * // Works with ISO 8601 strings
+ * const maxString = max("2024-06-15", "2024-06-10", "2024-06-20"); // June 20, 2024
  *
  * const invalidDate = new Date('invalid');
  * const validDate = new Date(2024, 5, 15);
  * const maxResult = max(invalidDate, validDate); // Invalid Date
  * ```
  */
-declare function max(...dates: (Date | number)[]): Date;
+declare function max(...dates: DateInput[]): Date;
 
 /**
  * Get the current date and time.
@@ -3568,9 +3729,9 @@ declare function now(): Date;
  * If the date is after the maximum, returns the maximum.
  * If any date is invalid, returns an Invalid Date.
  *
- * @param date - The date to clamp
- * @param minDate - The minimum allowed date
- * @param maxDate - The maximum allowed date
+ * @param date - The date to clamp (Date object, timestamp, or ISO 8601 string)
+ * @param minDate - The minimum allowed date (Date object, timestamp, or ISO 8601 string)
+ * @param maxDate - The maximum allowed date (Date object, timestamp, or ISO 8601 string)
  * @returns The clamped date, or Invalid Date if any input is invalid
  *
  * @example
@@ -3593,6 +3754,9 @@ declare function now(): Date;
  * const maxTimestamp = timestamp + 1000;
  * const clampedTimestamp = clamp(timestamp, minTimestamp, maxTimestamp);
  *
+ * // Works with ISO 8601 strings
+ * const clampedString = clamp("2024-06-05", "2024-06-10", "2024-06-20"); // June 10, 2024
+ *
  * // Returns Invalid Date if any input is invalid
  * const invalidDate = new Date('invalid');
  * const validMin = new Date(2024, 5, 10);
@@ -3600,13 +3764,13 @@ declare function now(): Date;
  * const result = clamp(invalidDate, validMin, validMax); // Invalid Date
  * ```
  */
-declare function clamp(date: Date | number, minDate: Date | number, maxDate: Date | number): Date;
+declare function clamp(date: DateInput, minDate: DateInput, maxDate: DateInput): Date;
 
 /**
- * Compare two Date objects or timestamps chronologically with configurable sort order.
+ * Compare two Date objects, timestamps, or ISO 8601 strings chronologically with configurable sort order.
  *
- * @param date1 - The first Date object or timestamp to compare
- * @param date2 - The second Date object or timestamp to compare
+ * @param date1 - The first Date object, timestamp, or ISO 8601 string to compare
+ * @param date2 - The second Date object, timestamp, or ISO 8601 string to compare
  * @param options - Comparison options with default { order: "ASC" }
  * @returns -1 if date1 < date2, 1 if date1 > date2, 0 if equal (adjusted for order)
  *          Returns NaN if inputs are invalid
@@ -3626,6 +3790,11 @@ declare function clamp(date: Date | number, minDate: Date | number, maxDate: Dat
  * const timestamp2 = new Date('2024-01-02').getTime();
  * compare(timestamp1, timestamp2); // -1 (ascending)
  * compare(timestamp1, timestamp2, { order: 'DESC' }); // 1 (descending)
+ *
+ * @example
+ * // Compare ISO 8601 strings
+ * compare("2024-01-01", "2024-01-02"); // -1 (ascending)
+ * compare("2024-01-02", "2024-01-01", { order: 'DESC' }); // -1 (descending)
  *
  * @example
  * // Compare mixed Date and timestamp inputs
@@ -3651,7 +3820,7 @@ declare function clamp(date: Date | number, minDate: Date | number, maxDate: Dat
  * // compare(date1, date2, { order: 'asc' });  // treated as 'ASC'
  * // compare(date1, date2, { order: 'xyz' });  // treated as 'ASC' (default)
  */
-declare function compare(date1: Date | number, date2: Date | number, options?: CompareOptions): number;
+declare function compare(date1: DateInput, date2: DateInput, options?: CompareOptions): number;
 
 /**
  * Date constants for the minimum and maximum representable dates in JavaScript.
@@ -3672,4 +3841,4 @@ declare const MIN_DATE: Date;
  */
 declare const MAX_DATE: Date;
 
-export { BetweenOption, CompareOptions, ComparisonOptions, Interval, Locale, MAX_DATE, MIN_DATE, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isDate, isEqual, isExists, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export { BetweenOption, CompareOptions, ComparisonOptions, DateInput, Interval, Locale, MAX_DATE, MIN_DATE, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isDate, isEqual, isExists, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };

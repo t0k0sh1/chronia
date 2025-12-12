@@ -109,12 +109,18 @@ describe("setTime", () => {
   it.each([
     { name: "null", input: null },
     { name: "undefined", input: undefined },
-    { name: "string", input: "2024-01-01" },
+    { name: "invalid string", input: "not-a-date" },
     { name: "boolean", input: true },
     { name: "object", input: {} },
     { name: "array", input: [] },
   ])("returns Invalid Date for $name as first argument", ({ input }) => {
     const result = setTime(input as any, 1704067200000);
     expect(isNaN(result.getTime())).toBe(true);
+  });
+
+  it("accepts ISO 8601 string as first argument", () => {
+    const result = setTime("2024-01-01", 1704153600000);
+    expect(isNaN(result.getTime())).toBe(false);
+    expect(result.getTime()).toBe(1704153600000);
   });
 });

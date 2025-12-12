@@ -7,14 +7,14 @@ The `startOfDay` function returns a new Date object set to the beginning of the 
 ## Signature
 
 ```typescript
-function startOfDay(date: Date | number): Date;
+function startOfDay(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                         |
-| --------- | ---------------- | --------------------------------------------------- |
-| `date`    | `Date \| number` | The base date as a Date object or numeric timestamp |
+| Parameter | Type        | Description                                                           |
+| --------- | ----------- | --------------------------------------------------------------------- |
+| `date`    | `DateInput` | The base date as a Date object, numeric timestamp, or ISO 8601 string |
 
 ## Return Value
 

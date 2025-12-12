@@ -7,14 +7,14 @@ The `truncMonth` function truncates a given date to the start of the month, sett
 ## Signature
 
 ```typescript
-function truncMonth(date: Date | number): Date;
+function truncMonth(date: DateInput): Date;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                              |
-| --------- | ---------------- | ------------------------------------------------------------------------ |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to truncate to the start of the month |
+| Parameter | Type        | Description                                                                                |
+| --------- | ----------- | ------------------------------------------------------------------------------------------ |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to truncate to the start of the month |
 
 ## Return Value
 

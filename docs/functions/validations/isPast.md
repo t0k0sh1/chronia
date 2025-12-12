@@ -7,14 +7,14 @@ The `isPast` function checks whether a given date is in the past relative to the
 ## Signature
 
 ```typescript
-function isPast(date: Date | number): boolean;
+function isPast(date: DateInput): boolean;
 ```
 
 ## Parameters
 
-| Parameter | Type             | Description                                                          |
-| --------- | ---------------- | -------------------------------------------------------------------- |
-| `date`    | `Date \| number` | A Date object or numeric timestamp to check against the current time |
+| Parameter | Type        | Description                                                                            |
+| --------- | ----------- | -------------------------------------------------------------------------------------- |
+| `date`    | `DateInput` | A Date object, numeric timestamp, or ISO 8601 string to check against the current time |
 
 ## Return Value
 

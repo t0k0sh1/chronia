@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { diffMonths } from "../diffMonths";
 
 /**
@@ -6,8 +7,8 @@ import { diffMonths } from "../diffMonths";
  * This function compares two dates and returns true if they fall within the same calendar month
  * and year, regardless of day or time components.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same month and year, false otherwise or if either date is invalid
  *
  * @example
@@ -39,12 +40,12 @@ import { diffMonths } from "../diffMonths";
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores day and time components in the comparison
  * - Requires both month AND year to match (June 2024 ≠ June 2023)
  * - Uses diffMonths internally to determine if the month difference is zero
  * - Handles month boundaries and leap years correctly
  */
-export function isSameMonth(dateLeft: Date | number, dateRight: Date | number): boolean {
+export function isSameMonth(dateLeft: DateInput, dateRight: DateInput): boolean {
   return diffMonths(dateLeft, dateRight) === 0;
 }

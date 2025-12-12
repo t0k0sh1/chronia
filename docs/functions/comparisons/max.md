@@ -7,14 +7,14 @@ The `max` function returns the latest (maximum) date from a given set of dates o
 ## Signature
 
 ```typescript
-function max(...dates: (Date | number)[]): Date;
+function max(...dates: DateInput[]): Date;
 ```
 
 ## Parameters
 
-| Parameter  | Type                 | Description                                               |
-| ---------- | -------------------- | --------------------------------------------------------- |
-| `...dates` | `(Date \| number)[]` | One or more Date objects or numeric timestamps to compare |
+| Parameter  | Type          | Description                                                                  |
+| ---------- | ------------- | ---------------------------------------------------------------------------- |
+| `...dates` | `DateInput[]` | One or more Date objects, numeric timestamps, or ISO 8601 strings to compare |
 
 ## Return Value
 

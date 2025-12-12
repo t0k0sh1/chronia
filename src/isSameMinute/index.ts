@@ -1,3 +1,4 @@
+import type { DateInput } from "../types";
 import { diffMinutes } from "../diffMinutes";
 
 /**
@@ -6,8 +7,8 @@ import { diffMinutes } from "../diffMinutes";
  * This function compares two dates and returns true if they fall within the same minute,
  * regardless of seconds or milliseconds.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns True if both dates are in the same minute, false otherwise or if either date is invalid
  *
  * @example
@@ -48,12 +49,12 @@ import { diffMinutes } from "../diffMinutes";
  * @remarks
  * - Validates arguments before processing (consistent with library patterns)
  * - Returns false for any invalid input (Invalid Date, NaN, Infinity, -Infinity)
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Ignores second and millisecond components in the comparison
  * - Requires year, month, day, hour, AND minute to match
  * - Uses diffMinutes internally to determine if the minute difference is zero
  * - Handles DST transitions correctly
  */
-export function isSameMinute(dateLeft: Date | number, dateRight: Date | number): boolean {
+export function isSameMinute(dateLeft: DateInput, dateRight: DateInput): boolean {
   return diffMinutes(dateLeft, dateRight) === 0;
 }

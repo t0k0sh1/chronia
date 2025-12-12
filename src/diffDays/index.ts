@@ -1,4 +1,6 @@
-import { isValidDateOrNumber } from "../_lib/validators";
+import type { DateInput } from "../types";
+import { isValidDateInput } from "../_lib/validators";
+import { toDate } from "../_lib/toDate";
 
 /**
  * Calculate the difference in calendar days between two dates.
@@ -7,8 +9,8 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * comparing them at midnight. Time components are ignored to ensure accurate
  * calendar day counting.
  *
- * @param dateLeft - The first date as a Date object or timestamp (number)
- * @param dateRight - The second date as a Date object or timestamp (number)
+ * @param dateLeft - The first date as a Date object, timestamp (number), or ISO 8601 string
+ * @param dateRight - The second date as a Date object, timestamp (number), or ISO 8601 string
  * @returns The difference in calendar days (negative if dateLeft is before dateRight), or NaN if any input is invalid
  *
  * @example
@@ -27,6 +29,10 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * const result = diffDays(timestamp1, timestamp2);
  * // Returns: 5
  *
+ * // Works with ISO 8601 strings
+ * const result = diffDays("2024-06-20", "2024-06-15");
+ * // Returns: 5
+ *
  * // Negative result when first date is earlier
  * const result = diffDays(new Date(2024, 5, 10), new Date(2024, 5, 15));
  * // Returns: -5
@@ -39,18 +45,18 @@ import { isValidDateOrNumber } from "../_lib/validators";
  * @remarks
  * - Compares dates at midnight for accurate calendar day counting
  * - Time components (hours, minutes, seconds, milliseconds) are ignored
- * - Accepts both Date objects and numeric timestamps
+ * - Accepts Date objects, numeric timestamps, and ISO 8601 strings
  * - Returns NaN for: Invalid Date, NaN, Infinity, -Infinity
  * - Handles leap years, month boundaries, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-export function diffDays(dateLeft: Date | number, dateRight: Date | number): number {
+export function diffDays(dateLeft: DateInput, dateRight: DateInput): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
   // This differs from boolean functions (return false) and comparison functions (throw errors)
-  if (!isValidDateOrNumber(dateLeft) || !isValidDateOrNumber(dateRight)) return NaN;
+  if (!isValidDateInput(dateLeft) || !isValidDateInput(dateRight)) return NaN;
 
-  const dtLeft = new Date(dateLeft);
-  const dtRight = new Date(dateRight);
+  const dtLeft = toDate(dateLeft);
+  const dtRight = toDate(dateRight);
   // Create dates at midnight for calendar day comparison
   const leftMidnight = new Date(
     dtLeft.getFullYear(),
