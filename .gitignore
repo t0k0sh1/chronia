@@ -150,3 +150,6 @@ site/
 
 # Temporary files and test scripts
 .tmp/
+
+# Serena cache
+.serena/
