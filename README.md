@@ -30,7 +30,7 @@ It offers a simple, consistent, and functional API that makes working with dates
 
 ## Installation
 
-Chronia requires **Node.js v18 to v24**.
+Chronia requires **Node.js v18 or higher**.
 
 ```bash
 # Using pnpm (recommended)
@@ -317,11 +317,11 @@ Use `isValid()` to distinguish these cases.
 
 ## Node.js Version Support Policy
 
-- Support is limited to **LTS releases (even-numbered major versions)** (e.g., v18, v20, v22, v24, ...).
+- Support includes **LTS releases (even-numbered major versions)** (e.g., v18, v20, v22, v24, ...) and **Current releases** that are actively maintained.
 - For LTS versions that have reached end-of-life (EOL), support will continue **as long as the following conditions are not met**:
   - Updates to dependencies become impossible
   - Changes in the Node.js core make it impossible to maintain compatibility
-- CI tests must include the latest LTS release, and older LTS releases will be tested as far as reasonably possible
+- CI tests include all supported LTS releases and the latest Node.js version (including Current releases when available)
 
 ## Versioning and Backward Compatibility Policy
 

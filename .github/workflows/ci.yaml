@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
 
     strategy:
       matrix:
@@ -31,9 +31,20 @@ jobs:
           cache: "pnpm"
 
       - run: sfw pnpm install
-      - run: pnpm lint
+
+      - name: Lint
+        if: matrix.node-version == '24.x'
+        run: pnpm lint
+
       - run: pnpm run build
-      - run: pnpm vitest run --coverage
+
+      - name: Test
+        if: matrix.node-version != '24.x'
+        run: pnpm vitest run
+
+      - name: Test with coverage
+        if: matrix.node-version == '24.x'
+        run: pnpm vitest run --coverage
 
       - name: Upload coverage reports to Codecov
         if: matrix.node-version == '24.x' && github.actor != 'dependabot[bot]'
