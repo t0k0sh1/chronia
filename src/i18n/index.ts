@@ -21,3 +21,6 @@ export { id } from "./id";
 export { ms } from "./ms";
 export { th } from "./th";
 export { hi } from "./hi";
+export { enGB } from "./en-GB";
+export { enAU } from "./en-AU";
+export { enCA } from "./en-CA";
