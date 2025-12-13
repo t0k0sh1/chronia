@@ -156,4 +156,31 @@ declare const th: Locale;
  */
 declare const hi: Locale;
 
-export { ar, de, enUS, es, fr, hi, id, it, ja, ko, ms, nl, pl, pt, ptBR, ru, sv, th, tr, vi, zhCN, zhHK, zhTW };
+/**
+ * English (United Kingdom) locale data.
+ *
+ * Note: British English uses the same month names, weekday names, and day
+ * periods as American English. Date format differences (DD/MM/YYYY vs
+ * MM/DD/YYYY) are handled at the format pattern level, not in locale data.
+ */
+declare const enGB: Locale;
+
+/**
+ * English (Australia) locale data.
+ *
+ * Note: Australian English uses the same month names, weekday names, and day
+ * periods as American English. Date format differences (DD/MM/YYYY vs
+ * MM/DD/YYYY) are handled at the format pattern level, not in locale data.
+ */
+declare const enAU: Locale;
+
+/**
+ * English (Canada) locale data.
+ *
+ * Note: Canadian English uses the same month names, weekday names, and day
+ * periods as American English. Date format differences are handled at the
+ * format pattern level, not in locale data.
+ */
+declare const enCA: Locale;
+
+export { ar, de, enAU, enCA, enGB, enUS, es, fr, hi, id, it, ja, ko, ms, nl, pl, pt, ptBR, ru, sv, th, tr, vi, zhCN, zhHK, zhTW };
