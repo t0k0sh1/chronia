@@ -1,2 +1,10 @@
 export { enUS } from "./en-US";
 export { ja } from "./ja";
+export { zhCN } from "./zh-CN";
+export { ko } from "./ko";
+export { es } from "./es";
+export { fr } from "./fr";
+export { de } from "./de";
+export { ptBR } from "./pt-BR";
+export { ru } from "./ru";
+export { ar } from "./ar";
