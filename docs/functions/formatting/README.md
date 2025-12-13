@@ -6,9 +6,10 @@ Chronia provides a comprehensive date formatting system that allows you to conve
 
 ## Available Functions
 
-| Function                | Description                                                                                           |
-| ----------------------- | ----------------------------------------------------------------------------------------------------- |
-| [`format`](./format.md) | Converts a Date object to a formatted string using Unicode format tokens with optional locale support |
+| Function                                  | Description                                                                                           |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| [`format`](./format.md)                   | Converts a Date object to a formatted string using Unicode format tokens with optional locale support |
+| [`createFormatter`](./createFormatter.md) | Creates a pre-compiled formatter for efficient repeated formatting with the same pattern              |
 
 ## Common Features
 

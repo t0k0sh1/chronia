@@ -22,11 +22,11 @@ It offers a simple, consistent, and functional API that makes working with dates
 
 - 🚀 **TypeScript-first** – Strict typings with TypeScript 5.9+
 - 📦 **Lightweight** – ESM/CJS dual modules, fully tree-shakable
-- 🌍 **Internationalization** – Built-in locale support (English, Japanese)
+- 🌍 **Internationalization** – Built-in locale support (39 locales)
 - 📅 **Comprehensive Utilities** – Formatting, parsing, arithmetic, comparison, ranges, differences
 - 🎯 **Consistent API** – Unified support for `Date` objects, timestamps, and ISO 8601 strings
 - ✅ **Safe Error Handling** – No exceptions; standardized values (`Invalid Date`, `NaN`, `false`)
-- ⚡ **Well-tested** – 2900+ automated test cases ensure reliability
+- ⚡ **Well-tested** – 3500+ automated test cases ensure reliability
 
 ## Installation
 
@@ -63,7 +63,7 @@ console.log(isAfter(nextWeek, current)); // true
 
 ## Function Categories
 
-Chronia provides 74 functions organized into 10 categories:
+Chronia provides 76 functions organized into 11 categories:
 
 > 📚 **For AI Agents**: Detailed documentation optimized for AI comprehension is available in the [`docs/`](docs/) directory. See [`docs/README.md`](docs/README.md) for a complete guide.
 
@@ -202,14 +202,23 @@ Zero out time components below a specified unit.
 
 ### 8. Formatting (2 functions)
 
-Convert between dates and strings.
+Convert dates to strings.
 
 - `format` - Format a date to a string
+- `createFormatter` - Create a pre-compiled formatter for efficient repeated formatting
+
+📖 _Detailed documentation_: [Formatting](docs/functions/formatting/)
+
+### 9. Parsing (2 functions)
+
+Convert strings to dates.
+
 - `parse` - Parse a string to a date
+- `createParser` - Create a pre-compiled parser for efficient repeated parsing
 
-📖 _Detailed documentation_: [Conversion](docs/functions/formatting/conversion.md)
+📖 _Detailed documentation_: [Parsing](docs/functions/parsing/)
 
-### 9. Utility (4 functions)
+### 10. Utility (4 functions)
 
 Miscellaneous helper functions.
 
@@ -220,7 +229,7 @@ Miscellaneous helper functions.
 
 📖 _Detailed documentation_: [Helpers](docs/functions/utility/helpers.md)
 
-### 10. Constants & Types
+### 11. Constants & Types
 
 Exported constants and TypeScript type definitions.
 
