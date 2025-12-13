@@ -131,13 +131,13 @@ export function isValidNumber(value: unknown): value is number {
 // ========================================
 
 /**
- * Validates if a value is a valid ISO 8601 date string.
+ * Validates if a value is a valid date string parseable by Date.parse().
  *
  * Uses JavaScript's Date.parse() internally. Note that Date.parse() behavior
  * is implementation-dependent and may accept formats beyond ISO 8601.
  * Empty strings and whitespace-only strings are considered invalid.
  *
- * Supported formats:
+ * Recommended formats (ISO 8601):
  * - YYYY-MM-DD (e.g., "2024-01-15")
  * - YYYY-MM-DDTHH:mm:ss (e.g., "2024-01-15T14:30:00")
  * - YYYY-MM-DDTHH:mm:ss.sss (e.g., "2024-01-15T14:30:00.000")
