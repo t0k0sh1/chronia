@@ -8,9 +8,10 @@ Chronia provides a powerful and flexible date parsing system that converts date 
 
 ### String to Date Parsing
 
-| Function              | Description                                                                     |
-| --------------------- | ------------------------------------------------------------------------------- |
-| [`parse`](./parse.md) | Parses a date string into a Date object according to a specified format pattern |
+| Function                            | Description                                                                        |
+| ----------------------------------- | ---------------------------------------------------------------------------------- |
+| [`parse`](./parse.md)               | Parses a date string into a Date object according to a specified format pattern    |
+| [`createParser`](./createParser.md) | Creates a pre-compiled parser for efficient repeated parsing with the same pattern |
 
 ## Common Features
 

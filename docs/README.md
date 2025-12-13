@@ -14,7 +14,7 @@ Chronia is a modern, lightweight TypeScript date/time utility library with compr
 - 📅 **Comprehensive Utilities** – 60+ functions for date operations
 - 🎯 **Consistent API** – Unified support for `Date` objects, timestamps, and ISO 8601 strings
 - ✅ **Safe Error Handling** – No exceptions; graceful degradation
-- ⚡ **Well-tested** – 2900+ automated test cases
+- ⚡ **Well-tested** – 3500+ automated test cases
 
 ---
 
@@ -221,6 +221,7 @@ Compare and sort dates
 Convert dates to strings
 
 - `format` with customizable patterns
+- `createFormatter` for pre-compiled efficient formatting
 - **Use for**: Display formatting, localization, string conversion
 
 ### [Parsing](./functions/parsing/)
@@ -228,6 +229,7 @@ Convert dates to strings
 Convert strings to dates
 
 - `parse` with pattern matching
+- `createParser` for pre-compiled efficient parsing
 - **Use for**: User input parsing, string-to-date conversion
 
 ### [Mutators](./functions/mutators/)
@@ -362,24 +364,84 @@ const earliest = min(dates); // 2025-01-01
 
 ## Internationalization
 
-Chronia supports localization for formatting and parsing:
+Chronia supports localization for formatting and parsing with 40 built-in locales:
 
 ```typescript
 import { format } from "chronia";
+import { enUS } from "chronia/locale/en-US";
+import { ja } from "chronia/locale/ja";
+import { fr } from "chronia/locale/fr";
 
 const date = new Date(2025, 0, 23);
 
 // English (default)
-format(date, "MMMM d, yyyy"); // 'January 23, 2025'
+format(date, "MMMM d, yyyy", enUS); // 'January 23, 2025'
 
 // Japanese
-format(date, "yyyy年M月d日", { locale: "ja" }); // '2025年1月23日'
+format(date, "yyyy'年'M'月'd'日'", ja); // '2025年1月23日'
+
+// French
+format(date, "EEEE d MMMM yyyy", fr); // 'jeudi 23 janvier 2025'
 ```
 
-**Supported Locales**:
+### Supported Locales (40)
 
-- `en` - English (default)
+**Core:**
+
+- `en-US` - English (United States)
 - `ja` - Japanese
+
+**World Languages:**
+
+- `zh-CN` - Chinese (Simplified)
+- `ko` - Korean
+- `es` - Spanish
+- `fr` - French
+- `de` - German
+- `pt-BR` - Portuguese (Brazil)
+- `ru` - Russian
+- `ar` - Arabic
+
+**European Languages:**
+
+- `it` - Italian
+- `nl` - Dutch
+- `pl` - Polish
+- `pt` - Portuguese (Portugal)
+- `sv` - Swedish
+- `tr` - Turkish
+
+**Asian Languages:**
+
+- `zh-TW` - Chinese (Traditional, Taiwan)
+- `zh-HK` - Chinese (Traditional, Hong Kong)
+- `vi` - Vietnamese
+- `id` - Indonesian
+- `ms` - Malay
+- `th` - Thai
+- `hi` - Hindi
+
+**English Variants:**
+
+- `en-GB` - English (United Kingdom)
+- `en-AU` - English (Australia)
+- `en-CA` - English (Canada)
+
+**Major European Languages:**
+
+- `da` - Danish
+- `fi` - Finnish
+- `nb` - Norwegian (Bokmål)
+- `cs` - Czech
+- `el` - Greek
+- `he` - Hebrew
+- `hu` - Hungarian
+- `ro` - Romanian
+- `uk` - Ukrainian
+- `sk` - Slovak
+- `bg` - Bulgarian
+- `hr` - Croatian
+- `sr` - Serbian
 
 ---
 
@@ -451,14 +513,17 @@ type TimeUnit =
   | "minute"
   | "second"
   | "millisecond";
-type Locale = "en" | "ja";
+
+// Locale is a data structure containing localized strings
+interface Locale {
+  era: { narrow: string[]; abbr: string[]; wide: string[] };
+  month: { narrow: string[]; abbr: string[]; wide: string[] };
+  weekday: { narrow: string[]; abbr: string[]; wide: string[] };
+  dayPeriod: { narrow: string[]; abbr: string[]; wide: string[] };
+}
 
 interface ComparisonOptions {
   unit?: TimeUnit;
-}
-
-interface FormatOptions {
-  locale?: Locale;
 }
 ```
 
