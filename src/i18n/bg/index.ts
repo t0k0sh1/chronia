@@ -86,6 +86,6 @@ export const bg: Locale = {
     // Abbreviated: пр.об., сл.об.
     abbr: ["пр.об.", "сл.об."] as const,
     // Wide: преди обяд, следобед
-    wide: ["пр.об.", "сл.об."] as const,
+    wide: ["преди обяд", "следобед"] as const,
   },
 };

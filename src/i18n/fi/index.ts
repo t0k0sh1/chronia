@@ -86,6 +86,6 @@ export const fi: Locale = {
     // Abbreviated: ap., ip.
     abbr: ["ap.", "ip."] as const,
     // Wide: aamupäivä, iltapäivä
-    wide: ["ap.", "ip."] as const,
+    wide: ["aamupäivä", "iltapäivä"] as const,
   },
 };

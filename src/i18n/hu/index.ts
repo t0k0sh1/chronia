@@ -86,6 +86,6 @@ export const hu: Locale = {
     // Abbreviated: de., du.
     abbr: ["de.", "du."] as const,
     // Wide: délelőtt, délután
-    wide: ["de.", "du."] as const,
+    wide: ["délelőtt", "délután"] as const,
   },
 };
