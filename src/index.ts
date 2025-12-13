@@ -82,5 +82,4 @@ export type {
   BetweenOption,
   CompareOptions,
   ComparisonOptions,
-  TZ,
 } from "./types";
