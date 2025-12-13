@@ -231,3 +231,43 @@ export function format(date: Date, pattern: string, locale?: Locale): string {
   const compiled = compileFormatter(pattern);
   return compiled.format(date, locale);
 }
+
+/**
+ * Create a pre-compiled formatter for efficient repeated formatting.
+ *
+ * This function tokenizes the pattern once and returns a formatter function
+ * that can be used to format multiple dates efficiently. Useful when formatting
+ * many dates with the same pattern.
+ *
+ * @param pattern - The format pattern using Unicode tokens
+ * @param locale - Optional default locale for formatting
+ * @returns A function that formats dates using the pre-compiled pattern
+ * @throws TypeError if pattern is not a string
+ *
+ * @example
+ * ```typescript
+ * // Basic usage
+ * const formatISO = createFormatter("yyyy-MM-dd");
+ * formatISO(new Date(2024, 0, 15)); // "2024-01-15"
+ *
+ * // With locale
+ * import { ja } from "chronia/i18n";
+ * const formatJP = createFormatter("yyyy'年'M'月'd'日'", ja);
+ * formatJP(new Date(2024, 0, 15)); // "2024年1月15日"
+ *
+ * // Performance benefit with many dates
+ * const formatter = createFormatter("yyyy-MM-dd HH:mm:ss");
+ * const results = dates.map(d => formatter(d));
+ * ```
+ */
+export function createFormatter(
+  pattern: string,
+  locale?: Locale,
+): (date: Date) => string {
+  if (typeof pattern !== "string") {
+    throw new TypeError("Pattern must be a string");
+  }
+
+  const compiled = compileFormatter(pattern);
+  return (date: Date) => compiled.format(date, locale);
+}
