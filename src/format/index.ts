@@ -46,7 +46,7 @@ function compileFormatter(pattern: string): CompiledFormatter {
         } else {
           // Handle escaped quotes and literal text
           if (token === "''") {
-            // Two consecutive quotes -> single quote character
+            // Two consecutive quotes → single quote character
             result += "'";
           } else if (token.startsWith("'") && token.endsWith("'")) {
             // Literal text enclosed in quotes: remove outer quotes and unescape inner quotes
