@@ -183,9 +183,6 @@ pnpm test
 
 # Run tests with coverage report
 pnpm test:coverage
-
-# Run property-based tests (if applicable)
-pnpm test:pbt
 ```
 
 ## Documentation Requirements

@@ -16,7 +16,6 @@ This library has the following features:
 - `pnpm build`: Builds and generates output in `dist/`
 - `pnpm test`: Run unit tests
 - `pnpm test:coverage`: Run unit tests with coverage reporting
-- `pnpm test:pbt`: Run property-based tests in `.kiro/spec/**`
 - `pnpm lint`: Run code and documentation linting
 - `pnpm lint:fix`: Run code and documentation linting and apply automatic fixes
 
