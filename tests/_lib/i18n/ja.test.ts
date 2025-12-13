@@ -8,6 +8,7 @@ import {
 const expectedValues: LocaleExpectedValues = {
   era: {
     // International standard: BC/AD for narrow (Anno Domini)
+    // See src/i18n/ja/index.ts for the rationale behind using "AD" instead of date-fns's non-standard "AC".
     narrow: ["BC", "AD"],
     // date-fns compatible: Japanese text for abbr/wide
     abbr: ["紀元前", "西暦"],

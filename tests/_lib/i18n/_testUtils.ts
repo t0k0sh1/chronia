@@ -57,7 +57,13 @@ type LocaleComponent = "era" | "month" | "weekday" | "dayPeriod";
 export type EquivalenceRule = {
   /** The locale component to test */
   component: LocaleComponent;
-  /** The widths that should have equal values (at least 2) */
+  /**
+   * The widths that should have equal values (at least 2).
+   * Equivalence rules only make sense when comparing two or more widths,
+   * since a single width cannot be "equivalent" to itself.
+   * For example, if "abbr" and "wide" month names are identical in a locale,
+   * use: widths: ["abbr", "wide"]
+   */
   widths: [LocaleWidth, LocaleWidth, ...LocaleWidth[]];
   /** Description of the equivalence rule for test output */
   description: string;
@@ -73,14 +79,14 @@ export type LocaleExpectedValues = {
     wide: readonly [string, string];
   };
   month: {
-    narrow: readonly string[];
-    abbr: readonly string[];
-    wide: readonly string[];
+    narrow: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    abbr: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    wide: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
   };
   weekday: {
-    narrow: readonly string[];
-    abbr: readonly string[];
-    wide: readonly string[];
+    narrow: readonly [string, string, string, string, string, string, string];
+    abbr: readonly [string, string, string, string, string, string, string];
+    wide: readonly [string, string, string, string, string, string, string];
   };
   dayPeriod: {
     narrow: readonly [string, string];
@@ -127,7 +133,7 @@ export function describeLocaleStructure(
   localeName: string
 ): void {
   describe(`${localeName} Locale Structure`, () => {
-    describe("property completeness", () => {
+    describe("structure completeness", () => {
       it("should have all required properties", () => {
         for (const component of COMPONENTS) {
           expect(locale).toHaveProperty(component);
@@ -203,11 +209,13 @@ export function describeLocaleValues(
     });
 
     // Language-specific equivalence tests
-    if (expected.equivalences && expected.equivalences.length > 0) {
+    if (expected.equivalences) {
       describe("language-specific characteristics", () => {
-        it.each(expected.equivalences!)(
+        it.each(expected.equivalences)(
           "$description",
           ({ component, widths }) => {
+            // The TypeScript type for `widths` ensures at least two elements,
+            // so this destructuring is always safe.
             const [first, ...rest] = widths;
             const firstValue = locale[component][first];
             for (const width of rest) {
