@@ -431,6 +431,18 @@ describe("format - edge cases", () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(format(undefined as any, "yyyy-MM-dd")).toBe("Invalid Date");
     });
+
+    it("returns 'Invalid Date' string for null pattern", () => {
+      const date = new Date(2024, 0, 15);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(format(date, null as any)).toBe("Invalid Date");
+    });
+
+    it("returns 'Invalid Date' string for undefined pattern", () => {
+      const date = new Date(2024, 0, 15);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(format(date, undefined as any)).toBe("Invalid Date");
+    });
   });
 
   describe("boundary dates", () => {
