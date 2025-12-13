@@ -183,4 +183,96 @@ declare const enAU: Locale;
  */
 declare const enCA: Locale;
 
-export { ar, de, enAU, enCA, enGB, enUS, es, fr, hi, id, it, ja, ko, ms, nl, pl, pt, ptBR, ru, sv, th, tr, vi, zhCN, zhHK, zhTW };
+/**
+ * Danish locale data.
+ *
+ * Based on CLDR data for Danish (Denmark).
+ */
+declare const da: Locale;
+
+/**
+ * Finnish locale data.
+ *
+ * Based on CLDR data for Finnish (Finland).
+ */
+declare const fi: Locale;
+
+/**
+ * Norwegian Bokmål locale data.
+ *
+ * Based on CLDR data for Norwegian Bokmål (Norway).
+ */
+declare const nb: Locale;
+
+/**
+ * Czech locale data.
+ *
+ * Based on CLDR data for Czech (Czech Republic).
+ */
+declare const cs: Locale;
+
+/**
+ * Greek locale data.
+ *
+ * Based on CLDR data for Greek (Greece).
+ */
+declare const el: Locale;
+
+/**
+ * Hebrew locale data.
+ *
+ * Based on CLDR data for Hebrew (Israel).
+ * Note: Hebrew is a right-to-left (RTL) language.
+ */
+declare const he: Locale;
+
+/**
+ * Hungarian locale data.
+ *
+ * Based on CLDR data for Hungarian (Hungary).
+ */
+declare const hu: Locale;
+
+/**
+ * Romanian locale data.
+ *
+ * Based on CLDR data for Romanian (Romania).
+ */
+declare const ro: Locale;
+
+/**
+ * Ukrainian locale data.
+ *
+ * Based on CLDR data for Ukrainian (Ukraine).
+ */
+declare const uk: Locale;
+
+/**
+ * Slovak locale data.
+ *
+ * Based on CLDR data for Slovak (Slovakia).
+ */
+declare const sk: Locale;
+
+/**
+ * Bulgarian locale data.
+ *
+ * Based on CLDR data for Bulgarian (Bulgaria).
+ */
+declare const bg: Locale;
+
+/**
+ * Croatian locale data.
+ *
+ * Based on CLDR data for Croatian (Croatia).
+ */
+declare const hr: Locale;
+
+/**
+ * Serbian locale data.
+ *
+ * Based on CLDR data for Serbian (Serbia, Cyrillic script).
+ */
+declare const sr: Locale;
+
+export { ar, bg, cs, da, de, el, enAU, enCA, enGB, enUS, es, fi, fr, he, hi, hr, hu, id, it, ja, ko, ms, nb, nl, pl, pt, ptBR, ro, ru, sk, sr, sv, th, tr, uk, vi, zhCN, zhHK, zhTW };
