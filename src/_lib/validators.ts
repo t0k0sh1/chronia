@@ -133,7 +133,8 @@ export function isValidNumber(value: unknown): value is number {
 /**
  * Validates if a value is a valid ISO 8601 date string.
  *
- * Uses JavaScript's Date.parse() which supports ISO 8601 format.
+ * Uses JavaScript's Date.parse() internally. Note that Date.parse() behavior
+ * is implementation-dependent and may accept formats beyond ISO 8601.
  * Empty strings and whitespace-only strings are considered invalid.
  *
  * Supported formats:
@@ -145,7 +146,7 @@ export function isValidNumber(value: unknown): value is number {
  *
  * @internal
  * @param value - Any value to validate
- * @returns true if value is a valid ISO 8601 date string, false otherwise
+ * @returns true if value is a string parseable by Date.parse(), false otherwise
  *
  * @example
  * ```typescript
@@ -165,7 +166,7 @@ export function isValidDateString(value: unknown): value is string {
   if (value.trim() === "") {
     return false;
   }
-  // Use Date.parse to check if the string is parseable as ISO 8601
+  // Use Date.parse to check if the string is parseable
   const timestamp = Date.parse(value);
   return !isNaN(timestamp);
 }

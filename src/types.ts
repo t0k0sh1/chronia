@@ -221,12 +221,12 @@ export type Parser = (
 ) => ParseResult;
 
 /**
- * Date input type that accepts Date objects, Unix timestamps (milliseconds), or ISO 8601 strings.
+ * Date input type that accepts Date objects, Unix timestamps (milliseconds), or date strings parseable by Date.parse().
  *
  * This type is used throughout the library for functions that accept date values.
  * It provides flexibility in how dates can be specified while maintaining type safety.
  *
- * Supported string formats (ISO 8601):
+ * Recommended string formats (ISO 8601 is guaranteed to work across all environments):
  * - YYYY-MM-DD (e.g., "2024-01-15")
  * - YYYY-MM-DDTHH:mm:ss (e.g., "2024-01-15T14:30:00")
  * - YYYY-MM-DDTHH:mm:ss.sss (e.g., "2024-01-15T14:30:00.000")
