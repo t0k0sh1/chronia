@@ -24,3 +24,17 @@ export { hi } from "./hi";
 export { enGB } from "./en-GB";
 export { enAU } from "./en-AU";
 export { enCA } from "./en-CA";
+// Phase 5: Major European languages
+export { da } from "./da";
+export { fi } from "./fi";
+export { nb } from "./nb";
+export { cs } from "./cs";
+export { el } from "./el";
+export { he } from "./he";
+export { hu } from "./hu";
+export { ro } from "./ro";
+export { uk } from "./uk";
+export { sk } from "./sk";
+export { bg } from "./bg";
+export { hr } from "./hr";
+export { sr } from "./sr";
