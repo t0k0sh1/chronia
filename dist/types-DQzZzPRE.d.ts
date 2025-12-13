@@ -245,16 +245,5 @@ type ComparisonOptions = {
      */
     unit?: TimeUnit;
 };
-/**
- * Timezone object containing IANA identifier and timezone code.
- *
- * @see {@link https://www.iana.org/time-zones} - IANA Time Zone Database
- */
-type TZ = {
-    /** IANA timezone name (e.g., 'Asia/Tokyo', 'America/New_York') */
-    readonly ianaName: string;
-    /** Timezone identifier code (e.g., 'JST', 'EST', 'PST') */
-    readonly identifier: string;
-};
 
-export type { BetweenOption as B, ComparisonOptions as C, DateInput as D, Interval as I, Locale as L, TimeUnit as T, CompareOptions as a, BoundsType as b, TZ as c };
+export type { BetweenOption as B, ComparisonOptions as C, DateInput as D, Interval as I, Locale as L, TimeUnit as T, CompareOptions as a, BoundsType as b };
