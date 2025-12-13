@@ -321,3 +321,60 @@ export function parse(
   const compiled = compileParser(pattern);
   return compiled.parse(dateString, options);
 }
+
+/**
+ * Create a pre-compiled parser for efficient repeated parsing.
+ *
+ * This function tokenizes the pattern once and returns a parser function
+ * that can be used to parse multiple date strings efficiently. Useful when
+ * parsing many date strings with the same pattern.
+ *
+ * @param pattern - The format pattern using Unicode tokens
+ * @param defaultOptions - Optional default options (locale, referenceDate)
+ * @returns A function that parses date strings using the pre-compiled pattern
+ * @throws TypeError if pattern is not a string
+ *
+ * @example
+ * ```typescript
+ * // Basic usage
+ * const parseISO = createParser("yyyy-MM-dd");
+ * parseISO("2024-01-15"); // Date(2024, 0, 15)
+ *
+ * // With default locale
+ * import { ja } from "chronia/i18n";
+ * const parseJP = createParser("yyyy'年'M'月'd'日'", { locale: ja });
+ * parseJP("2024年1月15日"); // Date(2024, 0, 15)
+ *
+ * // With default reference date
+ * const parseTime = createParser("HH:mm", {
+ *   referenceDate: new Date(2024, 0, 1)
+ * });
+ * parseTime("14:30"); // Date(2024, 0, 1, 14, 30)
+ *
+ * // Override options per call
+ * const parser = createParser("HH:mm");
+ * parser("14:30", { referenceDate: new Date(2024, 5, 15) });
+ * // Date(2024, 5, 15, 14, 30)
+ *
+ * // Performance benefit with many strings
+ * const parser = createParser("yyyy-MM-dd");
+ * const dates = dateStrings.map(s => parser(s));
+ * ```
+ */
+export function createParser(
+  pattern: string,
+  defaultOptions?: { locale?: Locale; referenceDate?: Date },
+): (
+  dateString: string,
+  options?: { locale?: Locale; referenceDate?: Date },
+) => Date {
+  if (typeof pattern !== "string") {
+    throw new TypeError("Pattern must be a string");
+  }
+
+  const compiled = compileParser(pattern);
+  return (
+    dateString: string,
+    options?: { locale?: Locale; referenceDate?: Date },
+  ) => compiled.parse(dateString, { ...defaultOptions, ...options });
+}

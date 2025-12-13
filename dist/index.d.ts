@@ -1,5 +1,5 @@
-import { D as DateInput, L as Locale, C as ComparisonOptions, I as Interval, B as BetweenOption, a as CompareOptions } from './types-DQzZzPRE.js';
-export { b as BoundsType, T as TimeUnit } from './types-DQzZzPRE.js';
+import { D as DateInput, L as Locale, C as ComparisonOptions, I as Interval, B as BetweenOption, a as CompareOptions } from './types-BJmXVUwP.js';
+export { b as BoundsType, T as TimeUnit } from './types-BJmXVUwP.js';
 
 /**
  * Add the specified number of days to the given date.
@@ -507,6 +507,35 @@ declare function addYears(date: DateInput, amount: number): Date;
  * - Use format() to convert Date → string, parse() to convert string → Date
  */
 declare function format(date: Date, pattern: string, locale?: Locale): string;
+/**
+ * Create a pre-compiled formatter for efficient repeated formatting.
+ *
+ * This function tokenizes the pattern once and returns a formatter function
+ * that can be used to format multiple dates efficiently. Useful when formatting
+ * many dates with the same pattern.
+ *
+ * @param pattern - The format pattern using Unicode tokens
+ * @param locale - Optional default locale for formatting
+ * @returns A function that formats dates using the pre-compiled pattern
+ * @throws TypeError if pattern is not a string
+ *
+ * @example
+ * ```typescript
+ * // Basic usage
+ * const formatISO = createFormatter("yyyy-MM-dd");
+ * formatISO(new Date(2024, 0, 15)); // "2024-01-15"
+ *
+ * // With locale
+ * import { ja } from "chronia/i18n";
+ * const formatJP = createFormatter("yyyy'年'M'月'd'日'", ja);
+ * formatJP(new Date(2024, 0, 15)); // "2024年1月15日"
+ *
+ * // Performance benefit with many dates
+ * const formatter = createFormatter("yyyy-MM-dd HH:mm:ss");
+ * const results = dates.map(d => formatter(d));
+ * ```
+ */
+declare function createFormatter(pattern: string, locale?: Locale): (date: Date) => string;
 
 /**
  * Get the day of the month from the given date.
@@ -2067,6 +2096,52 @@ declare function parse(dateString: string, pattern: string, options?: {
     locale?: Locale;
     referenceDate?: Date;
 }): Date;
+/**
+ * Create a pre-compiled parser for efficient repeated parsing.
+ *
+ * This function tokenizes the pattern once and returns a parser function
+ * that can be used to parse multiple date strings efficiently. Useful when
+ * parsing many date strings with the same pattern.
+ *
+ * @param pattern - The format pattern using Unicode tokens
+ * @param defaultOptions - Optional default options (locale, referenceDate)
+ * @returns A function that parses date strings using the pre-compiled pattern
+ * @throws TypeError if pattern is not a string
+ *
+ * @example
+ * ```typescript
+ * // Basic usage
+ * const parseISO = createParser("yyyy-MM-dd");
+ * parseISO("2024-01-15"); // Date(2024, 0, 15)
+ *
+ * // With default locale
+ * import { ja } from "chronia/i18n";
+ * const parseJP = createParser("yyyy'年'M'月'd'日'", { locale: ja });
+ * parseJP("2024年1月15日"); // Date(2024, 0, 15)
+ *
+ * // With default reference date
+ * const parseTime = createParser("HH:mm", {
+ *   referenceDate: new Date(2024, 0, 1)
+ * });
+ * parseTime("14:30"); // Date(2024, 0, 1, 14, 30)
+ *
+ * // Override options per call
+ * const parser = createParser("HH:mm");
+ * parser("14:30", { referenceDate: new Date(2024, 5, 15) });
+ * // Date(2024, 5, 15, 14, 30)
+ *
+ * // Performance benefit with many strings
+ * const parser = createParser("yyyy-MM-dd");
+ * const dates = dateStrings.map(s => parser(s));
+ * ```
+ */
+declare function createParser(pattern: string, defaultOptions?: {
+    locale?: Locale;
+    referenceDate?: Date;
+}): (dateString: string, options?: {
+    locale?: Locale;
+    referenceDate?: Date;
+}) => Date;
 
 /**
  * Subtract the specified number of days from the given date.
@@ -3841,4 +3916,4 @@ declare const MIN_DATE: Date;
  */
 declare const MAX_DATE: Date;
 
-export { BetweenOption, CompareOptions, ComparisonOptions, DateInput, Interval, Locale, MAX_DATE, MIN_DATE, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isDate, isEqual, isExists, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export { BetweenOption, CompareOptions, ComparisonOptions, DateInput, Interval, Locale, MAX_DATE, MIN_DATE, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, createFormatter, createParser, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isDate, isEqual, isExists, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
