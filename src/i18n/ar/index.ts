@@ -21,7 +21,7 @@ export const ar: Locale = {
   },
 
   month: {
-    // Narrow: single number (Arabic numerals)
+    // Narrow: single letter (first letter of each month name in Arabic)
     narrow: [
       "ي",
       "ف",
