@@ -81,4 +81,16 @@ declare const ru: Locale;
  */
 declare const ar: Locale;
 
-export { ar, de, enUS, es, fr, ja, ko, ptBR, ru, zhCN };
+declare const it: Locale;
+
+declare const nl: Locale;
+
+declare const pl: Locale;
+
+declare const pt: Locale;
+
+declare const sv: Locale;
+
+declare const tr: Locale;
+
+export { ar, de, enUS, es, fr, it, ja, ko, nl, pl, pt, ptBR, ru, sv, tr, zhCN };
