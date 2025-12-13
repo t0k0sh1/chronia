@@ -201,6 +201,110 @@ import { tokenize } from "../_lib/tokenize";
 import { parsers } from "../_lib/parsers";
 import { Locale } from "../types";
 
+type ParseOptions = {
+  locale?: Locale;
+  referenceDate?: Date;
+};
+
+type CompiledParser = {
+  tokens: string[];
+  parse: (dateString: string, options?: ParseOptions) => Date;
+};
+
+function compileParser(pattern: string): CompiledParser {
+  const tokens = tokenize(pattern);
+
+  return {
+    tokens,
+    parse: (dateString: string, options?: ParseOptions): Date => {
+      // Input validation for dateString
+      if (typeof dateString !== "string") {
+        return new Date(NaN);
+      }
+
+      const referenceDate = options?.referenceDate || new Date();
+
+      // Initialize date components with reference date values
+      const dateComponents = {
+        year: referenceDate.getFullYear(),
+        month: referenceDate.getMonth(),
+        day: referenceDate.getDate(),
+        _initialDay: referenceDate.getDate(), // Track initial day value
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+        milliseconds: 0,
+        isPM: false,
+        hours12: null as number | null,
+      };
+
+      let position = 0;
+
+      for (const token of tokens) {
+        const parser = parsers[token[0]];
+
+        if (parser) {
+          const result = parser(dateString, position, token, options?.locale, dateComponents);
+          if (result === null) {
+            return new Date(NaN); // Parsing failed
+          }
+          position = result.position;
+        } else {
+          // Handle literal text and delimiters
+          let literalText = token;
+
+          // Handle quoted strings with escaped quotes
+          if (token.startsWith("'") && token.endsWith("'")) {
+            // Remove surrounding quotes and unescape inner quotes
+            literalText = token.slice(1, -1).replace(/''/g, "'");
+          }
+
+          if (!dateString.startsWith(literalText, position)) {
+            return new Date(NaN); // Literal text doesn't match
+          }
+          position += literalText.length;
+        }
+      }
+
+      // Check if entire string was consumed
+      if (position !== dateString.length) {
+        return new Date(NaN); // Extra characters in input
+      }
+
+      // Handle 12-hour format conversion
+      if (dateComponents.hours12 !== null) {
+        let hours24 = dateComponents.hours12;
+        if (dateComponents.isPM && hours24 !== 12) {
+          hours24 += 12;
+        } else if (!dateComponents.isPM && hours24 === 12) {
+          hours24 = 0;
+        }
+        dateComponents.hours = hours24;
+      }
+
+      // Create the final date
+      // Note: JavaScript Date constructor automatically adds 1900 to years 0-99
+      // We need to use setFullYear to set the correct year
+      const date = new Date(
+        dateComponents.year >= 100 ? dateComponents.year : 2000, // Use 2000 as temporary year for 0-99
+        dateComponents.month,
+        dateComponents.day,
+        dateComponents.hours,
+        dateComponents.minutes,
+        dateComponents.seconds,
+        dateComponents.milliseconds,
+      );
+
+      // Set the correct year if it was 0-99
+      if (dateComponents.year < 100) {
+        date.setFullYear(dateComponents.year);
+      }
+
+      return date;
+    },
+  };
+}
+
 export function parse(
   dateString: string,
   pattern: string,
@@ -209,89 +313,11 @@ export function parse(
     referenceDate?: Date;
   },
 ): Date {
-  // Validate inputs - return Invalid Date for null/undefined
-  if (typeof dateString !== "string" || typeof pattern !== "string") {
+  // Validate pattern - return Invalid Date for null/undefined
+  if (typeof pattern !== "string") {
     return new Date(NaN);
   }
 
-  const referenceDate = options?.referenceDate || new Date();
-  const tokens = tokenize(pattern);
-
-  // Initialize date components with reference date values
-  const dateComponents = {
-    year: referenceDate.getFullYear(),
-    month: referenceDate.getMonth(),
-    day: referenceDate.getDate(),
-    _initialDay: referenceDate.getDate(), // Track initial day value
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-    isPM: false,
-    hours12: null as number | null,
-  };
-
-  let position = 0;
-
-  for (const token of tokens) {
-    const parser = parsers[token[0]];
-
-    if (parser) {
-      const result = parser(dateString, position, token, options?.locale, dateComponents);
-      if (result === null) {
-        return new Date(NaN); // Parsing failed
-      }
-      position = result.position;
-    } else {
-      // Handle literal text and delimiters
-      let literalText = token;
-
-      // Handle quoted strings with escaped quotes
-      if (token.startsWith("'") && token.endsWith("'")) {
-        // Remove surrounding quotes and unescape inner quotes
-        literalText = token.slice(1, -1).replace(/''/g, "'");
-      }
-
-      if (!dateString.startsWith(literalText, position)) {
-        return new Date(NaN); // Literal text doesn't match
-      }
-      position += literalText.length;
-    }
-  }
-
-  // Check if entire string was consumed
-  if (position !== dateString.length) {
-    return new Date(NaN); // Extra characters in input
-  }
-
-  // Handle 12-hour format conversion
-  if (dateComponents.hours12 !== null) {
-    let hours24 = dateComponents.hours12;
-    if (dateComponents.isPM && hours24 !== 12) {
-      hours24 += 12;
-    } else if (!dateComponents.isPM && hours24 === 12) {
-      hours24 = 0;
-    }
-    dateComponents.hours = hours24;
-  }
-
-  // Create the final date
-  // Note: JavaScript Date constructor automatically adds 1900 to years 0-99
-  // We need to use setFullYear to set the correct year
-  const date = new Date(
-    dateComponents.year >= 100 ? dateComponents.year : 2000, // Use 2000 as temporary year for 0-99
-    dateComponents.month,
-    dateComponents.day,
-    dateComponents.hours,
-    dateComponents.minutes,
-    dateComponents.seconds,
-    dateComponents.milliseconds,
-  );
-
-  // Set the correct year if it was 0-99
-  if (dateComponents.year < 100) {
-    date.setFullYear(dateComponents.year);
-  }
-
-  return date;
+  const compiled = compileParser(pattern);
+  return compiled.parse(dateString, options);
 }
