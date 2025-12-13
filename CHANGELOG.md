@@ -68,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `isValid` - Check if a date is valid
 - `isExists` - Check if year, month, and day represent an existing date
 
-#### Accessor Functions (8)
+#### Getter Functions (8)
 
 - `getYear` - Get the year
 - `getMonth` - Get the month (0-11)
@@ -79,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `getMilliseconds` - Get the milliseconds
 - `getTime` - Get the timestamp
 
-#### Mutator Functions (8)
+#### Setter Functions (8)
 
 - `setYear` - Set the year
 - `setMonth` - Set the month

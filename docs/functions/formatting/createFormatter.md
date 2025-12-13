@@ -17,7 +17,7 @@ function createFormatter(
 
 | Parameter | Type                | Description                                                                                                 |
 | --------- | ------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `pattern` | `string`            | The format pattern using Unicode tokens (e.g., "yyyy-MM-dd HH:mm:ss")                                       |
+| `pattern` | `string`            | The format pattern using Unicode tokens (e.g., `yyyy-MM-dd HH:mm:ss`)                                       |
 | `locale`  | `Locale` (optional) | Optional localization object for locale-specific formatting of month names, weekdays, day periods, and eras |
 
 ## Return Value
