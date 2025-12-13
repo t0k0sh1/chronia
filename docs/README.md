@@ -11,7 +11,7 @@ Chronia is a modern, lightweight TypeScript date/time utility library with compr
 - 🚀 **TypeScript-first** – Strict typings with TypeScript 5.9+
 - 📦 **Lightweight** – ESM/CJS dual modules, fully tree-shakable
 - 🌍 **Internationalization** – Built-in locale support
-- 📅 **Comprehensive Utilities** – 60+ functions for date operations
+- 📅 **Comprehensive Utilities** – 76 functions organized into 11 categories for date operations
 - 🎯 **Consistent API** – Unified support for `Date` objects, timestamps, and ISO 8601 strings
 - ✅ **Safe Error Handling** – No exceptions; graceful degradation
 - ⚡ **Well-tested** – 3500+ automated test cases
@@ -179,7 +179,7 @@ isBefore(morning, evening, { unit: "day" }); // false (same day)
 
 ## Function Categories
 
-Chronia organizes its 60+ functions into 11 logical categories:
+Chronia organizes its 76 functions into 11 logical categories:
 
 ### [Validations](./functions/validations/)
 
