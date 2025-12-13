@@ -244,6 +244,26 @@ describe("parse", () => {
       // Extremely large values that cause Date constructor to return NaN
       expect(isNaN(parse("999999999", "yyyy").getTime())).toBe(true);
     });
+
+    it("returns invalid date for null dateString", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(isNaN(parse(null as any, "yyyy-MM-dd").getTime())).toBe(true);
+    });
+
+    it("returns invalid date for undefined dateString", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(isNaN(parse(undefined as any, "yyyy-MM-dd").getTime())).toBe(true);
+    });
+
+    it("returns invalid date for null pattern", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(isNaN(parse("2024-01-15", null as any).getTime())).toBe(true);
+    });
+
+    it("returns invalid date for undefined pattern", () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(isNaN(parse("2024-01-15", undefined as any).getTime())).toBe(true);
+    });
   });
 
   describe("with localization", () => {

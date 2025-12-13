@@ -161,7 +161,7 @@ import { Locale } from "../types";
  */
 export function format(date: Date, pattern: string, locale?: Locale): string {
   // Return "Invalid Date" for invalid dates (consistent with date-fns)
-  if (isNaN(date.getTime())) {
+  if (date == null || !(date instanceof Date) || isNaN(date.getTime())) {
     return "Invalid Date";
   }
 

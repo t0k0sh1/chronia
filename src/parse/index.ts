@@ -209,6 +209,11 @@ export function parse(
     referenceDate?: Date;
   },
 ): Date {
+  // Validate inputs - return Invalid Date for null/undefined
+  if (typeof dateString !== "string" || typeof pattern !== "string") {
+    return new Date(NaN);
+  }
+
   const referenceDate = options?.referenceDate || new Date();
   const tokens = tokenize(pattern);
 
