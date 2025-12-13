@@ -5,7 +5,7 @@ description: When making a Git commit, provide the subject of the commit and the
 
 This skill provides guidelines for commit targets and pre-commit checks.
 
-## Target of the commit
+## Commit targets
 
 - All files managed by the repository are subject to commit.
 - Please include files in the `dist/` directory in the commit target (as this is required when importing by specifying the repository directly).
