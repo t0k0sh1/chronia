@@ -22,7 +22,7 @@ It offers a simple, consistent, and functional API that makes working with dates
 
 - 🚀 **TypeScript-first** – Strict typings with TypeScript 5.9+
 - 📦 **Lightweight** – ESM/CJS dual modules, fully tree-shakable
-- 🌍 **Internationalization** – Built-in locale support (40 locales)
+- 🌍 **Internationalization** – Built-in locale support (39 locales)
 - 📅 **Comprehensive Utilities** – Formatting, parsing, arithmetic, comparison, ranges, differences
 - 🎯 **Consistent API** – Unified support for `Date` objects, timestamps, and ISO 8601 strings
 - ✅ **Safe Error Handling** – No exceptions; standardized values (`Invalid Date`, `NaN`, `false`)

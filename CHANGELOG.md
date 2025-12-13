@@ -126,7 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `max` - Get the latest date from an array
 - `clamp` - Clamp a date between a minimum and maximum
 
-#### Internationalization (40 locales)
+#### Internationalization (39 locales)
 
 **Core:**
 

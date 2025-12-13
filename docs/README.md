@@ -364,7 +364,7 @@ const earliest = min(dates); // 2025-01-01
 
 ## Internationalization
 
-Chronia supports localization for formatting and parsing with 40 built-in locales:
+Chronia supports localization for formatting and parsing with 39 built-in locales:
 
 ```typescript
 import { format } from "chronia";
@@ -384,7 +384,7 @@ format(date, "yyyy'年'M'月'd'日'", ja); // '2025年1月23日'
 format(date, "EEEE d MMMM yyyy", fr); // 'jeudi 23 janvier 2025'
 ```
 
-### Supported Locales (40)
+### Supported Locales (39)
 
 **Core:**
 
