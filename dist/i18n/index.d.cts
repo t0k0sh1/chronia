@@ -93,4 +93,67 @@ declare const sv: Locale;
 
 declare const tr: Locale;
 
-export { ar, de, enUS, es, fr, it, ja, ko, nl, pl, pt, ptBR, ru, sv, tr, zhCN };
+/**
+ * Chinese (Traditional - Taiwan) locale data.
+ *
+ * Note: Taiwan uses "西元" (Western calendar) for era naming, which differs
+ * from zh-CN's "公元" (Common Era). Weekday abbreviations use "週" instead
+ * of "周" (Simplified Chinese variant).
+ */
+declare const zhTW: Locale;
+
+/**
+ * Chinese (Traditional - Hong Kong) locale data.
+ *
+ * Note: Hong Kong uses "公元" (Common Era) for era naming, similar to zh-CN.
+ * Weekday abbreviations use "週" (Traditional Chinese variant) instead of "周".
+ */
+declare const zhHK: Locale;
+
+/**
+ * Vietnamese locale data.
+ *
+ * Note: Vietnamese uses Latin script with diacritics. Weekdays use "Thứ"
+ * (ordinal) prefix except for Sunday which is "Chủ Nhật" (Lord's Day).
+ * Day periods use abbreviated forms "SA" (sáng - morning) and "CH"
+ * (chiều - afternoon).
+ */
+declare const vi: Locale;
+
+/**
+ * Indonesian locale data.
+ *
+ * Note: Indonesian uses Latin script with Western-influenced month and
+ * weekday names. Era uses "Sebelum Masehi" (Before Christ) and "Masehi"
+ * (Common Era/AD).
+ */
+declare const id: Locale;
+
+/**
+ * Malay locale data.
+ *
+ * Note: Malay uses Latin script with some differences from Indonesian.
+ * Era uses "Sebelum Masihi" (Before Christ) and "Masihi" (Common Era).
+ * Day periods use "PG" (pagi - morning) and "PTG" (petang - evening).
+ */
+declare const ms: Locale;
+
+/**
+ * Thai locale data.
+ *
+ * Note: Thai uses Thai script. This implementation uses the Gregorian calendar
+ * era (ค.ศ. = คริสต์ศักราช) rather than Buddhist Era (พ.ศ. = พุทธศักราช)
+ * for consistency with international standards.
+ */
+declare const th: Locale;
+
+/**
+ * Hindi locale data.
+ *
+ * Note: Hindi uses Devanagari script. Era uses "ईसा-पूर्व" (Before Christ)
+ * and "ईसवी सन" (Anno Domini/Common Era). Day periods use "पूर्वाह्न"
+ * (forenoon/AM) and "अपराह्न" (afternoon/PM).
+ */
+declare const hi: Locale;
+
+export { ar, de, enUS, es, fr, hi, id, it, ja, ko, ms, nl, pl, pt, ptBR, ru, sv, th, tr, vi, zhCN, zhHK, zhTW };
