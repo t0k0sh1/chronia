@@ -3,6 +3,66 @@ import { formatters } from "../_lib/formatters";
 import { Locale } from "../types";
 
 /**
+ * Compiled formatter that stores pre-tokenized pattern.
+ * This is an internal type used to avoid re-tokenizing patterns.
+ */
+type CompiledFormatter = {
+  /** Pre-tokenized pattern tokens */
+  tokens: string[];
+  /**
+   * Format function that uses the pre-tokenized pattern.
+   * @param date - Date to format
+   * @param locale - Optional locale for localized formatting
+   * @returns Formatted date string
+   */
+  format: (date: Date, locale?: Locale) => string;
+};
+
+/**
+ * Compile a format pattern into a reusable formatter.
+ *
+ * This is an internal function that tokenizes the pattern once
+ * and returns a formatter that can be used multiple times.
+ *
+ * @param pattern - The format pattern using Unicode tokens
+ * @returns CompiledFormatter object with pre-tokenized pattern
+ */
+function compileFormatter(pattern: string): CompiledFormatter {
+  const tokens = tokenize(pattern);
+
+  return {
+    tokens,
+    format: (date: Date, locale?: Locale): string => {
+      // Date validation
+      if (date == null || !(date instanceof Date) || isNaN(date.getTime())) {
+        return "Invalid Date";
+      }
+
+      let result = "";
+      for (const token of tokens) {
+        const handler = formatters[token[0]];
+        if (handler) {
+          result += handler(date, token, locale);
+        } else {
+          // Handle escaped quotes and literal text
+          if (token === "''") {
+            // Two consecutive quotes -> single quote character
+            result += "'";
+          } else if (token.startsWith("'") && token.endsWith("'")) {
+            // Literal text enclosed in quotes: remove outer quotes and unescape inner quotes
+            result += token.slice(1, -1).replace(/''/g, "'");
+          } else {
+            // Other tokens (like punctuation) are added as-is
+            result += token;
+          }
+        }
+      }
+      return result;
+    },
+  };
+}
+
+/**
  * Format a Date object according to a format pattern.
  *
  * This function converts Date objects to formatted strings using Unicode format tokens.
@@ -168,27 +228,6 @@ export function format(date: Date, pattern: string, locale?: Locale): string {
     return "Invalid Date";
   }
 
-  const tokens = tokenize(pattern);
-  let result = "";
-
-  for (const token of tokens) {
-    const handler = formatters[token[0]];
-    if (handler) {
-      result += handler(date, token, locale);
-    } else {
-      // Handle escaped quotes and literal text
-      if (token === "''") {
-        // Two consecutive quotes → single quote character
-        result += "'";
-      } else if (token.startsWith("'") && token.endsWith("'")) {
-        // Literal text enclosed in quotes: remove outer quotes and unescape inner quotes
-        result += token.slice(1, -1).replace(/''/g, "'");
-      } else {
-        // Other tokens (like punctuation) are added as-is
-        result += token;
-      }
-    }
-  }
-
-  return result;
+  const compiled = compileFormatter(pattern);
+  return compiled.format(date, locale);
 }
