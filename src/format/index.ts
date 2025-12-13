@@ -160,8 +160,11 @@ import { Locale } from "../types";
  * - Use format() to convert Date → string, parse() to convert string → Date
  */
 export function format(date: Date, pattern: string, locale?: Locale): string {
-  // Return "Invalid Date" for invalid dates (consistent with date-fns)
-  if (isNaN(date.getTime())) {
+  // Return "Invalid Date" for invalid inputs (consistent with date-fns)
+  if (date == null || !(date instanceof Date) || isNaN(date.getTime())) {
+    return "Invalid Date";
+  }
+  if (typeof pattern !== "string") {
     return "Invalid Date";
   }
 
