@@ -149,6 +149,31 @@ describe("parse", () => {
       const result = parse("14:30", "HH:mm", { referenceDate });
       expect(result.getDate()).toBe(31); // 31st preserved
     });
+
+    it("correctly handles day when parsed day equals reference date's day (issue #87)", () => {
+      // When reference date is the 15th and we parse "15", the day should NOT be reset to 1
+      const referenceDate = new Date(2024, 0, 15); // Jan 15
+
+      // dd-MM-yyyy: day comes before month
+      const result1 = parse("15-01-2024", "dd-MM-yyyy", { referenceDate });
+      expect(result1.getFullYear()).toBe(2024);
+      expect(result1.getMonth()).toBe(0); // January
+      expect(result1.getDate()).toBe(15); // Should be 15, NOT 1
+
+      // dd/MM/yyyy h:mm a: day comes before month
+      const result2 = parse("15/01/2024 2:30 PM", "dd/MM/yyyy h:mm a", { referenceDate });
+      expect(result2.getDate()).toBe(15);
+      expect(result2.getMonth()).toBe(0);
+      expect(result2.getHours()).toBe(14);
+
+      // d-M-yyyy: flexible day/month format
+      const result3 = parse("15-1-2024", "d-M-yyyy", { referenceDate });
+      expect(result3.getDate()).toBe(15);
+
+      // Text month format
+      const result4 = parse("15 Jan 2024", "dd MMM yyyy", { referenceDate });
+      expect(result4.getDate()).toBe(15);
+    });
   });
 
   describe("weekday parsing", () => {

@@ -229,7 +229,7 @@ function compileParser(pattern: string): CompiledParser {
         year: referenceDate.getFullYear(),
         month: referenceDate.getMonth(),
         day: referenceDate.getDate(),
-        _initialDay: referenceDate.getDate(), // Track initial day value
+        _dayParsed: false, // Track whether day was explicitly parsed
         hours: 0,
         minutes: 0,
         seconds: 0,

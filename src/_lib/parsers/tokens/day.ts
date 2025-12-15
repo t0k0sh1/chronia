@@ -20,5 +20,6 @@ export const parseDay: Parser = (input, position, token, _locale, dateComponents
   if (day < 1 || day > 31) return null;
 
   dateComponents.day = day;
+  dateComponents._dayParsed = true;
   return { position: position + dayStr.length };
-};
+};;
