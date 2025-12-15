@@ -47,6 +47,7 @@ export const parseDayOfYear: Parser = (input, position, token, _locale, dateComp
 
   dateComponents.month = month;
   dateComponents.day = remainingDays;
+  dateComponents._dayParsed = true;
 
   return { position: position + dayStr.length };
-};
+};;

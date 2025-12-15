@@ -190,7 +190,7 @@ export type DateComponents = {
   year: number;
   month: number;
   day: number;
-  _initialDay: number; // Track initial day value to detect explicit day parsing
+  _dayParsed: boolean; // Track whether day was explicitly parsed
   hours: number;
   minutes: number;
   seconds: number;

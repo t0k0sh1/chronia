@@ -24,7 +24,7 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
 
     dateComponents.month = month - 1; // Convert to 0-based index
     // Reset day to 1 only if day wasn't explicitly parsed
-    if (dateComponents.day === dateComponents._initialDay) {
+    if (!dateComponents._dayParsed) {
       dateComponents.day = 1;
     }
     return { position: position + monthStr.length };
@@ -41,7 +41,7 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
       if (inputSlice.toLowerCase() === monthName.toLowerCase()) {
         dateComponents.month = monthIndex;
         // Reset day to 1 only if day wasn't explicitly parsed
-        if (dateComponents.day === dateComponents._initialDay) {
+        if (!dateComponents._dayParsed) {
           dateComponents.day = 1;
         }
         return { position: position + monthName.length };
@@ -50,4 +50,4 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
   }
 
   return null;
-};
+};;
