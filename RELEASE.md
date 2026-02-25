@@ -1,5 +1,7 @@
-## [1.0.1] - 2025-12-15
+## [1.0.2] - 2026-02-25
 
-### Fixed
+### Changed
 
-- Fix `parse` function incorrectly resetting day when reference date matches parsed day
+- Upgrade ESLint from v9.x to v10.0.2
+- Upgrade typescript-eslint packages to v8.56.0 (ESLint v10 compatibility)
+
