@@ -1,7 +1,7 @@
-## [1.0.2] - 2026-02-25
+## [1.0.3] - 2026-03-25
 
-### Changed
+### Fixed
 
-- Upgrade ESLint from v9.x to v10.0.2
-- Upgrade typescript-eslint packages to v8.56.0 (ESLint v10 compatibility)
+- Update `flatted` from 3.3.3 to 3.4.2 to fix Prototype Pollution and unbounded recursion DoS via `parse()`
+- Update `rollup` from 4.52.5 to 4.60.0 to fix Arbitrary File Write via Path Traversal
 
