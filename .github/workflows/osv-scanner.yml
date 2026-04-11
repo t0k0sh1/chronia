@@ -18,6 +18,8 @@ on:
     branches: [ "main" ]
   push:
     branches: [ "main" ]
+  schedule:
+    - cron: '0 3 * * 1'
 
 permissions:
   # Required to upload SARIF file to CodeQL. See: https://github.com/github/codeql-action/issues/2117
