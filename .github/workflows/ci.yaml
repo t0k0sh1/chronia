@@ -50,7 +50,7 @@ jobs:
 
       - name: Upload coverage reports to Codecov
         if: matrix.node-version == '24.x' && github.actor != 'dependabot[bot]'
-        uses: codecov/codecov-action@v5.5.2
+        uses: codecov/codecov-action@v7.0.0
         with:
           files: ./coverage/coverage-final.json
           token: ${{ secrets.CODECOV_TOKEN }}
