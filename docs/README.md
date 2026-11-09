@@ -506,13 +506,7 @@ for (const event of events) {
 type DateInput = Date | number | string;
 
 type TimeUnit =
-  | "year"
-  | "month"
-  | "day"
-  | "hour"
-  | "minute"
-  | "second"
-  | "millisecond";
+  "year" | "month" | "day" | "hour" | "minute" | "second" | "millisecond";
 
 // Locale is a data structure containing localized strings
 interface Locale {
