@@ -57,7 +57,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x, 24.x]
+        node-version: [18.x, 20.x, 22.x, 24.x, 26.x]
 
     env:
       # Vitest 5 needs Node >= 22.12, so 18.x/20.x only smoke-test the build.
@@ -99,8 +99,9 @@ jobs:
         if: env.RUN_TESTS == 'true'
         run: sfw pnpm install
 
+      # 24.x runs the same tests with coverage below.
       - name: Test
-        if: matrix.node-version == '22.x'
+        if: env.RUN_TESTS == 'true' && matrix.node-version != '24.x'
         run: pnpm vitest run
 
       - name: Test with coverage
