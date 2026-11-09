@@ -7,14 +7,13 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  # tsdown (and Vitest 5) need Node.js >= 22.12/22.18, but the library itself
+  # still supports Node >= 18. Build once on a recent Node, then verify the
+  # built package on every supported Node version in the `test` job.
+  build:
     runs-on: ubuntu-slim
     permissions:
       contents: read
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x, 24.x]
 
     steps:
       # add Socket Firewall to the runner environment
@@ -26,27 +25,76 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 24.x
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 24.x
           cache: "pnpm"
 
       - run: sfw pnpm install
 
       - name: Lint
-        if: matrix.node-version == '24.x'
         run: pnpm lint
 
       - run: pnpm run build
 
-      # Vitest 5 requires Node.js 22.12+, so Node 18.x/20.x only verify that
-      # the built package loads and works (the library still supports Node >=18).
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 1
+
+  test:
+    needs: build
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x, 24.x]
+
+    env:
+      # Vitest 5 needs Node >= 22.12, so 18.x/20.x only smoke-test the build.
+      RUN_TESTS: ${{ !contains(fromJSON('["18.x", "20.x"]'), matrix.node-version) }}
+
+    steps:
+      # add Socket Firewall to the runner environment
+      - uses: socketdev/action@v1
+        with:
+          mode: firewall
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        if: env.RUN_TESTS == 'true'
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: ${{ env.RUN_TESTS == 'true' && 'pnpm' || '' }}
+
+      # Node 18.x/20.x: install nothing, only check that the built package
+      # resolves through its `exports` map and works (self-reference by name).
+      - name: Download dist
+        if: env.RUN_TESTS != 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
       - name: Smoke test built package
-        if: contains(fromJSON('["18.x", "20.x"]'), matrix.node-version)
+        if: env.RUN_TESTS != 'true'
         run: |
-          node -e "const c = require('./dist/index.cjs'); const i = require('./dist/i18n/index.cjs'); if (c.addDays(new Date(2024, 0, 1), 1).getDate() !== 2 || !i.enUS) process.exit(1)"
-          node --input-type=module -e "import { addDays } from './dist/index.js'; import { enUS } from './dist/i18n/index.js'; if (addDays(new Date(2024, 0, 1), 1).getDate() !== 2 || !enUS) process.exit(1)"
+          node -e "const c = require('chronia'); const i = require('chronia/i18n'); if (c.addDays(new Date(2024, 0, 1), 1).getDate() !== 2 || !i.enUS) process.exit(1)"
+          node --input-type=module -e "import { addDays } from 'chronia'; import { enUS } from 'chronia/i18n'; if (addDays(new Date(2024, 0, 1), 1).getDate() !== 2 || !enUS) process.exit(1)"
+
+      - name: Install dependencies
+        if: env.RUN_TESTS == 'true'
+        run: sfw pnpm install
 
       - name: Test
         if: matrix.node-version == '22.x'
