@@ -533,13 +533,7 @@ function isSubmittedOnTime(submissionDate: Date, deadline: Date): boolean {
 
 ```typescript
 type TimeUnit =
-  | "year"
-  | "month"
-  | "day"
-  | "hour"
-  | "minute"
-  | "second"
-  | "millisecond";
+  "year" | "month" | "day" | "hour" | "minute" | "second" | "millisecond";
 
 interface ComparisonOptions {
   unit?: TimeUnit;
