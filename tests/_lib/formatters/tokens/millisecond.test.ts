@@ -118,7 +118,6 @@ describe("formatMillisecond", () => {
       const date = new Date(2025, 0, 1, 0, 0, 0, 789);
 
       // Act
-      // @ts-expect-error Testing runtime behavior with unknown token
       const result = formatMillisecond(date, "SSSS");
 
       // Assert
@@ -130,7 +129,6 @@ describe("formatMillisecond", () => {
       const date = new Date(2025, 0, 1, 0, 0, 0, 456);
 
       // Act
-      // @ts-expect-error Testing runtime behavior with empty token
       const result = formatMillisecond(date, "");
 
       // Assert
@@ -142,7 +140,6 @@ describe("formatMillisecond", () => {
       const date = new Date(2025, 0, 1, 0, 0, 0, 123);
 
       // Act
-      // @ts-expect-error Testing runtime behavior with arbitrary token
       const result = formatMillisecond(date, "xyz");
 
       // Assert

@@ -11,5 +11,6 @@
     "isolatedDeclarations": true,
     "noEmit": true
   },
-  "include": ["src"]
+  "include": ["src", "tests"],
+  "exclude": ["tests/**/*.bench.ts"]
 }

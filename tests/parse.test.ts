@@ -17,7 +17,9 @@ describe("parse", () => {
   });
 
   describe("time parsing", () => {
-    it.each([
+    it.each<
+      [string, string, { hours: number; minutes: number; seconds: number; milliseconds?: number }]
+    >([
       ["23:59:59", "HH:mm:ss", { hours: 23, minutes: 59, seconds: 59 }],
       ["00:00:00", "HH:mm:ss", { hours: 0, minutes: 0, seconds: 0 }],
       ["12:30:45", "HH:mm:ss", { hours: 12, minutes: 30, seconds: 45 }],

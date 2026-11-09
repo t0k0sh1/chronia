@@ -199,7 +199,6 @@ describe("endOfYear", () => {
 
     it("should return Invalid Date when input is NaN", () => {
       // Act
-      // @ts-expect-error - Testing runtime behavior with invalid input type
       const result = endOfYear(NaN);
 
       // Assert
@@ -208,9 +207,7 @@ describe("endOfYear", () => {
 
     it("should return Invalid Date when input is Infinity", () => {
       // Arrange & Act
-      // @ts-expect-error - Testing runtime behavior with invalid input type
       const resultPositive = endOfYear(Infinity);
-      // @ts-expect-error - Testing runtime behavior with invalid input type
       const resultNegative = endOfYear(-Infinity);
 
       // Assert

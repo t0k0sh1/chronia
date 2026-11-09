@@ -209,9 +209,10 @@ export function describeLocaleValues(
     });
 
     // Language-specific equivalence tests
-    if (expected.equivalences) {
+    const { equivalences } = expected;
+    if (equivalences) {
       describe("language-specific characteristics", () => {
-        it.each(expected.equivalences)(
+        it.each(equivalences)(
           "$description",
           ({ component, widths }) => {
             // The TypeScript type for `widths` ensures at least two elements,
