@@ -2,4 +2,7 @@ allowBuilds:
   esbuild: true
 minimumReleaseAge: 1440
 overrides:
+  # esbuild is only an optional peer of vite, but pnpm auto-installs it; without
+  # this it resolved to 0.27.7 (GHSA-g7r4-m6w7-qqqr, fixed in 0.28.1).
+  esbuild: ^0.28.2
   yaml: ^2.8.3
