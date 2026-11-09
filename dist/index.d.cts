@@ -1,6 +1,4 @@
-import { D as DateInput, L as Locale, C as ComparisonOptions, I as Interval, B as BetweenOption, a as CompareOptions } from './types-BNkin9Bz.cjs';
-export { b as BoundsType, T as TimeUnit } from './types-BNkin9Bz.cjs';
-
+import { a as DateInput, c as TimeUnit, i as ComparisonOptions, n as BoundsType, o as Interval, r as CompareOptions, s as Locale, t as BetweenOption } from "./types-DHF3p-yQ.cjs";
 /**
  * Add the specified number of days to the given date.
  *
@@ -49,8 +47,7 @@ export { b as BoundsType, T as TimeUnit } from './types-BNkin9Bz.cjs';
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addDays(date: DateInput, amount: number): Date;
-
+export declare function addDays(date: DateInput, amount: number): Date;
 /**
  * Add the specified number of hours to the given date.
  *
@@ -97,8 +94,7 @@ declare function addDays(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addHours(date: DateInput, amount: number): Date;
-
+export declare function addHours(date: DateInput, amount: number): Date;
 /**
  * Add the specified number of milliseconds to the given date.
  *
@@ -143,8 +139,7 @@ declare function addHours(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addMilliseconds(date: DateInput, amount: number): Date;
-
+export declare function addMilliseconds(date: DateInput, amount: number): Date;
 /**
  * Add the specified number of minutes to the given date.
  *
@@ -191,8 +186,7 @@ declare function addMilliseconds(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addMinutes(date: DateInput, amount: number): Date;
-
+export declare function addMinutes(date: DateInput, amount: number): Date;
 /**
  * Add the specified number of months to the given date.
  *
@@ -245,8 +239,7 @@ declare function addMinutes(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addMonths(date: DateInput, amount: number): Date;
-
+export declare function addMonths(date: DateInput, amount: number): Date;
 /**
  * Add the specified number of seconds to the given date.
  *
@@ -293,8 +286,7 @@ declare function addMonths(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addSeconds(date: DateInput, amount: number): Date;
-
+export declare function addSeconds(date: DateInput, amount: number): Date;
 /**
  * Add the specified number of years to the given date.
  *
@@ -347,8 +339,7 @@ declare function addSeconds(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function addYears(date: DateInput, amount: number): Date;
-
+export declare function addYears(date: DateInput, amount: number): Date;
 /**
  * Format a Date object according to a format pattern.
  *
@@ -506,7 +497,7 @@ declare function addYears(date: DateInput, amount: number): Date;
  * - parse(format(date, pattern), pattern) should produce equivalent date (if pattern includes all components)
  * - Use format() to convert Date → string, parse() to convert string → Date
  */
-declare function format(date: Date, pattern: string, locale?: Locale): string;
+export declare function format(date: Date, pattern: string, locale?: Locale): string;
 /**
  * Create a pre-compiled formatter for efficient repeated formatting.
  *
@@ -535,8 +526,7 @@ declare function format(date: Date, pattern: string, locale?: Locale): string;
  * const results = dates.map(d => formatter(d));
  * ```
  */
-declare function createFormatter(pattern: string, locale?: Locale): (date: Date) => string;
-
+export declare function createFormatter(pattern: string, locale?: Locale): (date: Date) => string;
 /**
  * Get the day of the month from the given date.
  *
@@ -580,8 +570,7 @@ declare function createFormatter(pattern: string, locale?: Locale): (date: Date)
  * - Returns the day in the local timezone
  * - Day values range from 1 to 31 depending on the month
  */
-declare function getDay(date: DateInput): number;
-
+export declare function getDay(date: DateInput): number;
 /**
  * Get the hours of the given date.
  *
@@ -625,8 +614,7 @@ declare function getDay(date: DateInput): number;
  * - Returns the hours in the local timezone (not UTC)
  * - Hours are in 24-hour format (0-23)
  */
-declare function getHours(date: DateInput): number;
-
+export declare function getHours(date: DateInput): number;
 /**
  * Get the milliseconds of the given date.
  *
@@ -670,8 +658,7 @@ declare function getHours(date: DateInput): number;
  * - Returns milliseconds in the range 0-999
  * - Works with dates in any timezone (returns local time component)
  */
-declare function getMilliseconds(date: DateInput): number;
-
+export declare function getMilliseconds(date: DateInput): number;
 /**
  * Get the minutes of the given date.
  *
@@ -715,8 +702,7 @@ declare function getMilliseconds(date: DateInput): number;
  * - Returns the minutes in the local timezone
  * - Always returns a value between 0 and 59 for valid dates
  */
-declare function getMinutes(date: DateInput): number;
-
+export declare function getMinutes(date: DateInput): number;
 /**
  * Get the month of the given date.
  *
@@ -760,8 +746,7 @@ declare function getMinutes(date: DateInput): number;
  * - Returns the month in the local timezone
  * - Uses 0-based indexing (0-11), same as JavaScript's native getMonth()
  */
-declare function getMonth(date: DateInput): number;
-
+export declare function getMonth(date: DateInput): number;
 /**
  * Get the seconds of the given date.
  *
@@ -805,8 +790,7 @@ declare function getMonth(date: DateInput): number;
  * - Returns the seconds in the local timezone
  * - Seconds are always in the range 0-59
  */
-declare function getSeconds(date: DateInput): number;
-
+export declare function getSeconds(date: DateInput): number;
 /**
  * Get the timestamp of the given date.
  *
@@ -850,8 +834,7 @@ declare function getSeconds(date: DateInput): number;
  * - Returns timestamp in milliseconds since Unix epoch (1970-01-01T00:00:00.000Z)
  * - For numeric input, returns the value as-is if valid
  */
-declare function getTime(date: DateInput): number;
-
+export declare function getTime(date: DateInput): number;
 /**
  * Get the full year of the given date.
  *
@@ -895,8 +878,7 @@ declare function getTime(date: DateInput): number;
  * - Returns the year in the local timezone
  * - Supports negative years (BC dates)
  */
-declare function getYear(date: DateInput): number;
-
+export declare function getYear(date: DateInput): number;
 /**
  * Set the year of the given date.
  *
@@ -943,8 +925,7 @@ declare function getYear(date: DateInput): number;
  * - Special handling: When the source date is Feb 29 and the target year is not a leap year, the result becomes Feb 28
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setYear(date: DateInput, year: number): Date;
-
+export declare function setYear(date: DateInput, year: number): Date;
 /**
  * Set the month of the given date.
  *
@@ -991,8 +972,7 @@ declare function setYear(date: DateInput, year: number): Date;
  * - Special handling: When the original day doesn't exist in the target month (e.g., Jan 31 → Feb), adjusts to the last valid day of the month (Feb 28 or 29)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setMonth(date: DateInput, month: number): Date;
-
+export declare function setMonth(date: DateInput, month: number): Date;
 /**
  * Set the day of the month of the given date.
  *
@@ -1039,8 +1019,7 @@ declare function setMonth(date: DateInput, month: number): Date;
  * - Rollover behavior: Day values outside valid range cause date to roll over to adjacent months (e.g., Jan 32 → Feb 1, day 0 → last day of previous month)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setDay(date: DateInput, day: number): Date;
-
+export declare function setDay(date: DateInput, day: number): Date;
 /**
  * Set the hours of the given date.
  *
@@ -1087,8 +1066,7 @@ declare function setDay(date: DateInput, day: number): Date;
  * - Hours outside 0-23 will cause date rollover (e.g., 24 → next day, -1 → previous day)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setHours(date: DateInput, hours: number): Date;
-
+export declare function setHours(date: DateInput, hours: number): Date;
 /**
  * Set the minutes of the given date.
  *
@@ -1135,8 +1113,7 @@ declare function setHours(date: DateInput, hours: number): Date;
  * - Values outside 0-59 cause rollover: 60 → next hour, -1 → previous hour
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setMinutes(date: DateInput, minutes: number): Date;
-
+export declare function setMinutes(date: DateInput, minutes: number): Date;
 /**
  * Set the seconds of the given date.
  *
@@ -1183,8 +1160,7 @@ declare function setMinutes(date: DateInput, minutes: number): Date;
  * - Seconds outside 0-59 range cause rollover to adjacent minutes (60 → next minute, -1 → previous minute)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setSeconds(date: DateInput, seconds: number): Date;
-
+export declare function setSeconds(date: DateInput, seconds: number): Date;
 /**
  * Set the complete timestamp of the given date.
  *
@@ -1232,8 +1208,7 @@ declare function setSeconds(date: DateInput, seconds: number): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - This function replaces all date/time components at once (unlike setYear, setMonth, etc.)
  */
-declare function setTime(date: DateInput, time: number): Date;
-
+export declare function setTime(date: DateInput, time: number): Date;
 /**
  * Set the milliseconds of the given date.
  *
@@ -1280,8 +1255,7 @@ declare function setTime(date: DateInput, time: number): Date;
  * - Special handling: Values outside 0-999 cause rollover to adjacent seconds (1000 → next second, -1 → previous second)
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function setMilliseconds(date: DateInput, milliseconds: number): Date;
-
+export declare function setMilliseconds(date: DateInput, milliseconds: number): Date;
 /**
  * Check if the first date is strictly after the second date.
  *
@@ -1331,8 +1305,7 @@ declare function setMilliseconds(date: DateInput, milliseconds: number): Date;
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isAfter(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
-
+export declare function isAfter(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 /**
  * Check if the first date is after or equal to the second date.
  *
@@ -1382,8 +1355,7 @@ declare function isAfter(a: DateInput, b: DateInput, options?: ComparisonOptions
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isAfterOrEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
-
+export declare function isAfterOrEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 /**
  * Check if the first date is strictly before the second date.
  *
@@ -1433,8 +1405,7 @@ declare function isAfterOrEqual(a: DateInput, b: DateInput, options?: Comparison
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isBefore(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
-
+export declare function isBefore(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 /**
  * Check if the first date is before or equal to the second date.
  *
@@ -1484,8 +1455,7 @@ declare function isBefore(a: DateInput, b: DateInput, options?: ComparisonOption
  * - When using unit-based comparison, dates are truncated to the specified unit before comparing
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  */
-declare function isBeforeOrEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
-
+export declare function isBeforeOrEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 /**
  * Check if a date falls between two boundary dates with configurable inclusion.
  *
@@ -1547,8 +1517,7 @@ declare function isBeforeOrEqual(a: DateInput, b: DateInput, options?: Compariso
  *   - "(]" - Start excluded, end included
  * - Invalid bounds values default to "()" behavior
  */
-declare function isBetween(date: DateInput, interval: Interval, options?: BetweenOption): boolean;
-
+export declare function isBetween(date: DateInput, interval: Interval, options?: BetweenOption): boolean;
 /**
  * Check if two dates are equal.
  *
@@ -1600,8 +1569,7 @@ declare function isBetween(date: DateInput, interval: Interval, options?: Betwee
  * - Unit comparison example: comparing by "day" ignores hours, minutes, seconds, and milliseconds
  * - Two dates with the same timestamp are always equal (at millisecond precision)
  */
-declare function isEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
-
+export declare function isEqual(a: DateInput, b: DateInput, options?: ComparisonOptions): boolean;
 /**
  * Checks if the given date is in the future relative to the current time.
  *
@@ -1663,8 +1631,7 @@ declare function isEqual(a: DateInput, b: DateInput, options?: ComparisonOptions
  * @see {@link isPast} - Check if a date is in the past
  * @see {@link isAfter} - Check if one date is after another date
  */
-declare function isFuture(date: DateInput): boolean;
-
+export declare function isFuture(date: DateInput): boolean;
 /**
  * Checks if the given date is in the past relative to the current time.
  *
@@ -1726,8 +1693,7 @@ declare function isFuture(date: DateInput): boolean;
  * @see {@link isFuture} - Check if a date is in the future
  * @see {@link isBefore} - Check if one date is before another date
  */
-declare function isPast(date: DateInput): boolean;
-
+export declare function isPast(date: DateInput): boolean;
 /**
  * Check if the given value is a Date object instance.
  *
@@ -1780,8 +1746,7 @@ declare function isPast(date: DateInput): boolean;
  * - Never throws exceptions, always returns a boolean
  * - For checking valid dates (both type and validity), use: `isDate(value) && isValid(value)`
  */
-declare function isDate(value: unknown): value is Date;
-
+export declare function isDate(value: unknown): value is Date;
 /**
  * Validates whether the given year, month, and day combination represents a valid date.
  *
@@ -1841,8 +1806,7 @@ declare function isDate(value: unknown): value is Date;
  * - Returns false for any invalid input
  * - Immutable: does not modify any input values
  */
-declare function isExists(year: number, month: number, day: number): boolean;
-
+export declare function isExists(year: number, month: number, day: number): boolean;
 /**
  * Check if the given value is a valid Date, timestamp, or ISO 8601 string.
  *
@@ -1891,210 +1855,10 @@ declare function isExists(year: number, month: number, day: number): boolean;
  * - Returns true for all finite numeric timestamps, including 0 (Unix epoch) and negative values
  * - Uses the same validation logic as other library functions for consistency
  */
-declare function isValid(date: DateInput): boolean;
-
-/**
- * Parse a date string according to a format pattern.
- *
- * This function validates arguments before processing and parses date strings using the same
- * Unicode format tokens as the format() function. Returns a new Date object on success, or
- * an invalid Date (with NaN time) if parsing fails. Supports localized parsing and uses a
- * reference date for missing date components.
- *
- * @param dateString - The date string to parse
- * @param pattern - The format pattern using Unicode tokens (e.g., "yyyy-MM-dd HH:mm:ss")
- * @param options - Optional parsing configuration
- * @param options.locale - Optional localization object for parsing locale-specific text (month names, day periods, etc.)
- * @param options.referenceDate - Reference date for missing components (defaults to current date)
- * @returns Parsed Date object, or invalid Date if parsing fails (no exceptions thrown)
- *
- * @example
- * ```typescript
- * // Basic date parsing
- * const date1 = parse("2024-01-15", "yyyy-MM-dd");
- * // Returns: Date(2024, 0, 15, 0, 0, 0, 0)
- *
- * // Date and time combined
- * const date2 = parse("15/01/2024 14:30", "dd/MM/yyyy HH:mm");
- * // Returns: Date(2024, 0, 15, 14, 30, 0, 0)
- *
- * // 12-hour format with AM/PM
- * const date3 = parse("2:30 PM", "h:mm a");
- * // Returns: Date with current date, time set to 14:30
- *
- * // Parsing with seconds and milliseconds
- * const date4 = parse("14:30:45.123", "HH:mm:ss.SSS");
- * // Returns: Date with current date, time set to 14:30:45.123
- *
- * // Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)
- * const date5 = parse("99-12-31", "yy-MM-dd");
- * // Returns: Date(1999, 11, 31)
- * const date6 = parse("00-01-01", "yy-MM-dd");
- * // Returns: Date(2000, 0, 1)
- *
- * // Literal text in pattern (enclosed in quotes)
- * const date7 = parse("Year 2024, Month 01", "'Year' yyyy', Month' MM");
- * // Returns: Date(2024, 0, 1, 0, 0, 0, 0)
- *
- * // Escaped single quote in pattern
- * const date8 = parse("It's 2024", "'It''s' yyyy");
- * // Returns: Date(2024, current month, current day)
- *
- * // Using reference date for missing components
- * const refDate = new Date(2023, 5, 10); // June 10, 2023
- * const date9 = parse("14:30", "HH:mm", { referenceDate: refDate });
- * // Returns: Date(2023, 5, 10, 14, 30, 0, 0)
- *
- * // Localized month names (English)
- * import { enUS } from "./i18n/en-US";
- * const date10 = parse("January 15, 2024", "MMMM dd, yyyy", { locale: enUS });
- * // Returns: Date(2024, 0, 15)
- *
- * // Localized month names (Japanese)
- * import { ja } from "./i18n/ja";
- * const date11 = parse("2024年1月15日", "yyyy'年'M'月'd'日'", { locale: ja });
- * // Returns: Date(2024, 0, 15)
- *
- * // Month-only parsing with 31st reference date (day resets to 1)
- * const refDate31 = new Date(2024, 0, 31); // Jan 31
- * const date16 = parse("Feb", "MMM", { referenceDate: refDate31 });
- * // Returns: Date(2024, 1, 1) - Feb 1st (NOT Mar 2nd/3rd - rollover prevented)
- *
- * // Explicit day parsing overrides month parser's day=1 default
- * const date17 = parse("Feb 15", "MMM dd", { referenceDate: refDate31 });
- * // Returns: Date(2024, 1, 15) - Feb 15th
- *
- * // Weekday parsing (for validation, doesn't affect result)
- * const date12 = parse("Monday, 2024-01-15", "EEEE, yyyy-MM-dd");
- * // Returns: Date(2024, 0, 15)
- *
- * // Day of year parsing
- * const date13 = parse("2024-032", "yyyy-DDD");
- * // Returns: Date(2024, 1, 1) - February 1st (32nd day of 2024)
- *
- * // Era parsing (AD/BC)
- * const date14 = parse("100 BC", "yyyy G");
- * // Returns: Date(-99, 0, 1) - Year 100 BC
- *
- * // ISO 8601-like format
- * const date15 = parse("2024-01-15T14:30:00", "yyyy-MM-dd'T'HH:mm:ss");
- * // Returns: Date(2024, 0, 15, 14, 30, 0, 0)
- *
- * // Invalid input returns Invalid Date
- * const invalid1 = parse("invalid-text", "yyyy-MM-dd");
- * // Returns: Invalid Date (isNaN(invalid1.getTime()) === true)
- *
- * // Mismatched pattern returns Invalid Date
- * const invalid2 = parse("2024-01-15", "dd/MM/yyyy");
- * // Returns: Invalid Date
- *
- * // Out of range values return Invalid Date
- * const invalid3 = parse("2024-13-01", "yyyy-MM-dd");
- * // Returns: Invalid Date (month 13 is invalid)
- *
- * // Extra characters return Invalid Date
- * const invalid4 = parse("2024-01-15extra", "yyyy-MM-dd");
- * // Returns: Invalid Date
- *
- * // Validation with isValid
- * import { isValid } from "../isValid";
- * const result = parse("2024-01-15", "yyyy-MM-dd");
- * if (isValid(result)) {
- *   console.log("Parsed successfully:", result);
- * } else {
- *   console.log("Parsing failed");
- * }
- * ```
- *
- * @remarks
- * **Supported Parse Tokens:**
- * - **Year**: y (variable), yy (2-digit, 50-99→19XX, 00-49→20XX), yyy (3-digit), yyyy (4-digit)
- * - **Month**: M (1-12), MM (01-12), MMM (Jan/Feb/..., case-insensitive), MMMM (January/February/..., case-insensitive), MMMMM (J/F/M/..., case-insensitive)
- * - **Day**: d (1-31), dd (01-31)
- * - **Hour**: H (0-23), HH (00-23), h (1-12), hh (01-12)
- * - **Minute**: m (0-59), mm (00-59)
- * - **Second**: s (0-59), ss (00-59)
- * - **Millisecond**: S (0-9, ×100), SS (00-99, ×10), SSS (000-999)
- * - **Day Period**: a/aa/aaa (AM/PM, case-insensitive), aaaa (A.M./P.M.), aaaaa (a/p)
- * - **Era**: G/GG/GGG (AD/BC, case-insensitive), GGGG (Anno Domini/Before Christ, case-insensitive), GGGGG (A/B, case-insensitive)
- * - **Weekday**: E/EE/EEE (Mon/Tue/..., case-insensitive), EEEE (Monday/Tuesday/..., case-insensitive), EEEEE (M/T/W/..., case-insensitive)
- * - **Day of Year**: D (1-366), DD (01-366), DDD (001-366)
- *
- * **Parsing Behavior:**
- * - Validates arguments before processing (consistent with library patterns)
- * - Missing date components use reference date values (or current date if not specified)
- * - Time components default to 00:00:00.000 when not specified in pattern
- * - **Month parsing resets day to 1** to prevent JavaScript Date rollover (e.g., parsing "Feb" on the 31st yields Feb 1st, not March 2nd/3rd)
- * - Explicit day parsing (pattern contains d/dd tokens) overrides the month parser's day=1 default
- * - Time-only parsing (no date tokens) preserves the reference date completely
- * - Literal text must be enclosed in single quotes ('text')
- * - Use '' (two single quotes) to represent a literal single quote character
- * - Pattern must match input exactly (including delimiters and spacing)
- * - Returns Invalid Date for: mismatched pattern, invalid values, extra/missing characters
- * - No exceptions thrown - always returns a Date object (valid or invalid)
- * - Use isValid() to check if parsing succeeded
- * - Locale option enables parsing of localized month names, weekdays, and day periods
- * - **Timezone handling**: Parsed dates are created in the local timezone (as per JavaScript's Date API)
- * - No timezone conversion is performed; the resulting Date object uses the system's local timezone
- * - Timezone tokens (z, Z, X, etc.) are not supported; parsed times are always interpreted as local time
- *
- * **Year Parsing:**
- * - yy: Two-digit year (50-99 → 1950-1999, 00-49 → 2000-2049)
- * - yyyy: Accepts 1-4 digits (supports years like "1 AD" or "999")
- * - yyy: Exactly 3 digits required (e.g., "001", "999")
- * - y: Variable length, parses all consecutive digits
- * - Supports years 0-99 via setFullYear (avoids JavaScript's automatic 1900 offset)
- * - BC years are represented as negative (e.g., 100 BC → -99)
- *
- * **12-Hour Format:**
- * - Requires both hour token (h/hh) and day period token (a/aa/aaa/aaaa/aaaaa)
- * - 12 AM converts to 00:00 (midnight)
- * - 12 PM remains 12:00 (noon)
- * - 1-11 AM remains 1-11 hours
- * - 1-11 PM converts to 13-23 hours
- * - Day period is case-insensitive ("am"/"AM"/"Am" all work)
- *
- * **Millisecond Parsing:**
- * - S: Parses 1 digit, multiplies by 100 (5 → 500ms)
- * - SS: Parses 2 digits, multiplies by 10 (50 → 500ms)
- * - SSS: Parses 3 digits, uses as-is (500 → 500ms)
- *
- * **Day of Year Parsing:**
- * - Automatically calculates month and day from day-of-year
- * - Respects leap years (366 days vs 365 days)
- * - Example: Day 32 in 2024 → February 1st
- *
- * **Weekday Parsing:**
- * - Weekday tokens are parsed but don't affect the resulting date
- * - Can be used for format validation (e.g., ensuring "Monday" matches a Monday date)
- * - Note: Parser doesn't validate weekday matches the actual date
- *
- * **Localization:**
- * - Provide locale object to parse localized text (month/weekday names, day periods)
- * - Without locale, falls back to English text parsing
- * - Locale affects: MMM/MMMM/MMMMM, E/EE/EEE/EEEE/EEEEE, a/aa/aaa/aaaa/aaaaa, G/GG/GGG/GGGG/GGGGG
- *
- * **Common Patterns:**
- * - ISO 8601-like: "yyyy-MM-dd'T'HH:mm:ss" or "yyyy-MM-dd'T'HH:mm:ss.SSS"
- * - US format: "MM/dd/yyyy" or "M/d/yyyy h:mm a"
- * - European format: "dd/MM/yyyy" or "dd.MM.yyyy HH:mm"
- * - Japanese format: "yyyy'年'M'月'd'日'" or "yyyy/MM/dd"
- *
- * **Performance Considerations:**
- * - Pattern tokenization occurs on every call (no caching)
- * - Complex patterns with many tokens may be slower
- * - Localized parsing (with locale option) is slightly slower than English-only
- * - For parsing many dates with same pattern, reuse the pattern string for better performance
- *
- * **Relationship with format():**
- * - parse() and format() use the same token syntax for consistency
- * - format(parse(str, pattern), pattern) should equal str (if str is valid)
- * - Use parse() to convert string → Date, format() to convert Date → string
- */
-
-declare function parse(dateString: string, pattern: string, options?: {
-    locale?: Locale;
-    referenceDate?: Date;
+export declare function isValid(date: DateInput): boolean;
+export declare function parse(dateString: string, pattern: string, options?: {
+  locale?: Locale;
+  referenceDate?: Date;
 }): Date;
 /**
  * Create a pre-compiled parser for efficient repeated parsing.
@@ -2135,14 +1899,13 @@ declare function parse(dateString: string, pattern: string, options?: {
  * const dates = dateStrings.map(s => parser(s));
  * ```
  */
-declare function createParser(pattern: string, defaultOptions?: {
-    locale?: Locale;
-    referenceDate?: Date;
+export declare function createParser(pattern: string, defaultOptions?: {
+  locale?: Locale;
+  referenceDate?: Date;
 }): (dateString: string, options?: {
-    locale?: Locale;
-    referenceDate?: Date;
+  locale?: Locale;
+  referenceDate?: Date;
 }) => Date;
-
 /**
  * Subtract the specified number of days from the given date.
  *
@@ -2191,8 +1954,7 @@ declare function createParser(pattern: string, defaultOptions?: {
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subDays(date: DateInput, amount: number): Date;
-
+export declare function subDays(date: DateInput, amount: number): Date;
 /**
  * Subtract the specified number of hours from the given date.
  *
@@ -2239,8 +2001,7 @@ declare function subDays(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subHours(date: DateInput, amount: number): Date;
-
+export declare function subHours(date: DateInput, amount: number): Date;
 /**
  * Subtract the specified number of milliseconds from the given date.
  *
@@ -2285,8 +2046,7 @@ declare function subHours(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subMilliseconds(date: DateInput, amount: number): Date;
-
+export declare function subMilliseconds(date: DateInput, amount: number): Date;
 /**
  * Subtract the specified number of minutes from the given date.
  *
@@ -2333,8 +2093,7 @@ declare function subMilliseconds(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subMinutes(date: DateInput, amount: number): Date;
-
+export declare function subMinutes(date: DateInput, amount: number): Date;
 /**
  * Subtract the specified number of months from the given date.
  *
@@ -2387,8 +2146,7 @@ declare function subMinutes(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subMonths(date: DateInput, amount: number): Date;
-
+export declare function subMonths(date: DateInput, amount: number): Date;
 /**
  * Subtract the specified number of seconds from the given date.
  *
@@ -2435,8 +2193,7 @@ declare function subMonths(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subSeconds(date: DateInput, amount: number): Date;
-
+export declare function subSeconds(date: DateInput, amount: number): Date;
 /**
  * Subtract the specified number of years from the given date.
  *
@@ -2489,8 +2246,7 @@ declare function subSeconds(date: DateInput, amount: number): Date;
  * - Returns Invalid Date for: Invalid Date, NaN, Infinity, -Infinity, invalid strings
  * - Always returns a new Date instance (does not mutate input)
  */
-declare function subYears(date: DateInput, amount: number): Date;
-
+export declare function subYears(date: DateInput, amount: number): Date;
 /**
  * Truncate a date to the start of the day.
  *
@@ -2531,8 +2287,7 @@ declare function subYears(date: DateInput, amount: number): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Preserves the date across DST transitions
  */
-declare function truncDay(date: DateInput): Date;
-
+export declare function truncDay(date: DateInput): Date;
 /**
  * Truncate a date to the start of the hour.
  *
@@ -2573,8 +2328,7 @@ declare function truncDay(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Works correctly across all 24 hours of the day
  */
-declare function truncHour(date: DateInput): Date;
-
+export declare function truncHour(date: DateInput): Date;
 /**
  * Truncate a date to the millisecond.
  *
@@ -2616,8 +2370,7 @@ declare function truncHour(date: DateInput): Date;
  * - Provided for API consistency even though no truncation occurs
  * - Maintains millisecond precision (0-999)
  */
-declare function truncMillisecond(date: DateInput): Date;
-
+export declare function truncMillisecond(date: DateInput): Date;
 /**
  * Truncate a date to the start of the minute.
  *
@@ -2658,8 +2411,7 @@ declare function truncMillisecond(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Works correctly across all 60 minutes of an hour
  */
-declare function truncMinute(date: DateInput): Date;
-
+export declare function truncMinute(date: DateInput): Date;
 /**
  * Truncate a date to the start of the month.
  *
@@ -2700,8 +2452,7 @@ declare function truncMinute(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Handles leap years correctly (February in leap years)
  */
-declare function truncMonth(date: DateInput): Date;
-
+export declare function truncMonth(date: DateInput): Date;
 /**
  * Truncate a date to the start of the second.
  *
@@ -2742,8 +2493,7 @@ declare function truncMonth(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Works correctly across all 60 seconds of a minute
  */
-declare function truncSecond(date: DateInput): Date;
-
+export declare function truncSecond(date: DateInput): Date;
 /**
  * Truncate a date to the start of the year.
  *
@@ -2784,8 +2534,7 @@ declare function truncSecond(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Handles leap years correctly
  */
-declare function truncYear(date: DateInput): Date;
-
+export declare function truncYear(date: DateInput): Date;
 /**
  * Calculate the difference in calendar days between two dates.
  *
@@ -2834,8 +2583,7 @@ declare function truncYear(date: DateInput): Date;
  * - Handles leap years, month boundaries, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffDays(dateLeft: DateInput, dateRight: DateInput): number;
-
+export declare function diffDays(dateLeft: DateInput, dateRight: DateInput): number;
 /**
  * Calculate the difference in complete hours between two dates.
  *
@@ -2884,8 +2632,7 @@ declare function diffDays(dateLeft: DateInput, dateRight: DateInput): number;
  * - Handles day, month, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffHours(dateLeft: DateInput, dateRight: DateInput): number;
-
+export declare function diffHours(dateLeft: DateInput, dateRight: DateInput): number;
 /**
  * Calculate the difference in milliseconds between two dates.
  *
@@ -2934,8 +2681,7 @@ declare function diffHours(dateLeft: DateInput, dateRight: DateInput): number;
  * - Most precise time difference function in the library
  * - Useful for performance measurements and precise time calculations
  */
-declare function diffMilliseconds(dateLeft: DateInput, dateRight: DateInput): number;
-
+export declare function diffMilliseconds(dateLeft: DateInput, dateRight: DateInput): number;
 /**
  * Calculate the difference in complete minutes between two dates.
  *
@@ -2984,8 +2730,7 @@ declare function diffMilliseconds(dateLeft: DateInput, dateRight: DateInput): nu
  * - Handles hour, day, month, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffMinutes(dateLeft: DateInput, dateRight: DateInput): number;
-
+export declare function diffMinutes(dateLeft: DateInput, dateRight: DateInput): number;
 /**
  * Calculate the difference in calendar months between two dates.
  *
@@ -3033,8 +2778,7 @@ declare function diffMinutes(dateLeft: DateInput, dateRight: DateInput): number;
  * - Handles year boundaries correctly
  * - Calculation: (yearDiff * 12) + monthDiff
  */
-declare function diffMonths(dateLeft: DateInput, dateRight: DateInput): number;
-
+export declare function diffMonths(dateLeft: DateInput, dateRight: DateInput): number;
 /**
  * Calculate the difference in complete seconds between two dates.
  *
@@ -3083,8 +2827,7 @@ declare function diffMonths(dateLeft: DateInput, dateRight: DateInput): number;
  * - Handles minute, hour, day, month, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-declare function diffSeconds(dateLeft: DateInput, dateRight: DateInput): number;
-
+export declare function diffSeconds(dateLeft: DateInput, dateRight: DateInput): number;
 /**
  * Calculate the difference in calendar years between two dates.
  *
@@ -3132,8 +2875,7 @@ declare function diffSeconds(dateLeft: DateInput, dateRight: DateInput): number;
  * - Handles century and millennium boundaries correctly
  * - Calculation: dateLeft.getFullYear() - dateRight.getFullYear()
  */
-declare function diffYears(dateLeft: DateInput, dateRight: DateInput): number;
-
+export declare function diffYears(dateLeft: DateInput, dateRight: DateInput): number;
 /**
  * Get the end of the month for the given date.
  *
@@ -3177,8 +2919,7 @@ declare function diffYears(dateLeft: DateInput, dateRight: DateInput): number;
  * - Automatically handles different month lengths (28, 29, 30, or 31 days)
  * - Correctly handles leap years for February
  */
-declare function endOfMonth(date: DateInput): Date;
-
+export declare function endOfMonth(date: DateInput): Date;
 /**
  * Get the start of the month for the given date.
  *
@@ -3220,8 +2961,7 @@ declare function endOfMonth(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Sets day to 1 and resets hours, minutes, seconds, and milliseconds to 0
  */
-declare function startOfMonth(date: DateInput): Date;
-
+export declare function startOfMonth(date: DateInput): Date;
 /**
  * Get the end of the year for the given date.
  *
@@ -3263,8 +3003,7 @@ declare function startOfMonth(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Sets month to 11 (December), day to 31, hours to 23, minutes to 59, seconds to 59, and milliseconds to 999
  */
-declare function endOfYear(date: DateInput): Date;
-
+export declare function endOfYear(date: DateInput): Date;
 /**
  * Get the start of the year for the given date.
  *
@@ -3306,8 +3045,7 @@ declare function endOfYear(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Sets month to 0 (January), day to 1, and resets hours, minutes, seconds, and milliseconds to 0
  */
-declare function startOfYear(date: DateInput): Date;
-
+export declare function startOfYear(date: DateInput): Date;
 /**
  * Get the end of the day for the given date.
  *
@@ -3349,8 +3087,7 @@ declare function startOfYear(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Sets hours to 23, minutes to 59, seconds to 59, and milliseconds to 999
  */
-declare function endOfDay(date: DateInput): Date;
-
+export declare function endOfDay(date: DateInput): Date;
 /**
  * Get the start of the day for the given date.
  *
@@ -3391,8 +3128,7 @@ declare function endOfDay(date: DateInput): Date;
  * - Always returns a new Date instance (does not mutate input)
  * - Preserves the date while resetting hours, minutes, seconds, and milliseconds to 0
  */
-declare function startOfDay(date: DateInput): Date;
-
+export declare function startOfDay(date: DateInput): Date;
 /**
  * Check if two dates are in the same calendar year.
  *
@@ -3437,8 +3173,7 @@ declare function startOfDay(date: DateInput): Date;
  * - Uses diffYears internally to determine if the year difference is zero
  * - Handles leap years, BC dates, and century boundaries correctly
  */
-declare function isSameYear(dateLeft: DateInput, dateRight: DateInput): boolean;
-
+export declare function isSameYear(dateLeft: DateInput, dateRight: DateInput): boolean;
 /**
  * Check if two dates are in the same calendar month and year.
  *
@@ -3484,8 +3219,7 @@ declare function isSameYear(dateLeft: DateInput, dateRight: DateInput): boolean;
  * - Uses diffMonths internally to determine if the month difference is zero
  * - Handles month boundaries and leap years correctly
  */
-declare function isSameMonth(dateLeft: DateInput, dateRight: DateInput): boolean;
-
+export declare function isSameMonth(dateLeft: DateInput, dateRight: DateInput): boolean;
 /**
  * Check if two dates are on the same calendar day.
  *
@@ -3538,8 +3272,7 @@ declare function isSameMonth(dateLeft: DateInput, dateRight: DateInput): boolean
  * - Uses diffDays internally to determine if the day difference is zero
  * - Handles DST transitions and leap years correctly
  */
-declare function isSameDay(dateLeft: DateInput, dateRight: DateInput): boolean;
-
+export declare function isSameDay(dateLeft: DateInput, dateRight: DateInput): boolean;
 /**
  * Check if two dates are in the same hour.
  *
@@ -3594,8 +3327,7 @@ declare function isSameDay(dateLeft: DateInput, dateRight: DateInput): boolean;
  * - Uses diffHours internally to determine if the hour difference is zero
  * - Handles DST transitions correctly
  */
-declare function isSameHour(dateLeft: DateInput, dateRight: DateInput): boolean;
-
+export declare function isSameHour(dateLeft: DateInput, dateRight: DateInput): boolean;
 /**
  * Check if two dates are in the same minute.
  *
@@ -3650,8 +3382,7 @@ declare function isSameHour(dateLeft: DateInput, dateRight: DateInput): boolean;
  * - Uses diffMinutes internally to determine if the minute difference is zero
  * - Handles DST transitions correctly
  */
-declare function isSameMinute(dateLeft: DateInput, dateRight: DateInput): boolean;
-
+export declare function isSameMinute(dateLeft: DateInput, dateRight: DateInput): boolean;
 /**
  * Check if two dates are in the same second.
  *
@@ -3706,8 +3437,7 @@ declare function isSameMinute(dateLeft: DateInput, dateRight: DateInput): boolea
  * - Uses diffSeconds internally to determine if the second difference is zero
  * - Handles DST transitions correctly
  */
-declare function isSameSecond(dateLeft: DateInput, dateRight: DateInput): boolean;
-
+export declare function isSameSecond(dateLeft: DateInput, dateRight: DateInput): boolean;
 /**
  * Return the earliest (minimum) date from the given dates.
  *
@@ -3738,8 +3468,7 @@ declare function isSameSecond(dateLeft: DateInput, dateRight: DateInput): boolea
  * const minResult = min(invalidDate, validDate); // Invalid Date
  * ```
  */
-declare function min(...dates: DateInput[]): Date;
-
+export declare function min(...dates: DateInput[]): Date;
 /**
  * Return the latest (maximum) date from the given dates.
  *
@@ -3770,8 +3499,7 @@ declare function min(...dates: DateInput[]): Date;
  * const maxResult = max(invalidDate, validDate); // Invalid Date
  * ```
  */
-declare function max(...dates: DateInput[]): Date;
-
+export declare function max(...dates: DateInput[]): Date;
 /**
  * Get the current date and time.
  *
@@ -3794,8 +3522,7 @@ declare function max(...dates: DateInput[]): Date;
  * const formatted = format(now(), 'yyyy-MM-dd HH:mm:ss');
  * ```
  */
-declare function now(): Date;
-
+export declare function now(): Date;
 /**
  * Clamp a date within a specified range.
  *
@@ -3839,8 +3566,7 @@ declare function now(): Date;
  * const result = clamp(invalidDate, validMin, validMax); // Invalid Date
  * ```
  */
-declare function clamp(date: DateInput, minDate: DateInput, maxDate: DateInput): Date;
-
+export declare function clamp(date: DateInput, minDate: DateInput, maxDate: DateInput): Date;
 /**
  * Compare two Date objects, timestamps, or ISO 8601 strings chronologically with configurable sort order.
  *
@@ -3895,8 +3621,7 @@ declare function clamp(date: DateInput, minDate: DateInput, maxDate: DateInput):
  * // compare(date1, date2, { order: 'asc' });  // treated as 'ASC'
  * // compare(date1, date2, { order: 'xyz' });  // treated as 'ASC' (default)
  */
-declare function compare(date1: DateInput, date2: DateInput, options?: CompareOptions): number;
-
+export declare function compare(date1: DateInput, date2: DateInput, options?: CompareOptions): number;
 /**
  * Date constants for the minimum and maximum representable dates in JavaScript.
  *
@@ -3909,11 +3634,10 @@ declare function compare(date1: DateInput, date2: DateInput, options?: CompareOp
  * The minimum date that can be represented by a JavaScript Date object.
  * Corresponds to April 20, 271821 BC.
  */
-declare const MIN_DATE: Date;
+export declare const MIN_DATE: Date;
 /**
  * The maximum date that can be represented by a JavaScript Date object.
  * Corresponds to September 13, 275760 AD.
  */
-declare const MAX_DATE: Date;
-
-export { BetweenOption, CompareOptions, ComparisonOptions, DateInput, Interval, Locale, MAX_DATE, MIN_DATE, addDays, addHours, addMilliseconds, addMinutes, addMonths, addSeconds, addYears, clamp, compare, createFormatter, createParser, diffDays, diffHours, diffMilliseconds, diffMinutes, diffMonths, diffSeconds, diffYears, endOfDay, endOfMonth, endOfYear, format, getDay, getHours, getMilliseconds, getMinutes, getMonth, getSeconds, getTime, getYear, isAfter, isAfterOrEqual, isBefore, isBeforeOrEqual, isBetween, isDate, isEqual, isExists, isFuture, isPast, isSameDay, isSameHour, isSameMinute, isSameMonth, isSameSecond, isSameYear, isValid, max, min, now, parse, setDay, setHours, setMilliseconds, setMinutes, setMonth, setSeconds, setTime, setYear, startOfDay, startOfMonth, startOfYear, subDays, subHours, subMilliseconds, subMinutes, subMonths, subSeconds, subYears, truncDay, truncHour, truncMillisecond, truncMinute, truncMonth, truncSecond, truncYear };
+export declare const MAX_DATE: Date;
+export type { BetweenOption, BoundsType, CompareOptions, ComparisonOptions, DateInput, Interval, Locale, TimeUnit };

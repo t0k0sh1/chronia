@@ -1,4 +1,4 @@
-import { defineConfig } from "tsup";
+import { defineConfig } from "tsdown";
 
 export default defineConfig({
   entry: {
@@ -13,4 +13,6 @@ export default defineConfig({
   treeshake: true,
   outDir: "dist",
   target: "es2020",
+  // Keep the published file names (.js for ESM under "type": "module", .cjs for CJS)
+  fixedExtension: false,
 });

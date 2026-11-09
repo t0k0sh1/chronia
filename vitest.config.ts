@@ -14,7 +14,7 @@ export default defineConfig({
         "**/tests/**",
         "**/node_modules/**",
         "**/vitest.config.ts",
-        "**/tsup.config.ts",
+        "**/tsdown.config.ts",
         "**/src/types.ts",
         "**/src/i18n/**",
       ],

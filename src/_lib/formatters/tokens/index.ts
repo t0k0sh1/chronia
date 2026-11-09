@@ -10,7 +10,19 @@ import { formatDayPeriod } from "./dayPeriod";
 import { formatDayOfYear } from "./dayOfYear";
 import { formatWeekday } from "./weekday";
 
-export const tokens = {
+export const tokens: {
+  formatEra: typeof formatEra;
+  formatYear: typeof formatYear;
+  formatMonth: typeof formatMonth;
+  formatHour: typeof formatHour;
+  formatMinute: typeof formatMinute;
+  formatDay: typeof formatDay;
+  formatSecond: typeof formatSecond;
+  formatMillisecond: typeof formatMillisecond;
+  formatDayPeriod: typeof formatDayPeriod;
+  formatDayOfYear: typeof formatDayOfYear;
+  formatWeekday: typeof formatWeekday;
+} = {
   formatEra,
   formatYear,
   formatMonth,

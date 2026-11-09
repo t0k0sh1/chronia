@@ -1,7 +1,5 @@
-import { L as Locale } from '../types-BNkin9Bz.js';
-
-declare const enUS: Locale;
-
+import { s as Locale } from "../types-DHF3p-yQ.js";
+export declare const enUS: Locale;
 /**
  * Japanese locale data.
  *
@@ -15,8 +13,7 @@ declare const enUS: Locale;
  * uses "AC" in its Japanese locale, which is non-standard. Chronia prioritizes
  * correctness over compatibility in this case.
  */
-declare const ja: Locale;
-
+export declare const ja: Locale;
 /**
  * Chinese (Simplified) locale data.
  *
@@ -24,51 +21,44 @@ declare const ja: Locale;
  * certain components (era, dayPeriod), which is a characteristic of
  * the language.
  */
-declare const zhCN: Locale;
-
+export declare const zhCN: Locale;
 /**
  * Korean locale data.
  *
  * Note: In Korean, narrow and abbreviated forms are often identical for
  * weekdays and dayPeriod, which is a characteristic of the language.
  */
-declare const ko: Locale;
-
+export declare const ko: Locale;
 /**
  * Spanish locale data.
  *
  * Based on CLDR data for Spanish (Spain).
  */
-declare const es: Locale;
-
+export declare const es: Locale;
 /**
  * French locale data.
  *
  * Based on CLDR data for French (France).
  */
-declare const fr: Locale;
-
+export declare const fr: Locale;
 /**
  * German locale data.
  *
  * Based on CLDR data for German (Germany).
  */
-declare const de: Locale;
-
+export declare const de: Locale;
 /**
  * Portuguese (Brazil) locale data.
  *
  * Based on CLDR data for Portuguese (Brazil).
  */
-declare const ptBR: Locale;
-
+export declare const ptBR: Locale;
 /**
  * Russian locale data.
  *
  * Based on CLDR data for Russian (Russia).
  */
-declare const ru: Locale;
-
+export declare const ru: Locale;
 /**
  * Arabic locale data.
  *
@@ -79,20 +69,13 @@ declare const ru: Locale;
  * the UI layer. Applications should apply appropriate CSS styles
  * (`direction: rtl`) or use platform-specific RTL rendering.
  */
-declare const ar: Locale;
-
-declare const it: Locale;
-
-declare const nl: Locale;
-
-declare const pl: Locale;
-
-declare const pt: Locale;
-
-declare const sv: Locale;
-
-declare const tr: Locale;
-
+export declare const ar: Locale;
+export declare const it: Locale;
+export declare const nl: Locale;
+export declare const pl: Locale;
+export declare const pt: Locale;
+export declare const sv: Locale;
+export declare const tr: Locale;
 /**
  * Chinese (Traditional - Taiwan) locale data.
  *
@@ -100,16 +83,14 @@ declare const tr: Locale;
  * from zh-CN's "公元" (Common Era). Weekday abbreviations use "週" instead
  * of "周" (Simplified Chinese variant).
  */
-declare const zhTW: Locale;
-
+export declare const zhTW: Locale;
 /**
  * Chinese (Traditional - Hong Kong) locale data.
  *
  * Note: Hong Kong uses "公元" (Common Era) for era naming, similar to zh-CN.
  * Weekday abbreviations use "週" (Traditional Chinese variant) instead of "周".
  */
-declare const zhHK: Locale;
-
+export declare const zhHK: Locale;
 /**
  * Vietnamese locale data.
  *
@@ -118,8 +99,7 @@ declare const zhHK: Locale;
  * Day periods use abbreviated forms "SA" (sáng - morning) and "CH"
  * (chiều - afternoon).
  */
-declare const vi: Locale;
-
+export declare const vi: Locale;
 /**
  * Indonesian locale data.
  *
@@ -127,8 +107,7 @@ declare const vi: Locale;
  * weekday names. Era uses "Sebelum Masehi" (Before Christ) and "Masehi"
  * (Common Era/AD).
  */
-declare const id: Locale;
-
+export declare const id: Locale;
 /**
  * Malay locale data.
  *
@@ -136,8 +115,7 @@ declare const id: Locale;
  * Era uses "Sebelum Masihi" (Before Christ) and "Masihi" (Common Era).
  * Day periods use "PG" (pagi - morning) and "PTG" (petang - evening).
  */
-declare const ms: Locale;
-
+export declare const ms: Locale;
 /**
  * Thai locale data.
  *
@@ -145,8 +123,7 @@ declare const ms: Locale;
  * era (ค.ศ. = คริสต์ศักราช) rather than Buddhist Era (พ.ศ. = พุทธศักราช)
  * for consistency with international standards.
  */
-declare const th: Locale;
-
+export declare const th: Locale;
 /**
  * Hindi locale data.
  *
@@ -154,8 +131,7 @@ declare const th: Locale;
  * and "ईसवी सन" (Anno Domini/Common Era). Day periods use "पूर्वाह्न"
  * (forenoon/AM) and "अपराह्न" (afternoon/PM).
  */
-declare const hi: Locale;
-
+export declare const hi: Locale;
 /**
  * English (United Kingdom) locale data.
  *
@@ -163,8 +139,7 @@ declare const hi: Locale;
  * periods as American English. Date format differences (DD/MM/YYYY vs
  * MM/DD/YYYY) are handled at the format pattern level, not in locale data.
  */
-declare const enGB: Locale;
-
+export declare const enGB: Locale;
 /**
  * English (Australia) locale data.
  *
@@ -172,8 +147,7 @@ declare const enGB: Locale;
  * periods as American English. Date format differences (DD/MM/YYYY vs
  * MM/DD/YYYY) are handled at the format pattern level, not in locale data.
  */
-declare const enAU: Locale;
-
+export declare const enAU: Locale;
 /**
  * English (Canada) locale data.
  *
@@ -181,98 +155,83 @@ declare const enAU: Locale;
  * periods as American English. Date format differences are handled at the
  * format pattern level, not in locale data.
  */
-declare const enCA: Locale;
-
+export declare const enCA: Locale;
 /**
  * Danish locale data.
  *
  * Based on CLDR data for Danish (Denmark).
  */
-declare const da: Locale;
-
+export declare const da: Locale;
 /**
  * Finnish locale data.
  *
  * Based on CLDR data for Finnish (Finland).
  */
-declare const fi: Locale;
-
+export declare const fi: Locale;
 /**
  * Norwegian Bokmål locale data.
  *
  * Based on CLDR data for Norwegian Bokmål (Norway).
  */
-declare const nb: Locale;
-
+export declare const nb: Locale;
 /**
  * Czech locale data.
  *
  * Based on CLDR data for Czech (Czech Republic).
  */
-declare const cs: Locale;
-
+export declare const cs: Locale;
 /**
  * Greek locale data.
  *
  * Based on CLDR data for Greek (Greece).
  */
-declare const el: Locale;
-
+export declare const el: Locale;
 /**
  * Hebrew locale data.
  *
  * Based on CLDR data for Hebrew (Israel).
  * Note: Hebrew is a right-to-left (RTL) language.
  */
-declare const he: Locale;
-
+export declare const he: Locale;
 /**
  * Hungarian locale data.
  *
  * Based on CLDR data for Hungarian (Hungary).
  */
-declare const hu: Locale;
-
+export declare const hu: Locale;
 /**
  * Romanian locale data.
  *
  * Based on CLDR data for Romanian (Romania).
  */
-declare const ro: Locale;
-
+export declare const ro: Locale;
 /**
  * Ukrainian locale data.
  *
  * Based on CLDR data for Ukrainian (Ukraine).
  */
-declare const uk: Locale;
-
+export declare const uk: Locale;
 /**
  * Slovak locale data.
  *
  * Based on CLDR data for Slovak (Slovakia).
  */
-declare const sk: Locale;
-
+export declare const sk: Locale;
 /**
  * Bulgarian locale data.
  *
  * Based on CLDR data for Bulgarian (Bulgaria).
  */
-declare const bg: Locale;
-
+export declare const bg: Locale;
 /**
  * Croatian locale data.
  *
  * Based on CLDR data for Croatian (Croatia).
  */
-declare const hr: Locale;
-
+export declare const hr: Locale;
 /**
  * Serbian locale data.
  *
  * Based on CLDR data for Serbian (Serbia, Cyrillic script).
  */
-declare const sr: Locale;
-
-export { ar, bg, cs, da, de, el, enAU, enCA, enGB, enUS, es, fi, fr, he, hi, hr, hu, id, it, ja, ko, ms, nb, nl, pl, pt, ptBR, ro, ru, sk, sr, sv, th, tr, uk, vi, zhCN, zhHK, zhTW };
+export declare const sr: Locale;
