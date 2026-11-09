@@ -51,6 +51,7 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
     "lint": "oxlint ./src && prettier --check 'src/**/*.ts' 'docs/**/*.md' 'README.md'",
     "lint:fix": "oxlint ./src --fix && prettier --write 'src/**/*.ts' 'docs/**/*.md' 'README.md'"
   },
@@ -61,13 +62,12 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/node": "^24.19.2",
     "@vitest/coverage-v8": "^5.1.0",
     "oxlint": "^1.92.0",
     "prettier": "^3.9.10",
     "rimraf": "^6.1.4",
     "tsdown": "^0.23.7",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@12.18.0"
