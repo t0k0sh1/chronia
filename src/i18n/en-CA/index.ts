@@ -1,4 +1,5 @@
 import { enUS } from "../en-US";
+import { Locale } from "../../types";
 
 /**
  * English (Canada) locale data.
@@ -7,4 +8,4 @@ import { enUS } from "../en-US";
  * periods as American English. Date format differences are handled at the
  * format pattern level, not in locale data.
  */
-export const enCA = enUS;
+export const enCA: Locale = enUS;

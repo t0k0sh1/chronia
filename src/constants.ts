@@ -11,10 +11,10 @@
  * The minimum date that can be represented by a JavaScript Date object.
  * Corresponds to April 20, 271821 BC.
  */
-export const MIN_DATE = new Date(-8640000000000000);
+export const MIN_DATE: Date = new Date(-8640000000000000);
 
 /**
  * The maximum date that can be represented by a JavaScript Date object.
  * Corresponds to September 13, 275760 AD.
  */
-export const MAX_DATE = new Date(8640000000000000);
+export const MAX_DATE: Date = new Date(8640000000000000);
