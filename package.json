@@ -51,8 +51,8 @@
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint ./src && prettier --check 'docs/**/*.md' 'README.md'",
-    "lint:fix": "eslint ./src --fix && prettier --write 'docs/**/*.md' 'README.md'"
+    "lint": "oxlint ./src && prettier --check 'src/**/*.ts' 'docs/**/*.md' 'README.md'",
+    "lint:fix": "oxlint ./src --fix && prettier --write 'src/**/*.ts' 'docs/**/*.md' 'README.md'"
   },
   "engines": {
     "node": ">=18"
@@ -62,15 +62,12 @@
   },
   "devDependencies": {
     "@types/node": "^24.19.2",
-    "@typescript-eslint/eslint-plugin": "^8.72.1",
-    "@typescript-eslint/parser": "^8.72.1",
     "@vitest/coverage-v8": "^5.1.0",
-    "eslint": "^10.14.0",
+    "oxlint": "^1.92.0",
     "prettier": "^3.9.10",
     "rimraf": "^6.1.4",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.72.1",
     "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@12.18.0"

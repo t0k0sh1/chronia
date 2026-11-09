@@ -103,7 +103,7 @@ pnpm lint:docs      # Markdown linting (required for docs changes)
 ### Coding Guidelines
 
 - **TypeScript Strict Mode**: All code must pass TypeScript's strict type checking.
-- **ESLint Compliance**: Zero ESLint warnings or errors are required.
+- **Lint and Format Compliance**: `pnpm lint` runs oxlint and checks formatting with Prettier on `src`, `docs`, and `README.md`. Zero errors are required. `pnpm lint:fix` applies automatic fixes.
 - **Test Coverage**: Add tests for all new functionality. Maintain or improve existing test coverage.
 - **Documentation**: When adding new functions, create documentation in `docs/functions/`.
 

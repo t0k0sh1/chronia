@@ -14,7 +14,6 @@ export default defineConfig({
         "**/tests/**",
         "**/node_modules/**",
         "**/vitest.config.ts",
-        "**/eslint.config.js",
         "**/tsup.config.ts",
         "**/src/types.ts",
         "**/src/i18n/**",
