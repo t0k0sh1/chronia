@@ -83,11 +83,50 @@ export type Locale = {
    */
   month: {
     /** Shortest month representation (12 elements: Jan-Dec) */
-    narrow: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    narrow: readonly [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ];
     /** Abbreviated month representation (12 elements: Jan-Dec) */
-    abbr: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    abbr: readonly [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ];
     /** Full month representation (12 elements: Jan-Dec) */
-    wide: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+    wide: readonly [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ];
   };
 
   /**
@@ -170,11 +209,7 @@ export type Locale = {
  * @param locale - Optional localization object for locale-specific formatting
  * @returns Formatted string representation of the date component
  */
-export type Formatter = (
-  date: Date,
-  token: string,
-  locale?: Locale,
-) => string;
+export type Formatter = (date: Date, token: string, locale?: Locale) => string;
 
 /**
  * Parser result containing the new position and any parsed data.
@@ -259,13 +294,7 @@ export type DateInput = Date | number | string;
  * - "millisecond": Millisecond level operations
  */
 export type TimeUnit =
-  | "year"
-  | "month"
-  | "day"
-  | "hour"
-  | "minute"
-  | "second"
-  | "millisecond";
+  "year" | "month" | "day" | "hour" | "minute" | "second" | "millisecond";
 
 /**
  * Date interval with optional start and end boundaries.

@@ -55,4 +55,3 @@ export function getYear(date: DateInput): number {
   const dateObj = toDate(date);
   return dateObj.getFullYear();
 }
-

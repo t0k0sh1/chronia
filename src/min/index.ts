@@ -53,4 +53,3 @@ export function min(...dates: DateInput[]): Date {
 
   return new Date(minDate.getTime());
 }
-

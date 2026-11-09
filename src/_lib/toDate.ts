@@ -4,11 +4,7 @@
  */
 
 import type { DateInput } from "../types";
-import {
-  isValidDate,
-  isValidNumber,
-  isValidDateString,
-} from "./validators";
+import { isValidDate, isValidNumber, isValidDateString } from "./validators";
 
 /**
  * Converts a DateInput value to a Date object.

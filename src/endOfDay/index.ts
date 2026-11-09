@@ -55,6 +55,6 @@ export function endOfDay(date: DateInput): Date {
     23, // 23:59:59.999
     59,
     59,
-    999
+    999,
   );
 }

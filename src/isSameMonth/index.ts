@@ -46,6 +46,9 @@ import { diffMonths } from "../diffMonths";
  * - Uses diffMonths internally to determine if the month difference is zero
  * - Handles month boundaries and leap years correctly
  */
-export function isSameMonth(dateLeft: DateInput, dateRight: DateInput): boolean {
+export function isSameMonth(
+  dateLeft: DateInput,
+  dateRight: DateInput,
+): boolean {
   return diffMonths(dateLeft, dateRight) === 0;
 }

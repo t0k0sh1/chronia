@@ -68,7 +68,7 @@ import { toDate } from "./toDate";
  */
 export function compareDateTimes(
   a: DateInput,
-  b: DateInput
+  b: DateInput,
 ): 1 | -1 | 0 | false {
   // 1. Validate inputs using isValidDateInput
   if (!isValidDateInput(a) || !isValidDateInput(b)) {

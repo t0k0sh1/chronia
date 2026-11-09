@@ -55,6 +55,9 @@ import { diffSeconds } from "../diffSeconds";
  * - Uses diffSeconds internally to determine if the second difference is zero
  * - Handles DST transitions correctly
  */
-export function isSameSecond(dateLeft: DateInput, dateRight: DateInput): boolean {
+export function isSameSecond(
+  dateLeft: DateInput,
+  dateRight: DateInput,
+): boolean {
   return diffSeconds(dateLeft, dateRight) === 0;
 }

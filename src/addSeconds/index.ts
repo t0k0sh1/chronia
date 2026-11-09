@@ -49,8 +49,7 @@ import { toDate } from "../_lib/toDate";
  * - Always returns a new Date instance (does not mutate input)
  */
 export function addSeconds(date: DateInput, amount: number): Date {
-  if (!isValidDateInput(date) || !isValidNumber(amount))
-    return new Date(NaN);
+  if (!isValidDateInput(date) || !isValidNumber(amount)) return new Date(NaN);
 
   const dt = toDate(date);
   const secondsToAdd = Math.trunc(amount);
@@ -58,4 +57,3 @@ export function addSeconds(date: DateInput, amount: number): Date {
   dt.setSeconds(dt.getSeconds() + secondsToAdd);
   return dt;
 }
-

@@ -72,11 +72,50 @@ type Locale = {
      */
     month: {
         /** Shortest month representation (12 elements: Jan-Dec) */
-        narrow: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+        narrow: readonly [
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string
+        ];
         /** Abbreviated month representation (12 elements: Jan-Dec) */
-        abbr: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+        abbr: readonly [
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string
+        ];
         /** Full month representation (12 elements: Jan-Dec) */
-        wide: readonly [string, string, string, string, string, string, string, string, string, string, string, string];
+        wide: readonly [
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string,
+            string
+        ];
     };
     /**
      * Weekday names indexed by weekday value (0-based, Sunday first).

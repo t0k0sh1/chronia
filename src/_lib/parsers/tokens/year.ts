@@ -1,6 +1,12 @@
 import { Parser } from "../../../types";
 
-export const parseYear: Parser = (input, position, token, _locale, dateComponents) => {
+export const parseYear: Parser = (
+  input,
+  position,
+  token,
+  _locale,
+  dateComponents,
+) => {
   let yearStr = "";
 
   if (token === "y") {

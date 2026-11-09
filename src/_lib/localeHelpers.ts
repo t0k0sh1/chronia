@@ -47,7 +47,7 @@ import { defaultLocale } from "./defaultLocale";
 export function getMonthName(
   locale: Locale | undefined,
   month: number,
-  width: LocaleWidth = "abbr"
+  width: LocaleWidth = "abbr",
 ): string {
   const targetLocale = locale || defaultLocale;
   // Validate month is within valid range [0, 11]
@@ -102,7 +102,7 @@ export function getMonthName(
 export function getWeekdayName(
   locale: Locale | undefined,
   weekday: number,
-  width: LocaleWidth = "abbr"
+  width: LocaleWidth = "abbr",
 ): string {
   const targetLocale = locale || defaultLocale;
   // Validate weekday is within valid range [0, 6]
@@ -158,7 +158,7 @@ export function getWeekdayName(
 export function getEraName(
   locale: Locale | undefined,
   era: 0 | 1,
-  width: LocaleWidth = "abbr"
+  width: LocaleWidth = "abbr",
 ): string {
   const targetLocale = locale || defaultLocale;
   return targetLocale.era[width][era];
@@ -213,7 +213,7 @@ export function getEraName(
 export function getDayPeriod(
   locale: Locale | undefined,
   period: "am" | "pm",
-  width: LocaleWidth = "abbr"
+  width: LocaleWidth = "abbr",
 ): string {
   const targetLocale = locale || defaultLocale;
   const periodIndex = period === "am" ? 0 : 1;

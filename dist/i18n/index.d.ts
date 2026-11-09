@@ -1,4 +1,4 @@
-import { L as Locale } from '../types-BJmXVUwP.js';
+import { L as Locale } from '../types-BNkin9Bz.js';
 
 declare const enUS: Locale;
 

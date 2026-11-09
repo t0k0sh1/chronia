@@ -111,4 +111,3 @@ export function compare(
   // Apply order adjustment for descending sort
   return normalizedOrder === "DESC" ? -result : result;
 }
-

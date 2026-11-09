@@ -73,4 +73,3 @@ export function isAfter(
   const bTruncated = truncateToUnit(dtB, unit);
   return aTruncated.getTime() > bTruncated.getTime();
 }
-
