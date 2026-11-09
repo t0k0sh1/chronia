@@ -43,7 +43,7 @@ pnpm install
 pnpm test    # Run tests
 pnpm build   # Build the project
 pnpm lint    # Run linter
-pnpm typecheck # Type-check src
+pnpm typecheck # Type-check src and tests
 ```
 
 If all commands complete successfully, you're ready to start contributing!

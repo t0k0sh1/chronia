@@ -5,17 +5,17 @@ describe("LocaleWidth type", () => {
   describe("valid values", () => {
     it("should accept 'narrow'", () => {
       const width: LocaleWidth = "narrow";
-      expectTypeOf(width).toEqualTypeOf<LocaleWidth>();
+      expectTypeOf(width).toExtend<LocaleWidth>();
     });
 
     it("should accept 'abbr'", () => {
       const width: LocaleWidth = "abbr";
-      expectTypeOf(width).toEqualTypeOf<LocaleWidth>();
+      expectTypeOf(width).toExtend<LocaleWidth>();
     });
 
     it("should accept 'wide'", () => {
       const width: LocaleWidth = "wide";
-      expectTypeOf(width).toEqualTypeOf<LocaleWidth>();
+      expectTypeOf(width).toExtend<LocaleWidth>();
     });
   });
 
@@ -23,13 +23,11 @@ describe("LocaleWidth type", () => {
     it("should reject 'abbreviated' (old name)", () => {
       // @ts-expect-error - 'abbreviated' is not a valid LocaleWidth
       const width: LocaleWidth = "abbreviated";
-      expectTypeOf(width).not.toEqualTypeOf<LocaleWidth>();
     });
 
     it("should reject arbitrary strings", () => {
       // @ts-expect-error - arbitrary string is not valid
       const width: LocaleWidth = "invalid";
-      expectTypeOf(width).not.toEqualTypeOf<LocaleWidth>();
     });
   });
 });
@@ -160,9 +158,9 @@ describe("Locale type", () => {
         },
       };
 
-      expectTypeOf(locale.month.narrow).toEqualTypeOf<readonly string[]>();
-      expectTypeOf(locale.month.abbr).toEqualTypeOf<readonly string[]>();
-      expectTypeOf(locale.month.wide).toEqualTypeOf<readonly string[]>();
+      expectTypeOf(locale.month.narrow).toExtend<readonly string[]>();
+      expectTypeOf(locale.month.abbr).toExtend<readonly string[]>();
+      expectTypeOf(locale.month.wide).toExtend<readonly string[]>();
     });
 
     it("should have weekday property with 7-element arrays for each width", () => {
@@ -223,9 +221,9 @@ describe("Locale type", () => {
         },
       };
 
-      expectTypeOf(locale.weekday.narrow).toEqualTypeOf<readonly string[]>();
-      expectTypeOf(locale.weekday.abbr).toEqualTypeOf<readonly string[]>();
-      expectTypeOf(locale.weekday.wide).toEqualTypeOf<readonly string[]>();
+      expectTypeOf(locale.weekday.narrow).toExtend<readonly string[]>();
+      expectTypeOf(locale.weekday.abbr).toExtend<readonly string[]>();
+      expectTypeOf(locale.weekday.wide).toExtend<readonly string[]>();
     });
 
     it("should have dayPeriod property with 2-element arrays for each width", () => {
@@ -380,14 +378,13 @@ describe("Locale type", () => {
         },
       };
 
-      expectTypeOf(incompleteLocale).not.toEqualTypeOf<Locale>();
     });
 
     it("should reject incorrect width property names", () => {
-      // @ts-expect-error - 'abbreviated' should be 'abbr'
       const invalidLocale: Locale = {
         era: {
           narrow: ["B", "A"],
+          // @ts-expect-error - 'abbreviated' should be 'abbr'
           abbreviated: ["BC", "AD"], // Wrong property name
           wide: ["Before Christ", "Anno Domini"],
         },
@@ -442,7 +439,6 @@ describe("Locale type", () => {
         },
       };
 
-      expectTypeOf(invalidLocale).not.toEqualTypeOf<Locale>();
     });
 
     it("should enforce correct array element counts for era", () => {
@@ -507,9 +503,9 @@ describe("Locale type", () => {
       expectTypeOf(locale).toEqualTypeOf<Locale>();
 
       // Should reject era arrays with wrong element count
-      // @ts-expect-error - Era narrow should have exactly 2 elements
       const wrongEraCount: Locale = {
         era: {
+          // @ts-expect-error - Era narrow should have exactly 2 elements
           narrow: ["B"], // Wrong: only 1 element
           abbr: ["BC", "AD"],
           wide: ["Before Christ", "Anno Domini"],
@@ -565,7 +561,6 @@ describe("Locale type", () => {
         },
       };
 
-      expectTypeOf(wrongEraCount).not.toEqualTypeOf<Locale>();
     });
 
     it("should enforce correct array element counts for dayPeriod", () => {
@@ -630,7 +625,6 @@ describe("Locale type", () => {
       expectTypeOf(locale).toEqualTypeOf<Locale>();
 
       // Should reject dayPeriod arrays with wrong element count
-      // @ts-expect-error - DayPeriod abbr should have exactly 2 elements
       const wrongDayPeriodCount: Locale = {
         era: {
           narrow: ["B", "A"],
@@ -683,12 +677,12 @@ describe("Locale type", () => {
         },
         dayPeriod: {
           narrow: ["a", "p"],
+          // @ts-expect-error - DayPeriod abbr should have exactly 2 elements
           abbr: ["AM", "PM", "Noon"], // Wrong: 3 elements
           wide: ["AM (morning)", "PM (afternoon)"],
         },
       };
 
-      expectTypeOf(wrongDayPeriodCount).not.toEqualTypeOf<Locale>();
     });
   });
 });

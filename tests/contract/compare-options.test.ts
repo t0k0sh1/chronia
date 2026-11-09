@@ -119,9 +119,9 @@ describe("CompareOptions API Contracts", () => {
   // T010: Contract 8 - Unknown Properties Are Ignored
   describe("Contract 8: Unknown Properties Are Ignored", () => {
     it("should ignore excess properties", () => {
-      // @ts-expect-error Testing excess properties
       const result = compare(earlier, later, {
         order: "DESC",
+        // @ts-expect-error Testing excess properties
         unknown: true,
         extra: "value",
       });

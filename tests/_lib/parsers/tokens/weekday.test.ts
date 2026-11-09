@@ -13,6 +13,7 @@ describe("parseWeekday", () => {
     milliseconds: 0,
     isPM: false,
     hours12: null,
+    _dayParsed: false,
   });
 
   const mockLocale: Locale = {

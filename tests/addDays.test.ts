@@ -442,7 +442,7 @@ describe("addDays", () => {
 
     it("should return Invalid Date when date is array", () => {
       // Arrange
-      const invalidInput = [];
+      const invalidInput: unknown[] = [];
 
       // Act
       const result = addDays(invalidInput as any, 1);

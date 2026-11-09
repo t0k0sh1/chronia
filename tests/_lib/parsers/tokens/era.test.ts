@@ -3,6 +3,9 @@ import { parseEra } from "../../../../src/_lib/parsers/tokens/era";
 import { DateComponents, Locale } from "../../../../src/types";
 
 describe("parseEra", () => {
+  const EMPTY_MONTHS = ["", "", "", "", "", "", "", "", "", "", "", ""] as const;
+  const EMPTY_WEEKDAYS = ["", "", "", "", "", "", ""] as const;
+
   const createDateComponents = (year = 2000): DateComponents => ({
     year,
     month: 0,
@@ -13,6 +16,7 @@ describe("parseEra", () => {
     milliseconds: 0,
     isPM: false,
     hours12: null,
+    _dayParsed: false,
   });
 
   const mockLocale: Locale = {
@@ -22,14 +26,14 @@ describe("parseEra", () => {
       wide: ["Before Christ", "Anno Domini"],
     },
     month: {
-      narrow: [],
-      abbr: [],
-      wide: [],
+      narrow: EMPTY_MONTHS,
+      abbr: EMPTY_MONTHS,
+      wide: EMPTY_MONTHS,
     },
     weekday: {
-      narrow: [],
-      abbr: [],
-      wide: [],
+      narrow: EMPTY_WEEKDAYS,
+      abbr: EMPTY_WEEKDAYS,
+      wide: EMPTY_WEEKDAYS,
     },
     dayPeriod: {
       narrow: ["", ""],

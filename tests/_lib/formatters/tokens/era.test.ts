@@ -2,6 +2,9 @@ import { describe, it, expect } from "vitest";
 import { formatEra } from "../../../../src/_lib/formatters/tokens/era";
 import { Locale } from "../../../../src/types";
 
+const EMPTY_MONTHS = ["", "", "", "", "", "", "", "", "", "", "", ""] as const;
+const EMPTY_WEEKDAYS = ["", "", "", "", "", "", ""] as const;
+
 const mockLocale: Locale = {
   era: {
     narrow: ["B", "A"],
@@ -9,14 +12,14 @@ const mockLocale: Locale = {
     wide: ["Before Christ", "Anno Domini"],
   },
   month: {
-    narrow: [],
-    abbr: [],
-    wide: [],
+    narrow: EMPTY_MONTHS,
+    abbr: EMPTY_MONTHS,
+    wide: EMPTY_MONTHS,
   },
   weekday: {
-    narrow: [],
-    abbr: [],
-    wide: [],
+    narrow: EMPTY_WEEKDAYS,
+    abbr: EMPTY_WEEKDAYS,
+    wide: EMPTY_WEEKDAYS,
   },
   dayPeriod: {
     narrow: ["", ""],
