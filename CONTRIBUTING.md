@@ -19,7 +19,7 @@ There are many ways you can contribute to Chronia:
 
 Before you begin, ensure you have the following installed:
 
-- **Node.js 18 or higher** (LTS recommended): [Download Node.js](https://nodejs.org/)
+- **Node.js 22.12 or higher** (LTS recommended): [Download Node.js](https://nodejs.org/). Running the test suite requires it because Vitest 5 does not support older versions. The published library itself still supports Node.js 18 or higher.
 - **pnpm**: Chronia uses pnpm as its package manager
 
 ### Setup Steps

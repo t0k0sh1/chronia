@@ -40,8 +40,16 @@ jobs:
 
       - run: pnpm run build
 
+      # Vitest 5 requires Node.js 22.12+, so Node 18.x/20.x only verify that
+      # the built package loads and works (the library still supports Node >=18).
+      - name: Smoke test built package
+        if: contains(fromJSON('["18.x", "20.x"]'), matrix.node-version)
+        run: |
+          node -e "const c = require('./dist/index.cjs'); const i = require('./dist/i18n/index.cjs'); if (c.addDays(new Date(2024, 0, 1), 1).getDate() !== 2 || !i.enUS) process.exit(1)"
+          node --input-type=module -e "import { addDays } from './dist/index.js'; import { enUS } from './dist/i18n/index.js'; if (addDays(new Date(2024, 0, 1), 1).getDate() !== 2 || !enUS) process.exit(1)"
+
       - name: Test
-        if: matrix.node-version != '24.x'
+        if: matrix.node-version == '22.x'
         run: pnpm vitest run
 
       - name: Test with coverage
