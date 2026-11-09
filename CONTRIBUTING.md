@@ -43,6 +43,7 @@ pnpm install
 pnpm test    # Run tests
 pnpm build   # Build the project
 pnpm lint    # Run linter
+pnpm typecheck # Type-check src
 ```
 
 If all commands complete successfully, you're ready to start contributing!
@@ -210,6 +211,7 @@ If you add new functions or modify existing behavior, please update the document
 Ensure you have completed the following checklist:
 
 - [ ] `pnpm lint` passes with zero warnings
+- [ ] `pnpm typecheck` passes
 - [ ] `pnpm test` passes (all tests succeed)
 - [ ] `pnpm build` succeeds without errors
 - [ ] Tests added for new functionality

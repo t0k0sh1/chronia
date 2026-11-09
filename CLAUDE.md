@@ -16,6 +16,7 @@ This library has the following features:
 - `pnpm build`: Builds and generates output in `dist/`
 - `pnpm test`: Run unit tests
 - `pnpm test:coverage`: Run unit tests with coverage reporting
+- `pnpm typecheck`: Type-check `src/` with `tsc --noEmit`
 - `pnpm lint`: Run code and documentation linting
 - `pnpm lint:fix`: Run code and documentation linting and apply automatic fixes
 
