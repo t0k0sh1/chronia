@@ -1,7 +1,13 @@
 import { Parser } from "../../../types";
 import { getEraName } from "../../localeHelpers";
 
-export const parseEra: Parser = (input, position, token, locale, dateComponents) => {
+export const parseEra: Parser = (
+  input,
+  position,
+  token,
+  locale,
+  dateComponents,
+) => {
   // Collect all era variants from locale (case-sensitive by default)
   const adVariants = [
     getEraName(locale, 1, "wide"),
@@ -19,11 +25,27 @@ export const parseEra: Parser = (input, position, token, locale, dateComponents)
   // These are alternative English era designations not in default en-US locale
   // or case variants of default locale values
   const additionalAdVariants = ["CE", "ce", "Ce", "cE", "ad", "Ad", "aD"];
-  const additionalBcVariants = ["BCE", "bce", "Bce", "bcE", "BCe", "BcE", "bCe", "bCE", "bc", "Bc", "bC"];
+  const additionalBcVariants = [
+    "BCE",
+    "bce",
+    "Bce",
+    "bcE",
+    "BCe",
+    "BcE",
+    "bCe",
+    "bCE",
+    "bc",
+    "Bc",
+    "bC",
+  ];
 
   // Combine all variants and sort by length (longest first) to prefer longer matches
-  const allAdVariants = [...adVariants, ...additionalAdVariants].sort((a, b) => b.length - a.length);
-  const allBcVariants = [...bcVariants, ...additionalBcVariants].sort((a, b) => b.length - a.length);
+  const allAdVariants = [...adVariants, ...additionalAdVariants].sort(
+    (a, b) => b.length - a.length,
+  );
+  const allBcVariants = [...bcVariants, ...additionalBcVariants].sort(
+    (a, b) => b.length - a.length,
+  );
 
   // Try BC/BCE first (to handle "BCE" before "BC")
   for (const bcText of allBcVariants) {

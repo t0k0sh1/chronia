@@ -48,10 +48,14 @@ import { toDate } from "../_lib/toDate";
 export function clamp(
   date: DateInput,
   minDate: DateInput,
-  maxDate: DateInput
+  maxDate: DateInput,
 ): Date {
   // Validate arguments before conversion (consistent with library patterns)
-  if (!isValidDateInput(date) || !isValidDateInput(minDate) || !isValidDateInput(maxDate)) {
+  if (
+    !isValidDateInput(date) ||
+    !isValidDateInput(minDate) ||
+    !isValidDateInput(maxDate)
+  ) {
     return new Date(NaN);
   }
 
@@ -61,8 +65,10 @@ export function clamp(
   const maxDateObj = toDate(maxDate);
 
   // Ensure min <= max, swap if necessary
-  const actualMin = minDateObj.getTime() <= maxDateObj.getTime() ? minDateObj : maxDateObj;
-  const actualMax = minDateObj.getTime() <= maxDateObj.getTime() ? maxDateObj : minDateObj;
+  const actualMin =
+    minDateObj.getTime() <= maxDateObj.getTime() ? minDateObj : maxDateObj;
+  const actualMax =
+    minDateObj.getTime() <= maxDateObj.getTime() ? maxDateObj : minDateObj;
 
   const dateTime = dateObj.getTime();
   const minTime = actualMin.getTime();

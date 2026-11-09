@@ -55,6 +55,9 @@ import { diffMinutes } from "../diffMinutes";
  * - Uses diffMinutes internally to determine if the minute difference is zero
  * - Handles DST transitions correctly
  */
-export function isSameMinute(dateLeft: DateInput, dateRight: DateInput): boolean {
+export function isSameMinute(
+  dateLeft: DateInput,
+  dateRight: DateInput,
+): boolean {
   return diffMinutes(dateLeft, dateRight) === 0;
 }

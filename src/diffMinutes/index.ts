@@ -50,14 +50,10 @@ import { toDate } from "../_lib/toDate";
  * - Handles hour, day, month, and year boundaries correctly
  * - Uses Math.round to ensure integer results
  */
-export function diffMinutes(
-  dateLeft: DateInput,
-  dateRight: DateInput,
-): number {
+export function diffMinutes(dateLeft: DateInput, dateRight: DateInput): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
   // This differs from boolean functions (return false) and comparison functions (throw errors)
-  if (!isValidDateInput(dateLeft) || !isValidDateInput(dateRight))
-    return NaN;
+  if (!isValidDateInput(dateLeft) || !isValidDateInput(dateRight)) return NaN;
 
   const dtLeft = toDate(dateLeft);
   const dtRight = toDate(dateRight);
@@ -82,4 +78,3 @@ export function diffMinutes(
 
   return Math.round(diffTime / millisecondsPerMinute);
 }
-

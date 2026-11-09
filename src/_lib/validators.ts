@@ -3,7 +3,6 @@
  * These functions are for internal use only and are not exported in the public API.
  */
 
-
 // ========================================
 // Date Type Validation
 // ========================================
@@ -65,7 +64,6 @@ export function isValidDate(value: unknown): value is Date {
   return !isNaN(value.getTime());
 }
 
-
 // ========================================
 // Number Type Validation
 // ========================================
@@ -125,7 +123,6 @@ export function isValidNumber(value: unknown): value is number {
   return typeof value === "number" && isFinite(value);
 }
 
-
 // ========================================
 // String Type Validation
 // ========================================
@@ -170,7 +167,6 @@ export function isValidDateString(value: unknown): value is string {
   const timestamp = Date.parse(value);
   return !isNaN(timestamp);
 }
-
 
 // ========================================
 // Compound Type Validation

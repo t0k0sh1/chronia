@@ -75,4 +75,3 @@ export function isAfterOrEqual(
   const bTruncated = truncateToUnit(dtB, unit);
   return aTruncated.getTime() >= bTruncated.getTime();
 }
-

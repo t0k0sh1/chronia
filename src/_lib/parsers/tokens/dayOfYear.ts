@@ -5,7 +5,13 @@ function getDaysInMonth(year: number, month: number): number {
   return date.getDate();
 }
 
-export const parseDayOfYear: Parser = (input, position, token, _locale, dateComponents) => {
+export const parseDayOfYear: Parser = (
+  input,
+  position,
+  token,
+  _locale,
+  dateComponents,
+) => {
   const maxLength = token.length <= 3 ? 3 : token.length;
   let dayStr = "";
 
@@ -50,4 +56,4 @@ export const parseDayOfYear: Parser = (input, position, token, _locale, dateComp
   dateComponents._dayParsed = true;
 
   return { position: position + dayStr.length };
-};;
+};

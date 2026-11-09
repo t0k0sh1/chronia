@@ -57,4 +57,3 @@ export function startOfDay(date: DateInput): Date {
     0,
   );
 }
-

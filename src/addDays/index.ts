@@ -51,8 +51,7 @@ import { toDate } from "../_lib/toDate";
  * - Always returns a new Date instance (does not mutate input)
  */
 export function addDays(date: DateInput, amount: number): Date {
-  if (!isValidDateInput(date) || !isValidNumber(amount))
-    return new Date(NaN);
+  if (!isValidDateInput(date) || !isValidNumber(amount)) return new Date(NaN);
 
   const dt = toDate(date);
   const daysToAdd = Math.trunc(amount);

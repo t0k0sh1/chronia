@@ -1,7 +1,13 @@
 import { Parser } from "../../../types";
 import { getDayPeriod } from "../../localeHelpers";
 
-export const parseDayPeriod: Parser = (input, position, token, locale, dateComponents) => {
+export const parseDayPeriod: Parser = (
+  input,
+  position,
+  token,
+  locale,
+  dateComponents,
+) => {
   // Try AM - check longer strings first
   // Filter out null/undefined/empty strings for defensive programming
   const amVariants = [
@@ -9,7 +15,9 @@ export const parseDayPeriod: Parser = (input, position, token, locale, dateCompo
     getDayPeriod(locale, "am", "abbr"),
     getDayPeriod(locale, "am", "narrow"),
   ]
-    .filter((variant): variant is string => Boolean(variant) && variant.length > 0)
+    .filter(
+      (variant): variant is string => Boolean(variant) && variant.length > 0,
+    )
     .sort((a, b) => b.length - a.length); // Sort by length descending
 
   for (const amText of amVariants) {
@@ -26,7 +34,9 @@ export const parseDayPeriod: Parser = (input, position, token, locale, dateCompo
     getDayPeriod(locale, "pm", "abbr"),
     getDayPeriod(locale, "pm", "narrow"),
   ]
-    .filter((variant): variant is string => Boolean(variant) && variant.length > 0)
+    .filter(
+      (variant): variant is string => Boolean(variant) && variant.length > 0,
+    )
     .sort((a, b) => b.length - a.length); // Sort by length descending
 
   for (const pmText of pmVariants) {

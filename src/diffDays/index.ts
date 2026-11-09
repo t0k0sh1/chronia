@@ -61,12 +61,12 @@ export function diffDays(dateLeft: DateInput, dateRight: DateInput): number {
   const leftMidnight = new Date(
     dtLeft.getFullYear(),
     dtLeft.getMonth(),
-    dtLeft.getDate()
+    dtLeft.getDate(),
   );
   const rightMidnight = new Date(
     dtRight.getFullYear(),
     dtRight.getMonth(),
-    dtRight.getDate()
+    dtRight.getDate(),
   );
 
   const diffTime = leftMidnight.getTime() - rightMidnight.getTime();

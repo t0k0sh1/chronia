@@ -56,12 +56,10 @@ export function diffMilliseconds(
 ): number {
   // Calculation functions return NaN for invalid inputs (graceful error handling)
   // This differs from boolean functions (return false) and comparison functions (throw errors)
-  if (!isValidDateInput(dateLeft) || !isValidDateInput(dateRight))
-    return NaN;
+  if (!isValidDateInput(dateLeft) || !isValidDateInput(dateRight)) return NaN;
 
   const dtLeft = toDate(dateLeft);
   const dtRight = toDate(dateRight);
 
   return dtLeft.getTime() - dtRight.getTime();
 }
-

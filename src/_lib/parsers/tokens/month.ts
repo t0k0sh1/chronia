@@ -1,7 +1,13 @@
 import { Parser } from "../../../types";
 import { getMonthName } from "../../localeHelpers";
 
-export const parseMonth: Parser = (input, position, token, locale, dateComponents) => {
+export const parseMonth: Parser = (
+  input,
+  position,
+  token,
+  locale,
+  dateComponents,
+) => {
   // Handle numeric month formats
   if (token === "M" || token === "MM") {
     let monthStr = "";
@@ -32,7 +38,8 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
 
   // Handle text month formats (MMM, MMMM, MMMMM)
   if (token === "MMM" || token === "MMMM" || token === "MMMMM") {
-    const width = token === "MMM" ? "abbr" : token === "MMMM" ? "wide" : "narrow";
+    const width =
+      token === "MMM" ? "abbr" : token === "MMMM" ? "wide" : "narrow";
 
     // Try to match each month (case-insensitive)
     for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
@@ -50,4 +57,4 @@ export const parseMonth: Parser = (input, position, token, locale, dateComponent
   }
 
   return null;
-};;
+};

@@ -1,6 +1,12 @@
 import { Parser } from "../../../types";
 
-export const parseSecond: Parser = (input, position, token, _locale, dateComponents) => {
+export const parseSecond: Parser = (
+  input,
+  position,
+  token,
+  _locale,
+  dateComponents,
+) => {
   let secondStr = "";
   const maxLength = 2;
 

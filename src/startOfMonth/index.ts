@@ -55,6 +55,6 @@ export function startOfMonth(date: DateInput): Date {
     0, // 00:00:00.000
     0,
     0,
-    0
+    0,
   );
 }

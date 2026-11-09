@@ -53,4 +53,3 @@ export function max(...dates: DateInput[]): Date {
 
   return new Date(maxDate.getTime());
 }
-

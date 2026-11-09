@@ -1,6 +1,12 @@
 import { Parser } from "../../../types";
 
-export const parseHour12: Parser = (input, position, token, _locale, dateComponents) => {
+export const parseHour12: Parser = (
+  input,
+  position,
+  token,
+  _locale,
+  dateComponents,
+) => {
   let hourStr = "";
   const maxLength = 2;
 

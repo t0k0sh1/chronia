@@ -244,7 +244,13 @@ function compileParser(pattern: string): CompiledParser {
         const parser = parsers[token[0]];
 
         if (parser) {
-          const result = parser(dateString, position, token, options?.locale, dateComponents);
+          const result = parser(
+            dateString,
+            position,
+            token,
+            options?.locale,
+            dateComponents,
+          );
           if (result === null) {
             return new Date(NaN); // Parsing failed
           }
